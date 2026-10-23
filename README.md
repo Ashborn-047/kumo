@@ -1,6 +1,6 @@
-# 🍡 Goo / Mochiboard — Desktop Companion & Planning Canvas
+# ☁️ Kumo — Animated AI Desktop Companion & Infinite Canvas
 
-> An always-on-top, animated AI companion and infinite spatial planning canvas designed specifically for Windows.
+> An always-on-top, organic AI desktop companion and infinite spatial planning canvas designed specifically for Windows.
 
 ---
 
@@ -14,7 +14,7 @@
   - Automatic sleep mode with floating `Zzz` particles during inactivity.
 
 - **AI Chat & Streaming Bubble**:
-  - Press <kbd>Alt</kbd> + <kbd>Space</kbd> anytime to summon the chat input bar or click on Goo.
+  - Press <kbd>Alt</kbd> + <kbd>Space</kbd> anytime to summon the chat input bar or click directly on Kumo.
   - Real-time token streaming powered by OpenRouter free models (`Llama 3.3 70B`, `Gemini Flash 1.5`, `DeepSeek R1`, `Qwen 2.5 72B`).
   - Expandable/collapsible speech bubble with conversation history tracking.
 
@@ -26,8 +26,8 @@
 - **Mochiboard Infinite Planning Canvas**:
   - Full spatial infinite canvas ported from Mochiboard.
   - Notes, to-dos, collections, connectors, and custom fonts.
-  - Atomic JSON disk persistence in `%APPDATA%\Goo\boards\`.
-  - AI Canvas Assistant (`ai.askBoard`): Ask Goo to brainstorm, organize cards, or structure thoughts on the board in real time.
+  - Atomic JSON disk persistence in `%APPDATA%\Kumo\boards\`.
+  - AI Canvas Assistant (`ai.askBoard`): Ask Kumo to brainstorm, organize cards, or structure thoughts on the board in real time.
   - Export boards to Markdown or JSON.
 
 - **System Tray & Settings**:
@@ -65,7 +65,7 @@ npm start
 | Summon / Focus Chat | <kbd>Alt</kbd> + <kbd>Space</kbd> |
 | Toggle Chat Bar | Click directly on mascot body |
 | Drag Window | Click & drag mascot across screen |
-| Open Mochiboard Canvas | Click 📋 icon on mascot hover |
+| Open Planning Canvas | Click 📋 icon on mascot hover |
 | Open Chat History | Click 💬 icon on mascot hover |
 | Open Settings Modal | Click ⚙️ icon on mascot hover |
 | Dismiss Chat / Bubble | <kbd>Esc</kbd> or click background |
@@ -87,10 +87,10 @@ The compiled installer will be generated in `dist/` ready for distribution.
 ## 📁 Project Architecture
 
 ```
-Goo/
+Kumo/
 ├── assets/                  # App icons, tray icons, mascot graphics
-│   ├── icon.ico            # Windows application icon
-│   ├── icon.png            # 32x32 app PNG icon
+│   ├── icon.ico            # Windows application icon (256x256 multi-layer)
+│   ├── icon.png            # App PNG icon
 │   └── tray.png            # Windows system tray icon
 │
 ├── Docs/                    # Architecture and development plans
@@ -105,7 +105,7 @@ Goo/
 │   ├── ai.js               # OpenRouter streaming client & canvas assistant
 │   ├── board-manager.js    # Canvas window manager, atomic file I/O & export
 │   ├── overlay-manager.js  # Floating mascot transparent window controller
-│   ├── settings.js         # Configuration manager (%APPDATA%\Goo\config.json)
+│   ├── settings.js         # Configuration manager (%APPDATA%\Kumo\config.json)
 │   └── tray.js             # Windows system tray manager
 │
 ├── ui/                      # Renderer Web Interfaces
@@ -129,9 +129,9 @@ Goo/
 
 ## 🔒 Safety Policy
 
-Goo is designed with desktop safety as a first-class citizen:
+Kumo is designed with desktop safety as a first-class citizen:
 - No telemetry or tracking.
-- All board data remains local in `%APPDATA%\Goo\boards\`.
+- All board data remains local in `%APPDATA%\Kumo\boards\`.
 - All system commands pass through explicit safety filters before execution.
 
 ---

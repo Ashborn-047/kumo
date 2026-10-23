@@ -1,7 +1,7 @@
 {
-  "name": "goo",
+  "name": "kumo",
   "version": "0.1.0",
-  "description": "Floating AI desktop mascot + infinite planning canvas for Windows",
+  "description": "Kumo — Animated AI desktop companion & spatial planning canvas for Windows",
   "main": "src/main.js",
   "scripts": {
     "start": "electron .",
@@ -10,7 +10,14 @@
     "build": "electron-builder --win",
     "dist": "electron-builder --win --publish=never"
   },
-  "keywords": [],
+  "keywords": [
+    "desktop-companion",
+    "ai-agent",
+    "canvas",
+    "electron",
+    "windows",
+    "spatial-planning"
+  ],
   "author": "",
   "license": "MIT",
   "devDependencies": {
@@ -21,8 +28,8 @@
     "openai": "^4.0.0"
   },
   "build": {
-    "appId": "com.goo.app",
-    "productName": "Goo",
+    "appId": "com.kumo.app",
+    "productName": "Kumo",
     "win": {
       "target": "nsis",
       "icon": "assets/icon.ico"

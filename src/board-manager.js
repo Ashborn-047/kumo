@@ -1,7 +1,7 @@
 // ============================================================
 // board-manager.js — Board Window + File I/O
 // Opens the Mochiboard canvas in a separate BrowserWindow.
-// Reads/writes board JSON files from %APPDATA%\Goo\boards\
+// Reads/writes board JSON files from %APPDATA%\Kumo\boards\
 // ============================================================
 // TODO Phase 2: implement all board file operations
 // TODO Phase 2: board list / home screen
@@ -26,7 +26,7 @@ function openBoardWindow(preloadPath) {
     height: 800,
     minWidth: 800,
     minHeight: 600,
-    title: 'Mochiboard',
+    title: 'Mochiboard — Kumo',
     icon: path.join(__dirname, '../assets/icon.png'),
     autoHideMenuBar: true,
     webPreferences: {

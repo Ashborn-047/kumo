@@ -20,10 +20,10 @@ function create({ onShowOverlay, onHideOverlay, onOpenBoard, onOpenSettings, onQ
 
   try {
     tray = new Tray(icon);
-    tray.setToolTip('Goo — Desktop Companion');
+    tray.setToolTip('Kumo — Desktop Companion');
 
     const contextMenu = Menu.buildFromTemplate([
-      { label: 'Ask Goo…',     click: onShowOverlay },
+      { label: 'Ask Kumo…',    click: onShowOverlay },
       { label: 'Open Board',   click: onOpenBoard   },
       { type: 'separator' },
       { label: 'Show Mascot',  click: onShowOverlay },
@@ -31,7 +31,7 @@ function create({ onShowOverlay, onHideOverlay, onOpenBoard, onOpenSettings, onQ
       { type: 'separator' },
       { label: 'Settings…',    click: onOpenSettings || onShowOverlay },
       { type: 'separator' },
-      { label: 'Quit Goo',     click: onQuit        },
+      { label: 'Quit Kumo',    click: onQuit        },
     ]);
 
     tray.setContextMenu(contextMenu);

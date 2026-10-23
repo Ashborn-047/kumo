@@ -1,6 +1,6 @@
 // ============================================================
 // settings.js — Config Read/Write
-// Stores user preferences in %APPDATA%\Goo\config.json
+// Stores user preferences in %APPDATA%\Kumo\config.json
 // ============================================================
 
 const { app } = require('electron');

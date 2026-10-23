@@ -31,7 +31,7 @@ const PRELOAD = path.join(__dirname, 'preload.js');
 // ── App ready ─────────────────────────────────────────────────
 app.whenReady().then(async () => {
   // Hide from taskbar — lives in tray only
-  app.setAppUserModelId('com.goo.app');
+  app.setAppUserModelId('com.kumo.app');
 
   // Load settings
   const cfg = settings.get();

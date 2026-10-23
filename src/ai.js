@@ -31,8 +31,8 @@ function init(apiKey) {
     baseURL: 'https://openrouter.ai/api/v1',
     apiKey,
     defaultHeaders: {
-      'HTTP-Referer': 'https://github.com/goo-app',
-      'X-Title': 'Goo',
+      'HTTP-Referer': 'https://github.com/Ashborn-047/kumo',
+      'X-Title': 'Kumo',
     },
   });
 }
@@ -42,7 +42,8 @@ function init(apiKey) {
  * @param {string} userMessage
  * @param {Array}  history       - prior messages [{role, content}]
  * @param {Function} onChunk    - called for each streamed token
-const SYSTEM_PROMPT = `You are Goo, a cute, helpful, friendly desktop assistant on Windows.
+ */
+const SYSTEM_PROMPT = `You are Kumo, a cute, helpful, friendly desktop assistant on Windows.
 Keep answers brief, pleasant, and warm (1-3 sentences max).
 When the user asks you to do something on their computer, answer warmly and append an action block at the very end in this exact format:
 [ACTION:{"type":"ACTION_NAME","args":{...}}]

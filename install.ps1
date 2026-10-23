@@ -1,11 +1,11 @@
 # ============================================================
-# install.ps1 — One-Click Setup & Installer for Goo / Mochi
+# install.ps1 — One-Click Setup & Installer for Kumo
 # ============================================================
 
 $ErrorActionPreference = 'Stop'
 
 Write-Host "========================================" -ForegroundColor Cyan
-Write-Host "  ✨ Welcome to Goo Desktop Companion!  " -ForegroundColor Magenta
+Write-Host "  ☁️ Welcome to Kumo Desktop Companion!  " -ForegroundColor Magenta
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host ""
 
@@ -47,15 +47,15 @@ Write-Host "       Electron environment ready." -ForegroundColor Green
 Write-Host ""
 Write-Host "[4/4] Installation complete!" -ForegroundColor Cyan
 Write-Host ""
-Write-Host "To launch Goo now, type:" -ForegroundColor White
+Write-Host "To launch Kumo now, type:" -ForegroundColor White
 Write-Host "  npm start" -ForegroundColor Yellow
 Write-Host ""
 Write-Host "To package a Windows installer (.exe):" -ForegroundColor White
 Write-Host "  npm run dist" -ForegroundColor Yellow
 Write-Host ""
 
-$choice = Read-Host "Would you like to launch Goo now? (Y/N)"
+$choice = Read-Host "Would you like to launch Kumo now? (Y/N)"
 if ($choice -match '^[Yy]') {
-    Write-Host "Launching Goo..." -ForegroundColor Magenta
+    Write-Host "Launching Kumo..." -ForegroundColor Magenta
     Start-Process -FilePath "npx" -ArgumentList "electron", "." -WorkingDirectory $PSScriptRoot
 }

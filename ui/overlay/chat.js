@@ -242,7 +242,7 @@ async function loadSettings() {
 
   // Welcome prompt on first run if no API key
   if (!currentSettings.apiKey) {
-    showBubble("👋 Hi! I'm Goo. Click ⚙️ to add your OpenRouter API key so I can talk!");
+    showBubble("👋 Hi! I'm Kumo. Click ⚙️ to add your OpenRouter API key so I can talk!");
   }
 }
 
@@ -258,7 +258,7 @@ function closeSettings() {
 }
 
 // ── 7. Chat History Modal ────────────────────────────────────
-const HISTORY_STORAGE_KEY = 'goo:chat_history';
+const HISTORY_STORAGE_KEY = 'kumo:chat_history';
 
 function loadHistory() {
   try {
@@ -283,13 +283,13 @@ function recordHistory(role, content) {
 function renderHistory() {
   if (!historyList) return;
   if (!chatHistory.length) {
-    historyList.innerHTML = '<div class="history-empty">No conversations yet.<br><small style="opacity:0.6;">Chat with Goo to see past history here.</small></div>';
+    historyList.innerHTML = '<div class="history-empty">No conversations yet.<br><small style="opacity:0.6;">Chat with Kumo to see past history here.</small></div>';
     return;
   }
 
   historyList.innerHTML = chatHistory.map(item => `
     <div class="history-item ${item.role}">
-      <span class="history-role">${item.role === 'user' ? 'You' : 'Goo'}</span>
+      <span class="history-role">${item.role === 'user' ? 'You' : 'Kumo'}</span>
       <div class="history-content">${item.content.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>
     </div>
   `).join('');
@@ -352,7 +352,7 @@ linkOpenRouter?.addEventListener('click', () => {
 window.addEventListener('goo:focus-chat', showChat);
 window.addEventListener('goo:open-settings', openSettings);
 window.addEventListener('goo:first-run', () => {
-  showBubble("✨ Welcome to Goo! Press Alt+Space anytime or click me to chat.");
+  showBubble("✨ Welcome to Kumo! Press Alt+Space anytime or click me to chat.");
 });
 
 // Initialize on page load
