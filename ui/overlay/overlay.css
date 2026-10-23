@@ -1,0 +1,478 @@
+/* ============================================================
+   overlay.css — Overlay Window Styles
+   Transparent background, floating mascot, chat bubble, settings.
+   ============================================================ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  background: transparent !important;
+  overflow: hidden;
+  width: 300px;
+  height: 380px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  user-select: none;
+  color: #f1edfa;
+}
+
+#app-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  padding-bottom: 8px;
+}
+
+/* ── Reply Speech Bubble ────────────────────────────────── */
+.bubble {
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  right: 12px;
+  max-height: 160px;
+  background: rgba(18, 15, 28, 0.94);
+  border: 1px solid rgba(186, 160, 255, 0.35);
+  border-radius: 16px;
+  padding: 10px 14px;
+  backdrop-filter: blur(16px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 16px rgba(186, 160, 255, 0.15);
+  animation: pop-in 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+}
+
+.bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -9px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 9px solid transparent;
+  border-top-color: rgba(18, 15, 28, 0.94);
+  border-bottom: none;
+}
+
+#bubble-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.bubble-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #baa0ff;
+}
+
+.bubble-close-btn {
+  background: none;
+  border: none;
+  color: rgba(232, 224, 255, 0.6);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 4px;
+  transition: all 0.15s;
+}
+
+.bubble-close-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+#bubble-text {
+  color: #f1edfa;
+  font-size: 12.5px;
+  line-height: 1.45;
+  word-break: break-word;
+  overflow-y: auto;
+  max-height: 100px;
+  padding-right: 4px;
+}
+
+#bubble-text::-webkit-scrollbar {
+  width: 4px;
+}
+#bubble-text::-webkit-scrollbar-thumb {
+  background: rgba(186, 160, 255, 0.3);
+  border-radius: 4px;
+}
+
+.bubble-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.bubble-btn {
+  background: rgba(186, 160, 255, 0.15);
+  border: 1px solid rgba(186, 160, 255, 0.3);
+  border-radius: 8px;
+  color: #cdb8ff;
+  font-size: 11px;
+  padding: 3px 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.bubble-btn:hover {
+  background: rgba(186, 160, 255, 0.3);
+  color: #fff;
+}
+
+/* ── Mascot Container ───────────────────────────────────── */
+#mascot-wrap {
+  position: relative;
+  width: 160px;
+  height: 180px;
+  margin-bottom: 6px;
+  cursor: grab;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.15s cubic-bezier(0.2, 0, 0, 1);
+  z-index: 5;
+}
+
+#mascot-wrap:active {
+  cursor: grabbing;
+}
+
+#goo-canvas {
+  display: block;
+  pointer-events: none; /* Let clicks pass to wrapper */
+}
+
+/* Mascot quick controls on hover */
+.mascot-controls {
+  position: absolute;
+  top: 50%;
+  right: -10px;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.2s ease;
+}
+
+#mascot-wrap:hover .mascot-controls {
+  opacity: 1;
+  pointer-events: auto;
+  right: -4px;
+}
+
+.control-btn {
+  background: rgba(22, 18, 36, 0.85);
+  border: 1px solid rgba(186, 160, 255, 0.3);
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 12px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transition: all 0.15s ease;
+}
+
+.control-btn:hover {
+  background: #baa0ff;
+  transform: scale(1.15);
+}
+
+/* ── Chat Input Bar ─────────────────────────────────────── */
+#chat-bar {
+  width: calc(100% - 24px);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(18, 15, 28, 0.94);
+  border: 1px solid rgba(186, 160, 255, 0.35);
+  border-radius: 14px;
+  padding: 6px 8px;
+  backdrop-filter: blur(16px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  animation: slide-up 0.2s ease;
+  z-index: 10;
+}
+
+#chat-input {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  color: #f1edfa;
+  font-size: 12.5px;
+  min-width: 0;
+  padding: 2px 4px;
+}
+
+#chat-input::placeholder {
+  color: rgba(186, 160, 255, 0.5);
+}
+
+#chat-send {
+  background: #baa0ff;
+  border: none;
+  border-radius: 10px;
+  width: 28px;
+  height: 28px;
+  color: #120f1c;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+#chat-send:hover {
+  background: #d6c4ff;
+  transform: scale(1.05);
+}
+
+/* ── Quick Settings Modal ───────────────────────────────── */
+.settings-modal {
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  right: 12px;
+  bottom: 10px;
+  background: rgba(16, 13, 24, 0.96);
+  border: 1px solid rgba(186, 160, 255, 0.4);
+  border-radius: 18px;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+  z-index: 20;
+  display: flex;
+  animation: pop-in 0.2s ease;
+}
+
+.settings-card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 14px;
+}
+
+.settings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.settings-header h3 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #baa0ff;
+}
+
+.settings-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+}
+
+.settings-label {
+  font-size: 11.5px;
+  color: #c7beea;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.settings-label input[type="password"],
+.settings-label select {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(186, 160, 255, 0.25);
+  border-radius: 8px;
+  padding: 6px 8px;
+  color: #f1edfa;
+  font-size: 11.5px;
+  outline: none;
+}
+
+.settings-label select option {
+  background: #181424;
+  color: #fff;
+}
+
+.settings-hint {
+  font-size: 10.5px;
+  color: rgba(186, 160, 255, 0.65);
+  margin-top: -6px;
+}
+
+.settings-hint .link {
+  color: #baa0ff;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.color-picker-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.color-swatch {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.15s ease;
+}
+
+.color-swatch.active {
+  border-color: #fff;
+  transform: scale(1.15);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+.settings-footer {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-primary {
+  background: #baa0ff;
+  color: #120f1c;
+  font-size: 12px;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-primary:hover {
+  background: #d6c4ff;
+}
+
+/* ── Quick Chat History Modal ────────────────────────────── */
+.history-modal {
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  right: 12px;
+  bottom: 10px;
+  background: rgba(16, 13, 24, 0.96);
+  border: 1px solid rgba(186, 160, 255, 0.4);
+  border-radius: 18px;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+  z-index: 20;
+  display: flex;
+  animation: pop-in 0.2s ease;
+}
+
+.history-card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 14px;
+}
+
+.history-list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-right: 4px;
+  margin-bottom: 8px;
+}
+
+.history-list::-webkit-scrollbar {
+  width: 4px;
+}
+.history-list::-webkit-scrollbar-thumb {
+  background: rgba(186, 160, 255, 0.3);
+  border-radius: 4px;
+}
+
+.history-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  font-size: 11px;
+}
+
+.history-item.user {
+  background: rgba(186, 160, 255, 0.12);
+  align-self: flex-end;
+  max-width: 90%;
+  color: #f1edfa;
+}
+
+.history-item.goo {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(186, 160, 255, 0.15);
+  align-self: flex-start;
+  max-width: 95%;
+  color: #cdb8ff;
+}
+
+.history-role {
+  font-size: 9.5px;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #baa0ff;
+}
+
+.history-empty {
+  font-size: 11.5px;
+  color: rgba(186, 160, 255, 0.5);
+  text-align: center;
+  margin-top: 40px;
+}
+
+.history-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 6px;
+  border-top: 1px solid rgba(186, 160, 255, 0.15);
+}
+
+/* ── Utilities & Animations ─────────────────────────────── */
+.hidden {
+  display: none !important;
+}
+
+@keyframes pop-in {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Goo</title>
+  <link rel="stylesheet" href="overlay.css" />
+</head>
+<body>
+  <div id="app-container">
+    <!-- Reply speech bubble — sits right above mascot -->
+    <div id="bubble" class="bubble hidden">
+      <div id="bubble-header">
+        <span class="bubble-title">Goo</span>
+        <button id="bubble-close" class="bubble-close-btn" title="Dismiss">×</button>
+      </div>
+      <div id="bubble-text"></div>
+      <div id="bubble-actions" class="bubble-actions hidden">
+        <button id="bubble-more" class="bubble-btn hidden">show more ▾</button>
+        <button id="bubble-open-board" class="bubble-btn hidden">Open Board ↗</button>
+      </div>
+    </div>
+
+    <!-- Mascot container (draggable & clickable) -->
+    <div id="mascot-wrap" title="Drag to move • Click to chat">
+      <canvas id="goo-canvas" width="160" height="180"></canvas>
+      <div id="mascot-controls" class="mascot-controls">
+        <button id="btn-quick-board" class="control-btn" title="Open Mochiboard">📋</button>
+        <button id="btn-quick-history" class="control-btn" title="Chat History">💬</button>
+        <button id="btn-quick-settings" class="control-btn" title="Settings">⚙️</button>
+      </div>
+    </div>
+
+    <!-- Chat input bar -->
+    <div id="chat-bar" class="hidden">
+      <input id="chat-input" type="text" placeholder="Ask Goo anything… (Esc to close)" autocomplete="off" />
+      <button id="chat-send" title="Send message">↑</button>
+    </div>
+
+    <!-- Quick Settings Modal -->
+    <div id="settings-modal" class="settings-modal hidden">
+      <div class="settings-card">
+        <div class="settings-header">
+          <h3>Goo Settings</h3>
+          <button id="settings-close" class="bubble-close-btn">×</button>
+        </div>
+        <div class="settings-body">
+          <label class="settings-label">
+            OpenRouter API Key
+            <input id="setting-api-key" type="password" placeholder="sk-or-v1-..." />
+          </label>
+          <div class="settings-hint">Get a free key at <span class="link" id="link-openrouter">openrouter.ai</span></div>
+          
+          <label class="settings-label">
+            Mascot Color
+            <div class="color-picker-row">
+              <span class="color-swatch active" data-color="#baa0ff" style="background:#baa0ff;"></span>
+              <span class="color-swatch" data-color="#7bdcb5" style="background:#7bdcb5;"></span>
+              <span class="color-swatch" data-color="#ff9ec6" style="background:#ff9ec6;"></span>
+              <span class="color-swatch" data-color="#ffd166" style="background:#ffd166;"></span>
+              <span class="color-swatch" data-color="#64b5f6" style="background:#64b5f6;"></span>
+            </div>
+          </label>
+
+          <label class="settings-label">
+            Model
+            <select id="setting-model">
+              <option value="meta-llama/llama-3.3-70b-instruct:free">Llama 3.3 70B (Free)</option>
+              <option value="google/gemini-flash-1.5:free">Gemini Flash 1.5 (Free)</option>
+              <option value="deepseek/deepseek-r1:free">DeepSeek R1 (Free)</option>
+              <option value="qwen/qwen-2.5-72b-instruct:free">Qwen 2.5 72B (Free)</option>
+            </select>
+          </label>
+        </div>
+        <div class="settings-footer">
+          <button id="btn-save-settings" class="btn-primary">Save Changes</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Chat History Modal -->
+    <div id="history-modal" class="history-modal hidden">
+      <div class="history-card">
+        <div class="settings-header">
+          <h3>Chat History</h3>
+          <button id="history-close" class="bubble-close-btn">×</button>
+        </div>
+        <div id="history-list" class="history-list">
+          <div class="history-empty">No conversations yet.</div>
+        </div>
+        <div class="history-footer">
+          <button id="btn-clear-history" class="bubble-btn">Clear History</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="goo.js"></script>
+  <script src="chat.js"></script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+
+# Production build & packaged binaries
+dist/
+build/
+out/
+
+# Environment & API keys
+.env
+.env.local
+config.json
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS metadata
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editor & IDE artifacts
+.idea/
+*.swp
+*.swo

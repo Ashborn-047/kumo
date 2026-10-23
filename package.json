@@ -1,0 +1,43 @@
+{
+  "name": "goo",
+  "version": "0.1.0",
+  "description": "Floating AI desktop mascot + infinite planning canvas for Windows",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "node dev-server.js",
+    "web": "node dev-server.js",
+    "build": "electron-builder --win",
+    "dist": "electron-builder --win --publish=never"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^31.0.0",
+    "electron-builder": "^24.0.0"
+  },
+  "dependencies": {
+    "openai": "^4.0.0"
+  },
+  "build": {
+    "appId": "com.goo.app",
+    "productName": "Goo",
+    "win": {
+      "target": "nsis",
+      "icon": "assets/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "files": [
+      "src/**/*",
+      "ui/**/*",
+      "assets/**/*"
+    ]
+  },
+  "allowScripts": {
+    "electron@31.7.7": true
+  }
+}
