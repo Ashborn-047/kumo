@@ -1,0 +1,266 @@
+<!-- SECTION 2: Color Palettes & 5 Workbench Archetypes -->
+<section class="space-y-8" id="tokens">
+  <div class="flex items-center justify-between border-b border-outline-variant/30 pb-3">
+    <div>
+      <span class="text-label-sm font-label-sm text-primary uppercase font-bold tracking-wider font-mono">02 / Token Spectrum</span>
+      <h2 class="text-headline-lg font-headline-lg text-on-surface">Color Palettes &amp; Functional Archetypes</h2>
+    </div>
+    <button class="inline-flex items-center gap-1.5 px-3 py-1 bg-surface-container rounded-full text-label-md font-label-md text-secondary hover:text-on-surface transition-colors cursor-pointer font-mono" onclick="copyToken('All Tokens JSON copied to clipboard')" type="button">
+      <span class="material-symbols-outlined text-[16px]">content_copy</span>
+      Copy Design Tokens
+    </button>
+  </div>
+
+  <!-- Core Brand Tokens -->
+  <div class="space-y-4">
+    <h3 class="text-headline-sm font-headline-sm text-on-surface flex items-center gap-2">
+      <span>Brand Core &amp; Neutrals</span>
+      <span class="text-label-sm font-label-sm text-secondary font-normal font-mono">(Primary, Accent, Midnight Slate, &amp; Canvas Base)</span>
+    </h3>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+      <!-- Swatch: Primary Iris -->
+      <div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/30 shadow-xs flex flex-col justify-between">
+        <div class="h-24 w-full rounded-lg bg-primary-container relative flex items-end p-2.5 shadow-sm">
+          <span class="text-label-sm font-label-sm bg-black/40 text-white px-2 py-0.5 rounded backdrop-blur-xs font-semibold font-mono">Primary Iris</span>
+        </div>
+        <div class="mt-3 space-y-1">
+          <div class="flex justify-between items-center">
+            <span class="text-headline-sm font-headline-sm font-semibold text-on-surface font-mono">#6355d8</span>
+            <button class="text-label-sm font-label-sm text-primary hover:underline cursor-pointer font-mono" onclick="copyToken('#6355d8')">Copy</button>
+          </div>
+          <p class="text-body-sm font-body-sm text-secondary">RGB: 99, 85, 216</p>
+          <div class="flex items-center gap-2 mt-2 pt-2 border-t border-surface-container text-label-sm font-label-sm font-mono">
+            <span class="text-secondary">CR vs #FFF:</span>
+            <span class="font-semibold text-emerald-700 bg-emerald-100 px-1.5 rounded">4.8:1 (AA)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Swatch: Midnight Slate -->
+      <div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/30 shadow-xs flex flex-col justify-between">
+        <div class="h-24 w-full rounded-lg bg-[#2e3b52] relative flex items-end p-2.5 shadow-sm">
+          <span class="text-label-sm font-label-sm bg-black/40 text-white px-2 py-0.5 rounded backdrop-blur-xs font-semibold font-mono">Midnight Slate</span>
+        </div>
+        <div class="mt-3 space-y-1">
+          <div class="flex justify-between items-center">
+            <span class="text-headline-sm font-headline-sm font-semibold text-on-surface font-mono">#2e3b52</span>
+            <button class="text-label-sm font-label-sm text-primary hover:underline cursor-pointer font-mono" onclick="copyToken('#2e3b52')">Copy</button>
+          </div>
+          <p class="text-body-sm font-body-sm text-secondary">RGB: 46, 59, 82</p>
+          <div class="flex items-center gap-2 mt-2 pt-2 border-t border-surface-container text-label-sm font-label-sm font-mono">
+            <span class="text-secondary">CR vs #FFF:</span>
+            <span class="font-semibold text-emerald-700 bg-emerald-100 px-1.5 rounded">8.2:1 (AAA)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Swatch: Coral Punch -->
+      <div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/30 shadow-xs flex flex-col justify-between">
+        <div class="h-24 w-full rounded-lg bg-[#ff7e67] relative flex items-end p-2.5 shadow-sm">
+          <span class="text-label-sm font-label-sm bg-black/40 text-white px-2 py-0.5 rounded backdrop-blur-xs font-semibold font-mono">Coral Punch</span>
+        </div>
+        <div class="mt-3 space-y-1">
+          <div class="flex justify-between items-center">
+            <span class="text-headline-sm font-headline-sm font-semibold text-on-surface font-mono">#ff7e67</span>
+            <button class="text-label-sm font-label-sm text-primary hover:underline cursor-pointer font-mono" onclick="copyToken('#ff7e67')">Copy</button>
+          </div>
+          <p class="text-body-sm font-body-sm text-secondary">RGB: 255, 126, 103</p>
+          <div class="flex items-center gap-2 mt-2 pt-2 border-t border-surface-container text-label-sm font-label-sm font-mono">
+            <span class="text-secondary">CR vs #2E3B:</span>
+            <span class="font-semibold text-emerald-700 bg-emerald-100 px-1.5 rounded">4.5:1 (AA)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Swatch: Canvas Surface -->
+      <div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/30 shadow-xs flex flex-col justify-between">
+        <div class="h-24 w-full rounded-lg bg-[#fbf8fc] border border-outline-variant/50 relative flex items-end p-2.5 shadow-sm">
+          <span class="text-label-sm font-label-sm bg-black/10 text-on-surface px-2 py-0.5 rounded backdrop-blur-xs font-semibold font-mono">Canvas Surface</span>
+        </div>
+        <div class="mt-3 space-y-1">
+          <div class="flex justify-between items-center">
+            <span class="text-headline-sm font-headline-sm font-semibold text-on-surface font-mono">#fbf8fc</span>
+            <button class="text-label-sm font-label-sm text-primary hover:underline cursor-pointer font-mono" onclick="copyToken('#fbf8fc')">Copy</button>
+          </div>
+          <p class="text-body-sm font-body-sm text-secondary">RGB: 251, 248, 252</p>
+          <div class="flex items-center gap-2 mt-2 pt-2 border-t border-surface-container text-label-sm font-label-sm font-mono">
+            <span class="text-secondary">CR vs #2E3B:</span>
+            <span class="font-semibold text-emerald-700 bg-emerald-100 px-1.5 rounded">9.4:1 (AAA)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Swatch: Pure Crisp White -->
+      <div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/30 shadow-xs flex flex-col justify-between">
+        <div class="h-24 w-full rounded-lg bg-surface-container-lowest border border-outline-variant/50 relative flex items-end p-2.5 shadow-sm">
+          <span class="text-label-sm font-label-sm bg-black/10 text-on-surface px-2 py-0.5 rounded backdrop-blur-xs font-semibold font-mono">Pure Card Surface</span>
+        </div>
+        <div class="mt-3 space-y-1">
+          <div class="flex justify-between items-center">
+            <span class="text-headline-sm font-headline-sm font-semibold text-on-surface font-mono">#ffffff</span>
+            <button class="text-label-sm font-label-sm text-primary hover:underline cursor-pointer font-mono" onclick="copyToken('#ffffff')">Copy</button>
+          </div>
+          <p class="text-body-sm font-body-sm text-secondary">RGB: 255, 255, 255</p>
+          <div class="flex items-center gap-2 mt-2 pt-2 border-t border-surface-container text-label-sm font-label-sm font-mono">
+            <span class="text-secondary">CR vs #6355:</span>
+            <span class="font-semibold text-emerald-700 bg-emerald-100 px-1.5 rounded">4.8:1 (AA)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- The 5 Workbench Pastel Archetypes -->
+  <div class="space-y-4 pt-4">
+    <div class="flex items-center justify-between">
+      <h3 class="text-headline-sm font-headline-sm text-on-surface flex items-center gap-2">
+        <span>The 5 Workbench Pastel Card Archetypes</span>
+        <span class="text-label-sm font-label-sm text-secondary font-normal font-mono">(Dynamic Functional Header Systems)</span>
+      </h3>
+      <span class="text-label-sm font-label-sm text-primary font-mono font-semibold">48px Height Header Standards</span>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+      <!-- Pastel 1: Sky Blue -->
+      <div class="bg-surface-container-lowest rounded-2xl p-4 border border-outline-variant/30 shadow-xs flex flex-col justify-between hover:border-primary/40 transition-colors">
+        <div class="space-y-3">
+          <div class="h-20 w-full rounded-xl bg-[#dcedff] p-3 flex flex-col justify-between border border-[#c3dfff]">
+            <div class="flex items-center justify-between">
+              <span class="material-symbols-outlined text-[#1b5ba5] text-[20px]">widgets</span>
+              <span class="tilted-tag text-label-sm font-label-sm bg-white/80 text-[#1b5ba5] px-1.5 py-0.5 rounded font-bold shadow-xs font-mono">SYS-01</span>
+            </div>
+            <span class="text-label-sm font-label-sm text-[#1b5ba5] font-bold">Sky Blue Archetype</span>
+          </div>
+          <div>
+            <h4 class="text-headline-sm font-headline-sm text-on-surface font-semibold">App Launcher &amp; System</h4>
+            <p class="text-body-sm font-body-sm text-secondary mt-1">Host dock operations, system tools, and process telemetry nodes.</p>
+          </div>
+        </div>
+        <div class="mt-4 pt-3 border-t border-surface-container space-y-1 font-mono">
+          <div class="flex justify-between text-label-sm font-label-sm">
+            <span class="text-secondary">HEX:</span>
+            <span class="font-semibold text-on-surface">#dcedff</span>
+          </div>
+          <div class="flex justify-between text-label-sm font-label-sm">
+            <span class="text-secondary">RGB:</span>
+            <span>220, 237, 255</span>
+          </div>
+          <button class="w-full mt-2 py-1 bg-surface-container rounded-lg text-label-sm font-label-sm text-primary hover:bg-primary-fixed transition-colors font-medium cursor-pointer" onclick="copyToken('#dcedff')">Copy Hex</button>
+        </div>
+      </div>
+
+      <!-- Pastel 2: Soft Lilac -->
+      <div class="bg-surface-container-lowest rounded-2xl p-4 border border-outline-variant/30 shadow-xs flex flex-col justify-between hover:border-primary/40 transition-colors">
+        <div class="space-y-3">
+          <div class="h-20 w-full rounded-xl bg-[#eadfff] p-3 flex flex-col justify-between border border-[#dac8ff]">
+            <div class="flex items-center justify-between">
+              <span class="material-symbols-outlined text-primary text-[20px]">psychology</span>
+              <span class="tilted-tag text-label-sm font-label-sm bg-white/80 text-primary px-1.5 py-0.5 rounded font-bold shadow-xs font-mono">AI-AGENT</span>
+            </div>
+            <span class="text-label-sm font-label-sm text-primary font-bold">Soft Lilac Archetype</span>
+          </div>
+          <div>
+            <h4 class="text-headline-sm font-headline-sm text-on-surface font-semibold">AI Drafting &amp; Agents</h4>
+            <p class="text-body-sm font-body-sm text-secondary mt-1">Copilot reasoning loops, neural drafting, and multi-turn conversations.</p>
+          </div>
+        </div>
+        <div class="mt-4 pt-3 border-t border-surface-container space-y-1 font-mono">
+          <div class="flex justify-between text-label-sm font-label-sm">
+            <span class="text-secondary">HEX:</span>
+            <span class="font-semibold text-on-surface">#eadfff</span>
+          </div>
+          <div class="flex justify-between text-label-sm font-label-sm">
+            <span class="text-secondary">RGB:</span>
+            <span>234, 223, 255</span>
+          </div>
+          <button class="w-full mt-2 py-1 bg-surface-container rounded-lg text-label-sm font-label-sm text-primary hover:bg-primary-fixed transition-colors font-medium cursor-pointer" onclick="copyToken('#eadfff')">Copy Hex</button>
+        </div>
+      </div>
+
+      <!-- Pastel 3: Soft Mint -->
+      <div class="bg-surface-container-lowest rounded-2xl p-4 border border-outline-variant/30 shadow-xs flex flex-col justify-between hover:border-primary/40 transition-colors">
+        <div class="space-y-3">
+          <div class="h-20 w-full rounded-xl bg-[#dcf5e7] p-3 flex flex-col justify-between border border-[#bbf0cf]">
+            <div class="flex items-center justify-between">
+              <span class="material-symbols-outlined text-[#166534] text-[20px]">terminal</span>
+              <span class="tilted-tag text-label-sm font-label-sm bg-white/80 text-[#166534] px-1.5 py-0.5 rounded font-bold shadow-xs font-mono">RUNNER</span>
+            </div>
+            <span class="text-label-sm font-label-sm text-[#166534] font-bold">Soft Mint Archetype</span>
+          </div>
+          <div>
+            <h4 class="text-headline-sm font-headline-sm text-on-surface font-semibold">Terminal &amp; Automation</h4>
+            <p class="text-body-sm font-body-sm text-secondary mt-1">PowerShell execution, CLI jobs, live output daemons and webhooks.</p>
+          </div>
+        </div>
+        <div class="mt-4 pt-3 border-t border-surface-container space-y-1 font-mono">
+          <div class="flex justify-between text-label-sm font-label-sm">
+            <span class="text-secondary">HEX:</span>
+            <span class="font-semibold text-on-surface">#dcf5e7</span>
+          </div>
+          <div class="flex justify-between text-label-sm font-label-sm">
+            <span class="text-secondary">RGB:</span>
+            <span>220, 245, 231</span>
+          </div>
+          <button class="w-full mt-2 py-1 bg-surface-container rounded-lg text-label-sm font-label-sm text-primary hover:bg-primary-fixed transition-colors font-medium cursor-pointer" onclick="copyToken('#dcf5e7')">Copy Hex</button>
+        </div>
+      </div>
+
+      <!-- Pastel 4: Soft Peach -->
+      <div class="bg-surface-container-lowest rounded-2xl p-4 border border-outline-variant/30 shadow-xs flex flex-col justify-between hover:border-primary/40 transition-colors">
+        <div class="space-y-3">
+          <div class="h-20 w-full rounded-xl bg-[#ffe9d6] p-3 flex flex-col justify-between border border-[#ffd2af]">
+            <div class="flex items-center justify-between">
+              <span class="material-symbols-outlined text-[#b84a14] text-[20px]">palette</span>
+              <span class="tilted-tag text-label-sm font-label-sm bg-white/80 text-[#b84a14] px-1.5 py-0.5 rounded font-bold shadow-xs font-mono">DESIGN</span>
+            </div>
+            <span class="text-label-sm font-label-sm text-[#b84a14] font-bold">Soft Peach Archetype</span>
+          </div>
+          <div>
+            <h4 class="text-headline-sm font-headline-sm text-on-surface font-semibold">Design Studio &amp; Tokens</h4>
+            <p class="text-body-sm font-body-sm text-secondary mt-1">Palette inspectors, typographic scales, visual canvas assets.</p>
+          </div>
+        </div>
+        <div class="mt-4 pt-3 border-t border-surface-container space-y-1 font-mono">
+          <div class="flex justify-between text-label-sm font-label-sm">
+            <span class="text-secondary">HEX:</span>
+            <span class="font-semibold text-on-surface">#ffe9d6</span>
+          </div>
+          <div class="flex justify-between text-label-sm font-label-sm">
+            <span class="text-secondary">RGB:</span>
+            <span>255, 233, 214</span>
+          </div>
+          <button class="w-full mt-2 py-1 bg-surface-container rounded-lg text-label-sm font-label-sm text-primary hover:bg-primary-fixed transition-colors font-medium cursor-pointer" onclick="copyToken('#ffe9d6')">Copy Hex</button>
+        </div>
+      </div>
+
+      <!-- Pastel 5: Warm Butter -->
+      <div class="bg-surface-container-lowest rounded-2xl p-4 border border-outline-variant/30 shadow-xs flex flex-col justify-between hover:border-primary/40 transition-colors">
+        <div class="space-y-3">
+          <div class="h-20 w-full rounded-xl bg-[#fff5c8] p-3 flex flex-col justify-between border border-[#ffec99]">
+            <div class="flex items-center justify-between">
+              <span class="material-symbols-outlined text-[#856404] text-[20px]">sticky_note_2</span>
+              <span class="tilted-tag text-label-sm font-label-sm bg-white/80 text-[#856404] px-1.5 py-0.5 rounded font-bold shadow-xs font-mono">STICKY</span>
+            </div>
+            <span class="text-label-sm font-label-sm text-[#856404] font-bold">Warm Butter Archetype</span>
+          </div>
+          <div>
+            <h4 class="text-headline-sm font-headline-sm text-on-surface font-semibold">Ideas &amp; Sprint Notes</h4>
+            <p class="text-body-sm font-body-sm text-secondary mt-1">Freeform ideation, tactile checklist reminders, quick canvas post-its.</p>
+          </div>
+        </div>
+        <div class="mt-4 pt-3 border-t border-surface-container space-y-1 font-mono">
+          <div class="flex justify-between text-label-sm font-label-sm">
+            <span class="text-secondary">HEX:</span>
+            <span class="font-semibold text-on-surface">#fff5c8</span>
+          </div>
+          <div class="flex justify-between text-label-sm font-label-sm">
+            <span class="text-secondary">RGB:</span>
+            <span>255, 245, 200</span>
+          </div>
+          <button class="w-full mt-2 py-1 bg-surface-container rounded-lg text-label-sm font-label-sm text-primary hover:bg-primary-fixed transition-colors font-medium cursor-pointer" onclick="copyToken('#fff5c8')">Copy Hex</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

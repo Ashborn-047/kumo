@@ -1,0 +1,21 @@
+{
+  "name": "Cotton Cloud",
+  "id": "cotton-cloud",
+  "archetype": "Organic Vector",
+  "description": "Soft puffy vector cloud with rosy blush, gentle specular highlights, and calming demeanor.",
+  "engine": "Vector SVG",
+  "moods": ["idle", "happy", "thinking", "speaking"],
+  "palette": {
+    "primary": "#6355d8",
+    "cloudWhite": "#ffffff",
+    "cloudLilac": "#f2ebff",
+    "cloudSky": "#e2eeff",
+    "blush": "#ffb4a6",
+    "eyes": "#2e3b52"
+  },
+  "physics": {
+    "mass": 0.6,
+    "damping": 0.82,
+    "stiffness": 100
+  }
+}

@@ -26,9 +26,11 @@ function openBoardWindow(preloadPath) {
     height: 800,
     minWidth: 800,
     minHeight: 600,
-    title: 'Mochiboard — Kumo',
+    title: 'Kumoboard — Assistant Workbench',
     icon: path.join(__dirname, '../assets/icon.png'),
     autoHideMenuBar: true,
+    show: true,
+    center: true,
     webPreferences: {
       preload: preloadPath,
       contextIsolation: true,
@@ -37,10 +39,15 @@ function openBoardWindow(preloadPath) {
   });
 
   boardWindow.loadFile(path.join(__dirname, '../ui/board/index.html'));
+  boardWindow.once('ready-to-show', () => {
+    boardWindow.show();
+    boardWindow.focus();
+  });
   boardWindow.on('closed', () => { boardWindow = null; });
 }
 
 function focusBoard() { boardWindow?.focus(); }
+function get() { return boardWindow; }
 
 // ── File I/O ──────────────────────────────────────────────────
 
@@ -143,6 +150,7 @@ function exportBoard(id, format = 'markdown') {
 module.exports = {
   openBoardWindow,
   focusBoard,
+  get,
   listBoards,
   loadBoard,
   saveBoard,

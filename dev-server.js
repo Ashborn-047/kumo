@@ -28,29 +28,41 @@ const server = http.createServer((req, res) => {
   let reqPath = decodeURI(req.url.split('?')[0]);
 
   // Route shortcuts
+  if (reqPath === '/studio' || reqPath === '/onboarding') {
+    res.writeHead(302, { Location: '/ui/studio/index.html?mode=wizard' });
+    res.end();
+    return;
+  }
+
   if (reqPath === '/' || reqPath === '/overlay' || reqPath === '/mascot') {
     reqPath = '/ui/overlay/index.html';
   } else if (reqPath === '/board' || reqPath === '/canvas') {
     reqPath = '/ui/board/index.html';
+  } else if (reqPath === '/design' || reqPath === '/design-system' || reqPath === '/tokens') {
+    reqPath = '/design-system/index.html';
+  } else if (reqPath === '/lab' || reqPath === '/mascot-lab' || reqPath === '/bot-studio') {
+    reqPath = '/assets/Lab/asset-studio/index.html';
   } else if (reqPath === '/clay') {
     reqPath = '/assets/Lab/kumo-studio-clay.html';
   } else if (reqPath === '/glass') {
     reqPath = '/assets/Lab/kumo-studio-glassmorphic.html';
   } else if (reqPath === '/y2k') {
     reqPath = '/assets/Lab/kumo-studio-y2k.html';
-  } else if (reqPath === '/studio' || reqPath === '/lab') {
-    reqPath = '/assets/Lab/3d_2d_ai_bot_asset_studio.html';
   }
 
   // Handle overlay relative paths (e.g. /overlay.css or /goo.js when on /)
   let filePath = path.join(ROOT, reqPath);
 
   if (!fs.existsSync(filePath)) {
-    // Try resolving inside ui/overlay or ui/board
+    // Try resolving inside ui/overlay, ui/board, or design-system
     const overlayTry = path.join(ROOT, 'ui', 'overlay', reqPath);
     const boardTry   = path.join(ROOT, 'ui', 'board', reqPath);
+    const studioTry  = path.join(ROOT, 'ui', 'studio', reqPath);
+    const designTry  = path.join(ROOT, 'design-system', reqPath);
     if (fs.existsSync(overlayTry)) filePath = overlayTry;
     else if (fs.existsSync(boardTry)) filePath = boardTry;
+    else if (fs.existsSync(studioTry)) filePath = studioTry;
+    else if (fs.existsSync(designTry)) filePath = designTry;
   }
 
   fs.stat(filePath, (err, stats) => {
@@ -78,6 +90,7 @@ server.listen(PORT, () => {
   console.log(`🚀 Goo & Mochiboard Local Server running!`);
   console.log(`======================================================`);
   console.log(`👉 Mascot Overlay:      http://localhost:${PORT}/`);
+  console.log(`👉 Onboarding Studio:   http://localhost:${PORT}/studio`);
   console.log(`👉 Mochiboard Canvas:   http://localhost:${PORT}/board`);
   console.log(`======================================================\n`);
 });

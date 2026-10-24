@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kumo Mascot Preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <link rel="stylesheet" href="preview.css">
+</head>
+<body>
+  <div class="preview-layout">
+    <div class="stage-container">
+      <canvas id="preview-canvas" width="320" height="320"></canvas>
+      <div class="stage-badge" id="badge">3D VOXEL BOT · IDLE</div>
+    </div>
+
+    <div class="controls-panel">
+      <h2>Mascot Runner</h2>
+      
+      <div class="control-group">
+        <label>Engine</label>
+        <div class="btn-row">
+          <button class="btn on" data-type="3d">3D Mochi</button>
+          <button class="btn" data-type="2d">2D Puff</button>
+        </div>
+      </div>
+
+      <div class="control-group" id="geo-group">
+        <label>3D Style</label>
+        <div class="btn-row">
+          <button class="btn on" data-geo="voxel">Voxel</button>
+          <button class="btn" data-geo="smooth">Smooth</button>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label>Animated State</label>
+        <div class="btn-row wrap">
+          <button class="btn on" data-st="idle">Idle</button>
+          <button class="btn" data-st="speaking">Speaking</button>
+          <button class="btn" data-st="listening">Listening</button>
+          <button class="btn" data-st="happy">Happy</button>
+          <button class="btn" data-st="thinking">Thinking</button>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label>Palette</label>
+        <div class="palette-row" id="palette-row"></div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="preview.js"></script>
+</body>
+</html>

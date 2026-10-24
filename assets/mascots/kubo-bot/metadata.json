@@ -1,0 +1,23 @@
+{
+  "name": "Kubo Bot",
+  "id": "kubo-bot",
+  "archetype": "Voxel Retro Buffer",
+  "description": "Playful cubic voxel robot buddy featuring a bouncy spring antenna, CRT screen bezel, and emotive LED pixel facial expressions.",
+  "engine": "Retro Buffer / WebGL Voxel",
+  "moods": ["idle", "happy", "thinking", "speaking"],
+  "palette": {
+    "chassis": "#2e3b52",
+    "chassisBorder": "#474554",
+    "screen": "#171b2b",
+    "screenBorder": "#3a475f",
+    "pixelLed": "#dcf5e7",
+    "antennaGlow": "#34d399",
+    "accentBlue": "#818cf8",
+    "accentRose": "#fb7185"
+  },
+  "physics": {
+    "mass": 1.1,
+    "damping": 0.95,
+    "stiffness": 140
+  }
+}

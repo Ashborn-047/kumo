@@ -1,0 +1,112 @@
+<!-- SECTION 4: Elevation & Glassmorphism Tokens -->
+<section class="space-y-6" id="elevation">
+  <div class="flex items-center justify-between border-b border-outline-variant/30 pb-3">
+    <div>
+      <span class="text-label-sm font-label-sm text-primary uppercase font-bold tracking-wider font-mono">04 / Spatial Depth</span>
+      <h2 class="text-headline-lg font-headline-lg text-on-surface">4-Tier Elevation Hierarchy &amp; Frosted Glass</h2>
+    </div>
+    <span class="text-label-md font-label-md text-secondary font-mono">Level 0 to Level 3</span>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <!-- Level 0: Canvas Base -->
+    <div class="flex flex-col gap-3">
+      <div class="h-56 rounded-2xl p-5 border border-outline-variant/40 bg-[#fbf8fc] relative flex flex-col justify-between overflow-hidden shadow-inner">
+        <div class="absolute inset-0 bg-dot-matrix opacity-80 pointer-events-none"></div>
+        <div class="relative z-10 flex items-center justify-between font-mono">
+          <span class="text-label-sm font-label-sm font-bold bg-white/90 text-on-surface px-2 py-1 rounded shadow-xs">LEVEL 0</span>
+          <span class="text-label-sm font-label-sm text-secondary">z-index: 0</span>
+        </div>
+        <div class="relative z-10 bg-white/80 p-3 rounded-lg border border-outline-variant/30 backdrop-blur-xs">
+          <p class="text-headline-sm font-headline-sm text-on-surface font-semibold">Infinite Canvas Base</p>
+          <p class="text-body-sm font-body-sm text-secondary mt-1">#fbf8fc warm tint with 24px dot-matrix coordinate origin.</p>
+        </div>
+      </div>
+      <div class="space-y-1">
+        <p class="text-label-md font-label-md font-semibold text-on-surface font-mono">Level 0 — Base Surface</p>
+        <p class="text-body-sm font-body-sm text-secondary">Virtual plane holding all spatial coordinate geometry.</p>
+      </div>
+    </div>
+
+    <!-- Level 1: Resting Tool Card -->
+    <div class="flex flex-col gap-3">
+      <div class="h-56 rounded-[18px] p-5 bg-surface-container-lowest border border-outline-variant/20 shadow-[0_1px_2px_rgba(46,59,82,0.04),0_8px_24px_-4px_rgba(46,59,82,0.06)] relative flex flex-col justify-between">
+        <div class="flex items-center justify-between font-mono">
+          <span class="text-label-sm font-label-sm font-bold bg-primary-fixed text-primary px-2 py-1 rounded">LEVEL 1</span>
+          <span class="text-label-sm font-label-sm text-secondary">18px Corner</span>
+        </div>
+        <div class="bg-surface-container-low p-3 rounded-xl border border-surface-container">
+          <p class="text-headline-sm font-headline-sm text-on-surface font-semibold">Resting Tool Card</p>
+          <p class="text-body-sm font-body-sm text-secondary mt-1">Soft dual-layer drop shadow with subtle stroke definition.</p>
+        </div>
+      </div>
+      <div class="space-y-1">
+        <p class="text-label-md font-label-md font-semibold text-on-surface font-mono">Level 1 — Inactive Node</p>
+        <p class="text-body-sm font-body-sm text-secondary">Calm resting elevation on the infinite surface.</p>
+      </div>
+    </div>
+
+    <!-- Level 2: Active / Dragging Focus State -->
+    <div class="flex flex-col gap-3">
+      <div class="h-56 rounded-[18px] p-5 bg-surface-container-lowest border border-primary/35 shadow-[0_0_0_1px_rgba(99,85,216,0.15),0_12px_32px_-6px_rgba(99,85,216,0.12),0_4px_12px_rgba(46,59,82,0.04)] ring-2 ring-primary/20 relative flex flex-col justify-between transform -translate-y-1 transition-transform">
+        <div class="flex items-center justify-between font-mono">
+          <span class="text-label-sm font-label-sm font-bold bg-primary text-on-primary px-2 py-1 rounded">LEVEL 2</span>
+          <span class="material-symbols-outlined text-primary text-[20px]">pan_tool</span>
+        </div>
+        <div class="bg-primary-fixed/40 p-3 rounded-xl border border-primary-fixed">
+          <p class="text-headline-sm font-headline-sm text-on-surface font-semibold">Active &amp; Focused Card</p>
+          <p class="text-body-sm font-body-sm text-secondary mt-1">Iris halo ring, active elevation lift, crisp selection glow.</p>
+        </div>
+      </div>
+      <div class="space-y-1">
+        <p class="text-label-md font-label-md font-semibold text-primary font-mono">Level 2 — Interactive Focus</p>
+        <p class="text-body-sm font-body-sm text-secondary">Triggered on card selection, parameter edits, or drag gestures.</p>
+      </div>
+    </div>
+
+    <!-- Level 3: Floating Glass Capsule Dock -->
+    <div class="flex flex-col gap-3">
+      <div class="h-56 rounded-[22px] p-5 bg-white/75 backdrop-blur-md border border-white/80 shadow-[0_16px_36px_-8px_rgba(46,59,82,0.12),0_4px_12px_-2px_rgba(46,59,82,0.06)] relative flex flex-col justify-between ring-1 ring-black/5">
+        <div class="flex items-center justify-between font-mono">
+          <span class="text-label-sm font-label-sm font-bold bg-black/80 text-white px-2 py-1 rounded">LEVEL 3</span>
+          <span class="text-label-sm font-label-sm text-secondary">Blur: 16px</span>
+        </div>
+        <div class="bg-white/70 p-3 rounded-xl border border-white/90 shadow-xs">
+          <p class="text-headline-sm font-headline-sm text-on-surface font-semibold">Glass HUD Companion</p>
+          <p class="text-body-sm font-body-sm text-secondary mt-1">High refraction glass floats above all canvas panning nodes.</p>
+        </div>
+      </div>
+      <div class="space-y-1">
+        <p class="text-label-md font-label-md font-semibold text-on-surface font-mono">Level 3 — Floating Dock</p>
+        <p class="text-body-sm font-body-sm text-secondary">Heads-up display, floating navigators, and command switcher.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Live Code Block for Elevation Utility Classes -->
+  <div class="bg-[#1e2530] rounded-xl p-4 text-white overflow-x-auto shadow-md border border-slate-700/50">
+    <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-700/80">
+      <div class="flex items-center gap-2 font-mono">
+        <span class="w-3 h-3 rounded-full bg-red-500/80"></span>
+        <span class="w-3 h-3 rounded-full bg-amber-500/80"></span>
+        <span class="w-3 h-3 rounded-full bg-emerald-500/80"></span>
+        <span class="text-label-sm font-label-sm text-slate-400 ml-2">kumo.css &amp; tokens.css</span>
+      </div>
+      <button class="text-label-sm font-label-sm text-slate-300 hover:text-white flex items-center gap-1 font-mono cursor-pointer" onclick="copyToken('kumo-elevation-classes')">
+        <span class="material-symbols-outlined text-[14px]">content_copy</span> Copy CSS
+      </button>
+    </div>
+    <pre class="font-label-md text-label-md leading-relaxed text-slate-200 font-mono"><code><span class="text-slate-500">/* Level 1: Tool Card Resting */</span>
+<span class="text-[#dcedff]">.kumo-card</span> {
+  background: <span class="text-[#dcf5e7]">#ffffff</span>;
+  border-radius: <span class="text-[#ffe9d6]">18px</span>;
+  box-shadow: <span class="text-[#fff5c8]">0px 1px 2px rgba(46,59,82,0.04), 0px 8px 24px -4px rgba(46,59,82,0.06)</span>;
+}
+<span class="text-slate-500">/* Level 3: Frosted Companion Capsule Dock */</span>
+<span class="text-[#dcedff]">.kumo-dock</span> {
+  background: <span class="text-[#dcf5e7]">rgba(255, 255, 255, 0.72)</span>;
+  backdrop-filter: <span class="text-[#ffe9d6]">blur(16px) saturate(180%)</span>;
+  box-shadow: <span class="text-[#fff5c8]">0px 16px 36px -8px rgba(46,59,82,0.12), inset 0px 1px 0px rgba(255,255,255,0.9)</span>;
+}</code></pre>
+  </div>
+</section>

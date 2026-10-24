@@ -1,0 +1,118 @@
+/* ─────────────────────────────────────────────────────────────
+   KUMO DESIGN SYSTEM — CORE TOKENS (ui/board/css/tokens.css)
+   ───────────────────────────────────────────────────────────── */
+
+:root {
+  /* ── 1. Color Palette ── */
+  --ink: #494848;
+  --ink-soft: #8d8595;
+  --ink-faint: #b9b2c2;
+  --paper: #ffffff;
+  --dot: #e3dcee;
+
+  /* Sky (Work & Sprint Execution) */
+  --sky: #dcedff;
+  --sky-deep: #8cc1ff;
+  --sky-ink: #164273;
+
+  /* Butter (Study & Knowledge) */
+  --butter: #fff5c8;
+  --butter-deep: #f3d96a;
+  --butter-ink: #614e05;
+
+  /* Blush / Pink (Leisure & Mascot) */
+  --blush: #ffecec;
+  --blush-ink: #701c38;
+  --pink: #ff9ec4;
+  --pink-deep: #f27aa8;
+
+  /* Mint (Focus & Health) */
+  --mint: #dcf5e7;
+  --mint-deep: #7ad3a3;
+  --mint-ink: #115332;
+
+  /* Lilac (Creativity & Reading) */
+  --lilac: #eadfff;
+  --lilac-deep: #b89bff;
+  --lilac-ink: #482387;
+
+  /* Peach (Warm Notes & Sticky Notes) */
+  --peach: #ffe9d6;
+  --peach-deep: #ffb48a;
+  --peach-ink: #78340d;
+
+  /* Accents */
+  --coral: #ff9a7b;
+  --select: #0d99ff;
+
+  /* ── 2. Typography ── */
+  --font-sans: "DM Sans", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  --font-hand: "Caveat", "Comic Sans MS", cursive;
+  --font: var(--font-sans);
+  --mono: var(--font-mono);
+  --hand: var(--font-hand);
+
+  /* ── 3. Spacing Scale ── */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  /* ── 4. Border Radius ── */
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 18px;
+  --r-xl: 22px;
+  --r-full: 999px;
+
+  /* ── 5. Shadows ── */
+  --shadow-subtle: 0 3px 10px rgba(120, 80, 120, 0.10);
+  --shadow-panel: 0 8px 28px rgba(120, 80, 120, 0.12), 0 0 0 1px rgba(120, 80, 120, 0.05);
+  --shadow-card: 0 10px 30px rgba(120, 80, 120, 0.10), 0 1px 3px rgba(0, 0, 0, 0.04);
+  --shadow-dock: 0 12px 30px rgba(40, 20, 60, 0.30);
+  --shadow-pop: 0 16px 36px rgba(0, 0, 0, 0.16);
+
+  /* ── 6. Glassmorphism ── */
+  --bg-canvas: #fbf8fc;
+  --bg-surface: #ffffff;
+  --bg-glass: rgba(255, 255, 255, 0.88);
+  --bg-dock: rgba(40, 40, 48, 0.94);
+  --blur-glass: blur(16px);
+  --border-glass: 1px solid rgba(255, 255, 255, 0.35);
+
+  /* ── 7. Motion ── */
+  --ease-spring: cubic-bezier(0.2, 0.8, 0.3, 1);
+  --ease-pop: cubic-bezier(0.2, 0.9, 0.3, 1.4);
+  --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+}
+
+/* Dark Theme */
+html[data-theme="dark"], body.kumo-dark {
+  --bg-canvas: #09080f;
+  --bg-surface: #111019;
+  --bg-glass: rgba(26, 23, 36, 0.75);
+  --ink: #e8e4f0;
+  --ink-soft: #9990a8;
+  --ink-faint: #5e5670;
+  --paper: #18161f;
+  --dot: rgba(255, 255, 255, 0.05);
+}
+
+/* Light Theme */
+html[data-theme="light"], body.kumo-light {
+  --bg-canvas: #faf8fc;
+  --bg-surface: #ffffff;
+  --bg-glass: rgba(255, 255, 255, 0.90);
+  --ink: #1e1a24;
+  --ink-soft: #6d6480;
+  --ink-faint: #a89dba;
+  --paper: #ffffff;
+  --dot: rgba(0, 0, 0, 0.05);
+}

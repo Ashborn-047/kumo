@@ -10,13 +10,18 @@ const fs   = require('fs');
 const CONFIG_PATH = path.join(app.getPath('userData'), 'config.json');
 
 const DEFAULTS = {
-  apiKey:       '',
-  color:        '#baa0ff',   // default pastel purple
-  model:        'meta-llama/llama-3.3-70b-instruct:free',
-  overlayX:     null,        // null = auto position (bottom-right)
-  overlayY:     null,
-  socialBadges: [],          // e.g. ['instagram', 'linkedin']
-  firstRun:     true,
+  apiKey:          '',
+  color:           '#baa0ff',
+  model:           'meta-llama/llama-3.3-70b-instruct:free',
+  overlayX:        null,
+  overlayY:        null,
+  socialBadges:    [],
+  firstRun:        true,
+  userName:        '',
+  companionName:   'Kumo',
+  autostart:       false,
+  startMinimized:  false,
+  studioTheme:     'light',
 };
 
 function get() {
@@ -42,7 +47,7 @@ function isFirstRun() {
 }
 
 function completeFirstRun() {
-  save({ firstRun: false });
+  return save({ firstRun: false });
 }
 
 module.exports = { get, save, isFirstRun, completeFirstRun, DEFAULTS };

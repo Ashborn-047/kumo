@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Mascot Renderer</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 40px;
+      background: #fbf8fc;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 40px;
+    }
+    .mascot-box {
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. Cotton Cloud -->
+  <div id="cotton-cloud" class="mascot-box" style="width: 320px; height: 240px;">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 96" width="300" height="192" fill="none">
+      <defs>
+        <linearGradient id="cotton_grad" x1="10" y1="4" x2="142" y2="97" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#FFFFFF" />
+          <stop offset="0.75" stop-color="#F2EBFF" />
+          <stop offset="1" stop-color="#E2EEFF" />
+        </linearGradient>
+      </defs>
+      <ellipse cx="75" cy="8" rx="36" ry="6" fill="#6355d8" opacity="0.18" />
+      <path d="M120 72C133.255 72 144 61.2548 144 48C144 35.8456 134.975 25.7981 123.279 24.2386C120.485 10.3707 108.204 0 93.5 0C82.1066 0 72.1388 6.27315 66.8601 15.5492C62.4638 13.2922 57.481 12 52.2 12C36.736 12 24.2 24.536 24.2 40C24.2 41.229 24.2793 42.4395 24.433 43.627C10.6698 46.126 0 58.1256 0 72.6C0 88.6163 12.9837 101.6 29 101.6H120C133.255 101.6 144 90.8548 144 77.6" fill="#FFFFFF" />
+      <path d="M120 70C132.15 70 142 60.1503 142 48C142 36.8778 133.743 27.6833 123.042 26.252C120.486 13.5658 109.248 4 95.8 4C85.3748 4 76.2625 9.74088 71.4326 18.228C67.41 16.1627 62.8504 15 58 15C43.6406 15 32 26.6406 32 41C32 42.1246 32.0712 43.2329 32.2098 44.3197C19.6152 46.6063 10 57.5855 10 70.8C10 85.4355 21.8645 97.3 36.5 97.3H120C132.15 97.3 142 87.4503 142 75.3" fill="url(#cotton_grad)" />
+      <circle cx="68" cy="54" r="4.5" fill="#2E3B52" />
+      <circle cx="102" cy="54" r="4.5" fill="#2E3B52" />
+      <circle cx="69.5" cy="52.5" r="1.5" fill="#FFFFFF" />
+      <circle cx="103.5" cy="52.5" r="1.5" fill="#FFFFFF" />
+      <ellipse cx="59" cy="61" rx="6" ry="3.5" fill="#FFB4A6" opacity="0.75" />
+      <ellipse cx="111" cy="61" rx="6" ry="3.5" fill="#FFB4A6" opacity="0.75" />
+      <path d="M80 61C82.5 64.5 87.5 64.5 90 61" stroke="#2E3B52" stroke-width="2.5" stroke-linecap="round" />
+    </svg>
+  </div>
+
+  <!-- 2. Starlet Astro -->
+  <div id="starlet-astro" class="mascot-box" style="width: 280px; height: 260px;">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 110" width="260" height="240" fill="none">
+      <defs>
+        <linearGradient id="star_gold" x1="60" y1="5" x2="60" y2="95" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#FFF8D6" />
+          <stop offset="0.6" stop-color="#FFE37E" />
+          <stop offset="1" stop-color="#FFC83B" />
+        </linearGradient>
+      </defs>
+      <ellipse cx="60" cy="55" rx="55" ry="18" stroke="#FBBF24" stroke-width="2.5" opacity="0.85" transform="rotate(-14 60 55)" />
+      <path d="M60 8L72 38H104L78 58L88 88L60 69L32 88L42 58L16 38H48L60 8Z" fill="url(#star_gold)" />
+      <circle cx="51" cy="50" r="3.5" fill="#3D2900" />
+      <circle cx="69" cy="50" r="3.5" fill="#3D2900" />
+      <circle cx="52.2" cy="48.8" r="1.2" fill="#FFFFFF" />
+      <circle cx="70.2" cy="48.8" r="1.2" fill="#FFFFFF" />
+      <path d="M57 56C59 59 61 59 63 56" stroke="#3D2900" stroke-width="2" stroke-linecap="round" />
+      <circle cx="44" cy="54" r="2.5" fill="#FF8D54" opacity="0.75" />
+      <circle cx="76" cy="54" r="2.5" fill="#FF8D54" opacity="0.75" />
+    </svg>
+  </div>
+
+  <!-- 3. Mochi Droplet -->
+  <div id="mochi-droplet" class="mascot-box" style="width: 260px; height: 260px;">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 116" width="240" height="220" fill="none">
+      <defs>
+        <linearGradient id="mochi_gel" x1="64" y1="6" x2="64" y2="108" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#C2F9E0" />
+          <stop offset="0.6" stop-color="#A2EEDB" />
+          <stop offset="1" stop-color="#7BE2E2" />
+        </linearGradient>
+        <linearGradient id="mochi_inner" x1="64" y1="14" x2="64" y2="98" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#FFFFFF" />
+          <stop offset="0.7" stop-color="#DCFBEB" />
+          <stop offset="1" stop-color="#A7EFDD" />
+        </linearGradient>
+      </defs>
+      <path d="M64 6C46 32 16 54 16 80C16 96.5685 37.4853 108 64 108C90.5147 108 112 96.5685 112 80C112 54 82 32 64 6Z" fill="url(#mochi_gel)" />
+      <path d="M64 14C52 36 28 56 28 78C28 89.5 44 98 64 98C84 98 100 89.5 100 78C100 56 76 36 64 14Z" fill="url(#mochi_inner)" opacity="0.85" />
+      <ellipse cx="46" cy="46" rx="14" ry="7" fill="#FFFFFF" opacity="0.75" transform="rotate(-30 46 46)" />
+      <ellipse cx="50" cy="74" rx="4" ry="6" fill="#1C3833" />
+      <ellipse cx="78" cy="74" rx="4" ry="6" fill="#1C3833" />
+      <circle cx="51.5" cy="72" r="1.5" fill="#FFFFFF" />
+      <circle cx="79.5" cy="72" r="1.5" fill="#FFFFFF" />
+      <path d="M60 80C62 83 66 83 68 80" stroke="#1C3833" stroke-width="2.5" stroke-linecap="round" />
+      <ellipse cx="40" cy="80" rx="5" ry="3" fill="#A8F5D0" opacity="0.8" />
+      <ellipse cx="88" cy="80" rx="5" ry="3" fill="#A8F5D0" opacity="0.8" />
+    </svg>
+  </div>
+
+  <!-- 4. Kubo Bot -->
+  <div id="kubo-bot" class="mascot-box" style="width: 260px; height: 280px;">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130 140" width="240" height="260" fill="none">
+      <rect x="62" y="14" width="6" height="24" rx="3" fill="#525F77" />
+      <circle cx="65" cy="12" r="9" fill="#34D399" opacity="0.4" />
+      <circle cx="65" cy="12" r="6" fill="#34D399" stroke="#FFFFFF" stroke-width="2" />
+      <rect x="15" y="36" width="100" height="88" rx="20" fill="#2E3B52" stroke="#474554" stroke-width="3" />
+      <rect x="25" y="46" width="80" height="52" rx="14" fill="#171B2B" stroke="#3A475F" stroke-width="2" />
+      <rect x="38" y="62" width="16" height="16" rx="4" fill="#DCF5E7" />
+      <path d="M42 72L46 66L50 72" stroke="#171B2B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+      <rect x="76" y="62" width="16" height="16" rx="4" fill="#DCF5E7" />
+      <path d="M80 72L84 66L88 72" stroke="#171B2B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+      <rect x="58" y="76" width="14" height="4" rx="2" fill="#34D399" />
+      <circle cx="35" cy="110" r="4" fill="#818CF8" />
+      <circle cx="47" cy="110" r="4" fill="#FB7185" />
+      <text x="70" y="113" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="600" fill="#8A92A6" letter-spacing="1">KUBO-04</text>
+    </svg>
+  </div>
+
+</body>
+</html>

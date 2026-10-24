@@ -94,6 +94,7 @@ window.addEventListener('mouseup', () => {
     isDragging = false;
     // If it was just a click (minimal drag distance), toggle chat!
     if (dragDist < 6) {
+      window.gooState?.triggerPoke?.();
       toggleChat();
     }
   }
@@ -103,12 +104,16 @@ window.addEventListener('mouseup', () => {
 function showChat() {
   chatBar.classList.remove('hidden');
   settingsModal.classList.add('hidden');
+  window.gooState?.setState?.('listening');
   input.focus();
 }
 
 function hideChat() {
   chatBar.classList.add('hidden');
   input.value = '';
+  if (!isThinking) {
+    window.gooState?.setState?.('idle');
+  }
 }
 
 function toggleChat() {
@@ -233,20 +238,32 @@ async function loadSettings() {
   if (currentSettings.model) {
     settingModel.value = currentSettings.model;
   }
-  if (currentSettings.color) {
-    window.gooState?.setColor(currentSettings.color);
-    colorSwatches.forEach(s => {
-      s.classList.toggle('active', s.dataset.color === currentSettings.color);
-    });
-  }
+  applyCompanionSettings(currentSettings);
 
-  // Welcome prompt on first run if no API key
-  if (!currentSettings.apiKey) {
-    showBubble("👋 Hi! I'm Kumo. Click ⚙️ to add your OpenRouter API key so I can talk!");
+  if (!currentSettings.apiKey && currentSettings.firstRun === false) {
+    const name = currentSettings.companionName || 'Kumo';
+    showBubble(`Hi — I'm ${name}. Open Customize to add an OpenRouter key so I can talk.`);
+  }
+}
+
+function applyCompanionSettings(cfg = {}) {
+  const name = (cfg.companionName || 'Kumo').trim() || 'Kumo';
+  const title = document.getElementById('bubble-title');
+  if (title) title.textContent = name;
+
+  if (cfg.color) {
+    window.gooState?.setColor(cfg.color);
+    colorSwatches.forEach(s => {
+      s.classList.toggle('active', s.dataset.color === cfg.color);
+    });
   }
 }
 
 function openSettings() {
+  if (window.goo?.openStudio) {
+    window.goo.openStudio('studio');
+    return;
+  }
   hideChat();
   hideBubble();
   closeHistory();
@@ -358,8 +375,25 @@ linkOpenRouter?.addEventListener('click', () => {
 window.addEventListener('goo:focus-chat', showChat);
 window.addEventListener('goo:open-settings', openSettings);
 window.addEventListener('goo:first-run', () => {
-  showBubble("✨ Welcome to Kumo! Press Alt+Space anytime or click me to chat.");
+  window.goo?.openStudio('wizard');
 });
+window.addEventListener('goo:launched', (e) => {
+  const detail = e.detail || {};
+  const name = detail.companionName || 'Kumo';
+  const user = detail.userName;
+  const hello = user
+    ? `Hi ${user} — I'm ${name}. Press Alt+Space anytime, or click me to chat.`
+    : `Hi — I'm ${name}. Press Alt+Space anytime, or click me to chat.`;
+  window.gooState?.setStateTemp('happy', 2200);
+  showBubble(hello);
+});
+
+if (window.goo?.onSettingsUpdated) {
+  window.goo.onSettingsUpdated((cfg) => {
+    currentSettings = { ...currentSettings, ...cfg };
+    applyCompanionSettings(currentSettings);
+  });
+}
 
 // Initialize on page load
 loadSettings();

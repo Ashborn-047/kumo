@@ -5,13 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Kumo</title>
   <link rel="stylesheet" href="overlay.css" />
+  <!-- Three.js r128 for 3D Mochi mascot -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
   <div id="app-container">
     <!-- Reply speech bubble — sits right above mascot -->
     <div id="bubble" class="bubble hidden">
       <div id="bubble-header">
-        <span class="bubble-title">Kumo</span>
+        <span class="bubble-title" id="bubble-title">Kumo</span>
         <button id="bubble-close" class="bubble-close-btn" title="Dismiss">×</button>
       </div>
       <div id="bubble-text"></div>
@@ -64,12 +66,7 @@
 
           <label class="settings-label">
             Model
-            <select id="setting-model">
-              <option value="meta-llama/llama-3.3-70b-instruct:free">Llama 3.3 70B (Free)</option>
-              <option value="google/gemini-flash-1.5:free">Gemini Flash 1.5 (Free)</option>
-              <option value="deepseek/deepseek-r1:free">DeepSeek R1 (Free)</option>
-              <option value="qwen/qwen-2.5-72b-instruct:free">Qwen 2.5 72B (Free)</option>
-            </select>
+            <input type="text" id="setting-model" placeholder="e.g. anthropic/claude-3.5-sonnet, openai/gpt-4o" autocomplete="off" spellcheck="false" />
           </label>
         </div>
         <div class="settings-footer">
@@ -95,7 +92,7 @@
     </div>
   </div>
 
-  <script src="goo.js"></script>
+  <script type="module" src="goo.js"></script>
   <script src="chat.js"></script>
 </body>
 </html>

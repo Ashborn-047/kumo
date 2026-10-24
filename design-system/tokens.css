@@ -1,0 +1,80 @@
+/* ─────────────────────────────────────────────────────────────
+   KUMO DESIGN SYSTEM — OFFICIAL TOKENS (RFC-2025 SPEC)
+   Warm Tactile Spatial Canvas Architecture
+   ───────────────────────────────────────────────────────────── */
+
+:root {
+  /* ── 1. Brand Core & Neutrals ── */
+  --kumo-primary: #4a3abe;
+  --kumo-primary-container: #6355d8;
+  --kumo-primary-fixed: #e4dfff;
+  --kumo-primary-fixed-dim: #c6bfff;
+  --kumo-on-primary: #ffffff;
+  --kumo-on-primary-container: #ece7ff;
+  --kumo-on-primary-fixed: #160066;
+
+  --kumo-secondary: #525f77;
+  --kumo-secondary-container: #d3e0fd;
+  --kumo-on-secondary: #ffffff;
+  --kumo-on-secondary-container: #56637c;
+
+  --kumo-midnight-slate: #2e3b52;
+  --kumo-coral-punch: #ff7e67;
+  --kumo-canvas-base: #fbf8fc;
+  --kumo-card-surface: #ffffff;
+
+  --kumo-on-surface: #171b2b;
+  --kumo-on-surface-variant: #474554;
+  --kumo-outline: #787585;
+  --kumo-outline-variant: #c8c4d6;
+
+  /* ── 2. The 5 Workbench Pastel Archetypes (48px Header Standards) ── */
+  /* Archetype 1: Sky Blue (App Launcher & System Telemetry) */
+  --kumo-archetype-sky-bg: #dcedff;
+  --kumo-archetype-sky-border: #c3dfff;
+  --kumo-archetype-sky-ink: #1b5ba5;
+
+  /* Archetype 2: Soft Lilac (AI Drafting & Co-Pilot Agents) */
+  --kumo-archetype-lilac-bg: #eadfff;
+  --kumo-archetype-lilac-border: #dac8ff;
+  --kumo-archetype-lilac-ink: #4a3abe;
+
+  /* Archetype 3: Soft Mint (Terminal Automation & Daemons) */
+  --kumo-archetype-mint-bg: #dcf5e7;
+  --kumo-archetype-mint-border: #bbf0cf;
+  --kumo-archetype-mint-ink: #166534;
+
+  /* Archetype 4: Soft Peach (Design Studio & Token Inspectors) */
+  --kumo-archetype-peach-bg: #ffe9d6;
+  --kumo-archetype-peach-border: #ffd2af;
+  --kumo-archetype-peach-ink: #b84a14;
+
+  /* Archetype 5: Warm Butter (Ideas & Sprint Sticky Notes) */
+  --kumo-archetype-butter-bg: #fff5c8;
+  --kumo-archetype-butter-border: #ffec99;
+  --kumo-archetype-butter-ink: #856404;
+
+  /* ── 3. Typography Families ── */
+  --kumo-font-display: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --kumo-font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --kumo-font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* ── 4. Spatial Elevation Shadows ── */
+  --kumo-elevation-1: 0px 1px 2px rgba(46, 59, 82, 0.04), 0px 8px 24px -4px rgba(46, 59, 82, 0.06);
+  --kumo-elevation-2: 0px 0px 0px 1px rgba(99, 85, 216, 0.15), 0px 12px 32px -6px rgba(99, 85, 216, 0.12), 0px 4px 12px rgba(46, 59, 82, 0.04);
+  --kumo-elevation-3: 0px 16px 36px -8px rgba(46, 59, 82, 0.12), 0px 4px 12px -2px rgba(46, 59, 82, 0.06);
+  --kumo-dock-highlight: inset 0px 1px 0px rgba(255, 255, 255, 0.9);
+
+  /* ── 5. Spatial Radii ── */
+  --kumo-radius-sm: 0.25rem;
+  --kumo-radius-md: 0.5rem;
+  --kumo-radius-lg: 0.75rem;
+  --kumo-radius-card: 18px;
+  --kumo-radius-dock: 22px;
+  --kumo-radius-pill: 9999px;
+
+  /* ── 6. Grid & Spatial Coordinates ── */
+  --kumo-grid-size: 24px;
+  --kumo-grid-dot-color: rgba(113, 116, 136, 0.16);
+  --kumo-grid-dot-radius: 1.5px;
+}

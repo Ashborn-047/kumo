@@ -1,0 +1,67 @@
+/* ─────────────────────────────────────────────────────────────
+   ui/board/css/cards.css: Stitch Warm Tactile Cards & Overlays
+   ───────────────────────────────────────────────────────────── */
+
+.kumo-canvas-card {
+  position: absolute;
+  background: #ffffff;
+  border-radius: 18px;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow: 0px 1px 3px rgba(46, 59, 82, 0.05), 0px 10px 28px -6px rgba(46, 59, 82, 0.07);
+  transition: transform var(--duration-fast, 150ms), box-shadow var(--duration-fast, 150ms);
+  z-index: 10;
+  overflow: hidden;
+  user-select: text;
+}
+
+.kumo-canvas-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0px 0px 0px 1.5px rgba(99, 85, 216, 0.25), 0px 14px 34px -6px rgba(99, 85, 216, 0.12), 0px 4px 12px rgba(46, 59, 82, 0.04);
+  z-index: 25;
+}
+
+.kumo-canvas-card.dragging {
+  transform: scale(1.01);
+  box-shadow: 0 24px 50px rgba(46, 59, 82, 0.20);
+  z-index: 100;
+  transition: none;
+}
+
+.kumo-canvas-card.selected {
+  outline: 2px solid #6355d8;
+  outline-offset: 3px;
+}
+
+/* Minimized State */
+.kumo-canvas-card.minimized > div:not(header):not([data-drag-handle]) {
+  display: none !important;
+}
+.kumo-canvas-card.minimized {
+  height: 48px !important;
+  overflow: hidden !important;
+}
+
+/* Toast Notification */
+.toast {
+  position: fixed;
+  bottom: 84px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: rgba(23, 27, 43, 0.92);
+  color: #ffffff;
+  padding: 8px 18px;
+  border-radius: 9999px;
+  font-size: 13px;
+  font-family: var(--font-sans, "Inter", sans-serif);
+  font-weight: 500;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(12px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 9999;
+}
+.toast.on {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}

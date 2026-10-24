@@ -1,0 +1,29 @@
+<!-- SHARED COMPONENT: Footer / Bottom Navigation Dock -->
+<footer class="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 flex items-center gap-4 px-5 py-2 bg-surface-container-lowest/80 backdrop-blur-md rounded-full shadow-lg shadow-on-surface/5 ring-1 ring-white/60">
+  <span class="text-body-sm font-body-sm text-secondary hidden sm:inline">
+    Space to pan • Ctrl+Scroll to zoom • Ctrl+K quick command
+  </span>
+  <div class="h-4 w-px bg-outline-variant/50 hidden sm:block"></div>
+
+  <!-- Zoom and screen controls -->
+  <div class="flex items-center gap-2 text-label-sm font-label-sm font-mono">
+    <button class="text-primary font-medium hover:text-on-surface hover:bg-surface-container-high/50 rounded-lg px-2 py-1 transition-colors cursor-pointer" type="button" onclick="copyToken('Zoom reset to 100%')">
+      100%
+    </button>
+    <button class="text-secondary hover:text-on-surface hover:bg-surface-container-high/50 rounded-lg p-1 transition-colors cursor-pointer" title="Fit to Screen" type="button" onclick="copyToken('Canvas fitted to screen')">
+      <span class="material-symbols-outlined text-[18px]">fit_screen</span>
+    </button>
+    <button class="text-secondary hover:text-on-surface hover:bg-surface-container-high/50 rounded-lg p-1 transition-colors cursor-pointer" title="Zoom In" type="button" onclick="copyToken('Zoom In (+10%)')">
+      <span class="material-symbols-outlined text-[18px]">zoom_in</span>
+    </button>
+    <button class="text-secondary hover:text-on-surface hover:bg-surface-container-high/50 rounded-lg p-1 transition-colors cursor-pointer" title="Zoom Out" type="button" onclick="copyToken('Zoom Out (-10%)')">
+      <span class="material-symbols-outlined text-[18px]">zoom_out</span>
+    </button>
+  </div>
+</footer>
+
+<!-- Toast Notification Container -->
+<div class="fixed bottom-20 left-1/2 -translate-x-1/2 z-50 bg-[#1e2530] text-white px-4 py-2 rounded-full text-label-md font-label-md shadow-xl border border-slate-700 opacity-0 pointer-events-none transition-opacity duration-300 flex items-center gap-2 font-mono" id="copy-toast">
+  <span class="material-symbols-outlined text-emerald-400 text-[16px]">check_circle</span>
+  <span id="copy-toast-msg">Copied to clipboard</span>
+</div>

@@ -31,6 +31,14 @@ contextBridge.exposeInMainWorld('goo', {
   // Settings
   getSettings:  ()         => ipcRenderer.invoke('settings:get'),
   saveSettings: (data)     => ipcRenderer.invoke('settings:save', data),
+  onSettingsUpdated: (cb)  => ipcRenderer.on('settings:updated', (_e, data) => cb(data)),
+
+  // Studio / onboarding
+  openStudio:      (mode)     => ipcRenderer.send('studio:open', mode || 'studio'),
+  closeStudio:     ()         => ipcRenderer.send('studio:close'),
+  launchCompanion: (data)     => ipcRenderer.invoke('studio:launch', data),
+  studioWindow:    (action)   => ipcRenderer.send('studio:window', action),
+  openExternal:    (url)      => ipcRenderer.invoke('shell:open-external', url),
 
   // Window controls
   openBoard:       ()         => ipcRenderer.send('window:open-board'),

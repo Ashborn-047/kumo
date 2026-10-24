@@ -1,0 +1,114 @@
+/* ── ui/board/css/code.css: Stitch PowerShell & Script Sandbox ── */
+
+.code-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.code-actions-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.code-run-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: #059669;
+  color: #ffffff;
+  font: 600 11.5px/1 var(--font-sans);
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(5, 150, 105, 0.2);
+  transition: all var(--duration-fast);
+}
+.code-run-btn svg {
+  width: 13px;
+  height: 13px;
+}
+.code-run-btn:hover {
+  background: #047857;
+}
+
+.code-tool-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: #f1f5f9;
+  color: #334155;
+  font: 600 11px/1 var(--font-sans);
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
+  transition: all var(--duration-fast);
+}
+.code-tool-btn svg {
+  width: 13px;
+  height: 13px;
+}
+.code-tool-btn:hover {
+  background: #e2e8f0;
+}
+
+.code-version-badge {
+  font: 500 10.5px/1 var(--font-mono);
+  color: #94a3b8;
+}
+
+.code-editor-well {
+  width: 100%;
+  min-height: 85px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font: 500 12px/1.5 var(--font-mono);
+  color: #1e293b;
+  outline: none;
+  resize: vertical;
+  margin-bottom: 10px;
+}
+.code-editor-well:focus {
+  border-color: #6355d8;
+  background: #ffffff;
+}
+
+.code-terminal-console {
+  background: #1e2530;
+  border-radius: 12px;
+  border: 1px solid #334155;
+  padding: 10px 14px;
+  font: 500 11px/1.5 var(--font-mono);
+  color: #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 90px;
+  overflow-y: auto;
+}
+
+.terminal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(71, 85, 105, 0.4);
+  padding-bottom: 4px;
+  margin-bottom: 4px;
+  font: 700 9px/1 var(--font-mono);
+  color: #94a3b8;
+  letter-spacing: 0.05em;
+}
+
+.terminal-pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #34d399;
+  box-shadow: 0 0 6px rgba(52, 211, 153, 0.6);
+}

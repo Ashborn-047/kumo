@@ -29,6 +29,33 @@ function showNotification(title, body) {
 
 const PRELOAD = path.join(__dirname, 'preload.js');
 
+function applyLoginItem(enabled) {
+  try {
+    app.setLoginItemSettings({ openAtLogin: Boolean(enabled) });
+  } catch (err) {
+    console.warn('[main] login item:', err.message);
+  }
+}
+
+function broadcastSettings(updated) {
+  const payload = 'settings:updated';
+  overlayManager.get()?.webContents.send(payload, updated);
+  boardManager.get()?.webContents.send(payload, updated);
+  studioManager.get()?.webContents.send(payload, updated);
+}
+
+function applySavedSettings(saved, incoming = {}) {
+  if (incoming.apiKey) {
+    ai.init(saved.apiKey);
+    ai.detectBestModel().catch(console.warn);
+  }
+  if (Object.prototype.hasOwnProperty.call(incoming, 'autostart')) {
+    applyLoginItem(saved.autostart);
+  }
+  broadcastSettings(saved);
+  return saved;
+}
+
 // ── App ready ─────────────────────────────────────────────────
 app.whenReady().then(async () => {
   // Hide from taskbar — lives in tray only
@@ -43,11 +70,17 @@ app.whenReady().then(async () => {
     ai.detectBestModel().catch(console.warn);
   }
 
-  // Create floating overlay window
-  const overlay = overlayManager.create(PRELOAD);
+  applyLoginItem(cfg.autostart);
 
-  // Open the main Mochiboard Desktop application window
-  boardManager.openBoardWindow(PRELOAD);
+  overlayManager.create(PRELOAD);
+
+  const firstRun = settings.isFirstRun();
+  if (firstRun) {
+    overlayManager.hide();
+    studioManager.open(PRELOAD, { mode: 'wizard' });
+  } else if (!cfg.startMinimized) {
+    boardManager.openBoardWindow(PRELOAD);
+  }
 
   // Open the native Kumo Studio & Customizer window
   studioManager.openStudioWindow(PRELOAD);
@@ -56,29 +89,26 @@ app.whenReady().then(async () => {
   trayManager.create({
     onShowOverlay: () => {
       overlayManager.show();
-      overlay.webContents.executeJavaScript(`window.dispatchEvent(new Event('goo:focus-chat'))`);
+      overlayManager.get()?.webContents.executeJavaScript(`window.dispatchEvent(new Event('goo:focus-chat'))`);
     },
     onHideOverlay: () => overlayManager.hide(),
     onOpenBoard:   () => boardManager.openBoardWindow(PRELOAD),
+<<<<<<< Updated upstream
     onOpenStudio:  () => studioManager.openStudioWindow(PRELOAD),
     onOpenSettings: () => {
       studioManager.openStudioWindow(PRELOAD);
     },
+=======
+    onOpenSettings: () => studioManager.open(PRELOAD, { mode: 'studio' }),
+>>>>>>> Stashed changes
     onQuit:        () => app.quit(),
   });
 
   // Global hotkey: Alt+Space → focus chat
   globalShortcut.register('Alt+Space', () => {
     overlayManager.show();
-    overlay.webContents.executeJavaScript(`window.dispatchEvent(new Event('goo:focus-chat'))`);
+    overlayManager.get()?.webContents.executeJavaScript(`window.dispatchEvent(new Event('goo:focus-chat'))`);
   });
-
-  // First-run: show setup if no API key yet
-  if (settings.isFirstRun() || !cfg.apiKey) {
-    overlay.webContents.once('did-finish-load', () => {
-      overlay.webContents.executeJavaScript(`window.dispatchEvent(new Event('goo:first-run'))`);
-    });
-  }
 });
 
 // ── Cleanup ───────────────────────────────────────────────────
@@ -148,12 +178,38 @@ ipcMain.handle('ai:send', async (event, message) => {
 // Settings: get / save
 ipcMain.handle('settings:get',  ()       => settings.get());
 ipcMain.handle('settings:save', (_, data) => {
-  const saved = settings.save(data);
-  // Re-init AI if key changed
-  if (data.apiKey) {
-    ai.init(data.apiKey);
-    ai.detectBestModel().catch(console.warn);
+  const saved = settings.save(data || {});
+  return applySavedSettings(saved, data || {});
+});
+
+ipcMain.handle('shell:open-external', (_, url) => {
+  if (typeof url === 'string' && /^https?:\/\//i.test(url)) {
+    return shell.openExternal(url);
   }
+  return false;
+});
+
+ipcMain.on('studio:open', (_, mode) => {
+  studioManager.open(PRELOAD, { mode: mode === 'wizard' ? 'wizard' : 'studio' });
+});
+ipcMain.on('studio:close', () => studioManager.close());
+ipcMain.on('studio:window', (_, action) => studioManager.control(action));
+
+ipcMain.handle('studio:launch', (_, data) => {
+  const saved = settings.save({ ...(data || {}), firstRun: false });
+  applySavedSettings(saved, data || {});
+  overlayManager.show();
+  overlayManager.get()?.webContents.send('settings:updated', saved);
+  overlayManager.get()?.webContents.executeJavaScript(
+    `window.dispatchEvent(new CustomEvent('goo:launched', { detail: ${JSON.stringify({
+      companionName: saved.companionName,
+      userName: saved.userName,
+    })} }))`
+  );
+  if (!saved.startMinimized) {
+    boardManager.openBoardWindow(PRELOAD);
+  }
+  studioManager.close();
   return saved;
 });
 

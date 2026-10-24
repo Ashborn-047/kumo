@@ -9,6 +9,7 @@
 // TODO Phase 6: add model switcher from settings
 
 const OpenAI = require('openai');
+const settingsStore = require('./settings');
 
 // Free models in priority order (best first)
 const FREE_MODELS = [
@@ -43,7 +44,11 @@ function init(apiKey) {
  * @param {Array}  history       - prior messages [{role, content}]
  * @param {Function} onChunk    - called for each streamed token
  */
-const SYSTEM_PROMPT = `You are Kumo, a cute, helpful, friendly desktop assistant on Windows.
+function buildSystemPrompt(cfg = {}) {
+  const name = (cfg.companionName || 'Kumo').trim() || 'Kumo';
+  const user = (cfg.userName || '').trim();
+  const who = user ? ` The user's name is ${user}; address them by it when it feels natural.` : '';
+  return `You are ${name}, a cute, helpful, friendly desktop assistant on Windows.${who}
 Keep answers brief, pleasant, and warm (1-3 sentences max).
 When the user asks you to do something on their computer, answer warmly and append an action block at the very end in this exact format:
 [ACTION:{"type":"ACTION_NAME","args":{...}}]
@@ -61,6 +66,7 @@ Available actions:
 
 If no action is needed, just answer normally without any [ACTION:...] block.
 Never delete files or run dangerous commands.`;
+}
 
 /**
  * Send a message and stream the response back via callback.
@@ -73,7 +79,7 @@ async function sendMessage(userMessage, history = [], onChunk) {
   if (!client) throw new Error('AI not initialized — API key missing');
 
   const messages = [
-    { role: 'system', content: SYSTEM_PROMPT },
+    { role: 'system', content: buildSystemPrompt(settingsStore.get()) },
     ...history,
     { role: 'user', content: userMessage },
   ];

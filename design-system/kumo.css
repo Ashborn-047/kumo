@@ -1,0 +1,157 @@
+/* ─────────────────────────────────────────────────────────────
+   KUMO DESIGN SYSTEM — COMPONENT & UTILITY CSS (kumo.css)
+   Warm Tactile Spatial Canvas Utilities & Components
+   ───────────────────────────────────────────────────────────── */
+
+@import url("./tokens.css");
+
+/* ── Warm Tactile Dot-Matrix Grid Background ── */
+.bg-dot-matrix {
+  background-color: var(--kumo-canvas-base, #fbf8fc);
+  background-image: radial-gradient(var(--kumo-grid-dot-color, rgba(113, 116, 136, 0.16)) 1.5px, transparent 1.5px);
+  background-size: var(--kumo-grid-size, 24px) var(--kumo-grid-size, 24px);
+}
+
+/* ── Custom Tactile Scrollbar ── */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #fbf8fc;
+}
+::-webkit-scrollbar-thumb {
+  background: #dfe1f8;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #c6bfff;
+}
+
+/* ── Signature Tilted Badge ── */
+.tilted-tag {
+  transform: rotate(-2.5deg);
+  transform-origin: center center;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  user-select: none;
+}
+.tilted-tag:hover {
+  transform: rotate(0deg) scale(1.05);
+}
+
+/* ── Elevation Levels ── */
+.elevation-0 {
+  background-color: var(--kumo-canvas-base);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.elevation-1 {
+  background-color: var(--kumo-card-surface, #ffffff);
+  border-radius: var(--kumo-radius-card, 18px);
+  box-shadow: var(--kumo-elevation-1);
+}
+
+.elevation-2 {
+  background-color: var(--kumo-card-surface, #ffffff);
+  border-radius: var(--kumo-radius-card, 18px);
+  box-shadow: var(--kumo-elevation-2);
+}
+
+.elevation-3 {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border-radius: var(--kumo-radius-dock, 22px);
+  box-shadow: var(--kumo-elevation-3), var(--kumo-dock-highlight);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+/* ── Functional 48px Header Archetypes ── */
+.archetype-header-sky {
+  background-color: var(--kumo-archetype-sky-bg);
+  border-color: var(--kumo-archetype-sky-border);
+  color: var(--kumo-archetype-sky-ink);
+}
+
+.archetype-header-lilac {
+  background-color: var(--kumo-archetype-lilac-bg);
+  border-color: var(--kumo-archetype-lilac-border);
+  color: var(--kumo-archetype-lilac-ink);
+}
+
+.archetype-header-mint {
+  background-color: var(--kumo-archetype-mint-bg);
+  border-color: var(--kumo-archetype-mint-border);
+  color: var(--kumo-archetype-mint-ink);
+}
+
+.archetype-header-peach {
+  background-color: var(--kumo-archetype-peach-bg);
+  border-color: var(--kumo-archetype-peach-border);
+  color: var(--kumo-archetype-peach-ink);
+}
+
+.archetype-header-butter {
+  background-color: var(--kumo-archetype-butter-bg);
+  border-color: var(--kumo-archetype-butter-border);
+  color: var(--kumo-archetype-butter-ink);
+}
+
+/* ── Workbench Card Layout ── */
+.kumo-card {
+  background: var(--kumo-card-surface, #ffffff);
+  border-radius: var(--kumo-radius-card, 18px);
+  border: 1px solid rgba(200, 196, 214, 0.3);
+  box-shadow: var(--kumo-elevation-1);
+  overflow: hidden;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease;
+}
+
+.kumo-card:hover {
+  box-shadow: 0 12px 32px -6px rgba(99, 85, 216, 0.12);
+}
+
+.kumo-card.active, .kumo-card:focus-within {
+  box-shadow: var(--kumo-elevation-2);
+  border-color: rgba(99, 85, 216, 0.4);
+}
+
+.kumo-card-header {
+  height: 48px;
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  user-select: none;
+}
+
+/* ── Companion Capsule Dock ── */
+.kumo-dock {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border-radius: 9999px;
+  box-shadow: var(--kumo-elevation-3), var(--kumo-dock-highlight);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+}
+
+/* ── Dark Terminal Well ── */
+.kumo-terminal {
+  background-color: #1e2530;
+  border: 1px solid rgba(51, 65, 85, 0.6);
+  border-radius: var(--kumo-radius-card, 18px);
+  color: #f1f5f9;
+  font-family: var(--kumo-font-mono);
+}
+
+/* ── Warm Sticky Note ── */
+.kumo-sticky {
+  background-color: var(--kumo-archetype-butter-bg, #fff5c8);
+  border: 1px solid var(--kumo-archetype-butter-border, #ffec99);
+  border-radius: var(--kumo-radius-card, 18px);
+  box-shadow: 0 8px 24px -4px rgba(255, 245, 200, 0.6);
+}

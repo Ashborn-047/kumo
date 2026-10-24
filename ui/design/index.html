@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Kumo — AI Spatial Assistant Workbench | Design System &amp; Live Component Showcase</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans, Inter, JetBrains Mono -->
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;display=swap" rel="stylesheet"/>
+  
+  <!-- Material Symbols Outlined -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+
+  <!-- Tailwind CSS v3 with plugins & segregated theme configuration -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script src="./tailwind-config.js"></script>
+
+  <!-- Kumo Modular Design System Tokens & Component Styles -->
+  <link rel="stylesheet" href="./tokens.css"/>
+  <link rel="stylesheet" href="./kumo.css"/>
+</head>
+<body class="bg-dot-matrix text-on-surface antialiased selection:bg-primary-fixed selection:text-primary relative min-h-screen pb-32">
+
+  <!-- Modular Section 0: Top Navigation Bar -->
+  <div data-include="./sections/top-nav.html"></div>
+
+  <!-- Main Canvas Content Container -->
+  <main class="max-w-7xl mx-auto px-6 pt-28 space-y-16">
+    <!-- Modular Section 1: Hero Header & System Overview -->
+    <div data-include="./sections/hero.html"></div>
+
+    <!-- Modular Section 2: Spatial Foundation & Tactile Minimalism -->
+    <div data-include="./sections/foundation.html"></div>
+
+    <!-- Modular Section 3: Color Tokens & 5 Workbench Archetypes -->
+    <div data-include="./sections/tokens.html"></div>
+
+    <!-- Modular Section 4: Typography Architecture & Token Ladder -->
+    <div data-include="./sections/typography.html"></div>
+
+    <!-- Modular Section 5: 4-Tier Elevation & Glassmorphism -->
+    <div data-include="./sections/elevation.html"></div>
+
+    <!-- Modular Section 6: Interactive Live Component Showcase Specimens -->
+    <div data-include="./sections/specimens.html"></div>
+
+    <!-- Modular Section 7: Export & Production Deployment -->
+    <div data-include="./sections/export.html"></div>
+  </main>
+
+  <!-- Modular Section 8: Bottom Navigation Dock & Toast -->
+  <div data-include="./sections/footer.html"></div>
+
+  <!-- Modular Showcase Scripts & Section Loader -->
+  <script src="./showcase.js"></script>
+</body>
+</html>

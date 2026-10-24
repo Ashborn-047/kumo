@@ -30,7 +30,8 @@ function create({ onShowOverlay, onHideOverlay, onOpenBoard, onOpenSettings, onO
       { label: 'Show Mascot',         click: onShowOverlay },
       { label: 'Hide Mascot',         click: onHideOverlay },
       { type: 'separator' },
-      { label: 'Settings…',           click: onOpenSettings || onShowOverlay },
+      { label: 'Customize Kumo…', click: onOpenSettings || onShowOverlay },
+      { label: 'Settings…',       click: onOpenSettings || onShowOverlay },
       { type: 'separator' },
       { label: 'Quit Kumo',           click: onQuit        },
     ]);

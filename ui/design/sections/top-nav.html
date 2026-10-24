@@ -1,0 +1,53 @@
+<!-- ========================================================================= -->
+<!-- SHARED COMPONENT: TopNavBar (Exact blueprint mapping)                     -->
+<!-- ========================================================================= -->
+<header class="fixed top-4 left-1/2 -translate-x-1/2 w-[calc(100%-3rem)] max-w-7xl z-50 flex items-center justify-between px-4 py-2.5 bg-surface-container-lowest/70 backdrop-blur-md rounded-full shadow-lg shadow-on-surface/5 ring-1 ring-white/60">
+  <!-- Brand Anchor & Search -->
+  <div class="flex items-center gap-4">
+    <div class="flex items-center gap-2">
+      <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary shadow-sm">
+        <span class="material-symbols-outlined text-[18px]">cloud</span>
+      </div>
+      <span class="text-headline-md font-headline-md font-bold text-on-surface tracking-tight">Kumo</span>
+    </div>
+    <span class="text-label-sm font-label-sm bg-surface-container-high text-primary px-2 py-0.5 rounded-full border border-surface-variant font-semibold">v2.4 System Spec</span>
+
+    <!-- Search Input on Left -->
+    <div class="relative hidden lg:flex items-center ml-2">
+      <span class="material-symbols-outlined text-secondary absolute left-2.5 text-[18px]">search</span>
+      <input class="pl-8 pr-12 py-1 bg-surface-container-lowest border border-outline-variant/40 rounded-full text-body-sm font-body-sm text-on-surface placeholder:text-secondary/70 focus:outline-none focus:ring-2 focus:ring-primary/20 w-64 shadow-xs" placeholder="Search tokens, components... (Cmd+K)" type="text"/>
+      <span class="absolute right-2 text-label-sm font-label-sm text-secondary bg-surface-container px-1.5 py-0.5 rounded border border-outline-variant/30 font-mono">⌘K</span>
+    </div>
+  </div>
+
+  <!-- Navigation Links -->
+  <nav class="hidden md:flex items-center gap-1 bg-surface-container-high/40 p-1 rounded-full border border-white/50">
+    <a class="text-primary bg-primary-fixed font-semibold rounded-full px-3 py-1.5 transition-all text-label-md font-label-md shadow-xs flex items-center gap-1.5 font-mono" href="#overview">
+      <span class="material-symbols-outlined text-[14px]">grid_view</span>
+      All Tools
+    </a>
+    <a class="text-secondary hover:text-on-surface hover:bg-surface-container-high/60 rounded-full px-3 py-1.5 transition-all text-label-md font-label-md font-mono" href="#tokens">System</a>
+    <a class="text-secondary hover:text-on-surface hover:bg-surface-container-high/60 rounded-full px-3 py-1.5 transition-all text-label-md font-label-md font-mono" href="#typography">Writing</a>
+    <a class="text-secondary hover:text-on-surface hover:bg-surface-container-high/60 rounded-full px-3 py-1.5 transition-all text-label-md font-label-md font-mono" href="#elevation">Code</a>
+    <a class="text-secondary hover:text-on-surface hover:bg-surface-container-high/60 rounded-full px-3 py-1.5 transition-all text-label-md font-label-md font-mono" href="#showcase">Design</a>
+    <a class="text-secondary hover:text-on-surface hover:bg-surface-container-high/60 rounded-full px-3 py-1.5 transition-all text-label-md font-label-md font-mono" href="#notes">Notes</a>
+  </nav>
+
+  <!-- Trailing Actions & Profile -->
+  <div class="flex items-center gap-2">
+    <button class="hidden sm:inline-flex items-center gap-1 bg-primary text-on-primary hover:bg-primary-container px-3.5 py-1.5 rounded-full text-label-md font-label-md font-semibold shadow-sm active:scale-95 transition-all font-mono" type="button" onclick="copyToken('New tool workflow modal launched')">
+      <span class="material-symbols-outlined text-[16px]">add</span>
+      + New Tool
+    </button>
+    <button class="w-8 h-8 rounded-full flex items-center justify-center text-secondary hover:text-on-surface hover:bg-surface-container-high/60 transition-colors cursor-pointer" title="Notifications" type="button" onclick="copyToken('Notifications drawer opened')">
+      <span class="material-symbols-outlined text-[20px]">notifications</span>
+    </button>
+    <button class="w-8 h-8 rounded-full flex items-center justify-center text-secondary hover:text-on-surface hover:bg-surface-container-high/60 transition-colors cursor-pointer" title="Settings" type="button" onclick="copyToken('Kumo System Settings opened')">
+      <span class="material-symbols-outlined text-[20px]">settings</span>
+    </button>
+    <!-- Profile Avatar -->
+    <div class="relative w-8 h-8 ml-1 rounded-full ring-2 ring-primary/20 overflow-hidden bg-primary-fixed flex items-center justify-center">
+      <img class="w-full h-full object-cover" alt="Product Designer Avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_IEuCG4gwEUQ1NWZ6_J8HiGgfRo_PHmXx51dtvTIBBAkWA667piGh_j9gorjcKBHIBGoYADnFeHPvluiBjrt-QtgLtmjuT901shxdtGyLn49ho07krROVbWeBUPsDe9dYEukJSN6NlltoCh8r_i5g_5NukIGZkc1p9Lbj1tIs7BNeNCglw-Be_1szDQGIfKCm5WhkCvMdLUIo6Ai88XeMveyZdfu6VUPzfsY4r5CmxIf7T7v5D7RRNn_PFAk5OQmXkFoLhsj27Jk"/>
+    </div>
+  </div>
+</header>
