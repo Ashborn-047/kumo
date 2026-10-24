@@ -44,4 +44,8 @@ contextBridge.exposeInMainWorld('goo', {
   // Overlay mouse passthrough & reposition
   setMouseIgnore: (ignore) => ipcRenderer.send('overlay:set-mouse', ignore),
   moveOverlay:    (deltaX, deltaY) => ipcRenderer.send('overlay:move', { deltaX, deltaY }),
+
+  // Studio & Customizer controls
+  openStudio:     (theme)  => ipcRenderer.send('studio:open', theme),
+  closeStudio:    ()       => ipcRenderer.send('studio:close'),
 });

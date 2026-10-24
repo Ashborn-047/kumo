@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kumo Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800&family=Righteous&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* ── 1. Surface & Background Tokens ─────────────────── */
+  --kumo-bg-base:#ff5fd0;--kumo-bg-surface-1:#e4f4ff;--kumo-bg-surface-2:#d6f0ff;--kumo-bg-surface-3:#b9e2ff;
+  --kumo-bg-glass:#e4f4ff;--kumo-bg-glass-card:#d6f0ff;
+  /* ── 2. Border & Divider Tokens ──────────────────────── */
+  --kumo-border-subtle:rgba(27,26,94,.15);--kumo-border-default:#1b1a5e;--kumo-border-hover:#1b1a5e;--kumo-border-glow:rgba(255,95,207,.85);
+  /* ── 3. Brand & Accent Pastel Glows ──────────────────── */
+  --kumo-accent-sky:#1aa5f5;--kumo-accent-peach:#ff5fcf;--kumo-accent-lilac:#b9a6ff;--kumo-accent-mint:#1fb88a;--kumo-accent-butter:#ffe36e;
+  --kumo-glow-sky:0 0 26px rgba(92,200,255,.6);--kumo-glow-peach:0 0 26px rgba(255,95,207,.6);
+  /* ── 4. Typography Tokens ────────────────────────────── */
+  --kumo-font-sans:'Nunito',system-ui,sans-serif;--kumo-font-display:'Righteous','Nunito',sans-serif;--kumo-font-mono:'JetBrains Mono',monospace;
+  --kumo-text-primary:#1b1a5e;--kumo-text-secondary:rgba(27,26,94,.78);--kumo-text-muted:rgba(27,26,94,.55);--kumo-ink:#1b1a5e;
+  /* ── 5. Radii & Spacing Tokens ───────────────────────── */
+  --kumo-radius-sm:10px;--kumo-radius-md:14px;--kumo-radius-lg:20px;--kumo-radius-xl:26px;--kumo-radius-full:9999px;
+  --kumo-space-1:4px;--kumo-space-2:8px;--kumo-space-3:12px;--kumo-space-4:16px;--kumo-space-5:24px;--kumo-space-6:32px;
+  /* ── 6. Elevation & Shadows (glass + clay + gel) ─────── */
+  --kumo-shadow-sm:4px 6px 14px rgba(20,10,90,.28);--kumo-shadow-lg:14px 20px 40px -10px rgba(20,10,90,.55);
+  --kumo-shadow-glass:0 20px 50px -12px rgba(20,10,90,.5),inset 0 1px 0 rgba(255,255,255,.45);
+  --kumo-clay-out:6px 9px 18px rgba(20,10,90,.32),inset -5px -7px 12px rgba(20,10,90,.18),inset 5px 6px 12px rgba(255,255,255,.38);
+  --kumo-clay-in:inset 5px 6px 12px rgba(20,10,90,.34),inset -4px -5px 10px rgba(255,255,255,.2);
+  --kumo-gel:linear-gradient(#ff9fe8,#ff52c4 52%,#ff2eb0);
+  /* ── 7. Transitions & Spring Easings ─────────────────── */
+  --kumo-ease-spring:cubic-bezier(.34,1.56,.64,1);--kumo-ease-smooth:cubic-bezier(.16,1,.3,1);
+  --kumo-transition-fast:150ms var(--kumo-ease-smooth);--kumo-transition-base:250ms var(--kumo-ease-smooth);
+  --kumo-live:#7dd3fc;
+}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{font:600 14px/1.55 var(--kumo-font-sans);color:var(--kumo-text-primary);overflow:hidden;
+ background:radial-gradient(620px 460px at 6% 0%,rgba(92,200,255,.8),transparent 65%),radial-gradient(520px 420px at 88% 4%,rgba(185,166,255,.65),transparent 65%),radial-gradient(720px 540px at 100% 100%,rgba(255,95,207,.75),transparent 62%),var(--kumo-bg-base)}
+.app{display:flex;flex-direction:column;height:100%;max-width:1100px;margin:auto;padding:var(--kumo-space-4)}
+header{display:flex;align-items:center;gap:var(--kumo-space-4);padding:var(--kumo-space-2) 4px var(--kumo-space-4)}
+.logo{font:400 24px var(--kumo-font-display);white-space:nowrap;text-shadow:0 2px 10px rgba(20,10,90,.4)}.logo b{font-weight:400;color:#c8f1ff}
+nav{position:relative;display:flex;gap:2px;padding:5px;margin:0 auto;background:var(--kumo-bg-glass);border:1px solid var(--kumo-border-default);border-radius:var(--kumo-radius-full);backdrop-filter:blur(24px);box-shadow:var(--kumo-clay-in)}
+nav button{position:relative;z-index:1;padding:8px 15px;border:0;background:none;color:var(--kumo-text-secondary);font:800 13px var(--kumo-font-sans);border-radius:var(--kumo-radius-full);cursor:pointer;white-space:nowrap;transition:color var(--kumo-transition-fast)}
+nav button:hover,nav button.on{color:#fff}nav button.on{text-shadow:0 1px 2px rgba(120,0,90,.5)}
+#pill{position:absolute;top:5px;bottom:5px;left:5px;width:90px;border-radius:var(--kumo-radius-full);background:var(--kumo-gel);border:1px solid rgba(255,255,255,.6);box-shadow:var(--kumo-glow-peach),var(--kumo-clay-out);transition:left .45s var(--kumo-ease-spring),width .45s var(--kumo-ease-spring)}
+#pill::after,.btn.pri::after{content:"";position:absolute;left:10%;right:10%;top:3px;height:45%;border-radius:var(--kumo-radius-full);background:linear-gradient(rgba(255,255,255,.7),rgba(255,255,255,.04));pointer-events:none}
+.main{flex:1;min-height:0;display:grid;grid-template-columns:1fr;gap:var(--kumo-space-4)}
+.main.split{grid-template-columns:minmax(300px,1fr) minmax(320px,1fr)}
+#stageCard{display:none;flex-direction:column;gap:var(--kumo-space-2);align-items:center}
+.split #stageCard{display:flex}
+.card{background:var(--kumo-bg-glass-card);border:1px solid var(--kumo-border-default);border-radius:var(--kumo-radius-xl);backdrop-filter:blur(26px) saturate(1.5);box-shadow:var(--kumo-shadow-glass);padding:var(--kumo-space-4)}
+.pane{overflow:auto;padding:var(--kumo-space-5)}
+#stage{position:relative;width:100%;flex:1;min-height:260px;display:grid;place-items:center;border-radius:var(--kumo-radius-lg);border:2px solid rgba(255,255,255,.75);box-shadow:inset 7px 9px 20px rgba(20,10,90,.28),inset -5px -6px 14px rgba(255,255,255,.5);overflow:hidden;cursor:pointer;touch-action:none}
+#stage[data-bg=day]{background:linear-gradient(#d6f0ff,#f4fbff)}
+#stage[data-bg=night]{background:radial-gradient(1.5px 1.5px at 20% 25%,#fff9,transparent),radial-gradient(1.5px 1.5px at 75% 18%,#fff9,transparent),radial-gradient(ellipse at 50% 120%,#3b3aa8,#14124a 70%)}
+#stage[data-bg=dark]{background:radial-gradient(circle,#2a2670,#0a0830)}
+#stage[data-bg=checker]{background:repeating-conic-gradient(#e8ecfa 0 25%,#fff 0 50%) 0 0/20px 20px}
+#c2,#c3{width:min(380px,90%);aspect-ratio:1;image-rendering:pixelated;filter:drop-shadow(0 8px 14px rgba(20,10,90,.3)) drop-shadow(0 0 20px var(--kumo-live))}
+#c3{image-rendering:auto;display:none}
+.tag{position:absolute;left:12px;top:12px;font:800 11px var(--kumo-font-sans);color:var(--kumo-ink);background:rgba(255,255,255,.85);padding:4px 11px;border-radius:var(--kumo-radius-full);box-shadow:var(--kumo-shadow-sm)}
+.hint,.sub,label small{color:var(--kumo-text-secondary)}.hint{font-size:12px}
+.panel{display:none}.panel.on{display:block;animation:in .45s var(--kumo-ease-smooth)}
+@keyframes in{from{opacity:0;transform:translateY(10px) scale(.99)}}
+h1{font:400 38px/1.1 var(--kumo-font-display);background:linear-gradient(#fff,#bfe3ff 55%,#fff);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 3px 6px rgba(20,10,90,.35))}
+h1 small{font-size:26px;margin-left:8px;color:#ffd6f4;-webkit-text-fill-color:#ffd6f4}
+h2{font:400 22px var(--kumo-font-display);margin-bottom:4px;letter-spacing:.01em}h3{font:800 15px var(--kumo-font-sans);margin:var(--kumo-space-4) 0 var(--kumo-space-2)}
+.sub{margin:6px 0 var(--kumo-space-4);font-weight:600}
+.group{margin-top:var(--kumo-space-5)}.group>h3:first-child{margin-top:0}
+.mono{font-family:var(--kumo-font-mono);font-size:12px;font-weight:500}
+a{color:#c8f1ff}
+.btn{position:relative;padding:9px 18px;border-radius:var(--kumo-radius-full);border:1px solid rgba(255,255,255,.45);background:rgba(255,255,255,.2);color:#fff;font:800 13px var(--kumo-font-sans);cursor:pointer;box-shadow:var(--kumo-clay-out);transition:transform .3s var(--kumo-ease-spring),filter var(--kumo-transition-fast)}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.1)}.btn:active{transform:scale(.94);box-shadow:var(--kumo-clay-in)}
+.btn.pri{background:var(--kumo-gel);border-color:rgba(255,255,255,.6);text-shadow:0 1px 2px rgba(120,0,90,.5);box-shadow:var(--kumo-glow-peach),var(--kumo-clay-out)}
+.btn.big{padding:14px 30px;font-size:16px}
+:focus-visible{outline:3px solid #fff;outline-offset:2px}
+.row,.chips{display:flex;gap:var(--kumo-space-2);flex-wrap:wrap;align-items:center}
+.row{margin-top:var(--kumo-space-5);justify-content:space-between}
+.chip{padding:7px 16px;border-radius:var(--kumo-radius-full);border:1px solid rgba(255,255,255,.4);background:rgba(255,255,255,.18);color:#fff;font:800 12px var(--kumo-font-sans);cursor:pointer;box-shadow:var(--kumo-clay-out);transition:all var(--kumo-transition-base)}
+.chip:hover{transform:translateY(-1px)}
+.chip.on,.opt.on,.swc.on{background:linear-gradient(#fff,#e6ecff);color:var(--kumo-ink);border-color:#fff;box-shadow:var(--kumo-clay-out),0 0 20px -2px var(--kumo-live)}
+.cards2{display:grid;grid-template-columns:1fr 1fr;gap:var(--kumo-space-3)}
+.opt{text-align:left;padding:var(--kumo-space-4);border-radius:var(--kumo-radius-lg);border:1px solid rgba(255,255,255,.4);background:rgba(255,255,255,.17);color:var(--kumo-text-secondary);font:600 13px var(--kumo-font-sans);cursor:pointer;box-shadow:var(--kumo-clay-out);transition:all var(--kumo-transition-base)}
+.opt b{display:block;color:#fff;font:400 17px var(--kumo-font-display);margin-bottom:3px}.opt.on{color:#4a4a9a}.opt.on b{color:var(--kumo-ink)}.opt:hover{transform:translateY(-3px)}
+.swc{display:flex;align-items:center;gap:8px;padding:6px 14px 6px 6px;border-radius:var(--kumo-radius-full);border:1px solid rgba(255,255,255,.4);background:rgba(255,255,255,.18);color:#fff;font:800 12px var(--kumo-font-sans);cursor:pointer;box-shadow:var(--kumo-clay-out);transition:all var(--kumo-transition-base)}
+.swc i{width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 34% 28%,rgba(255,255,255,.85),transparent 42%),var(--c);box-shadow:inset -3px -4px 6px rgba(0,0,0,.2),0 3px 8px var(--c)}
+.dim{opacity:.4;pointer-events:none}
+.field{display:flex;align-items:center;gap:var(--kumo-space-3);justify-content:space-between;margin:var(--kumo-space-3) 0}
+.field span:first-child{flex:0 0 150px}
+input[type=range]{flex:1;-webkit-appearance:none;appearance:none;height:26px;background:none}
+input[type=range]::-webkit-slider-runnable-track{height:12px;border-radius:12px;background:rgba(255,255,255,.18);box-shadow:var(--kumo-clay-in)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;margin-top:-7px;border-radius:50%;border:0;background:radial-gradient(circle at 35% 30%,#fff,#dfe6ff 70%);box-shadow:3px 5px 10px rgba(20,10,90,.4),0 0 14px var(--kumo-live)}
+.val{width:52px;text-align:right;color:#fff}
+.in,select{width:100%;padding:11px 16px;border-radius:var(--kumo-radius-md);border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.14);color:#fff;font:700 14px var(--kumo-font-sans);box-shadow:var(--kumo-clay-in)}
+select option{color:var(--kumo-ink)}.in::placeholder{color:rgba(255,255,255,.5)}
+.in.mono{font-family:var(--kumo-font-mono)}.in:focus,select:focus{border-color:var(--kumo-border-glow);box-shadow:var(--kumo-clay-in),var(--kumo-glow-peach);outline:0}
+.keyrow{display:flex;gap:var(--kumo-space-2)}.keyrow .in{flex:1}
+.st{margin:8px 0;font-size:12px;color:var(--kumo-text-muted)}.st.ok{color:var(--kumo-accent-mint)}.st.bad{color:#ffc2ec}
+.sw{display:flex;align-items:center;gap:var(--kumo-space-3);cursor:pointer;margin:var(--kumo-space-3) 0}
+.sw input{position:absolute;opacity:0}
+.sw i{width:48px;height:26px;border-radius:var(--kumo-radius-full);background:rgba(255,255,255,.16);box-shadow:var(--kumo-clay-in);position:relative;transition:background var(--kumo-transition-base);flex:none}
+.sw i::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#dfe6ff 75%);box-shadow:2px 3px 6px rgba(20,10,90,.4);transition:transform .35s var(--kumo-ease-spring)}
+.sw input:checked+i{background:var(--kumo-gel)}.sw input:checked+i::after{transform:translateX(22px)}
+.sw input:focus-visible+i{outline:3px solid #fff;outline-offset:2px}
+.dots{display:flex;gap:8px;margin:var(--kumo-space-4) 0}.dots i{height:10px;flex:1;border-radius:10px;background:rgba(255,255,255,.16);box-shadow:var(--kumo-clay-in);transition:background var(--kumo-transition-base)}.dots i.on{background:var(--kumo-gel);box-shadow:var(--kumo-glow-peach)}
+.step{display:none}.step.on{display:block;animation:in .4s var(--kumo-ease-smooth)}
+#toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;background:#fff;color:var(--kumo-ink);font-weight:800;padding:10px 20px;border-radius:var(--kumo-radius-full);box-shadow:var(--kumo-shadow-lg);transition:all .4s var(--kumo-ease-spring);pointer-events:none}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+@media(max-width:820px){.main.split{grid-template-columns:1fr;grid-template-rows:260px 1fr}nav button{padding:8px 9px}.logo{display:none}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.ic{width:1.2em;height:1.2em;flex:none}nav button,.btn,.logo{display:inline-flex;align-items:center;justify-content:center;gap:7px}.opt b{display:flex;align-items:center;gap:8px}a .ic{vertical-align:-.2em}
+
+*{backdrop-filter:none!important}
+:root{--chrome:linear-gradient(#fff,#dfe8f8 45%,#aebfe0 52%,#eef3ff);--aqua:linear-gradient(#c9f1ff,#4fc3ff 50%,#1aa5f5 52%,#6fd8ff);--pink:linear-gradient(#ffc1f0,#ff62cf 50%,#ff2eb0 52%,#ff80dc)}
+body{color:var(--kumo-ink);background:radial-gradient(#fff 1.4px,transparent 2px) 0 0/24px 24px,linear-gradient(135deg,#ff8de6,#ff4fc3 55%,#7fd0ff)}
+.logo{color:#fff;font-size:26px;text-shadow:2px 2px 0 var(--kumo-ink),4px 4px 0 rgba(27,26,94,.35)}.logo b{color:#c8f1ff}
+.card{background:linear-gradient(#e4f4ff,#d1ecff) padding-box,linear-gradient(135deg,#fff,#8fa9dd 30%,#fff 52%,#7f9bd6 78%,#fff) border-box;border:5px solid transparent;box-shadow:0 0 0 2px var(--kumo-ink),8px 10px 0 var(--kumo-ink)}
+nav{background:var(--chrome);border:2px solid var(--kumo-ink);box-shadow:inset 0 2px 0 #fff,3px 4px 0 var(--kumo-ink)}nav button{color:var(--kumo-ink);font:400 14px var(--kumo-font-display)}nav button.on{color:#fff;text-shadow:0 1px 0 #a0007a}
+#pill{background:var(--pink);border:2px solid var(--kumo-ink);box-shadow:inset 0 1px 0 #fff}
+.btn{background:var(--aqua);color:var(--kumo-ink);border:2px solid var(--kumo-ink);text-shadow:0 1px 0 rgba(255,255,255,.6);box-shadow:inset 0 1px 0 #fff,3px 4px 0 var(--kumo-ink)}
+.btn::after{content:"";position:absolute;left:10%;right:10%;top:3px;height:42%;border-radius:99px;background:linear-gradient(rgba(255,255,255,.85),rgba(255,255,255,0));pointer-events:none}
+.btn:hover{transform:translate(-1px,-2px);filter:none;box-shadow:inset 0 1px 0 #fff,5px 7px 0 var(--kumo-ink)}.btn:active{transform:translate(3px,4px);box-shadow:inset 0 1px 0 #fff,0 0 0 var(--kumo-ink)}
+.btn.pri{background:var(--pink);color:#fff;text-shadow:0 1px 0 #a0007a;border-color:var(--kumo-ink)}
+.chip,.swc,.opt{background:var(--chrome);color:var(--kumo-ink);border:2px solid var(--kumo-ink);box-shadow:inset 0 1px 0 #fff,2px 3px 0 var(--kumo-ink)}
+.opt{color:rgba(27,26,94,.75)}.opt b{color:var(--kumo-ink)}
+.chip.on,.opt.on,.swc.on{background:var(--pink);color:#fff;border-color:var(--kumo-ink);box-shadow:inset 0 1px 0 rgba(255,255,255,.8),2px 3px 0 var(--kumo-ink)}.opt.on{color:rgba(255,255,255,.9)}.opt.on b{color:#fff;text-shadow:0 1px 0 #a0007a}
+.in,select{background:#fff;color:var(--kumo-ink);border:2px solid var(--kumo-ink);box-shadow:inset 2px 3px 0 rgba(27,26,94,.18)}.in::placeholder{color:rgba(27,26,94,.4)}.in:focus,select:focus{box-shadow:inset 2px 3px 0 rgba(27,26,94,.18),0 0 0 3px #ff62cf}
+input[type=range]::-webkit-slider-runnable-track{box-sizing:border-box;height:14px;background:var(--chrome);border:2px solid var(--kumo-ink);box-shadow:none}
+input[type=range]::-webkit-slider-thumb{box-sizing:border-box;width:28px;height:28px;margin-top:-9px;background:radial-gradient(circle at 35% 28%,#fff 0 12%,#6fd8ff 40%,#1aa5f5);border:2px solid var(--kumo-ink);box-shadow:2px 3px 0 var(--kumo-ink)}
+.sw i{background:var(--chrome);border:2px solid var(--kumo-ink);box-shadow:inset 2px 2px 0 rgba(27,26,94,.2)}.sw i::after{top:1px;left:1px;background:radial-gradient(circle at 35% 28%,#fff,#9fb8e8);border:2px solid var(--kumo-ink);box-shadow:none}.sw input:checked+i::after{transform:translateX(20px)}
+.dots i{height:12px;background:var(--chrome);border:2px solid var(--kumo-ink);box-shadow:none}.dots i.on{background:var(--pink);box-shadow:none}
+#stage{border:3px solid var(--kumo-ink);border-radius:18px;box-shadow:inset 0 0 0 3px #fff,inset 6px 8px 14px rgba(27,26,94,.2)}
+.tag{background:var(--kumo-ink);color:#fff;box-shadow:none}.val{color:var(--kumo-ink)}
+h1{background:none;-webkit-text-fill-color:var(--kumo-ink);color:var(--kumo-ink);filter:none;text-shadow:3px 3px 0 #ff62cf}h1 small{-webkit-text-fill-color:#ff2eb0;color:#ff2eb0}
+a,.st.bad{color:#d0158a}.st.ok{color:#0f9d74}#toast{border:2px solid var(--kumo-ink);box-shadow:4px 5px 0 var(--kumo-ink)}:focus-visible,.sw input:focus-visible+i{outline-color:var(--kumo-ink)}
+</style></head><body><svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="i-cloud" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></symbol><symbol id="i-ghost" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 10h.01"/><path d="M15 10h.01"/><path d="M12 2a8 8 0 0 0-8 8v12l3-3 2.5 2.5L12 19l2.5 2.5L17 19l3 3V10a8 8 0 0 0-8-8z"/></symbol><symbol id="i-box" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></symbol><symbol id="i-palette" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></symbol><symbol id="i-zap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></symbol><symbol id="i-key" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"/><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"/></symbol><symbol id="i-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></symbol><symbol id="i-ext" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></symbol><symbol id="i-rocket" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></symbol></defs></svg>
+<div class="app">
+<header><div class="logo"><svg class="ic" aria-hidden="true"><use href="#i-cloud"/></svg> <b>Kumo</b> Studio</div>
+<nav id="nav"><i id="pill"></i><button><svg class="ic" aria-hidden="true"><use href="#i-cloud"/></svg> Welcome</button><button><svg class="ic" aria-hidden="true"><use href="#i-ghost"/></svg> Avatar</button><button><svg class="ic" aria-hidden="true"><use href="#i-palette"/></svg> Colors</button><button><svg class="ic" aria-hidden="true"><use href="#i-zap"/></svg> Physics</button><button><svg class="ic" aria-hidden="true"><use href="#i-key"/></svg> AI &amp; System</button></nav>
+<button class="btn pri" id="save">Save &amp; Apply</button></header>
+<div class="main" id="main">
+<section class="card" id="stageCard"><div id="stage" data-bg="day"><canvas id="c2" width="64" height="64"></canvas><canvas id="c3"></canvas><span class="tag" id="tag"></span></div><p class="hint">Poke the mascot. It squishes back.</p></section>
+<section class="card pane" id="panes">
+
+<div class="panel" data-p="0">
+<h1>Hi, I am Kumo<small>雲</small></h1>
+<p class="sub">A small cloud that lives on your desktop, thinks alongside you, and keeps your ideas on a canvas. Three steps and it is yours.</p>
+<div class="dots" id="dots"><i></i><i></i><i></i></div>
+<div class="step" data-w="0"><h2>Connect your API key</h2><p class="sub">Kumo thinks through OpenRouter, and free models work fine.</p>
+<input id="wiz-key" class="in mono" type="password" placeholder="sk-or-v1-…" autocomplete="off">
+<p style="margin-top:10px"><a href="https://openrouter.ai/keys" data-ext>Get a free OpenRouter key <svg class="ic" aria-hidden="true"><use href="#i-ext"/></svg></a></p></div>
+<div class="step" data-w="1"><h2>Pick your companion</h2><p class="sub">You can restyle it any time from the Avatar and Colors tabs.</p>
+<div class="cards2"><button class="opt" data-av="2d"><b><svg class="ic" aria-hidden="true"><use href="#i-ghost"/></svg> 2D Pixel Cloud</b>Puff, a dithered 64×64 retro cloud.</button><button class="opt" data-av="3d"><b><svg class="ic" aria-hidden="true"><use href="#i-box"/></svg> 3D Mochi Bot</b>A gelatinous bot with real lighting.</button></div></div>
+<div class="step" data-w="2"><h2>Ready to launch</h2><p id="sum" class="sub mono"></p><button class="btn pri big" id="launch"><svg class="ic" aria-hidden="true"><use href="#i-rocket"/></svg> Launch Kumo</button></div>
+<div class="row"><button class="btn" id="back">Back</button><button class="btn" id="next">Next</button></div>
+</div>
+
+<div class="panel" data-p="1">
+<h2>Avatar engine</h2><p class="sub">Choose how Kumo is drawn on your desktop.</p>
+<div class="cards2"><button class="opt" data-av="2d"><b><svg class="ic" aria-hidden="true"><use href="#i-ghost"/></svg> 2D Pixel Cloud</b>Puff · SDF cloud, Bayer dithering, soft shading</button><button class="opt" data-av="3d"><b><svg class="ic" aria-hidden="true"><use href="#i-box"/></svg> 3D Mochi Bot</b>Three.js · specular gel, orbiting particles</button></div>
+<div class="group geo"><h3>3D geometry</h3><div class="chips"><button class="chip" data-geo="voxel">Voxel Pixel</button><button class="chip" data-geo="smooth">Smooth Mochi</button></div></div>
+<div class="group"><h3>State tester</h3><div class="chips"><button class="chip on" data-m="idle">Idle</button><button class="chip" data-m="speaking">Speaking</button><button class="chip" data-m="listening">Listening</button><button class="chip" data-m="hop">Happy Hop</button><button class="chip" data-m="thinking">Thinking</button></div></div>
+</div>
+
+<div class="panel" data-p="2">
+<h2>Colors &amp; aesthetics</h2><p class="sub">Palettes follow the active engine.</p>
+<div class="chips" id="pals"></div>
+<div class="group"><h3>Preview background</h3><div class="chips"><button class="chip" data-bg="night">Cozy Night</button><button class="chip" data-bg="dark">Dark Radial</button><button class="chip" data-bg="checker">Transparent</button><button class="chip" data-bg="day">Clean Day</button></div></div>
+<div class="group"><h3>Face &amp; geometry</h3>
+<label class="sw"><input type="checkbox" id="smile" checked><i></i><span>Smile mouth</span></label>
+<div class="field"><span>Blush</span><input type="range" id="blush" min="0" max="100" value="60"><span class="val mono" id="blushv"></span></div>
+<div class="geo"><div class="chips"><button class="chip" data-geo="voxel">Voxel Pixel</button><button class="chip" data-geo="smooth">Smooth Mochi</button></div></div></div>
+</div>
+
+<div class="panel" data-p="3">
+<h2>Physics &amp; animation</h2><p class="sub">Tune how alive Kumo feels.</p>
+<div class="field"><span>Animation speed</span><input type="range" id="speed" min=".2" max="2.5" step=".05" value="1"><span class="val mono" id="speedv"></span></div>
+<div class="field"><span>Squish intensity</span><input type="range" id="squish" min=".2" max="1.8" step=".05" value="1"><span class="val mono" id="squishv"></span></div>
+<label class="sw"><input type="checkbox" id="gaze" checked><i></i><span>Eyes follow the cursor <small>(off: gentle wander)</small></span></label>
+</div>
+
+<div class="panel" data-p="4">
+<h2>AI &amp; system</h2><p class="sub">Your key stays on this computer.</p>
+<h3>OpenRouter API key</h3>
+<div class="keyrow"><input id="api-key-input" class="in mono" type="password" placeholder="sk-or-v1-…" autocomplete="off"><button class="btn" id="eye" aria-label="Show or hide key"><svg class="ic" aria-hidden="true"><use href="#i-eye"/></svg></button><button class="btn" id="test">Test key</button></div>
+<p class="st" id="kst">No key yet</p>
+<h3>Model</h3>
+<select id="model-select"><option value="meta-llama/llama-3.3-70b-instruct:free">Llama 3.3 70B (free)</option><option value="google/gemini-flash-1.5">Gemini Flash 1.5</option><option value="deepseek/deepseek-r1:free">DeepSeek R1 (free)</option><option value="qwen/qwen-2.5-72b-instruct:free">Qwen 2.5 72B (free)</option></select>
+<div class="group"><h3>Window behavior</h3>
+<label class="sw"><input type="checkbox" id="auto"><i></i><span>Launch on Windows startup</span></label>
+<label class="sw"><input type="checkbox" id="mini" checked><i></i><span>Start minimized to tray</span></label></div>
+</div>
+
+</section></div></div>
+<div id="toast"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)],clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const P2=[['Sky','#7dd3fc'],['Peach','#f472b6'],['Lilac','#c084fc'],['Mint','#6ee7b7'],['Butter','#fde047'],['Cloud','#e2e8f0']];
+const P3=[['Classic Cyan','#38bdf8','#e0f7ff','#7dd3fc'],['Peach Pink','#f472b6','#ffe4f1','#fbcfe8'],['Grape Slime','#a78bfa','#f3e8ff','#c4b5fd'],['Mint Jelly','#34d399','#d1fae5','#6ee7b7']]; // name, base, specular, rim
+const DEF={apiKey:'',model:'meta-llama/llama-3.3-70b-instruct:free',avatarType:'2d',style3d:'smooth',palette:'Sky',speed:1.0,squish:1.0,trackGaze:true,firstRun:true,bg:'day',smile:true,blush:.6,autostart:false,startMinimized:true};
+let S,activeAvatarType='2d',active3DStyle='smooth',activePalette='Sky',tab=0,wiz=0,mx=0,my=0;
+const speedSlider=$('#speed'),squishSlider=$('#squish'),gazeCheckbox=$('#gaze'),kin=$('#api-key-input'),wk=$('#wiz-key');
+const pal=()=>activeAvatarType==='2d'?P2:P3, col=()=>pal().find(p=>p[0]===activePalette)||pal()[0];
+const rgb=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));
+const toast=t=>{const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),2600)};
+
+/* ── Avatar state (shared by both engines) ── */
+const A={sq:0,sv:0,y:0,yv:0,bl:0,nb:2,gx:0,gy:0,t:0,mt:0,pk:0,w:1,h:1,open:1,eye:1,m:0,mode:'idle'};
+function setMode(m){A.mode=m;A.mt=0;if(m==='hop'){A.yv=7;A.sv=-9*squishSlider.value}$$('[data-m]').forEach(b=>b.classList.toggle('on',b.dataset.m===m))}
+function step(dt){
+ dt=Math.min(dt,.05)*speedSlider.value;const q=+squishSlider.value,m=A.mode;A.t+=dt;A.mt+=dt;A.pk=Math.max(0,A.pk-dt);
+ A.sv+=(-90*A.sq-9*A.sv)*dt;A.sq=clamp(A.sq+A.sv*dt,-1.6,2.2);
+ A.yv-=16*dt;A.y+=A.yv*dt;if(A.y<0){if(A.yv<-1)A.sv=-A.yv*1.4*q;A.y=0;A.yv=0}
+ if(m==='hop'&&A.mt>1.2)setMode('idle');
+ A.nb-=dt;if(A.nb<0){A.bl=1;A.nb=2+Math.random()*3}A.bl=Math.max(0,A.bl-dt*7);
+ let tx,ty;if(m==='thinking'){tx=.7;ty=-.8}else if(gazeCheckbox.checked||m==='listening'){tx=mx;ty=my}else{tx=Math.sin(A.t*.7)*.7;ty=Math.sin(A.t*.43+1)*.4}
+ const k=Math.min(1,dt*9);A.gx+=(tx-A.gx)*k;A.gy+=(ty-A.gy)*k;
+ const br=Math.sin(A.t*1.8)*.03*q;A.w=clamp(1+.2*A.sq-br*.6,.7,1.4);A.h=clamp(1-.2*A.sq+br,.6,1.5);
+ A.open=A.pk>0?.25:A.bl>0?1-Math.sin(Math.PI*(1-A.bl)):1;A.eye=m==='listening'?1.25:1;
+ A.m=m==='speaking'?.5+.5*Math.sin(A.t*15):0;
+}
+
+/* ── 2D engine: 64×64 SDF cloud, Bayer dithering ── */
+const c2=$('#c2'),x2=c2.getContext('2d'),im=x2.createImageData(64,64),BAY=[0,8,2,10,12,4,14,6,3,11,1,9,15,7,13,5];
+const sm=(a,b,k)=>{const h=Math.max(k-Math.abs(a-b),0)/k;return Math.min(a,b)-h*h*k/4};
+function cd(x,y){let d=Math.hypot(x+.3,y-.02)-.26;d=sm(d,Math.hypot(x-.3,y-.02)-.26,.18);d=sm(d,Math.hypot(x+.02,y+.14)-.36,.18);
+ const bx=Math.abs(x)-.5,by=Math.abs(y-.22)-.08;return sm(d,Math.hypot(Math.max(bx,0),Math.max(by,0))+Math.min(Math.max(bx,by),0)-.1,.12)}
+function draw2(){
+ const d=im.data,B=rgb(col()[1]),sm_=$('#smile').checked,bl=$('#blush').value/100*(A.pk>0?1.6:1),hop=A.y*.09,gx=A.gx,gy=A.gy;
+ for(let py=0;py<64;py++)for(let px=0;px<64;px++){
+  const i=(py*64+px)*4,x=((px+.5)/32-1)/A.w,y=.45-(.45-((py+.5)/32-1)-hop)/A.h,d0=cd(x,y);
+  if(d0>0){d[i+3]=0;continue}
+  d[i+3]=255;let c;
+  if(d0>-.045)c=B.map(v=>v*.45);
+  else{const e=.03,nx=cd(x+e,y)-cd(x-e,y),ny=cd(x,y+e)-cd(x,y-e),L=Math.hypot(nx,ny)||1,v=.55+.4*(-nx*.5-ny*.7)/L-(y-.1)*.2;
+   const t=clamp(Math.round(v*3+BAY[(py&3)*4+(px&3)]/16-.5),0,3);c=t<3?B.map(u=>u*[.62,.82,1][t]):B.map(u=>u+(255-u)*.45)}
+  for(const s of[-1,1]){
+   const cx=s*.2+gx*.05,cy=-.02+gy*.04,rx=.065*A.eye,ry=Math.max(.085*A.eye*A.open,.014);
+   if(((x-cx)/rx)**2+((y-cy)/ry)**2<1)c=(x<cx-.01&&y<cy-.02&&A.open>.5)?[255,255,255]:[30,41,59];
+   if(bl>0&&((x-s*.36)/.08)**2+((y-.12)/.045)**2<1&&BAY[(py&3)*4+(px&3)]<bl*16)c=[244,114,182]}
+  if(A.m>.08){if(((x-gx*.03)/.05)**2+((y-.14)/(.02+.05*A.m))**2<1)c=[30,41,59]}
+  else if(sm_||A.pk>0){const r=Math.hypot(x-gx*.03,y-.07);if(Math.abs(r-.07)<.017&&y>.075)c=[30,41,59]}
+  d[i]=c[0];d[i+1]=c[1];d[i+2]=c[2]}
+ x2.putImageData(im,0,0)}
+
+/* ── 3D engine: Three.js gel bot ── */
+const T=window.THREE;let R,sc,cam,grp,mat,body,vox,rim,mA,mB,eyes=[],bl3=[],parts=[];
+function init3(){
+ if(!T){$$('[data-av="3d"]').forEach(b=>{b.classList.add('dim');b.title='Three.js failed to load'});return}
+ R=new T.WebGLRenderer({canvas:$('#c3'),alpha:true,antialias:true});R.setPixelRatio(Math.min(devicePixelRatio,2));R.setSize(384,384,false);
+ sc=new T.Scene();cam=new T.PerspectiveCamera(35,1,.1,50);cam.position.set(0,.2,6.4);
+ const key=new T.DirectionalLight(0xffffff,.9);key.position.set(-2,3,4);rim=new T.PointLight(0xffffff,1.3,14);rim.position.set(2.5,1,-2.5);sc.add(new T.AmbientLight(0xffffff,.55),key,rim);
+ grp=new T.Group();sc.add(grp);mat=new T.MeshPhongMaterial({shininess:90});
+ body=new T.Mesh(new T.SphereGeometry(1,48,32),mat);body.scale.y=.9;
+ const p=[];for(let i=-5;i<=5;i++)for(let j=-5;j<=5;j++)for(let k=-5;k<=5;k++){const x=i*.2,y=j*.2,z=k*.2;if(x*x+y*y*1.2+z*z<=1.02)p.push([x*1,y*.92,z*1])}
+ vox=new T.InstancedMesh(new T.BoxGeometry(.19,.19,.19),mat,p.length);const mt=new T.Matrix4();p.forEach((v,i)=>{mt.setPosition(...v);vox.setMatrixAt(i,mt)});
+ const dark=new T.MeshBasicMaterial({color:0x1e293b});
+ for(const s of[-1,1]){const e=new T.Mesh(new T.SphereGeometry(.09,16,12),dark);e.position.set(s*.3,.12,.95);eyes.push(e);
+  const b=new T.Mesh(new T.CircleGeometry(.11,16),new T.MeshBasicMaterial({color:0xf472b6,transparent:true}));b.position.set(s*.55,-.08,.85);b.rotation.y=s*.6;bl3.push(b);grp.add(e,b)}
+ mA=new T.Mesh(new T.TorusGeometry(.12,.025,8,20,Math.PI),dark);mA.rotation.z=Math.PI;mA.position.set(0,.0,.97);
+ mB=new T.Mesh(new T.SphereGeometry(.08,16,12),dark);mB.position.set(0,-.1,.97);
+ grp.add(body,vox,mA,mB);
+ for(let i=0;i<7;i++){const q=new T.Mesh(new T.SphereGeometry(.05,8,8),new T.MeshBasicMaterial());parts.push(q);sc.add(q)}}
+function paint3(){if(!T)return;const p=col(),c=new T.Color(p[1]);mat.color=c;mat.specular=new T.Color(p[2]||'#ffffff');mat.emissive=c.clone().multiplyScalar(.12);rim.color=new T.Color(p[3]||p[1]);
+ parts.forEach(m=>m.material.color.set(p[3]||p[1]));body.visible=active3DStyle==='smooth';vox.visible=!body.visible;
+ const z=body.visible?.95:1.03;eyes.forEach(e=>e.position.z=z);mA.position.z=mB.position.z=z+.02;bl3.forEach(b=>b.position.z=z-.1)}
+function draw3(){
+ const t=A.t;grp.scale.set(A.w,A.h,A.w);grp.position.y=-.2+A.y*.18;grp.rotation.y=A.gx*.4+Math.sin(t*.6)*.08;grp.rotation.x=A.gy*.18;
+ eyes.forEach((e,i)=>{e.position.x=(i?.3:-.3)+A.gx*.06;e.position.y=.12-A.gy*.04;e.scale.set(1,Math.max(.12,A.open)*A.eye,.5)});
+ const bl=$('#blush').value/100*(A.pk>0?1.6:1);bl3.forEach(b=>b.material.opacity=clamp(bl*.75,0,1));
+ mA.visible=($('#smile').checked||A.pk>0)&&A.m<.08;mB.visible=A.m>=.08;mB.scale.set(1,.4+A.m*1.4,.5);
+ parts.forEach((p,i)=>{const a=t*.8+i*6.283/parts.length;p.position.set(Math.cos(a)*1.6,Math.sin(t*1.3+i)*.5+.1,Math.sin(a)*1.6)});
+ R.render(sc,cam)}
+
+/* ── UI wiring ── */
+function sync(){
+ if(!pal().some(p=>p[0]===activePalette))activePalette=pal()[0][0];
+ document.documentElement.style.setProperty('--kumo-live',col()[1]);
+ $('#pals').innerHTML=pal().map(p=>`<button class="swc${p[0]===activePalette?' on':''}" data-pal="${p[0]}" style="--c:${p[1]}"><i></i>${p[0]}</button>`).join('');
+ $$('[data-av]').forEach(b=>b.classList.toggle('on',b.dataset.av===activeAvatarType));
+ $$('[data-geo]').forEach(b=>b.classList.toggle('on',b.dataset.geo===active3DStyle));
+ $$('[data-bg]').forEach(b=>b.classList.toggle('on',b.dataset.bg===$('#stage').dataset.bg));
+ $$('.geo').forEach(g=>g.classList.toggle('dim',activeAvatarType!=='3d'));
+ c2.style.display=activeAvatarType==='2d'?'':'none';$('#c3').style.display=activeAvatarType==='3d'?'block':'none';
+ $('#tag').textContent=activeAvatarType==='2d'?'2D · Puff':'3D · Mochi Bot · '+active3DStyle;
+ $('#sum').textContent=`${activeAvatarType==='2d'?'2D Pixel Cloud':'3D Mochi Bot'} · ${activePalette} · ${kin.value.trim()?'key connected':'no key yet'}`;
+ paint3()}
+const out=()=>{$('#speedv').textContent=(+speedSlider.value).toFixed(2)+'×';$('#squishv').textContent=Math.round(squishSlider.value*100)+'%';$('#blushv').textContent=$('#blush').value+'%'};
+function split(){$('#main').classList.toggle('split',(tab>0&&tab<4)||(tab===0&&wiz===1))}
+function go(i){tab=i;$$('.panel').forEach(p=>p.classList.toggle('on',+p.dataset.p===i));const bs=$$('#nav button');bs.forEach((b,j)=>b.classList.toggle('on',j===i));
+ $('#pill').style.left=bs[i].offsetLeft+'px';$('#pill').style.width=bs[i].offsetWidth+'px';split();sync()}
+function wz(i){wiz=clamp(i,0,2);$$('.step').forEach(s=>s.classList.toggle('on',+s.dataset.w===wiz));$$('#dots i').forEach((d,j)=>d.classList.toggle('on',j<=wiz));
+ $('#back').style.visibility=wiz?'':'hidden';$('#next').style.display=wiz<2?'':'none';split();sync()}
+function chk(v){const ok=/^sk-or-[\w-]{10,}$/.test(v),e=$('#kst');e.className='st '+(v?ok?'ok':'bad':'');e.textContent=v?ok?'Looks like a valid OpenRouter key':'OpenRouter keys start with sk-or-. Check for a typo.':'No key yet'}
+
+document.addEventListener('click',e=>{const t=e.target.closest('[data-pal],[data-av],[data-geo],[data-m],[data-bg],[data-ext],#nav button');if(!t)return;
+ if(t.dataset.ext!==undefined){e.preventDefault();window.goo?.openExternal?window.goo.openExternal(t.href):window.open(t.href,'_blank');return}
+ if(t.dataset.pal)activePalette=t.dataset.pal;
+ if(t.dataset.av){if(t.dataset.av==='3d'&&!T)return toast('3D needs Three.js. Check your connection.');activeAvatarType=t.dataset.av}
+ if(t.dataset.geo)active3DStyle=t.dataset.geo;
+ if(t.dataset.m)setMode(t.dataset.m);
+ if(t.dataset.bg)$('#stage').dataset.bg=t.dataset.bg;
+ if(t.closest('#nav'))return go($$('#nav button').indexOf(t));
+ sync()});
+$('#stage').addEventListener('pointerdown',()=>{A.sv=14*squishSlider.value;A.pk=.6});
+$('#stage').addEventListener('pointerenter',()=>{A.sv=5*squishSlider.value});
+addEventListener('pointermove',e=>{const r=$('#stage').getBoundingClientRect();mx=clamp((e.clientX-r.left-r.width/2)/300,-1,1);my=clamp((e.clientY-r.top-r.height/2)/300,-1,1)});
+[speedSlider,squishSlider,$('#blush')].forEach(s=>s.oninput=out);
+[kin,wk].forEach(el=>el.oninput=()=>{kin.value=wk.value=el.value;chk(el.value.trim());sync()});
+$('#eye').onclick=()=>{kin.type=kin.type==='password'?'text':'password'};
+$('#test').onclick=async()=>{const e=$('#kst');e.className='st';e.textContent='Testing…';
+ try{const r=await fetch('https://openrouter.ai/api/v1/auth/key',{headers:{Authorization:'Bearer '+kin.value.trim()}});e.className='st '+(r.ok?'ok':'bad');e.textContent=r.ok?'Key verified':'OpenRouter rejected this key ('+r.status+')'}
+ catch{e.className='st bad';e.textContent='Could not reach OpenRouter. Check your connection.'}};
+$('#next').onclick=()=>wz(wiz+1);$('#back').onclick=()=>wz(wiz-1);
+
+async function saveAllSettings(){
+ const o={apiKey:kin.value.trim(),model:$('#model-select').value,avatarType:activeAvatarType,style3d:active3DStyle,palette:activePalette,
+  speed:parseFloat(speedSlider.value),squish:parseFloat(squishSlider.value),trackGaze:gazeCheckbox.checked,firstRun:false,
+  bg:$('#stage').dataset.bg,smile:$('#smile').checked,blush:$('#blush').value/100,autostart:$('#auto').checked,startMinimized:$('#mini').checked};
+ if(window.goo?.saveSettings){await window.goo.saveSettings(o);window.goo.closeStudio?.()}
+ else{try{localStorage.kumo=JSON.stringify(o)}catch{}toast('Saved locally. No Electron bridge found.')}}
+$('#save').onclick=$('#launch').onclick=saveAllSettings;
+
+(async()=>{let s=null;try{s=await window.goo?.getSettings()}catch{}if(!s)try{s=JSON.parse(localStorage.kumo)}catch{}
+ S={...DEF,...s};activeAvatarType=S.avatarType;active3DStyle=S.style3d;activePalette=S.palette;
+ kin.value=wk.value=S.apiKey;$('#model-select').value=S.model;speedSlider.value=S.speed;squishSlider.value=S.squish;gazeCheckbox.checked=S.trackGaze;
+ $('#smile').checked=S.smile;$('#blush').value=Math.round(S.blush*100);$('#auto').checked=S.autostart;$('#mini').checked=S.startMinimized;$('#stage').dataset.bg=S.bg;
+ chk(S.apiKey);out();init3();go(S.firstRun?0:1);wz(0);document.fonts?.ready.then(()=>go(tab));
+ let last=performance.now();(function loop(n){step((n-last)/1000);last=n;activeAvatarType==='3d'&&T?draw3():draw2();requestAnimationFrame(loop)})(last)})();
+</script></body></html>

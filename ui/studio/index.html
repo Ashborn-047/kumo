@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kumo Studio — Desktop Customizer & Lab</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-dark: #0a0d14;
+      --bg-bar: rgba(15, 20, 32, 0.95);
+      --border-subtle: rgba(255, 255, 255, 0.1);
+      --accent: #38bdf8;
+      --accent-glow: 0 0 16px rgba(56, 189, 248, 0.4);
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    html, body {
+      width: 100%;
+      height: 100%;
+      background: var(--bg-dark);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+    }
+    /* Top Native Switcher Bar */
+    .top-bar {
+      height: 54px;
+      background: var(--bg-bar);
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 18px;
+      z-index: 100;
+      backdrop-filter: blur(16px);
+    }
+    .brand-section {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand-logo {
+      font-size: 20px;
+      line-height: 1;
+    }
+    .brand-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.02em;
+    }
+    .brand-badge {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 9999px;
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: var(--accent);
+      font-family: 'JetBrains Mono', monospace;
+    }
+    /* Switcher Pills */
+    .theme-pills {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border-subtle);
+    }
+    .pill-btn {
+      padding: 6px 14px;
+      border-radius: 8px;
+      border: 0;
+      background: transparent;
+      color: #94a3b8;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .pill-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .pill-btn.active {
+      color: #030712;
+      background: #fff;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+    }
+    .actions-section {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn-apply {
+      padding: 7px 16px;
+      border-radius: 10px;
+      border: 0;
+      background: linear-gradient(135deg, #38bdf8, #818cf8);
+      color: #030712;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 2px 12px rgba(56, 189, 248, 0.3);
+      transition: all 0.2s;
+    }
+    .btn-apply:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(56, 189, 248, 0.45);
+    }
+    /* Frame Viewport */
+    .viewport-frame {
+      flex: 1;
+      width: 100%;
+      height: calc(100% - 54px);
+      border: 0;
+      background: transparent;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Native Top Control Bar -->
+  <header class="top-bar">
+    <div class="brand-section">
+      <span class="brand-logo">☁️</span>
+      <span class="brand-title">Kumo Studio</span>
+      <span class="brand-badge">Native Lab</span>
+    </div>
+
+    <!-- Aesthetic Switcher Tabs -->
+    <div class="theme-pills">
+      <button class="pill-btn active" id="btn-glass" onclick="switchTheme('glass')">
+        <span>💎</span> Glassmorphic
+      </button>
+      <button class="pill-btn" id="btn-clay" onclick="switchTheme('clay')">
+        <span>🌸</span> Claymorphic
+      </button>
+      <button class="pill-btn" id="btn-y2k" onclick="switchTheme('y2k')">
+        <span>⚡</span> Y2K Cyber
+      </button>
+      <button class="pill-btn" id="btn-bot" onclick="switchTheme('bot')">
+        <span>🧊</span> 3D/2D Rig
+      </button>
+    </div>
+
+    <div class="actions-section">
+      <button class="btn-apply" onclick="adoptAndLaunch()">
+        <span>✓</span> Adopt This Avatar
+      </button>
+    </div>
+  </header>
+
+  <!-- Embedded Live Studio Frame -->
+  <iframe id="studio-frame" class="viewport-frame" src="../../assets/Lab/kumo-studio-glassmorphic.html"></iframe>
+
+  <script>
+    const THEME_URLS = {
+      glass: '../../assets/Lab/kumo-studio-glassmorphic.html',
+      clay:  '../../assets/Lab/kumo-studio-clay.html',
+      y2k:   '../../assets/Lab/kumo-studio-y2k.html',
+      bot:   '../../assets/Lab/3d_2d_ai_bot_asset_studio.html'
+    };
+
+    let currentTheme = 'glass';
+
+    function switchTheme(themeKey) {
+      if (!THEME_URLS[themeKey]) return;
+      currentTheme = themeKey;
+
+      document.querySelectorAll('.pill-btn').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = document.getElementById('btn-' + themeKey);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      const frame = document.getElementById('studio-frame');
+      frame.src = THEME_URLS[themeKey];
+    }
+
+    async function adoptAndLaunch() {
+      // Save chosen theme in settings via Electron IPC
+      try {
+        await window.goo?.saveSettings?.({ studioTheme: currentTheme, firstRun: false });
+      } catch (e) {
+        console.warn('Settings save warning:', e);
+      }
+      alert(`✨ Adopted ${currentTheme.toUpperCase()} style! Opening Kumo desktop companion…`);
+      window.goo?.closeStudio?.();
+    }
+
+    // Auto-detect theme from URL parameters if passed
+    const urlParams = new URLSearchParams(window.location.search);
+    const initial = urlParams.get('theme');
+    if (initial && THEME_URLS[initial]) {
+      switchTheme(initial);
+    }
+  </script>
+</body>
+</html>

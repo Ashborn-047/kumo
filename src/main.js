@@ -11,6 +11,7 @@ const path = require('path');
 
 const overlayManager = require('./overlay-manager');
 const boardManager   = require('./board-manager');
+const studioManager  = require('./studio-manager');
 const trayManager    = require('./tray');
 const settings       = require('./settings');
 const ai             = require('./ai');
@@ -48,6 +49,9 @@ app.whenReady().then(async () => {
   // Open the main Mochiboard Desktop application window
   boardManager.openBoardWindow(PRELOAD);
 
+  // Open the native Kumo Studio & Customizer window
+  studioManager.openStudioWindow(PRELOAD);
+
   // Create system tray
   trayManager.create({
     onShowOverlay: () => {
@@ -56,9 +60,9 @@ app.whenReady().then(async () => {
     },
     onHideOverlay: () => overlayManager.hide(),
     onOpenBoard:   () => boardManager.openBoardWindow(PRELOAD),
+    onOpenStudio:  () => studioManager.openStudioWindow(PRELOAD),
     onOpenSettings: () => {
-      overlayManager.show();
-      overlay.webContents.executeJavaScript(`window.dispatchEvent(new Event('goo:open-settings'))`);
+      studioManager.openStudioWindow(PRELOAD);
     },
     onQuit:        () => app.quit(),
   });
@@ -249,3 +253,7 @@ ipcMain.on('overlay:move', (event, { deltaX, deltaY }) => {
   const [currentX, currentY] = win.getPosition();
   win.setPosition(Math.round(currentX + deltaX), Math.round(currentY + deltaY));
 });
+
+// Studio & Customizer Window Control
+ipcMain.on('studio:open',  (_, theme) => studioManager.openStudioWindow(PRELOAD, theme));
+ipcMain.on('studio:close', () => studioManager.closeStudio());

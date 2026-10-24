@@ -316,7 +316,13 @@ function clearHistory() {
 }
 
 settingsClose.addEventListener('click', closeSettings);
-btnQuickSettings.addEventListener('click', openSettings);
+btnQuickSettings.addEventListener('click', () => {
+  if (window.goo?.openStudio) {
+    window.goo.openStudio();
+  } else {
+    openSettings();
+  }
+});
 btnQuickHistory.addEventListener('click', openHistory);
 historyClose.addEventListener('click', closeHistory);
 btnClearHistory.addEventListener('click', clearHistory);
