@@ -1,12 +1,11 @@
 /**
- * Kumo Design System — TiltedBadge Component
+ * Kumo Design System — TiltedBadge Component (JSX)
  * Tactile micro-badge with signature rotate(-2.5deg) and spring hover scaling.
  */
 
 import React from 'react';
-import { TiltedBadgeProps } from './types';
 
-const ARCHETYPE_STYLES: Record<string, string> = {
+const ARCHETYPE_STYLES = {
   sky: 'bg-[#dcedff] text-[#1b5ba5] border-[#c5e1ff]',
   lilac: 'bg-[#eadfff] text-[#4a3abe] border-[#dac7ff]',
   mint: 'bg-[#dcf5e7] text-[#166534] border-[#b8edcc]',
@@ -16,12 +15,12 @@ const ARCHETYPE_STYLES: Record<string, string> = {
   dark: 'bg-[#1e2530] text-slate-200 border-slate-700'
 };
 
-export const TiltedBadge: React.FC<TiltedBadgeProps> = ({
+export const TiltedBadge = ({
   archetype = 'primary',
   label,
   icon,
   className = '',
-  style,
+  style = {},
   ...rest
 }) => {
   const colorClasses = ARCHETYPE_STYLES[archetype] || ARCHETYPE_STYLES.primary;

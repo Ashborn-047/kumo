@@ -1,12 +1,11 @@
 /**
- * Kumo Design System — ColorSwatch Component
+ * Kumo Design System — ColorSwatch Component (JSX)
  * Swatch card with color preview, hex, RGB, and WCAG contrast ratio indicator.
  */
 
 import React from 'react';
-import { ColorSwatchProps } from './types';
 
-export const ColorSwatch: React.FC<ColorSwatchProps> = ({
+export const ColorSwatch = ({
   name,
   hex,
   rgb,

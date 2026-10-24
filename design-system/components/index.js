@@ -1,9 +1,9 @@
 /**
- * Kumo Design System — React / TypeScript Component Library
+ * Kumo Design System — React JSX Component Library
  * RFC-2025 Warm Tactile Spatial Canvas Architecture
  */
 
-export * from './types';
+export * from './constants';
 export { default as TiltedBadge } from './TiltedBadge';
 export { default as WorkbenchCard } from './WorkbenchCard';
 export { default as TopNavBar } from './TopNavBar';

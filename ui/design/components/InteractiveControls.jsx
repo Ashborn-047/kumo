@@ -1,18 +1,11 @@
 /**
- * Kumo Design System — InteractiveControls Component
+ * Kumo Design System — InteractiveControls Component (JSX)
  * Tactile pill buttons, coordinate snapping toggle switch, and blur intensity slider.
  */
 
 import React, { useState } from 'react';
 
-export interface InteractiveControlsProps {
-  onSnapToggle?: (snapped: boolean) => void;
-  onBlurChange?: (blurPx: number) => void;
-  onPrimaryClick?: () => void;
-  onGhostClick?: () => void;
-}
-
-export const InteractiveControls: React.FC<InteractiveControlsProps> = ({
+export const InteractiveControls = ({
   onSnapToggle,
   onBlurChange,
   onPrimaryClick,
@@ -21,13 +14,13 @@ export const InteractiveControls: React.FC<InteractiveControlsProps> = ({
   const [snapped, setSnapped] = useState(true);
   const [blurVal, setBlurVal] = useState(16);
 
-  const handleToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleToggle = (e) => {
     const checked = e.target.checked;
     setSnapped(checked);
     onSnapToggle?.(checked);
   };
 
-  const handleSlider = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSlider = (e) => {
     const val = Number(e.target.value);
     setBlurVal(val);
     onBlurChange?.(val);
@@ -46,7 +39,7 @@ export const InteractiveControls: React.FC<InteractiveControlsProps> = ({
           <div className="flex items-center gap-2 flex-wrap">
             <button
               onClick={onPrimaryClick}
-              className="px-4 py-2 bg-primary text-white hover:bg-primary-container rounded-lg text-[11px] font-mono font-semibold shadow-sm active:scale-95 transition-all flex items-center gap-1.5"
+              className="px-4 py-2 bg-primary text-white hover:bg-primary-container rounded-lg text-[11px] font-mono font-semibold shadow-sm active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer"
               type="button"
             >
               <span className="material-symbols-outlined text-[16px]">touch_app</span>
@@ -55,7 +48,7 @@ export const InteractiveControls: React.FC<InteractiveControlsProps> = ({
 
             <button
               onClick={onGhostClick}
-              className="px-3.5 py-2 bg-surface-container text-on-surface hover:bg-surface-container-high rounded-lg text-[11px] font-mono font-medium border border-outline-variant/40 active:scale-95 transition-all"
+              className="px-3.5 py-2 bg-surface-container text-on-surface hover:bg-surface-container-high rounded-lg text-[11px] font-mono font-medium border border-outline-variant/40 active:scale-95 transition-all cursor-pointer"
               type="button"
             >
               Ghost Secondary

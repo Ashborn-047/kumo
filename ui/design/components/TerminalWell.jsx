@@ -1,12 +1,11 @@
 /**
- * Kumo Design System — TerminalWell Component
+ * Kumo Design System — TerminalWell Component (JSX)
  * Obsidian Dark Terminal / Execution Well with syntax highlighting and daemon status.
  */
 
 import React from 'react';
-import { TerminalWellProps } from './types';
 
-export const TerminalWell: React.FC<TerminalWellProps> = ({
+export const TerminalWell = ({
   title = 'powershell.exe — kumo-daemon',
   statusLabel = 'RUNNING',
   isRunning = true,
@@ -70,7 +69,7 @@ export const TerminalWell: React.FC<TerminalWellProps> = ({
         <span>{memoryFootprint}</span>
         {onCopyCommand && (
           <button
-            className="text-slate-300 hover:text-white flex items-center gap-1 transition-colors"
+            className="text-slate-300 hover:text-white flex items-center gap-1 transition-colors cursor-pointer"
             onClick={() => onCopyCommand('Invoke-RestMethod -Uri api/sync')}
             type="button"
           >

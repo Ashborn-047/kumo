@@ -1,13 +1,12 @@
 /**
- * Kumo Design System — WorkbenchCard Component
+ * Kumo Design System — WorkbenchCard Component (JSX)
  * Spatial canvas tool card with 48px functional pastel header & 18px corners.
  */
 
 import React from 'react';
-import { WorkbenchCardProps, Archetype } from './types';
 import TiltedBadge from './TiltedBadge';
 
-const HEADER_STYLES: Record<Archetype, { bg: string; border: string; iconColor: string; defaultIcon: string }> = {
+const HEADER_STYLES = {
   sky: {
     bg: 'bg-[#dcedff]',
     border: 'border-[#c3dfff]',
@@ -40,7 +39,7 @@ const HEADER_STYLES: Record<Archetype, { bg: string; border: string; iconColor: 
   }
 };
 
-export const WorkbenchCard: React.FC<WorkbenchCardProps> = ({
+export const WorkbenchCard = ({
   archetype = 'lilac',
   title,
   badgeLabel,

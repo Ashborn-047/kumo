@@ -1,16 +1,20 @@
 /**
- * Kumo Design System — StickyNote Component
+ * Kumo Design System — StickyNote Component (JSX)
  * Warm Butter Ideation & Sprint Checklist Component.
  */
 
 import React from 'react';
-import { StickyNoteProps } from './types';
 import TiltedBadge from './TiltedBadge';
 
-export const StickyNote: React.FC<StickyNoteProps> = ({
+export const StickyNote = ({
   title = 'Sprint Milestones',
   badgeLabel = 'URGENT',
-  items,
+  items = [
+    { id: '1', label: 'Audit all 5 pastel header archetype contrasts', completed: true },
+    { id: '2', label: 'Calibrate 24px dot-matrix coordinate snap', completed: true },
+    { id: '3', label: 'Verify level 3 glass refraction on retina displays', completed: false },
+    { id: '4', label: 'Ship Kumo v2.4 specification documentation', completed: false }
+  ],
   onToggleItem
 }) => {
   const completedCount = items.filter(i => i.completed).length;

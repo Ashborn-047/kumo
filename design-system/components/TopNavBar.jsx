@@ -1,24 +1,15 @@
 /**
- * Kumo Design System — TopNavBar Component
+ * Kumo Design System — TopNavBar Component (JSX)
  * Frosted Glass Floating Top Navigation Header (Level 3 Elevation)
  */
 
 import React, { useState } from 'react';
-import { TopNavBarProps, NavItem } from './types';
+import { DEFAULT_NAV_ITEMS } from './constants';
 
-const DEFAULT_NAV: NavItem[] = [
-  { id: 'overview', label: 'All Tools', href: '#overview', icon: 'grid_view', isActive: true },
-  { id: 'tokens', label: 'System', href: '#tokens' },
-  { id: 'typography', label: 'Writing', href: '#typography' },
-  { id: 'elevation', label: 'Code', href: '#elevation' },
-  { id: 'showcase', label: 'Design', href: '#showcase' },
-  { id: 'notes', label: 'Notes', href: '#notes' }
-];
-
-export const TopNavBar: React.FC<TopNavBarProps> = ({
+export const TopNavBar = ({
   version = 'v2.4 System Spec',
   brandTitle = 'Kumo',
-  navItems = DEFAULT_NAV,
+  navItems = DEFAULT_NAV_ITEMS,
   avatarUrl = 'https://lh3.googleusercontent.com/aida-public/AB6AXuD_IEuCG4gwEUQ1NWZ6_J8HiGgfRo_PHmXx51dtvTIBBAkWA667piGh_j9gorjcKBHIBGoYADnFeHPvluiBjrt-QtgLtmjuT901shxdtGyLn49ho07krROVbWeBUPsDe9dYEukJSN6NlltoCh8r_i5g_5NukIGZkc1p9Lbj1tIs7BNeNCglw-Be_1szDQGIfKCm5WhkCvMdLUIo6Ai88XeMveyZdfu6VUPzfsY4r5CmxIf7T7v5D7RRNn_PFAk5OQmXkFoLhsj27Jk',
   onSearch,
   onNewTool,
@@ -27,7 +18,7 @@ export const TopNavBar: React.FC<TopNavBarProps> = ({
 }) => {
   const [searchVal, setSearchVal] = useState('');
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchChange = (e) => {
     setSearchVal(e.target.value);
     onSearch?.(e.target.value);
   };
@@ -85,7 +76,7 @@ export const TopNavBar: React.FC<TopNavBarProps> = ({
         {onNewTool && (
           <button
             onClick={onNewTool}
-            className="hidden sm:inline-flex items-center gap-1 bg-primary text-white hover:bg-primary-container px-3.5 py-1.5 rounded-full text-[11px] font-mono font-semibold shadow-sm active:scale-95 transition-all"
+            className="hidden sm:inline-flex items-center gap-1 bg-primary text-white hover:bg-primary-container px-3.5 py-1.5 rounded-full text-[11px] font-mono font-semibold shadow-sm active:scale-95 transition-all cursor-pointer"
             type="button"
           >
             <span className="material-symbols-outlined text-[16px]">add</span>
@@ -94,7 +85,7 @@ export const TopNavBar: React.FC<TopNavBarProps> = ({
         )}
         <button
           onClick={onOpenNotifications}
-          className="w-8 h-8 rounded-full flex items-center justify-center text-secondary hover:text-on-surface hover:bg-surface-container-high/60 transition-colors"
+          className="w-8 h-8 rounded-full flex items-center justify-center text-secondary hover:text-on-surface hover:bg-surface-container-high/60 transition-colors cursor-pointer"
           title="Notifications"
           type="button"
         >
@@ -102,7 +93,7 @@ export const TopNavBar: React.FC<TopNavBarProps> = ({
         </button>
         <button
           onClick={onOpenSettings}
-          className="w-8 h-8 rounded-full flex items-center justify-center text-secondary hover:text-on-surface hover:bg-surface-container-high/60 transition-colors"
+          className="w-8 h-8 rounded-full flex items-center justify-center text-secondary hover:text-on-surface hover:bg-surface-container-high/60 transition-colors cursor-pointer"
           title="Settings"
           type="button"
         >

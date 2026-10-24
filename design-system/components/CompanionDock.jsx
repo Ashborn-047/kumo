@@ -1,12 +1,11 @@
 /**
- * Kumo Design System — CompanionDock Component
+ * Kumo Design System — CompanionDock Component (JSX)
  * Frosted Glass Floating Bottom Companion Dock (Level 3 Elevation)
  */
 
 import React from 'react';
-import { CompanionDockProps } from './types';
 
-export const CompanionDock: React.FC<CompanionDockProps> = ({
+export const CompanionDock = ({
   shortcutHint = 'Space to pan • Ctrl+Scroll to zoom • Ctrl+K quick command',
   zoomLevel = '100%',
   onZoomIn,
@@ -26,7 +25,7 @@ export const CompanionDock: React.FC<CompanionDockProps> = ({
       <div className="flex items-center gap-2 text-[10px] font-mono">
         <button
           onClick={onResetZoom}
-          className="text-primary font-medium hover:text-on-surface hover:bg-surface-container-high/50 rounded-lg px-2 py-1 transition-colors"
+          className="text-primary font-medium hover:text-on-surface hover:bg-surface-container-high/50 rounded-lg px-2 py-1 transition-colors cursor-pointer"
           type="button"
         >
           {zoomLevel}
@@ -34,7 +33,7 @@ export const CompanionDock: React.FC<CompanionDockProps> = ({
 
         <button
           onClick={onFitScreen}
-          className="text-secondary hover:text-on-surface hover:bg-surface-container-high/50 rounded-lg p-1 transition-colors"
+          className="text-secondary hover:text-on-surface hover:bg-surface-container-high/50 rounded-lg p-1 transition-colors cursor-pointer"
           title="Fit to Screen"
           type="button"
         >
@@ -43,7 +42,7 @@ export const CompanionDock: React.FC<CompanionDockProps> = ({
 
         <button
           onClick={onZoomIn}
-          className="text-secondary hover:text-on-surface hover:bg-surface-container-high/50 rounded-lg p-1 transition-colors"
+          className="text-secondary hover:text-on-surface hover:bg-surface-container-high/50 rounded-lg p-1 transition-colors cursor-pointer"
           title="Zoom In"
           type="button"
         >
@@ -52,7 +51,7 @@ export const CompanionDock: React.FC<CompanionDockProps> = ({
 
         <button
           onClick={onZoomOut}
-          className="text-secondary hover:text-on-surface hover:bg-surface-container-high/50 rounded-lg p-1 transition-colors"
+          className="text-secondary hover:text-on-surface hover:bg-surface-container-high/50 rounded-lg p-1 transition-colors cursor-pointer"
           title="Zoom Out"
           type="button"
         >
