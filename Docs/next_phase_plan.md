@@ -59,17 +59,29 @@ ipcMain.handle('studio:save-settings', (event, newSettings) => {
 
 ---
 
-## 2. 📦 Standalone Executable (`.exe`) & Packaging
+## 2. 📦 Standalone Executable (`.exe`) & GitHub Releases Distribution
 
 ### Objectives:
-- Users should never have to open terminal or run `npm start`.
-- Two distribution flavors:
-  1. **NSIS Installer (`Kumo-Setup-0.1.0.exe`)**: Standard Windows installer with desktop shortcut, Start Menu entry, and uninstaller.
-  2. **Portable Executable (`Kumo-Portable-0.1.0.exe`)**: Single standalone `.exe` that runs immediately from any folder or USB drive.
+- Users downloading from GitHub should **never** need to clone the repository, install Node.js, or run terminal commands.
+- Provide two downloadable binary flavors under **GitHub Releases**:
+  1. **`Kumo-0.1.0-Portable.exe` (Zero Installation)**:
+     - Single standalone `.exe` that launches immediately from `Downloads`, Desktop, or USB drive.
+     - Ideal for quick trials and portable workflows.
+  2. **`Kumo-0.1.0-Setup.exe` (Standard Windows Installer)**:
+     - Standard NSIS wizard installing to `%LOCALAPPDATA%\Programs\Kumo`.
+     - Automatically provisions desktop shortcut and Start Menu launcher with custom Kumo cloud icon.
+     - Clean uninstaller registered in Windows *Add or Remove Programs*.
 
-### Configuration (`package.json` updates):
+### A. Production Packaging Configuration (`package.json`):
 ```json
 {
+  "scripts": {
+    "start": "electron .",
+    "dev": "node dev-server.js",
+    "dist": "electron-builder --win nsis portable --publish=never",
+    "dist:portable": "electron-builder --win portable --publish=never",
+    "dist:setup": "electron-builder --win nsis --publish=never"
+  },
   "build": {
     "appId": "com.kumo.app",
     "productName": "Kumo",
@@ -90,10 +102,65 @@ ipcMain.handle('studio:save-settings', (event, newSettings) => {
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "shortcutName": "Kumo"
-    }
+    },
+    "files": [
+      "src/**/*",
+      "ui/**/*",
+      "assets/**/*",
+      "design-system/**/*"
+    ]
   }
 }
 ```
+
+### B. Automated GitHub Releases CI/CD (`.github/workflows/release.yml`):
+Whenever a version tag (e.g. `v0.1.0`) is pushed to GitHub, GitHub Actions compiles the Windows binaries in the cloud and automatically attaches them to the GitHub Release page:
+
+```yaml
+name: Release Kumo Binaries
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-and-release:
+    runs-on: windows-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Windows Executables (NSIS + Portable)
+        run: npm run dist
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/*.exe
+            dist/*.blockmap
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+```
+
+### C. Release Verification Checklist:
+- [ ] Run `npm run dist:portable` locally to test portable `.exe` launch.
+- [ ] Run `npm run dist:setup` locally to verify NSIS installer and desktop shortcut.
+- [ ] Verify `dist/Kumo-0.1.0-portable.exe` correctly starts the tray and overlay.
+- [ ] Push tag `v0.1.0` to trigger the cloud release workflow.
 
 ---
 
