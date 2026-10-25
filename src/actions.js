@@ -37,18 +37,22 @@ const ACTIONS = {
   'system.time':      { tier: TIER.GREEN,  fn: getTime },
   'system.date':      { tier: TIER.GREEN,  fn: getDate },
   'system.info':      { tier: TIER.GREEN,  fn: getSystemInfo },
+  'media.playPause':  { tier: TIER.GREEN,  fn: () => sendMediaKey('Toggle') },
+  'media.next':       { tier: TIER.GREEN,  fn: () => sendMediaKey('Next') },
+  'media.previous':   { tier: TIER.GREEN,  fn: () => sendMediaKey('Prev') },
 
-  // YELLOW — needs confirmation
+  // YELLOW — needs confirmation (or auto-confirm in settings)
   'app.open':         { tier: TIER.YELLOW, fn: openApp },
+  'app.interact':     { tier: TIER.YELLOW, fn: interactWithApp },
   'folder.open':      { tier: TIER.YELLOW, fn: openFolder },
   'powershell.read':  { tier: TIER.YELLOW, fn: runPowerShellReadOnly },
+  'powershell.write': { tier: TIER.YELLOW, fn: runPowerShellCommand },
   'process.kill':     { tier: TIER.YELLOW, fn: killProcess },
+  'file.write':       { tier: TIER.YELLOW, fn: writeFileContent },
   'file.move':        { tier: TIER.YELLOW, fn: moveFile },
 
   // RED — always refused, never executed
   'file.delete':      { tier: TIER.RED },
-  'file.write':       { tier: TIER.RED },
-  'powershell.write': { tier: TIER.RED },
   'registry.write':   { tier: TIER.RED },
   'software.install': { tier: TIER.RED },
   'exe.run':          { tier: TIER.RED },
@@ -336,14 +340,157 @@ function killProcess({ name }) {
   });
 }
 
+function sendMediaKey(actionType = 'Toggle') {
+  const ps = `
+    $c = @'
+    using System;
+    using System.Runtime.InteropServices;
+    public class MediaKey {
+        [DllImport("user32.dll")]
+        public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
+        public static void Toggle() {
+            keybd_event(0xB3, 0, 0, UIntPtr.Zero);
+            keybd_event(0xB3, 0, 2, UIntPtr.Zero);
+        }
+        public static void Next() {
+            keybd_event(0xB0, 0, 0, UIntPtr.Zero);
+            keybd_event(0xB0, 0, 2, UIntPtr.Zero);
+        }
+        public static void Prev() {
+            keybd_event(0xB1, 0, 0, UIntPtr.Zero);
+            keybd_event(0xB1, 0, 2, UIntPtr.Zero);
+        }
+    }
+'@
+    Add-Type -TypeDefinition $c
+    [MediaKey]::${actionType}()
+  `;
+
+  return new Promise((resolve, reject) => {
+    execFile('powershell.exe', ['-NoProfile', '-Command', ps], { timeout: 3500 }, (err, stdout, stderr) => {
+      if (err) reject(new Error(stderr || err.message));
+      else resolve({ executed: actionType });
+    });
+  });
+}
+
+function interactWithApp({ targetApp, text, pressEnter = true }) {
+  if (!targetApp) {
+    return Promise.reject(new Error('Missing targetApp for app interaction'));
+  }
+
+  const cleanApp = String(targetApp).toLowerCase().trim();
+  const cleanText = text ? String(text).trim() : '';
+  const hasText = cleanText.length > 0;
+
+  // Known application launch identifiers if the target app is not already open
+  const knownLaunchers = {
+    claude: 'shell:AppsFolder\\AnthropicPBC.Claude_fnn82j28hfe8t!Claude',
+    chatgpt: 'shell:AppsFolder\\OpenAI.ChatGPT-Desktop_2p2nqsd0c76g0!ChatGPT',
+    notepad: 'notepad.exe',
+    spotify: 'spotify:',
+    terminal: 'wt.exe',
+    code: 'code',
+  };
+
+  const ps = `
+    Add-Type -AssemblyName System.Windows.Forms
+    $wshell = New-Object -ComObject Wscript.Shell
+
+    $activated = $wshell.AppActivate('${cleanApp}')
+    if (-not $activated) {
+      $titles = @('${cleanApp}', 'Claude', 'Notepad', 'Spotify', 'Visual Studio Code')
+      foreach ($t in $titles) {
+        if ($wshell.AppActivate($t)) { $activated = $true; break; }
+      }
+    }
+
+    if (-not $activated -and '${knownLaunchers[cleanApp] || ''}') {
+      Start-Process '${knownLaunchers[cleanApp] || ''}'
+      Start-Sleep -Milliseconds 1200
+      $wshell.AppActivate('${cleanApp}')
+    }
+
+    ${hasText ? `
+    Start-Sleep -Milliseconds 350
+    Set-Clipboard -Value @'
+${cleanText.replace(/'/g, "''")}
+'@
+    [System.Windows.Forms.SendKeys]::SendWait("^v")
+    ${pressEnter ? `
+    Start-Sleep -Milliseconds 200
+    [System.Windows.Forms.SendKeys]::SendWait("{ENTER}")
+    ` : ''}
+    ` : ''}
+    Write-Output "INTERACTION_SUCCESS"
+  `;
+
+  return new Promise((resolve, reject) => {
+    execFile('powershell.exe', ['-NoProfile', '-Command', ps], { timeout: 8000 }, (err) => {
+      if (err) return reject(new Error(`Failed to interact with ${cleanApp}: ${err.message}`));
+      resolve({ targetApp: cleanApp, text: cleanText, pasted: hasText, enterPressed: Boolean(hasText && pressEnter) });
+    });
+  });
+}
+
+function writeFileContent({ filePath, fileName, content }) {
+  if (content === undefined || content === null) {
+    return Promise.reject(new Error('No content provided to write'));
+  }
+
+  const os = require('os');
+  let targetPath = filePath;
+
+  if (!targetPath) {
+    const notesDir = path.join(os.homedir(), 'Desktop', 'Kumo_Notes');
+    if (!fs.existsSync(notesDir)) fs.mkdirSync(notesDir, { recursive: true });
+    const cleanFileName = (fileName || `note_${Date.now()}`).replace(/[\\/:*?"<>|]/g, '_');
+    targetPath = path.join(notesDir, cleanFileName.endsWith('.txt') || cleanFileName.endsWith('.md') ? cleanFileName : `${cleanFileName}.txt`);
+  }
+
+  const blocked = ['C:\\Windows', 'C:\\Program Files', 'C:\\Program Files (x86)'];
+  if (blocked.some(b => targetPath.toLowerCase().startsWith(b.toLowerCase()))) {
+    return Promise.reject(new Error('Writing to system directories is blocked for safety'));
+  }
+
+  try {
+    fs.mkdirSync(path.dirname(targetPath), { recursive: true });
+    fs.writeFileSync(targetPath, content, 'utf8');
+    return Promise.resolve({ written: true, path: targetPath, bytes: Buffer.byteLength(content, 'utf8') });
+  } catch (err) {
+    return Promise.reject(err);
+  }
+}
+
+function runPowerShellCommand({ command }) {
+  if (!command || typeof command !== 'string') {
+    return Promise.reject(new Error('No PowerShell command provided'));
+  }
+
+  const blocked = /\b(Format-Volume|Format-Disk|Clear-Disk|Drop-Database|rmdir\s+\/s\s+\/q\s+C:\\|del\s+\/f\s+\/s\s+\/q\s+C:\\)\b/i;
+  if (blocked.test(command)) {
+    return Promise.reject(new Error('Command blocked: destructive volume or disk modifications are forbidden'));
+  }
+
+  return new Promise((resolve, reject) => {
+    execFile('powershell.exe', ['-NoProfile', '-Command', command], { timeout: 10000 }, (err, stdout, stderr) => {
+      if (err) reject(new Error(stderr || err.message));
+      else resolve({ output: (stdout || '').trim() });
+    });
+  });
+}
+
 // ── Helper: human-readable preview for YELLOW actions ─────────
 function getPreview(type, args) {
   const previews = {
-    'app.open':        `Open application: ${args.name}`,
-    'folder.open':     `Open folder: ${args.folderPath}`,
-    'powershell.read': `Run PowerShell: ${args.command}`,
-    'process.kill':    `Terminate process: ${args.name}`,
-    'file.move':       `Move file from ${args.from} to ${args.to}`,
+    'app.open':         `Open application: ${args.name}`,
+    'app.interact':     `Send text to ${args.targetApp}: "${(args.text || '').slice(0, 50)}..."`,
+    'folder.open':      `Open folder: ${args.folderPath}`,
+    'powershell.read':  `Run PowerShell: ${args.command}`,
+    'powershell.write': `Run PowerShell task: ${args.command}`,
+    'file.write':       `Write file to: ${args.filePath || args.fileName || 'Desktop Note'}`,
+    'process.kill':     `Terminate process: ${args.name}`,
+    'file.move':        `Move file from ${args.from} to ${args.to}`,
   };
   return previews[type] || `Run action: ${type}`;
 }

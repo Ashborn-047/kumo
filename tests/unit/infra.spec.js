@@ -90,9 +90,14 @@ test.describe('Infrastructure: Action Registry & Security Gate', () => {
   test('enforces safety tier classification', () => {
     expect(actions.TIER).toBeDefined();
     expect(actions.ACTIONS['clipboard.read'].tier).toBe(actions.TIER.GREEN);
+    expect(actions.ACTIONS['media.playPause'].tier).toBe(actions.TIER.GREEN);
     expect(actions.ACTIONS['app.open'].tier).toBe(actions.TIER.YELLOW);
+    expect(actions.ACTIONS['app.interact'].tier).toBe(actions.TIER.YELLOW);
     expect(actions.ACTIONS['process.kill'].tier).toBe(actions.TIER.YELLOW);
-    expect(actions.ACTIONS['powershell.write'].tier).toBe(actions.TIER.RED);
+    expect(actions.ACTIONS['powershell.write'].tier).toBe(actions.TIER.YELLOW);
+    expect(actions.ACTIONS['file.write'].tier).toBe(actions.TIER.YELLOW);
+    expect(actions.ACTIONS['file.delete'].tier).toBe(actions.TIER.RED);
+    expect(actions.ACTIONS['registry.write'].tier).toBe(actions.TIER.RED);
   });
 
   test('generates accurate security preview messages', () => {

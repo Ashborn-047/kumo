@@ -44,6 +44,36 @@ const INTENT_PATTERNS = [
   // Process management
   { pattern: /(?:kill|terminate|stop)\s+(?:process|task|app)?\s*([a-zA-Z0-9_\-\.]+)/i, action: 'process.kill', extract: (m) => ({ name: m[1].trim() }) },
 
+  // Media controls (Spotify / System audio playback)
+  { pattern: /(?:pause|resume|play|toggle)\s+(?:the\s+)?(?:music|song|track|playback|spotify)/i, action: 'media.playPause', extract: () => ({}) },
+  { pattern: /(?:next\s+(?:song|track)|skip\s+(?:song|track)|next\s+spotify)/i, action: 'media.next', extract: () => ({}) },
+  { pattern: /(?:previous\s+(?:song|track)|prev\s+(?:song|track)|prev\s+spotify)/i, action: 'media.previous', extract: () => ({}) },
+  { pattern: /^(?:play|pause|resume|play\/pause)$/i, action: 'media.playPause', extract: () => ({}) },
+
+  // Application interaction & typing / sending prompts (Claude, ChatGPT, Notepad, etc.)
+  {
+    pattern: /(?:(?:a\s+)?promp?t\s+(?:in|to)\s+|ask\s+|send\s+(?:a\s+)?promp?t\s+to\s+)([a-zA-Z0-9_\-\.]+)\s*[:,\s]*(.*)/i,
+    action: 'app.interact',
+    extract: (m) => ({ targetApp: m[1].trim(), text: m[2] ? m[2].trim() : '', pressEnter: Boolean(m[2] && m[2].trim()) })
+  },
+  {
+    pattern: /(?:write|type|input|enter)\s+(?:in|into|to)\s+([a-zA-Z0-9_\-\.]+)\s*[:,\s]+(.+)/i,
+    action: 'app.interact',
+    extract: (m) => ({ targetApp: m[1].trim(), text: m[2].trim(), pressEnter: false })
+  },
+
+  // Note creation / File writing
+  {
+    pattern: /(?:create|write|save|make)\s+(?:a\s+)?(?:new\s+)?(?:note|file)\s*(?:called|named)?\s*([a-zA-Z0-9_\-\.]*)\s*[:,\s]+(.+)/i,
+    action: 'file.write',
+    extract: (m) => ({ fileName: m[1].trim() || 'QuickNote', content: m[2].trim() })
+  },
+  {
+    pattern: /(?:take\s+a\s+note|new\s+note|save\s+note)\s*[:,\s]+(.+)/i,
+    action: 'file.write',
+    extract: (m) => ({ fileName: 'QuickNote', content: m[1].trim() })
+  },
+
   // App launching (general fallback for launch/open/start)
   { pattern: /(?:open|launch|start|run)\s+(.+)/i, action: 'app.open', extract: (m) => ({ name: m[1].trim() }) },
 ];
@@ -161,6 +191,18 @@ function formatOfflineSuccess(action, args, result) {
     }
     case 'powershell.read':
       return `💻 Output:\n${result.result?.output || '(no output)'}`;
+    case 'powershell.write':
+      return `💻 Executed task:\n${result.result?.output || '(completed)'}`;
+    case 'app.interact':
+      return `✍️ Sent input to ${args.targetApp}: "${(args.text || '').slice(0, 50)}..."`;
+    case 'file.write':
+      return `📝 Saved note to: ${result.result?.path || 'Desktop\\Kumo_Notes'}`;
+    case 'media.playPause':
+      return `🎵 Toggled Spotify/Media (Play/Pause)!`;
+    case 'media.next':
+      return `⏭️ Skipped to next track!`;
+    case 'media.previous':
+      return `⏮️ Rewound to previous track!`;
     default:
       return `✅ Done!`;
   }

@@ -217,14 +217,19 @@ function showCardPopout(type, payload = {}) {
           <span class="metric-val">Connected (URI Hook)</span>
         </div>
       </div>
-      <div class="popout-action-row">
-        <button class="popout-action-btn primary" id="btn-popout-spotify-play">
-          <span class="material-symbols-outlined" style="font-size:16px;">play_arrow</span>
-          <span>Resume/Play</span>
+      <div class="popout-action-row" style="display:flex;gap:6px;align-items:center;">
+        <button class="popout-action-btn" id="btn-popout-spotify-prev" title="Previous Track" style="padding:6px 10px;">
+          <span class="material-symbols-outlined" style="font-size:16px;">skip_previous</span>
         </button>
-        <button class="popout-action-btn" id="btn-popout-spotify-focus">
+        <button class="popout-action-btn primary" id="btn-popout-spotify-play" style="flex:1;">
+          <span class="material-symbols-outlined" style="font-size:16px;">play_arrow</span>
+          <span>Play / Pause</span>
+        </button>
+        <button class="popout-action-btn" id="btn-popout-spotify-next" title="Next Track" style="padding:6px 10px;">
+          <span class="material-symbols-outlined" style="font-size:16px;">skip_next</span>
+        </button>
+        <button class="popout-action-btn" id="btn-popout-spotify-focus" title="Focus Spotify" style="padding:6px 10px;">
           <span class="material-symbols-outlined" style="font-size:16px;">open_in_new</span>
-          <span>Focus App</span>
         </button>
       </div>
     `;
@@ -367,9 +372,17 @@ function showCardPopout(type, payload = {}) {
   }
 
   // Bind popout quick action buttons
-  document.getElementById('btn-popout-spotify-play')?.addEventListener('click', () => {
-    window.goo?.action?.('app.open', { name: 'spotify' });
-    showBubble('🎵 Spotify opened via URI hook!');
+  document.getElementById('btn-popout-spotify-play')?.addEventListener('click', async () => {
+    await window.goo?.action?.('media.playPause');
+    showBubble('🎵 Spotify Play/Pause toggled!');
+  });
+  document.getElementById('btn-popout-spotify-next')?.addEventListener('click', async () => {
+    await window.goo?.action?.('media.next');
+    showBubble('⏭️ Next track!');
+  });
+  document.getElementById('btn-popout-spotify-prev')?.addEventListener('click', async () => {
+    await window.goo?.action?.('media.previous');
+    showBubble('⏮️ Previous track!');
   });
   document.getElementById('btn-popout-spotify-focus')?.addEventListener('click', () => {
     window.goo?.action?.('app.open', { name: 'spotify' });
