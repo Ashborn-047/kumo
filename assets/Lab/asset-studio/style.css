@@ -1,0 +1,23 @@
+body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            overflow: hidden;
+            background-color: #0c0a14;
+            color: #ece9fb;
+            user-select: none;
+        }
+        .bg-checkerboard {
+            background-color: #151221;
+            background-image: 
+                linear-gradient(45deg, #1e1a2e 25%, transparent 25%), 
+                linear-gradient(-45deg, #1e1a2e 25%, transparent 25%), 
+                linear-gradient(45deg, transparent 75%, #1e1a2e 75%), 
+                linear-gradient(-45deg, transparent 75%, #1e1a2e 75%);
+            background-size: 24px 24px;
+            background-position: 0 0, 0 12px, 12px -12px, -12px 0;
+        }
+        /* Custom Kuma Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0c0a14; }
+        ::-webkit-scrollbar-thumb { background: #2e2744; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3e375c; }

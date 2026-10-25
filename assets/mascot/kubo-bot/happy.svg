@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130 140" width="260" height="280" fill="none">
+  <defs>
+    <filter id="kubo_shadow_happy" x="-10%" y="-10%" width="120%" height="130%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#2E3B52" flood-opacity="0.3" />
+    </filter>
+  </defs>
+  <rect x="62" y="14" width="6" height="24" rx="3" fill="#525F77" />
+  <circle cx="65" cy="12" r="9" fill="#F472B6" opacity="0.4" />
+  <circle cx="65" cy="12" r="6" fill="#F472B6" stroke="#FFFFFF" stroke-width="2" />
+  <rect x="15" y="36" width="100" height="88" rx="20" fill="#2E3B52" stroke="#474554" stroke-width="3" filter="url(#kubo_shadow_happy)" />
+  <rect x="25" y="46" width="80" height="52" rx="14" fill="#171B2B" stroke="#3A475F" stroke-width="2" />
+  
+      <!-- Happy Hearts/Curves -->
+      <rect x="38" y="60" width="16" height="16" rx="4" fill="#FCE7F3" />
+      <path d="M42 70 Q46 62 50 70" stroke="#BE185D" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+      <rect x="76" y="60" width="16" height="16" rx="4" fill="#FCE7F3" />
+      <path d="M80 70 Q84 62 88 70" stroke="#BE185D" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+      <!-- Wide Smile -->
+      <path d="M56 76 Q65 83 74 76" stroke="#34D399" stroke-width="3" stroke-linecap="round" fill="none"/>
+    
+  <circle cx="35" cy="110" r="4" fill="#818CF8" />
+  <circle cx="47" cy="110" r="4" fill="#FB7185" />
+  <text x="70" y="113" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="600" fill="#8A92A6" letter-spacing="1">KUBO-04</text>
+</svg>

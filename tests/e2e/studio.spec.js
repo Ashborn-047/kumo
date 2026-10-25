@@ -74,10 +74,22 @@ test.describe('Kumo Studio & Onboarding Window', () => {
     await expect(studioPage.locator('#stageRightColumn')).toBeVisible();
 
     // Verify mascot cards exist and can be selected
-    const cottonCard = studioPage.locator('#card-mascot-cotton');
-    await expect(cottonCard).toBeVisible();
-    await cottonCard.click();
-    await expect(cottonCard).toHaveClass(/border-primary/);
+    const pixelCard = studioPage.locator('#card-mascot-pixel2d');
+    await expect(pixelCard).toBeVisible();
+    await pixelCard.click();
+    await expect(pixelCard).toHaveClass(/border-primary/);
+
+    // Verify 2D Pixel Cloud is rendered on the stage
+    const figure = studioPage.locator('#mochiFigure');
+    await expect(figure.locator('img')).toHaveAttribute('src', /pixel-cloud-2d\.png|idle\.png/);
+
+    // Click 'Happy' mood button and verify mascot switches to happy.png
+    await studioPage.locator('.mood-btn', { hasText: 'Happy' }).click();
+    await expect(figure.locator('img')).toHaveAttribute('src', /happy\.png/);
+
+    // Click 'Thinking' mood button and verify mascot switches to thinking.png
+    await studioPage.locator('.mood-btn', { hasText: 'Thinking' }).click();
+    await expect(figure.locator('img')).toHaveAttribute('src', /thinking\.png/);
 
     // Step to Step 3 (Persona & Swatches)
     await studioPage.locator('#tab-btn-3').click();

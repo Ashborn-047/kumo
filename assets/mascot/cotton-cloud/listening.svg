@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 96" width="300" height="192" fill="none">
+  <defs>
+    <linearGradient id="cotton_grad_listening" x1="10" y1="4" x2="142" y2="97" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF" />
+      <stop offset="0.75" stop-color="#F2EBFF" />
+      <stop offset="1" stop-color="#E2EEFF" />
+    </linearGradient>
+    <filter id="cotton_shadow_listening" x="-10%" y="-10%" width="120%" height="130%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#6355d8" flood-opacity="0.16" />
+    </filter>
+  </defs>
+  <ellipse cx="75" cy="8" rx="36" ry="6" fill="#6355d8" opacity="0.18" />
+  <path d="M120 72C133.255 72 144 61.2548 144 48C144 35.8456 134.975 25.7981 123.279 24.2386C120.485 10.3707 108.204 0 93.5 0C82.1066 0 72.1388 6.27315 66.8601 15.5492C62.4638 13.2922 57.481 12 52.2 12C36.736 12 24.2 24.536 24.2 40C24.2 41.229 24.2793 42.4395 24.433 43.627C10.6698 46.126 0 58.1256 0 72.6C0 88.6163 12.9837 101.6 29 101.6H120C133.255 101.6 144 90.8548 144 77.6" fill="#FFFFFF" filter="url(#cotton_shadow_listening)" />
+  <path d="M120 70C132.15 70 142 60.1503 142 48C142 36.8778 133.743 27.6833 123.042 26.252C120.486 13.5658 109.248 4 95.8 4C85.3748 4 76.2625 9.74088 71.4326 18.228C67.41 16.1627 62.8504 15 58 15C43.6406 15 32 26.6406 32 41C32 42.1246 32.0712 43.2329 32.2098 44.3197C19.6152 46.6063 10 57.5855 10 70.8C10 85.4355 21.8645 97.3 36.5 97.3H120C132.15 97.3 142 87.4503 142 75.3" fill="url(#cotton_grad_listening)" />
+  
+      <circle id="cotton-eye-left" cx="68" cy="54" r="5" fill="#2E3B52" />
+      <circle id="cotton-eye-right" cx="102" cy="54" r="5" fill="#2E3B52" />
+      <circle cx="69.5" cy="52" r="2" fill="#FFFFFF" />
+      <circle cx="103.5" cy="52" r="2" fill="#FFFFFF" />
+    
+  
+    <ellipse id="cotton-blush-left" cx="59" cy="61" rx="6" ry="3.5" fill="#FFB4A6" opacity="0.75" />
+    <ellipse id="cotton-blush-right" cx="111" cy="61" rx="6" ry="3.5" fill="#FFB4A6" opacity="0.75" />
+  
+  <path d="M82 62 Q85 63 88 62" stroke="#2E3B52" stroke-width="2.5" stroke-linecap="round"/>
+  
+      <path d="M125 45 Q129 52 125 59" stroke="#6355d8" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.7"/>
+      <path d="M129 41 Q135 52 129 63" stroke="#6355d8" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.5"/>
+    
+</svg>

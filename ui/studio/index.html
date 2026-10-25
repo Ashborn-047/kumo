@@ -197,6 +197,8 @@
       background: rgba(99, 85, 216, 0.4);
     }
   </style>
+  <!-- Kumo Canonical Design System Tokens -->
+  <link rel="stylesheet" href="../../design-system/tokens.css"/>
 </head>
 <body class="bg-[#fbf8fc] bg-dot-matrix text-on-surface antialiased min-h-screen selection:bg-primary-fixed selection:text-on-primary-fixed font-body-md overflow-x-hidden relative flex flex-col justify-between">
 <!-- Ambient Background Lighting / Diffused Pastel Orbs -->
@@ -423,103 +425,147 @@
 </div>
 <!-- 5 Real Mascot Selection Grid -->
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="engineSelectionGrid">
-<!-- Mascot 1: 3D Mochi Gel Cloud (ACTIVE by default) -->
+<!-- Mascot 1: Interactive Gel Cloud (ACTIVE by default) -->
 <div class="cursor-pointer relative p-3.5 rounded-2xl border-2 border-primary bg-primary-fixed/20 shadow-sm transition-all flex flex-col justify-between mascot-engine-card" id="card-mascot-mochi" data-mascot="mochi" onclick="selectMascot('mochi')">
-<div class="flex items-start justify-between mb-2">
-<div class="w-10 h-10 rounded-xl bg-primary text-on-primary flex items-center justify-center shadow-md shadow-primary/25">
-<span class="material-symbols-outlined text-[22px]">auto_awesome</span>
+  <div class="flex items-start justify-between mb-2">
+    <div class="w-10 h-10 rounded-xl bg-primary text-on-primary flex items-center justify-center shadow-md shadow-primary/25">
+      <span class="material-symbols-outlined text-[22px]">auto_awesome</span>
+    </div>
+    <div class="flex items-center gap-1.5 mascot-status-pill" id="pill-mascot-mochi">
+      <span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-primary text-on-primary font-bold">ACTIVE</span>
+      <div class="w-5 h-5 rounded-full bg-primary text-on-primary flex items-center justify-center">
+        <span class="material-symbols-outlined text-[14px]">check</span>
+      </div>
+    </div>
+  </div>
+  <div>
+    <h3 class="text-headline-sm font-headline-sm text-[15px] font-bold text-on-surface">Interactive Gel Cloud</h3>
+    <p class="text-body-sm font-body-sm text-secondary mt-0.5">Squishy procedural gelatin companion, reactive blush, organic jiggle physics.</p>
+  </div>
+  <div class="mt-2.5 pt-2 border-t border-primary/20 flex items-center justify-between text-secondary">
+    <span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-[#eadfff] text-primary font-semibold">Live Procedural</span>
+    <span class="font-label-sm text-label-sm text-primary font-semibold">Spring 60fps</span>
+  </div>
 </div>
-<div class="flex items-center gap-1.5 mascot-status-pill" id="pill-mascot-mochi">
-<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-primary text-on-primary font-bold">ACTIVE</span>
-<div class="w-5 h-5 rounded-full bg-primary text-on-primary flex items-center justify-center">
-<span class="material-symbols-outlined text-[14px]">check</span>
+
+<!-- Mascot 2: 2D Pixel Cloud (Puff) -->
+<div class="cursor-pointer relative p-3.5 rounded-2xl border border-outline-variant/50 bg-surface-container-lowest hover:border-primary/40 transition-all flex flex-col justify-between mascot-engine-card" id="card-mascot-pixel2d" data-mascot="pixel2d" onclick="selectMascot('pixel2d')">
+  <div class="flex items-start justify-between mb-2">
+    <div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center overflow-hidden p-1 shadow-xs">
+      <img src="../../assets/mascot/2d/pixel-cloud-2d.png" alt="2D Pixel Cloud" class="w-8 h-8 object-contain [image-rendering:pixelated]"/>
+    </div>
+    <div class="flex items-center gap-1.5 mascot-status-pill" id="pill-mascot-pixel2d">
+      <div class="w-5 h-5 rounded-full border-2 border-outline-variant flex items-center justify-center"></div>
+    </div>
+  </div>
+  <div>
+    <h3 class="text-headline-sm font-headline-sm text-[15px] font-semibold text-on-surface">2D Pixel Cloud (Puff)</h3>
+    <p class="text-body-sm font-body-sm text-secondary mt-0.5">Retro dithering 16-bit pixel cloud, blushing cheeks, lightweight footprint.</p>
+  </div>
+  <div class="mt-2.5 pt-2 border-t border-surface-container flex items-center justify-between text-secondary">
+    <span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-surface-container text-secondary">Canvas 2D</span>
+    <span class="font-label-sm text-label-sm text-secondary">&lt; 1% CPU</span>
+  </div>
 </div>
+
+<!-- Mascot 3: 3D Voxel Bot -->
+<div class="cursor-pointer relative p-3.5 rounded-2xl border border-outline-variant/50 bg-surface-container-lowest hover:border-primary/40 transition-all flex flex-col justify-between mascot-engine-card" id="card-mascot-voxel3d" data-mascot="voxel3d" onclick="selectMascot('voxel3d')">
+  <div class="flex items-start justify-between mb-2">
+    <div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center overflow-hidden p-1 shadow-xs">
+      <img src="../../assets/mascot/3d/voxel-bot-3d.png" alt="3D Voxel Bot" class="w-8 h-8 object-contain [image-rendering:pixelated]"/>
+    </div>
+    <div class="flex items-center gap-1.5 mascot-status-pill" id="pill-mascot-voxel3d">
+      <div class="w-5 h-5 rounded-full border-2 border-outline-variant flex items-center justify-center"></div>
+    </div>
+  </div>
+  <div>
+    <h3 class="text-headline-sm font-headline-sm text-[15px] font-semibold text-on-surface">3D Voxel Bot (Cube)</h3>
+    <p class="text-body-sm font-body-sm text-secondary mt-0.5">Chunky cyan isometric voxel cube robot, expressive smile, retro aesthetic.</p>
+  </div>
+  <div class="mt-2.5 pt-2 border-t border-surface-container flex items-center justify-between text-secondary">
+    <span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-surface-container text-secondary">3D Voxel</span>
+    <span class="font-label-sm text-label-sm text-secondary">Pixel Shaders</span>
+  </div>
 </div>
+
+<!-- Mascot 4: 3D Mochi Gel Bot -->
+<div class="cursor-pointer relative p-3.5 rounded-2xl border border-outline-variant/50 bg-surface-container-lowest hover:border-primary/40 transition-all flex flex-col justify-between mascot-engine-card" id="card-mascot-gel3d" data-mascot="gel3d" onclick="selectMascot('gel3d')">
+  <div class="flex items-start justify-between mb-2">
+    <div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center overflow-hidden p-1 shadow-xs">
+      <img src="../../assets/mascot/3d-mochi-gel/mochi-gel-3d.png" alt="3D Mochi Gel Bot" class="w-8 h-8 object-contain"/>
+    </div>
+    <div class="flex items-center gap-1.5 mascot-status-pill" id="pill-mascot-gel3d">
+      <div class="w-5 h-5 rounded-full border-2 border-outline-variant flex items-center justify-center"></div>
+    </div>
+  </div>
+  <div>
+    <h3 class="text-headline-sm font-headline-sm text-[15px] font-semibold text-on-surface">3D Mochi Gel Bot</h3>
+    <p class="text-body-sm font-body-sm text-secondary mt-0.5">Purple spherical organic gelatin buddy, ray-traced lighting, cute smile.</p>
+  </div>
+  <div class="mt-2.5 pt-2 border-t border-surface-container flex items-center justify-between text-secondary">
+    <span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-[#eadfff] text-primary font-semibold">PBR Gel</span>
+    <span class="font-label-sm text-label-sm text-secondary">Smooth 3D</span>
+  </div>
 </div>
-<div>
-<h3 class="text-headline-sm font-headline-sm text-[15px] font-bold text-on-surface">3D Mochi Gel Cloud</h3>
-<p class="text-body-sm font-body-sm text-secondary mt-0.5">Squishy procedural gelatin companion, reactive blush, organic jiggle physics.</p>
-</div>
-<div class="mt-2.5 pt-2 border-t border-primary/20 flex items-center justify-between text-secondary">
-<span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-[#eadfff] text-primary font-semibold">Live Procedural</span>
-<span class="font-label-sm text-label-sm text-primary font-semibold">Spring 60fps</span>
-</div>
-</div>
-<!-- Mascot 2: Cotton Cloud (Puff) -->
+
+<!-- Mascot 5: Cotton Cloud (Stitch) -->
 <div class="cursor-pointer relative p-3.5 rounded-2xl border border-outline-variant/50 bg-surface-container-lowest hover:border-primary/40 transition-all flex flex-col justify-between mascot-engine-card" id="card-mascot-cotton" data-mascot="cotton" onclick="selectMascot('cotton')">
-<div class="flex items-start justify-between mb-2">
-<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-secondary group-hover:text-primary transition-colors">
-<span class="material-symbols-outlined text-[22px]">filter_drama</span>
+  <div class="flex items-start justify-between mb-2">
+    <div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center overflow-hidden p-1 shadow-xs">
+      <img src="../../assets/mascot/cotton-cloud/cotton-cloud.png" alt="Cotton Cloud" class="w-8 h-8 object-contain"/>
+    </div>
+    <div class="flex items-center gap-1.5 mascot-status-pill" id="pill-mascot-cotton">
+      <div class="w-5 h-5 rounded-full border-2 border-outline-variant flex items-center justify-center"></div>
+    </div>
+  </div>
+  <div>
+    <h3 class="text-headline-sm font-headline-sm text-[15px] font-semibold text-on-surface">Cotton Cloud (Puff)</h3>
+    <p class="text-body-sm font-body-sm text-secondary mt-0.5">Pure vector SVG bezier curves, serene floating aura, gentle companion.</p>
+  </div>
+  <div class="mt-2.5 pt-2 border-t border-surface-container flex items-center justify-between text-secondary">
+    <span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-surface-container text-secondary">Vector 5-State</span>
+    <span class="font-label-sm text-label-sm text-secondary">Zero CPU</span>
+  </div>
 </div>
-<div class="flex items-center gap-1.5 mascot-status-pill" id="pill-mascot-cotton">
-<div class="w-5 h-5 rounded-full border-2 border-outline-variant flex items-center justify-center"></div>
-</div>
-</div>
-<div>
-<h3 class="text-headline-sm font-headline-sm text-[15px] font-semibold text-on-surface">Cotton Cloud (Puff)</h3>
-<p class="text-body-sm font-body-sm text-secondary mt-0.5">Pure vector SVG bezier curves, calm floating aura, breezy companion.</p>
-</div>
-<div class="mt-2.5 pt-2 border-t border-surface-container flex items-center justify-between text-secondary">
-<span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-surface-container text-secondary">Vector SVG</span>
-<span class="font-label-sm text-label-sm text-secondary">Zero Shaders</span>
-</div>
-</div>
-<!-- Mascot 3: Kubo Bot (Voxel) -->
+
+<!-- Mascot 6: Kubo Bot (Stitch) -->
 <div class="cursor-pointer relative p-3.5 rounded-2xl border border-outline-variant/50 bg-surface-container-lowest hover:border-primary/40 transition-all flex flex-col justify-between mascot-engine-card" id="card-mascot-kubo" data-mascot="kubo" onclick="selectMascot('kubo')">
-<div class="flex items-start justify-between mb-2">
-<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-secondary group-hover:text-primary transition-colors">
-<span class="material-symbols-outlined text-[22px]">grid_view</span>
+  <div class="flex items-start justify-between mb-2">
+    <div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center overflow-hidden p-1 shadow-xs">
+      <img src="../../assets/mascot/kubo-bot/kubo-bot.png" alt="Kubo Bot" class="w-8 h-8 object-contain"/>
+    </div>
+    <div class="flex items-center gap-1.5 mascot-status-pill" id="pill-mascot-kubo">
+      <div class="w-5 h-5 rounded-full border-2 border-outline-variant flex items-center justify-center"></div>
+    </div>
+  </div>
+  <div>
+    <h3 class="text-headline-sm font-headline-sm text-[15px] font-semibold text-on-surface">Kubo Bot (CRT)</h3>
+    <p class="text-body-sm font-body-sm text-secondary mt-0.5">Chunky CRT screen robot with equalizer audio mouth and glowing antenna.</p>
+  </div>
+  <div class="mt-2.5 pt-2 border-t border-surface-container flex items-center justify-between text-secondary">
+    <span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-surface-container text-secondary">CRT Display</span>
+    <span class="font-label-sm text-label-sm text-secondary">Reactive VU</span>
+  </div>
 </div>
-<div class="flex items-center gap-1.5 mascot-status-pill" id="pill-mascot-kubo">
-<div class="w-5 h-5 rounded-full border-2 border-outline-variant flex items-center justify-center"></div>
-</div>
-</div>
-<div>
-<h3 class="text-headline-sm font-headline-sm text-[15px] font-semibold text-on-surface">Kubo Bot (Voxel)</h3>
-<p class="text-body-sm font-body-sm text-secondary mt-0.5">16-bit retro CRT screen robot, blinking antenna beacon, pixel face.</p>
-</div>
-<div class="mt-2.5 pt-2 border-t border-surface-container flex items-center justify-between text-secondary">
-<span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-surface-container text-secondary">Retro CRT</span>
-<span class="font-label-sm text-label-sm text-secondary">&lt; 1% CPU</span>
-</div>
-</div>
-<!-- Mascot 4: Mochi Droplet -->
-<div class="cursor-pointer relative p-3.5 rounded-2xl border border-outline-variant/50 bg-surface-container-lowest hover:border-primary/40 transition-all flex flex-col justify-between mascot-engine-card" id="card-mascot-droplet" data-mascot="droplet" onclick="selectMascot('droplet')">
-<div class="flex items-start justify-between mb-2">
-<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-secondary group-hover:text-primary transition-colors">
-<span class="material-symbols-outlined text-[22px]">water_drop</span>
-</div>
-<div class="flex items-center gap-1.5 mascot-status-pill" id="pill-mascot-droplet">
-<div class="w-5 h-5 rounded-full border-2 border-outline-variant flex items-center justify-center"></div>
-</div>
-</div>
-<div>
-<h3 class="text-headline-sm font-headline-sm text-[15px] font-semibold text-on-surface">Mochi Droplet</h3>
-<p class="text-body-sm font-body-sm text-secondary mt-0.5">Squishy aquatic water droplet, mint gloss rim, refreshing ideation buddy.</p>
-</div>
-<div class="mt-2.5 pt-2 border-t border-surface-container flex items-center justify-between text-secondary">
-<span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-surface-container text-secondary">Aqua Droplet</span>
-<span class="font-label-sm text-label-sm text-secondary">Gloss Shaders</span>
-</div>
-</div>
-<!-- Mascot 5: Starlet Astro (Span 2) -->
-<div class="cursor-pointer relative p-3.5 rounded-2xl border border-outline-variant/50 bg-surface-container-lowest hover:border-primary/40 transition-all flex flex-col justify-between mascot-engine-card sm:col-span-2" id="card-mascot-starlet" data-mascot="starlet" onclick="selectMascot('starlet')">
-<div class="flex items-start justify-between mb-2">
-<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-secondary group-hover:text-primary transition-colors">
-<span class="material-symbols-outlined text-[22px]">star</span>
-</div>
-<div class="flex items-center gap-1.5 mascot-status-pill" id="pill-mascot-starlet">
-<div class="w-5 h-5 rounded-full border-2 border-outline-variant flex items-center justify-center"></div>
-</div>
-</div>
-<div>
-<h3 class="text-headline-sm font-headline-sm text-[15px] font-semibold text-on-surface">Starlet Astro (Cosmic)</h3>
-<p class="text-body-sm font-body-sm text-secondary mt-0.5">Planetary orbital star companion, gold luminescent glow, guiding your code.</p>
-</div>
-<div class="mt-2.5 pt-2 border-t border-surface-container flex items-center justify-between text-secondary">
-<span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-surface-container text-secondary">Cosmic Star</span>
-<span class="font-label-sm text-label-sm text-secondary">Orbital Ring</span>
-</div>
+
+<!-- Mascot 7: Mochi Droplet (Stitch - Span 2) -->
+<div class="cursor-pointer relative p-3.5 rounded-2xl border border-outline-variant/50 bg-surface-container-lowest hover:border-primary/40 transition-all flex flex-col justify-between mascot-engine-card sm:col-span-2" id="card-mascot-droplet" data-mascot="droplet" onclick="selectMascot('droplet')">
+  <div class="flex items-start justify-between mb-2">
+    <div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center overflow-hidden p-1 shadow-xs">
+      <img src="../../assets/mascot/mochi-droplet/mochi-droplet.png" alt="Mochi Droplet" class="w-8 h-8 object-contain"/>
+    </div>
+    <div class="flex items-center gap-1.5 mascot-status-pill" id="pill-mascot-droplet">
+      <div class="w-5 h-5 rounded-full border-2 border-outline-variant flex items-center justify-center"></div>
+    </div>
+  </div>
+  <div>
+    <h3 class="text-headline-sm font-headline-sm text-[15px] font-semibold text-on-surface">Mochi Droplet (Aquatic)</h3>
+    <p class="text-body-sm font-body-sm text-secondary mt-0.5">Translucent mint aquatic jelly buddy with gloss rim reflection and water physics.</p>
+  </div>
+  <div class="mt-2.5 pt-2 border-t border-surface-container flex items-center justify-between text-secondary">
+    <span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-surface-container text-secondary">Aqua Jelly</span>
+    <span class="font-label-sm text-label-sm text-secondary">Gloss Shaders</span>
+  </div>
 </div>
 </div>
 <!-- Fluid Jiggle Physics Toggle -->
@@ -898,129 +944,168 @@
   let selectedEngineKey = 'mochi';
   let currentBlushVal = 75;
 
+  let currentMood = 'idle';
+
+  function getProceduralSvg(state) {
+    let eyes = `
+      <path d="M85 106 C85 96 99 96 99 106" stroke="#171b2b" stroke-linecap="round" stroke-width="4.5"></path>
+      <circle cx="89" cy="100" fill="#ffffff" r="1.5"></circle>
+      <path d="M141 106 C141 96 155 96 155 106" stroke="#171b2b" stroke-linecap="round" stroke-width="4.5"></path>
+      <circle cx="145" cy="100" fill="#ffffff" r="1.5"></circle>
+    `;
+    let mouth = `<path d="M114 116 Q120 126 126 116" stroke="#171b2b" stroke-linecap="round" stroke-width="3.5"></path>`;
+    let sparkles = `
+      <path d="M198 42 L202 30 L206 42 L218 46 L206 50 L202 62 L198 50 L186 46 Z" fill="#6355d8" opacity="0.85"></path>
+      <circle cx="218" cy="28" fill="#ffb4a6" r="2.5"></circle>
+    `;
+
+    if (state === 'speaking') {
+      mouth = `<ellipse cx="120" cy="120" rx="7" ry="5" fill="#171b2b"/>`;
+    } else if (state === 'thinking') {
+      eyes = `
+        <circle cx="94" cy="98" r="4" fill="#171b2b"/>
+        <circle cx="95.5" cy="96.5" r="1.5" fill="#ffffff"/>
+        <circle cx="150" cy="98" r="4" fill="#171b2b"/>
+        <circle cx="151.5" cy="96.5" r="1.5" fill="#ffffff"/>
+      `;
+      sparkles = `
+        <path d="M198 32 L204 18 L210 32 L224 38 L210 44 L204 58 L198 44 L184 38 Z" fill="#ff7e67" opacity="0.95"></path>
+        <circle cx="228" cy="22" fill="#ffd166" r="3.5"></circle>
+      `;
+    } else if (state === 'happy') {
+      eyes = `
+        <path d="M83 108 Q91 96 99 108" stroke="#171b2b" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+        <path d="M139 108 Q147 96 155 108" stroke="#171b2b" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+      `;
+      mouth = `<path d="M112 115 Q120 128 128 115 Z" fill="#ff7e67" stroke="#171b2b" stroke-width="2.5"/>`;
+    }
+
+    return `<svg class="w-full h-full drop-shadow-[0_16px_24px_rgba(99,85,216,0.18)] ${state === 'happy' ? 'animate-bounce' : (state === 'speaking' ? 'animate-pulse' : 'animate-mochi-float')}" fill="none" viewbox="0 0 240 200" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <lineargradient gradientunits="userSpaceOnUse" id="cloudBodyGrad" x1="20" x2="220" y1="20" y2="180">
+          <stop offset="0%" stop-color="#ffffff"></stop>
+          <stop id="cloudGradMid" offset="40%" stop-color="${selectedPaletteHex || '#eadfff'}"></stop>
+          <stop offset="100%" stop-color="#dcedff"></stop>
+        </lineargradient>
+        <radialgradient cx="0" cy="0" gradienttransform="translate(70 125) scale(20 12)" gradientunits="userSpaceOnUse" id="blushLeft" r="1">
+          <stop offset="0%" stop-color="#ff7e67" stop-opacity="0.75"></stop>
+          <stop offset="100%" stop-color="#ff7e67" stop-opacity="0"></stop>
+        </radialgradient>
+        <radialgradient cx="0" cy="0" gradienttransform="translate(170 125) scale(20 12)" gradientunits="userSpaceOnUse" id="blushRight" r="1">
+          <stop offset="0%" stop-color="#ff7e67" stop-opacity="0.75"></stop>
+          <stop offset="100%" stop-color="#ff7e67" stop-opacity="0"></stop>
+        </radialgradient>
+      </defs>
+      <path d="M70 170 C40 170 20 145 20 115 C20 85 45 68 70 68 C76 40 105 20 135 22 C165 24 185 45 192 68 C215 70 230 90 230 115 C230 145 210 170 175 170 Z" fill="url(#cloudBodyGrad)" stroke="#ffffff" stroke-width="3"></path>
+      <path d="M80 62 C105 32 145 32 170 58" opacity="0.8" stroke="#ffffff" stroke-linecap="round" stroke-width="4"></path>
+      <ellipse cx="72" cy="122" fill="url(#blushLeft)" id="blushCircleL" rx="18" ry="11"></ellipse>
+      <ellipse cx="168" cy="122" fill="url(#blushRight)" id="blushCircleR" rx="18" ry="11"></ellipse>
+      ${eyes}
+      ${mouth}
+      ${sparkles}
+    </svg>`;
+  }
+
   const MASCOT_PREVIEWS = {
     mochi: {
-      name: '3D Mochi Gel Cloud',
+      name: 'Interactive Gel Cloud',
+      type: 'procedural',
+      speech: {
+        idle: '“Hi! I am <span class=\"font-bold text-primary\">Kumo</span>, your desktop thinking buddy. Ready to pair-program and ideate together!”',
+        thinking: '“Synthesizing logic flow across workspace buffers... Hold on!”',
+        speaking: '“Reading aloud response at 160 WPM using neural speech engine.”',
+        happy: '“All local checks pass! Ready to build amazing things together!”'
+      },
+      render(st) { return getProceduralSvg(st); }
+    },
+    pixel2d: {
+      name: '2D Pixel Cloud (Puff)',
+      type: '2d',
+      speech: {
+        idle: '“Puff is here! Lightweight 16-bit pixel cloud, floating smoothly by your side.”',
+        thinking: '“Puff is processing thoughts in retro 16-bit dithered pixels…”',
+        speaking: '“Puff is speaking! Chime frequencies active across the audio bus.”',
+        happy: '“Yay! Puff did a joyful hop across your workspace!”'
+      },
+      render(st) {
+        const file = st === 'speaking' ? 'speaking.png' : (st === 'thinking' ? 'thinking.png' : (st === 'happy' ? 'happy.png' : 'idle.png'));
+        const anim = st === 'happy' ? 'animate-bounce' : (st === 'speaking' ? 'animate-pulse' : 'animate-mochi-float');
+        return `<div class="w-full h-full flex items-center justify-center ${anim}"><img src="../../assets/mascot/2d/${file}" alt="2D Pixel Cloud" class="w-52 h-52 object-contain drop-shadow-[0_16px_24px_rgba(99,85,216,0.25)] [image-rendering:pixelated]"/></div>`;
+      }
+    },
+    voxel3d: {
+      name: '3D Voxel Bot (Cube)',
       type: '3d',
-      speech: '“Hi! I am <span class=\"font-bold text-primary\">Kumo</span>, your desktop thinking buddy. Ready to pair-program and ideate together!”',
-      svg: `<svg class="w-full h-full drop-shadow-[0_16px_24px_rgba(99,85,216,0.18)]" fill="none" viewbox="0 0 240 200" xmlns="http://www.w3.org/2000/svg">
-<defs>
-<lineargradient gradientunits="userSpaceOnUse" id="cloudBodyGrad" x1="20" x2="220" y1="20" y2="180">
-<stop offset="0%" stop-color="#ffffff"></stop>
-<stop id="cloudGradMid" offset="40%" stop-color="#eadfff"></stop>
-<stop offset="100%" stop-color="#dcedff"></stop>
-</lineargradient>
-<radialgradient cx="0" cy="0" gradienttransform="translate(70 125) scale(20 12)" gradientunits="userSpaceOnUse" id="blushLeft" r="1">
-<stop offset="0%" stop-color="#ff7e67" stop-opacity="0.75"></stop>
-<stop offset="100%" stop-color="#ff7e67" stop-opacity="0"></stop>
-</radialgradient>
-<radialgradient cx="0" cy="0" gradienttransform="translate(170 125) scale(20 12)" gradientunits="userSpaceOnUse" id="blushRight" r="1">
-<stop offset="0%" stop-color="#ff7e67" stop-opacity="0.75"></stop>
-<stop offset="100%" stop-color="#ff7e67" stop-opacity="0"></stop>
-</radialgradient>
-</defs>
-<path d="M70 170 C40 170 20 145 20 115 C20 85 45 68 70 68 C76 40 105 20 135 22 C165 24 185 45 192 68 C215 70 230 90 230 115 C230 145 210 170 175 170 Z" fill="url(#cloudBodyGrad)" stroke="#ffffff" stroke-width="3"></path>
-<path d="M80 62 C105 32 145 32 170 58" opacity="0.8" stroke="#ffffff" stroke-linecap="round" stroke-width="4"></path>
-<ellipse cx="72" cy="122" fill="url(#blushLeft)" id="blushCircleL" rx="18" ry="11"></ellipse>
-<ellipse cx="168" cy="122" fill="url(#blushRight)" id="blushCircleR" rx="18" ry="11"></ellipse>
-<path d="M85 106 C85 96 99 96 99 106" stroke="#171b2b" stroke-linecap="round" stroke-width="4.5"></path>
-<circle cx="89" cy="100" fill="#ffffff" r="1.5"></circle>
-<path d="M141 106 C141 96 155 96 155 106" stroke="#171b2b" stroke-linecap="round" stroke-width="4.5"></path>
-<circle cx="145" cy="100" fill="#ffffff" r="1.5"></circle>
-<path d="M114 116 Q120 126 126 116" stroke="#171b2b" stroke-linecap="round" stroke-width="3.5"></path>
-<path d="M198 42 L202 30 L206 42 L218 46 L206 50 L202 62 L198 50 L186 46 Z" fill="#6355d8" opacity="0.85"></path>
-<circle cx="218" cy="28" fill="#ffb4a6" r="2.5"></circle>
-</svg>`
+      speech: {
+        idle: '“Voxel Bot active! Chunky isometric 3D cube ready to assist across your desktop canvas.”',
+        thinking: '“Calculating voxel ray intersections... Thinking routine active!”',
+        speaking: '“Broadcasting telemetry through cube audio synthesizer.”',
+        happy: '“Voxel Bot celebrates! System status green across all modules.”'
+      },
+      render(st) {
+        const file = st === 'speaking' ? 'speaking.png' : (st === 'thinking' ? 'thinking.png' : (st === 'happy' ? 'happy.png' : 'idle.png'));
+        const anim = st === 'happy' ? 'animate-bounce' : (st === 'speaking' ? 'animate-pulse' : 'animate-mochi-float');
+        return `<div class="w-full h-full flex items-center justify-center ${anim}"><img src="../../assets/mascot/3d/${file}" alt="3D Voxel Bot" class="w-52 h-52 object-contain drop-shadow-[0_16px_24px_rgba(46,59,82,0.3)] [image-rendering:pixelated]"/></div>`;
+      }
+    },
+    gel3d: {
+      name: '3D Mochi Gel Bot',
+      type: '3d',
+      speech: {
+        idle: '“Mochi Gel ready! Smooth gelatinous physics companion with reactive specular shading.”',
+        thinking: '“Simulating fluid spring tensors and organic viscosity…”',
+        speaking: '“Vibrating surface ripples to produce acoustic vocal harmonics.”',
+        happy: '“Super squishy happy jiggle! High bounce coefficient enabled.”'
+      },
+      render(st) {
+        const anim = st === 'happy' ? 'animate-bounce' : (st === 'speaking' ? 'animate-pulse' : 'animate-mochi-float');
+        return `<div class="w-full h-full flex items-center justify-center ${anim}"><img src="../../assets/mascot/3d-mochi-gel/mochi-gel-3d.png" alt="3D Mochi Gel Bot" class="w-52 h-52 object-contain drop-shadow-[0_16px_24px_rgba(99,85,216,0.3)]"/></div>`;
+      }
     },
     cotton: {
       name: 'Cotton Cloud (Puff)',
-      type: '2d',
-      speech: '“Puff here! Soft and tranquil, floating quietly along with your workflow.”',
-      svg: `<svg class="w-full h-full drop-shadow-[0_16px_24px_rgba(99,85,216,0.18)]" viewBox="0 0 150 96" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="cotton_grad" x1="10" y1="4" x2="142" y2="97" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#FFFFFF" />
-      <stop id="cottonGradMid" offset="0.75" stop-color="#eadfff" />
-      <stop offset="1" stop-color="#dcedff" />
-    </linearGradient>
-  </defs>
-  <path d="M120 72C133.255 72 144 61.2548 144 48C144 35.8456 134.975 25.7981 123.279 24.2386C120.485 10.3707 108.204 0 93.5 0C82.1066 0 72.1388 6.27315 66.8601 15.5492C62.4638 13.2922 57.481 12 52.2 12C36.736 12 24.2 24.536 24.2 40C24.2 41.229 24.2793 42.4395 24.433 43.627C10.6698 46.126 0 58.1256 0 72.6C0 88.6163 12.9837 101.6 29 101.6H120C133.255 101.6 144 90.8548 144 77.6" fill="#FFFFFF" />
-  <path d="M120 70C132.15 70 142 60.1503 142 48C142 36.8778 133.743 27.6833 123.042 26.252C120.486 13.5658 109.248 4 95.8 4C85.3748 4 76.2625 9.74088 71.4326 18.228C67.41 16.1627 62.8504 15 58 15C43.6406 15 32 26.6406 32 41C32 42.1246 32.0712 43.2329 32.2098 44.3197C19.6152 46.6063 10 57.5855 10 70.8C10 85.4355 21.8645 97.3 36.5 97.3H120C132.15 97.3 142 87.4503 142 75.3" fill="url(#cotton_grad)" />
-  <circle cx="68" cy="54" r="4.5" fill="#2E3B52" />
-  <circle cx="102" cy="54" r="4.5" fill="#2E3B52" />
-  <circle cx="69.5" cy="52.5" r="1.5" fill="#FFFFFF" />
-  <circle cx="103.5" cy="52.5" r="1.5" fill="#FFFFFF" />
-  <ellipse cx="59" cy="61" rx="6" ry="3.5" fill="#FFB4A6" opacity="0.8" />
-  <ellipse cx="111" cy="61" rx="6" ry="3.5" fill="#FFB4A6" opacity="0.8" />
-  <path d="M80 61C82.5 64.5 87.5 64.5 90 61" stroke="#2E3B52" stroke-width="2.5" stroke-linecap="round" />
-</svg>`
+      type: 'svg',
+      speech: {
+        idle: '“Cotton Cloud is drifting peacefully. Calming presence for focused deep work.”',
+        thinking: '“Floating up into the ideation stratosphere... pondering.”',
+        speaking: '“Whispering thoughts gently through soft cloud aura.”',
+        happy: '“Warm golden sparkles! A joyful breeze passes through.”'
+      },
+      render(st) {
+        const file = st === 'speaking' ? 'speaking.png' : (st === 'thinking' ? 'thinking.png' : (st === 'happy' ? 'happy.png' : 'idle.png'));
+        const anim = st === 'happy' ? 'animate-bounce' : (st === 'speaking' ? 'animate-pulse' : 'animate-mochi-float');
+        return `<div class="w-full h-full flex items-center justify-center ${anim}"><img src="../../assets/mascot/cotton-cloud/${file}" alt="Cotton Cloud" class="w-52 h-52 object-contain drop-shadow-[0_16px_24px_rgba(99,85,216,0.2)]"/></div>`;
+      }
     },
     kubo: {
-      name: 'Kubo Bot (Voxel)',
-      type: '3d',
-      speech: '“KUBO-04 online. Beep boop! All systems operational, ready to write code.”',
-      svg: `<svg class="w-full h-full drop-shadow-[0_16px_24px_rgba(46,59,82,0.22)]" viewBox="0 0 130 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect x="62" y="14" width="6" height="24" rx="3" fill="#525F77" />
-  <circle cx="65" cy="12" r="9" fill="#34D399" opacity="0.4" />
-  <circle cx="65" cy="12" r="6" fill="#34D399" stroke="#FFFFFF" stroke-width="2" />
-  <rect x="15" y="36" width="100" height="88" rx="20" fill="#2E3B52" stroke="#474554" stroke-width="3" />
-  <rect x="25" y="46" width="80" height="52" rx="14" fill="#171B2B" stroke="#3A475F" stroke-width="2" />
-  <rect x="38" y="62" width="16" height="16" rx="4" fill="#DCF5E7" />
-  <path d="M42 72L46 66L50 72" stroke="#171B2B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
-  <rect x="76" y="62" width="16" height="16" rx="4" fill="#DCF5E7" />
-  <path d="M80 72L84 66L88 72" stroke="#171B2B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
-  <rect x="58" y="76" width="14" height="4" rx="2" fill="#34D399" />
-  <circle cx="35" cy="110" r="4" fill="#818CF8" />
-  <circle cx="47" cy="110" r="4" fill="#FB7185" />
-  <text x="68" y="113" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="600" fill="#8A92A6">KUBO-04</text>
-</svg>`
+      name: 'Kubo Bot (CRT)',
+      type: 'svg',
+      speech: {
+        idle: '“KUBO-04 online. Terminal link established on localhost:4429.”',
+        thinking: '“Executing background daemon compilation... Memory optimal.”',
+        speaking: '“Transmitting audio packets through CRT speaker grille.”',
+        happy: '“Success! VU meters pegged at 100% joyful harmony.”'
+      },
+      render(st) {
+        const file = st === 'speaking' ? 'speaking.png' : (st === 'thinking' ? 'thinking.png' : (st === 'happy' ? 'happy.png' : 'idle.png'));
+        const anim = st === 'happy' ? 'animate-bounce' : (st === 'speaking' ? 'animate-pulse' : 'animate-mochi-float');
+        return `<div class="w-full h-full flex items-center justify-center ${anim}"><img src="../../assets/mascot/kubo-bot/${file}" alt="Kubo Bot" class="w-52 h-52 object-contain drop-shadow-[0_16px_24px_rgba(46,59,82,0.3)]"/></div>`;
+      }
     },
     droplet: {
-      name: 'Mochi Droplet',
-      type: '2d',
-      speech: '“Splash! Fresh thinking ahead. Let us build something clear and fluid today.”',
-      svg: `<svg class="w-full h-full drop-shadow-[0_16px_24px_rgba(20,184,166,0.22)]" viewBox="0 0 128 116" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="mochi_gel_drop" x1="64" y1="6" x2="64" y2="108" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#C2F9E0" />
-      <stop offset="0.6" stop-color="#A2EEDB" />
-      <stop offset="1" stop-color="#7BE2E2" />
-    </linearGradient>
-  </defs>
-  <path d="M64 6C46 32 16 54 16 80C16 96.5685 37.4853 108 64 108C90.5147 108 112 96.5685 112 80C112 54 82 32 64 6Z" fill="url(#mochi_gel_drop)" />
-  <path d="M64 14C52 36 28 56 28 78C28 89.5 44 98 64 98C84 98 100 89.5 100 78C100 56 76 36 64 14Z" fill="#FFFFFF" opacity="0.6" />
-  <ellipse cx="46" cy="46" rx="14" ry="7" fill="#FFFFFF" opacity="0.75" transform="rotate(-30 46 46)" />
-  <ellipse cx="50" cy="74" rx="4" ry="6" fill="#1C3833" />
-  <ellipse cx="78" cy="74" rx="4" ry="6" fill="#1C3833" />
-  <circle cx="51.5" cy="72" r="1.5" fill="#FFFFFF" />
-  <circle cx="79.5" cy="72" r="1.5" fill="#FFFFFF" />
-  <path d="M60 80C62 83 66 83 68 80" stroke="#1C3833" stroke-width="2.5" stroke-linecap="round" />
-  <ellipse cx="40" cy="80" rx="5" ry="3" fill="#A8F5D0" opacity="0.8" />
-  <ellipse cx="88" cy="80" rx="5" ry="3" fill="#A8F5D0" opacity="0.8" />
-</svg>`
-    },
-    starlet: {
-      name: 'Starlet Astro',
-      type: '2d',
-      speech: '“Greetings from the cosmos! Ready to illuminate your spatial workbench with ideas.”',
-      svg: `<svg class="w-full h-full drop-shadow-[0_16px_24px_rgba(245,158,11,0.25)]" viewBox="0 0 120 110" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="star_gold_stage" x1="60" y1="5" x2="60" y2="95" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#FFF8D6" />
-      <stop offset="0.6" stop-color="#FFE37E" />
-      <stop offset="1" stop-color="#FFC83B" />
-    </linearGradient>
-  </defs>
-  <ellipse cx="60" cy="55" rx="55" ry="18" stroke="#FBBF24" stroke-width="2.5" opacity="0.85" transform="rotate(-14 60 55)" />
-  <path d="M60 8L72 38H104L78 58L88 88L60 69L32 88L42 58L16 38H48L60 8Z" fill="url(#star_gold_stage)" />
-  <circle cx="51" cy="50" r="3.5" fill="#3D2900" />
-  <circle cx="69" cy="50" r="3.5" fill="#3D2900" />
-  <circle cx="52.2" cy="48.8" r="1.2" fill="#FFFFFF" />
-  <circle cx="70.2" cy="48.8" r="1.2" fill="#FFFFFF" />
-  <path d="M57 56C59 59 61 59 63 56" stroke="#3D2900" stroke-width="2" stroke-linecap="round" />
-  <circle cx="44" cy="54" r="2.5" fill="#FF8D54" opacity="0.8" />
-  <circle cx="76" cy="54" r="2.5" fill="#FF8D54" opacity="0.8" />
-</svg>`
+      name: 'Mochi Droplet (Aquatic)',
+      type: 'svg',
+      speech: {
+        idle: '“Mochi Droplet hydrated! Crisp fresh mint essence for your desktop.”',
+        thinking: '“Bubbles of thought rising to the surface... Ideating!”',
+        speaking: '“Rippling calm aquatic voice through the desktop workspace.”',
+        happy: '“Splash! High tide of good energy and clean code.”'
+      },
+      render(st) {
+        const file = st === 'speaking' ? 'speaking.png' : (st === 'thinking' ? 'thinking.png' : (st === 'happy' ? 'happy.png' : 'idle.png'));
+        const anim = st === 'happy' ? 'animate-bounce' : (st === 'speaking' ? 'animate-pulse' : 'animate-mochi-float');
+        return `<div class="w-full h-full flex items-center justify-center ${anim}"><img src="../../assets/mascot/mochi-droplet/${file}" alt="Mochi Droplet" class="w-52 h-52 object-contain drop-shadow-[0_16px_24px_rgba(20,184,166,0.25)]"/></div>`;
+      }
     }
   };
 
@@ -1046,23 +1131,53 @@
       }
     });
 
-    // 2. Update Interactive Stage on the Right
+    // 2. Update Interactive Stage on the Right with currentMood
     const figure = document.getElementById('mochiFigure');
-    if (figure && MASCOT_PREVIEWS[key].svg) {
-      figure.innerHTML = MASCOT_PREVIEWS[key].svg;
+    if (figure && MASCOT_PREVIEWS[key].render) {
+      figure.innerHTML = MASCOT_PREVIEWS[key].render(currentMood);
       pokeCompanion();
     }
 
     // 3. Update Speech Bubble Greeting
     const speech = document.getElementById('companionSpeechText');
     if (speech && MASCOT_PREVIEWS[key].speech) {
-      speech.innerHTML = MASCOT_PREVIEWS[key].speech;
+      speech.innerHTML = MASCOT_PREVIEWS[key].speech[currentMood] || MASCOT_PREVIEWS[key].speech.idle;
     }
 
     // 4. Update Summary Review
     const sumEngine = document.getElementById('summaryReviewEngine');
     if (sumEngine) {
       sumEngine.textContent = selectedEngineName;
+    }
+  }
+
+  function setMood(button, moodName) {
+    currentMood = moodName.toLowerCase();
+
+    // 1. Update Mood Pills UI
+    document.querySelectorAll('.mood-btn').forEach(btn => {
+      btn.className = "px-2.5 py-1 rounded-lg hover:bg-surface-container text-secondary hover:text-on-surface font-label-sm text-label-sm flex items-center gap-1 transition-colors mood-btn cursor-pointer";
+    });
+    button.className = "px-2.5 py-1 rounded-lg bg-primary-fixed text-primary font-label-sm text-label-sm font-bold shadow-xs transition-colors mood-btn flex items-center gap-1 cursor-pointer";
+
+    // 2. Actively re-render the mascot figure for this state!
+    const figure = document.getElementById('mochiFigure');
+    const mascot = MASCOT_PREVIEWS[selectedEngineKey];
+    if (figure && mascot && mascot.render) {
+      figure.innerHTML = mascot.render(currentMood);
+      pokeCompanion();
+    }
+
+    // 3. Update speech bubble text
+    const speechText = document.getElementById('companionSpeechText');
+    if (speechText && mascot && mascot.speech) {
+      speechText.innerHTML = mascot.speech[currentMood] || mascot.speech.idle;
+    }
+
+    // 4. Update resting smile indicator
+    const smileIndicator = document.querySelector('#stageRightColumn .text-secondary .text-on-surface');
+    if (smileIndicator) {
+      smileIndicator.textContent = moodName === 'Happy' ? 'Joyful Smile' : (moodName === 'Thinking' ? 'Curious Focus' : (moodName === 'Speaking' ? 'Vocal Wave' : 'Resting Smile'));
     }
   }
 
@@ -1148,14 +1263,8 @@
 
     // 4. Update Summary Review when entering Step 4
     if (stepNumber === 4) {
-      const checkedEngine = document.querySelector('input[name="companion_engine_choice"]:checked');
-      if (checkedEngine) {
-        selectedEngineKey = checkedEngine.value;
-        if (selectedEngineKey === 'mochi') selectedEngineName = '3D Mochi Bot';
-        else if (selectedEngineKey === 'puff') selectedEngineName = '2D Cotton Cloud';
-        else if (selectedEngineKey === 'voxel') selectedEngineName = 'Kubo Voxel Bot';
-        else if (selectedEngineKey === 'particle') selectedEngineName = 'Starlet Particle';
-      }
+      const sumEngine = document.getElementById('summaryReviewEngine');
+      if (sumEngine) sumEngine.textContent = selectedEngineName;
     }
   }
 
@@ -1209,26 +1318,6 @@
     const slider = document.getElementById('blushRange');
     if (slider) slider.value = val;
     updateBlush(val);
-  }
-
-  function setMood(button, moodName) {
-    document.querySelectorAll('.mood-btn').forEach(btn => {
-      btn.className = "px-2.5 py-1 rounded-lg hover:bg-surface-container text-secondary hover:text-on-surface font-label-sm text-label-sm flex items-center gap-1 transition-colors mood-btn cursor-pointer";
-    });
-    button.className = "px-2.5 py-1 rounded-lg bg-primary-fixed text-primary font-label-sm text-label-sm font-bold shadow-xs transition-colors mood-btn flex items-center gap-1 cursor-pointer";
-
-    const speechText = document.getElementById('companionSpeechText');
-    if (speechText) {
-      if (moodName === 'Thinking') {
-        speechText.innerHTML = '“Synthesizing logic flow across workspace buffers... Hold on!”';
-      } else if (moodName === 'Speaking') {
-        speechText.innerHTML = '“Reading aloud response at 160 WPM using neural speech engine.”';
-      } else if (moodName === 'Happy') {
-        speechText.innerHTML = '“All local checks pass! Ready to build amazing things together!”';
-      } else {
-        speechText.innerHTML = '“Hi! I am <span class="font-bold text-primary">Kumo</span>, your desktop thinking buddy. Ready to pair-program and ideate together!”';
-      }
-    }
   }
 
   function pokeCompanion() {

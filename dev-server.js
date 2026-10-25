@@ -40,6 +40,16 @@ const server = http.createServer((req, res) => {
     reqPath = '/ui/board/index.html';
   } else if (reqPath === '/design' || reqPath === '/design-system' || reqPath === '/tokens') {
     reqPath = '/design-system/index.html';
+  } else if (reqPath === '/lab' || reqPath === '/mascot-lab' || reqPath === '/bot-studio') {
+    reqPath = '/assets/Lab/asset-studio/index.html';
+  } else if (reqPath === '/asset-studio-standalone') {
+    reqPath = '/assets/Lab/3d_2d_ai_bot_asset_studio.html';
+  } else if (reqPath === '/clay') {
+    reqPath = '/assets/Lab/kumo-studio-clay.html';
+  } else if (reqPath === '/glass') {
+    reqPath = '/assets/Lab/kumo-studio-glassmorphic.html';
+  } else if (reqPath === '/y2k') {
+    reqPath = '/assets/Lab/kumo-studio-y2k.html';
   }
 
   // Handle overlay relative paths (e.g. /overlay.css or /goo.js when on /)
