@@ -14,7 +14,7 @@ const clipboard = electron?.clipboard || {
   readText: () => '',
   writeText: () => {}
 };
-const { exec } = require('child_process');
+const { exec, execFile } = require('child_process');
 const path = require('path');
 const fs = require('fs');
 const settings = require('./settings');
@@ -241,33 +241,21 @@ function openApp({ name }) {
   const target = known[cleanName] || name;
 
   return new Promise((resolve, reject) => {
-    // If it's a protocol (ends with :) or shell:AppsFolder, use Start-Process / explorer
-    if (target.endsWith(':') || target.startsWith('shell:AppsFolder')) {
-      exec(`powershell -NoProfile -Command "Start-Process '${target}'"`, (err) => {
-        if (err) {
-          exec(`explorer "${target}"`, (err2) => {
-            if (err2) reject(new Error(`Could not open app: ${name}`));
-            else resolve({ opened: target });
-          });
-        } else {
-          resolve({ opened: target });
-        }
-      });
-      return;
-    }
+    const safeTarget = target.replace(/['"`;$()]/g, '');
 
-    // Try standard start command
-    exec(`start "" "${target}"`, (err) => {
+    // Non-blocking Windows kernel process dispatcher via Start-Process
+    execFile('powershell.exe', ['-NoProfile', '-Command', `Start-Process '${safeTarget}'`], { timeout: 3500 }, (err) => {
       if (!err) {
         return resolve({ opened: target });
       }
 
       // Dynamic fallback: Search installed StartApps in PowerShell
-      const psSearch = `Get-StartApps | Where-Object { $_.Name -like '*${cleanName.replace(/['"`;$()]/g, '')}*' } | Select-Object -First 1 -ExpandProperty AppID`;
-      exec(`powershell -NoProfile -Command "${psSearch}"`, (psErr, stdout) => {
+      const cleanSearch = cleanName.replace(/['"`;$()]/g, '');
+      const psSearch = `Get-StartApps | Where-Object { $_.Name -like '*${cleanSearch}*' } | Select-Object -First 1 -ExpandProperty AppID`;
+      execFile('powershell.exe', ['-NoProfile', '-Command', psSearch], { timeout: 4000 }, (psErr, stdout) => {
         const appId = stdout?.trim();
         if (appId) {
-          exec(`explorer.exe "shell:AppsFolder\\${appId}"`, (appErr) => {
+          execFile('powershell.exe', ['-NoProfile', '-Command', `Start-Process 'shell:AppsFolder\\${appId}'`], (appErr) => {
             if (appErr) reject(new Error(`Could not open app: ${name}`));
             else resolve({ opened: appId });
           });
@@ -304,9 +292,9 @@ function openFolder({ folderPath }) {
 
 function runPowerShellReadOnly({ command }) {
   const { execFile } = require('child_process');
-  // Only allow safe read-only commands
-  const BLOCKED = ['Remove-', 'Delete-', 'Set-', 'New-', 'Format-', 'Stop-Process', 'Restart-', 'Invoke-WebRequest', 'rm ', 'del ', 'format '];
-  if (BLOCKED.some(b => command.toLowerCase().includes(b.toLowerCase()))) {
+  // Only allow safe read-only commands — block destructive write operations
+  const BLOCKED_REGEX = /\b(Remove-[a-zA-Z]+|Delete-[a-zA-Z]+|Set-[a-zA-Z]+|New-[a-zA-Z]+|Format-Volume|Format-Disk|Stop-Process|Restart-Computer|Invoke-WebRequest|rm\s+|del\s+|format\s+[a-zA-Z]:)/i;
+  if (BLOCKED_REGEX.test(command)) {
     throw new Error('Command blocked — only read-only PowerShell commands are permitted for safety');
   }
   return new Promise((resolve, reject) => {
