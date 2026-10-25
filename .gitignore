@@ -37,3 +37,4 @@ graphify-out/
 # Test artifacts
 test-results/
 tests/report/
+scratch/

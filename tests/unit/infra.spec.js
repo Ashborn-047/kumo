@@ -137,3 +137,30 @@ test.describe('Infrastructure: Dual-Mode Dynamic Card Pinning', () => {
     expect(canvasCard.data.pinnedDomain).toBe('spotify');
   });
 });
+
+test.describe('Infrastructure: Execution & Security Gating', () => {
+  test('blocks dangerous or destructive PowerShell commands', async () => {
+    const res = await actions.run('powershell.read', { command: 'Format-Volume -DriveLetter C' });
+    expect(res.ok).toBe(false);
+    expect(res.error).toContain('only read-only PowerShell commands are permitted');
+  });
+
+  test('routes natural time questions and preserves actionResults', async () => {
+    const res = await intentRouter.route('what time is it');
+    expect(res.ok).toBe(true);
+    expect(res.source).toBe('offline');
+    expect(res.reply).toMatch(/⏰/);
+    expect(res.actionResults).toBeDefined();
+    expect(res.actionResults.length).toBeGreaterThan(0);
+    expect(res.actionResults[0].type).toBe('system.time');
+  });
+
+  test('discovers capabilities profile dynamically from host system', async () => {
+    const caps = await systemScanner.getCapabilities();
+    expect(caps).toBeDefined();
+    expect(caps.totalApps).toBeGreaterThan(0);
+    expect(caps.categories).toBeDefined();
+    expect(Array.isArray(caps.cliTools)).toBe(true);
+  });
+});
+

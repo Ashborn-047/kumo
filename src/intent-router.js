@@ -30,8 +30,8 @@ const INTENT_PATTERNS = [
   { pattern: /copy\s+(?:this\s+)?(.+)\s+to\s+clipboard/i, action: 'clipboard.write', extract: (m) => ({ text: m[1].trim() }) },
 
   // Time & Date
-  { pattern: /what(?:'s|\s+is)\s+(?:the\s+)?(?:current\s+)?time/i, action: 'system.time', extract: () => ({}) },
-  { pattern: /what(?:'s|\s+is)\s+(?:the\s+)?(?:today(?:'s)?\s+)?date/i, action: 'system.date', extract: () => ({}) },
+  { pattern: /(?:what\s+time\s+is\s+it|tell\s+me\s+the\s+time|current\s+time|time\s+now|what(?:'s|\s+is)\s+(?:the\s+)?(?:current\s+)?time)/i, action: 'system.time', extract: () => ({}) },
+  { pattern: /(?:what\s+date\s+is\s+it|today(?:'s)?\s+date|what(?:'s|\s+is)\s+(?:the\s+)?(?:today(?:'s)?\s+)?date)/i, action: 'system.date', extract: () => ({}) },
   { pattern: /what\s+(?:day|date)\s+(?:is\s+)?(?:it\s+)?today/i, action: 'system.date', extract: () => ({}) },
 
   // System info
@@ -180,7 +180,7 @@ async function route(text, onChunk = null) {
   // If no API key, always go offline
   if (!cfg.apiKey) {
     const result = await processOffline(text);
-    return { ok: true, reply: result.reply, source: 'offline' };
+    return { ok: true, reply: result.reply, source: 'offline', actionResults: result.actionResults };
   }
 
   // Check connectivity
@@ -188,7 +188,7 @@ async function route(text, onChunk = null) {
 
   if (!online) {
     const result = await processOffline(text);
-    return { ok: true, reply: result.reply, source: 'offline' };
+    return { ok: true, reply: result.reply, source: 'offline', actionResults: result.actionResults };
   }
 
   // Online path — use LLM
