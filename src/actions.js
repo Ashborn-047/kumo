@@ -492,6 +492,14 @@ function interactWithApp({ targetApp, text, pressEnter = true }) {
     spotify: 'spotify:',
     terminal: 'wt.exe',
     code: 'code',
+    word: 'winword',
+    docs: 'winword',
+    excel: 'excel',
+    sheets: 'excel',
+    powerpoint: 'powerpnt',
+    discord: 'discord:',
+    telegram: 'tg:',
+    slack: 'slack:',
   };
 
   const ps = `
@@ -500,9 +508,17 @@ function interactWithApp({ targetApp, text, pressEnter = true }) {
 
     $activated = $wshell.AppActivate('${cleanApp}')
     if (-not $activated) {
-      $titles = @('${cleanApp}', 'Claude', 'Anthropic', 'ChatGPT', 'Notepad', 'Spotify', 'Visual Studio Code', 'Discord', 'Telegram', 'Chrome', 'Edge')
+      $titles = @('${cleanApp}', 'Claude', 'Anthropic', 'ChatGPT', 'Notepad', 'Word', 'Excel', 'PowerPoint', 'Spotify', 'Visual Studio Code', 'Discord', 'Telegram', 'Chrome', 'Edge', 'Slack', 'Obsidian')
       foreach ($t in $titles) {
         if ($wshell.AppActivate($t)) { $activated = $true; break; }
+      }
+    }
+
+    if (-not $activated) {
+      # Universal fallback: search any active window matching the app or process name
+      $proc = Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.MainWindowTitle -like "*${cleanApp}*" -or $_.ProcessName -like "*${cleanApp}*" } | Select-Object -First 1
+      if ($proc -and $proc.MainWindowTitle) {
+        $activated = $wshell.AppActivate($proc.MainWindowTitle)
       }
     }
 
