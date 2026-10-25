@@ -12,8 +12,8 @@
 html, body {
   background: transparent !important;
   overflow: hidden;
-  width: 300px;
-  height: 380px;
+  width: 440px;
+  height: 480px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   user-select: none;
   color: #f1edfa;
@@ -29,6 +29,208 @@ html, body {
   justify-content: flex-end;
   align-items: center;
   padding-bottom: 8px;
+}
+
+/* ── Contextual Card Popout (Dual-Mode Mascot Instance) ─── */
+.card-popout {
+  position: absolute;
+  top: 10px;
+  left: 14px;
+  right: 14px;
+  max-height: 270px;
+  background: rgba(18, 15, 28, 0.95);
+  border: 1px solid rgba(186, 160, 255, 0.35);
+  border-radius: 18px;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 24px rgba(186, 160, 255, 0.18);
+  animation: pop-in 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  z-index: 15;
+  overflow: hidden;
+}
+
+.card-popout.hidden {
+  display: none !important;
+}
+
+.card-popout-header {
+  padding: 10px 14px;
+  background: rgba(36, 30, 56, 0.6);
+  border-bottom: 1px solid rgba(186, 160, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-popout-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.card-popout-icon-box {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: rgba(186, 160, 255, 0.15);
+  color: #baa0ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.card-popout-title {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -0.2px;
+}
+
+.card-popout-subtitle {
+  font-size: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  color: rgba(232, 224, 255, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.card-popout-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.card-popout-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #e8e0ff;
+  border-radius: 6px;
+  padding: 3px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.15s;
+}
+
+.card-popout-btn:hover {
+  background: rgba(186, 160, 255, 0.25);
+  border-color: rgba(186, 160, 255, 0.5);
+  color: #ffffff;
+}
+
+.card-popout-btn.pin-btn {
+  background: rgba(186, 160, 255, 0.18);
+  border-color: rgba(186, 160, 255, 0.35);
+  color: #d1bfff;
+}
+
+.card-popout-btn.pin-btn:hover {
+  background: #baa0ff;
+  color: #120f1c;
+}
+
+.card-popout-btn.close-btn {
+  padding: 3px 5px;
+}
+
+.card-popout-body {
+  padding: 10px 14px;
+  overflow-y: auto;
+  max-height: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.metric-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.metric-pill {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 6px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.metric-label {
+  font-size: 10px;
+  color: rgba(232, 224, 255, 0.5);
+  text-transform: uppercase;
+  font-family: monospace;
+}
+
+.metric-val {
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.popout-action-row {
+  display: flex;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.popout-action-btn {
+  flex: 1;
+  background: rgba(186, 160, 255, 0.12);
+  border: 1px solid rgba(186, 160, 255, 0.25);
+  color: #f1edfa;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  transition: all 0.15s;
+}
+
+.popout-action-btn:hover {
+  background: rgba(186, 160, 255, 0.25);
+  color: #fff;
+}
+
+.popout-action-btn.primary {
+  background: #baa0ff;
+  color: #120f1c;
+}
+
+.popout-action-btn.primary:hover {
+  background: #c8b3ff;
+}
+
+.popout-action-btn.danger {
+  background: rgba(255, 82, 82, 0.15);
+  border-color: rgba(255, 82, 82, 0.4);
+  color: #ff8a80;
+}
+
+.popout-action-btn.danger:hover {
+  background: #ff5252;
+  color: #fff;
 }
 
 /* ── Reply Speech Bubble ────────────────────────────────── */

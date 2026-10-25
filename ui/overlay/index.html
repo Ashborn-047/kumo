@@ -24,6 +24,33 @@
       </div>
     </div>
 
+    <!-- Contextual Card Popout (Dual-Mode Mascot Instance) -->
+    <div id="card-popout" class="card-popout hidden">
+      <div class="card-popout-header">
+        <div class="card-popout-title-wrap">
+          <div id="card-popout-icon-box" class="card-popout-icon-box">
+            <span id="card-popout-icon" class="material-symbols-outlined">widgets</span>
+          </div>
+          <div>
+            <div id="card-popout-title" class="card-popout-title">Card Title</div>
+            <div id="card-popout-subtitle" class="card-popout-subtitle">Live Assistant Instance</div>
+          </div>
+        </div>
+        <div class="card-popout-actions">
+          <button id="card-popout-pin" class="card-popout-btn pin-btn" title="Pin to Kumoboard Canvas">
+            <span class="material-symbols-outlined" style="font-size:14px;">push_pin</span>
+            <span>Pin</span>
+          </button>
+          <button id="card-popout-close" class="card-popout-btn close-btn" title="Dismiss">
+            <span class="material-symbols-outlined" style="font-size:16px;">close</span>
+          </button>
+        </div>
+      </div>
+      <div id="card-popout-body" class="card-popout-body">
+        <!-- Dynamic content injected here -->
+      </div>
+    </div>
+
     <!-- Mascot container (draggable & clickable) -->
     <div id="mascot-wrap" title="Drag to move • Click to chat">
       <canvas id="goo-canvas" width="160" height="180"></canvas>

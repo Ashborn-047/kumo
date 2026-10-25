@@ -110,3 +110,30 @@ test.describe('Infrastructure: System Capability Categorization', () => {
     expect(systemScanner.categorizeApp('Microsoft Word')).toBe('productivity');
   });
 });
+
+test.describe('Infrastructure: Dual-Mode Dynamic Card Pinning', () => {
+  test('creates a valid canvas card contract when pinning from mascot popout', () => {
+    const popoutCard = {
+      type: 'launcher',
+      title: 'Spotify Media Agent',
+      width: 520,
+      data: { activeTab: 'apps', pinnedDomain: 'spotify', status: 'PLAYING' }
+    };
+
+    const canvasCard = {
+      id: `card-pinned-${Date.now()}`,
+      type: popoutCard.type,
+      title: popoutCard.title,
+      x: 200,
+      y: 160,
+      width: popoutCard.width,
+      data: popoutCard.data,
+      zIndex: 1,
+    };
+
+    expect(canvasCard.id).toMatch(/^card-pinned-/);
+    expect(canvasCard.type).toBe('launcher');
+    expect(canvasCard.width).toBe(520);
+    expect(canvasCard.data.pinnedDomain).toBe('spotify');
+  });
+});

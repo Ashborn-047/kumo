@@ -55,4 +55,8 @@ contextBridge.exposeInMainWorld('goo', {
   // Overlay mouse passthrough & reposition
   setMouseIgnore: (ignore) => ipcRenderer.send('overlay:set-mouse', ignore),
   moveOverlay:    (deltaX, deltaY) => ipcRenderer.send('overlay:move', { deltaX, deltaY }),
+
+  // Dual-mode card pinning: from mascot popout to Kumoboard canvas
+  pinCardToBoard: (card) => ipcRenderer.send('board:pin-card', card),
+  onCardPinned:   (cb)   => ipcRenderer.on('board:card-pinned', (_e, card) => cb(card)),
 });

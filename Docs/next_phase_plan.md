@@ -1,12 +1,12 @@
 # ☁️ Kumo — Implementation Blueprint: Next Phase
 
-This document outlines the architecture, data flow, and step-by-step engineering plan for the four major features queued for Kumo:
+This document outlines the architecture, data flow, and step-by-step engineering plan for the core execution phases:
 
-1. **Interactive Studio & Onboarding Window**
-2. **Comprehensive Electron E2E Testing Suite (Playwright for Electron)**
-3. **Standalone Windows Executable (`.exe`) & Portable Distribution**
-4. **Voice Support (Speech-to-Text & Text-to-Speech)**
-5. **Quirky Mascot Audio, Reactions & Personality System**
+1. **Interactive Studio & Onboarding Window** (COMPLETED ✅)
+2. **Comprehensive Test Suite & GitHub Actions CI** (COMPLETED ✅)
+3. **Standalone Windows Executable (`.exe`) & Portable Distribution** (ACTIVE 🚀)
+4. **Dual-Mode Dynamic Card Engine: Mascot Popouts & Canvas Pinning** (ACTIVE 🚀)
+5. **Voice Support & Procedural Audio** (ON HALT ⏸️ — Relocated to `Docs/INFRASTRUCTURE_CORE.md` §11)
 
 ---
 
@@ -244,19 +244,32 @@ npx playwright test --ui
 ## 🗓️ Implementation Sequence
 
 ```
-Phase A: Studio & Onboarding Window + E2E Suite (COMPLETED)
+Phase 1: Studio & Onboarding Window + E2E Suite (COMPLETED ✅)
   ├── Resolve IPC contracts in src/main.js and src/studio-manager.js
   ├── Wire ui/studio/index.html avatar adoption to launch companion & board
-  ├── Implement Playwright for Electron automated E2E test suite (3 specs passing)
+  ├── Implement Playwright unit suite (tests/unit/infra.spec.js) & E2E suite
+  ├── Configure GitHub Actions CI (.github/workflows/ci.yml)
   └── Synchronize Graphify AST knowledge graph
 
-Phase B: Standalone Windows Executable (.exe) & GitHub Releases
-  ├── Validate app icons (assets/icon.ico, assets/tray.png)
-  ├── Run electron-builder for NSIS Installer (.exe) & Portable (.exe)
-  └── Configure .github/workflows/release.yml with automated npm test gate
+Phase 2: Dual-Brain & System Scanner Infrastructure (COMPLETED ✅)
+  ├── Implement src/intent-router.js (Dual-Brain: Online LLM + Offline deterministic)
+  ├── Implement src/system-scanner.js (Dynamic host discovery & per-app permissions)
+  ├── Implement Windows 10 protocol & UWP action dispatch in src/actions.js
+  └── Synchronize Graphify AST knowledge graph
 
-Phase C: Audio & Voice Engine
-  ├── Implement Web Audio procedural sound effects (squish, chime, chatter)
-  ├── Hook up SpeechRecognition for microphone voice input
-  └── Add SpeechSynthesis / cute retro formant TTS
+Phase 3: Standalone Windows Executable (.exe) & GitHub Releases (ACTIVE 🚀)
+  ├── Configure electron-builder for NSIS Installer (.exe) & Portable (.exe) in package.json
+  ├── Ensure files array properly packages src, ui, assets, and design-system
+  └── Configure .github/workflows/release.yml with automated npm test gate on tag push
+
+Phase 4: Dual-Mode Dynamic Card Engine (ACTIVE 🚀)
+  ├── Contextual Mascot Popouts: cards pop up directly beside mascot in ui/overlay/
+  ├── Live interaction: Play/Pause Spotify, CPU/RAM bars, Terminal run, Process kill
+  └── Pin to Canvas bridge: [ 📌 Pin to Canvas ] transfers card into Kumoboard canvas
+
+Phase 5: Audio & Voice Engine (ON HALT ⏸️ — Relocated to Docs/INFRASTRUCTURE_CORE.md §11)
+  ├── Web Audio procedural sound effects (squish, chime, chatter)
+  ├── Native SpeechRecognition for microphone voice input
+  └── SpeechSynthesis & procedural formant TTS
 ```
+

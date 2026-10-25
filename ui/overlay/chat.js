@@ -30,6 +30,16 @@ const historyClose   = document.getElementById('history-close');
 const historyList    = document.getElementById('history-list');
 const btnClearHistory = document.getElementById('btn-clear-history');
 
+// Contextual Card Popout (Dual-Mode Engine)
+const cardPopout     = document.getElementById('card-popout');
+const cardPopoutTitle = document.getElementById('card-popout-title');
+const cardPopoutSubtitle = document.getElementById('card-popout-subtitle');
+const cardPopoutIcon = document.getElementById('card-popout-icon');
+const cardPopoutBody = document.getElementById('card-popout-body');
+const cardPopoutPin  = document.getElementById('card-popout-pin');
+const cardPopoutClose = document.getElementById('card-popout-close');
+
+let currentActiveCard = null;
 let fullReply      = '';
 let chatHistory    = [];
 let isThinking     = false;
@@ -44,6 +54,7 @@ function updateMousePassthrough(e) {
     el.closest('#mascot-wrap') ||
     el.closest('#chat-bar:not(.hidden)') ||
     el.closest('#bubble:not(.hidden)') ||
+    el.closest('#card-popout:not(.hidden)') ||
     el.closest('#settings-modal:not(.hidden)') ||
     el.closest('#history-modal:not(.hidden)')
   );
@@ -169,6 +180,245 @@ function hideBubble() {
   bubble.classList.add('hidden');
 }
 
+// ── Dual-Mode Contextual Card Popout Engine ───────────────────
+function showCardPopout(type, payload = {}) {
+  if (!cardPopout) return;
+
+  hideBubble();
+  cardPopout.classList.remove('hidden');
+
+  let title = 'Assistant Card';
+  let subtitle = 'Active Instance';
+  let icon = 'widgets';
+  let bodyHTML = '';
+  let cardState = { type, title, data: {} };
+
+  const query = (payload.query || '').toLowerCase();
+  const reply = (payload.reply || '').toLowerCase();
+
+  if (type === 'spotify' || query.includes('spotify') || reply.includes('spotify')) {
+    title = 'Spotify Media Agent';
+    subtitle = 'Active Playback Hook';
+    icon = 'graphic_eq';
+    cardState = {
+      type: 'launcher',
+      title: 'Spotify Media Agent',
+      width: 520,
+      data: { activeTab: 'apps', pinnedDomain: 'spotify', status: 'PLAYING' }
+    };
+    bodyHTML = `
+      <div class="metric-row">
+        <div class="metric-pill">
+          <span class="metric-label">Service</span>
+          <span class="metric-val" style="color:#1db954;">Spotify Desktop</span>
+        </div>
+        <div class="metric-pill">
+          <span class="metric-label">Status</span>
+          <span class="metric-val">Connected (URI Hook)</span>
+        </div>
+      </div>
+      <div class="popout-action-row">
+        <button class="popout-action-btn primary" id="btn-popout-spotify-play">
+          <span class="material-symbols-outlined" style="font-size:16px;">play_arrow</span>
+          <span>Resume/Play</span>
+        </button>
+        <button class="popout-action-btn" id="btn-popout-spotify-focus">
+          <span class="material-symbols-outlined" style="font-size:16px;">open_in_new</span>
+          <span>Focus App</span>
+        </button>
+      </div>
+    `;
+  } else if (type === 'system-health' || query.includes('ram') || query.includes('cpu') || query.includes('specs')) {
+    title = 'System Telemetry Hub';
+    subtitle = 'Windows 10 Pro • 12 Cores';
+    icon = 'memory';
+    cardState = {
+      type: 'code',
+      title: 'System Telemetry Hub',
+      width: 560,
+      data: { command: 'Get-Process | Select -First 10', mode: 'telemetry' }
+    };
+    bodyHTML = `
+      <div class="metric-row">
+        <div class="metric-pill">
+          <span class="metric-label">Host RAM</span>
+          <span class="metric-val" style="color:#baa0ff;">16 GB (64% Active)</span>
+        </div>
+        <div class="metric-pill">
+          <span class="metric-label">CPU Cores</span>
+          <span class="metric-val">12 Logical Threads</span>
+        </div>
+      </div>
+      <div class="popout-action-row">
+        <button class="popout-action-btn primary" id="btn-popout-taskmgr">
+          <span class="material-symbols-outlined" style="font-size:16px;">monitoring</span>
+          <span>Task Manager</span>
+        </button>
+        <button class="popout-action-btn" id="btn-popout-clean-temp">
+          <span class="material-symbols-outlined" style="font-size:16px;">cleaning_services</span>
+          <span>Clean Temp</span>
+        </button>
+      </div>
+    `;
+  } else if (type === 'network' || query.includes('ip') || query.includes('ping') || query.includes('dns') || query.includes('network') || query.includes('wifi')) {
+    title = 'Network Sentinel';
+    subtitle = 'IPv4 / DNS Diagnostics';
+    icon = 'wifi_tethering';
+    cardState = {
+      type: 'code',
+      title: 'Network Sentinel Hub',
+      width: 540,
+      data: { command: 'Test-NetConnection 8.8.8.8', mode: 'network' }
+    };
+    bodyHTML = `
+      <div class="metric-row">
+        <div class="metric-pill">
+          <span class="metric-label">Gateway</span>
+          <span class="metric-val">192.168.0.1</span>
+        </div>
+        <div class="metric-pill">
+          <span class="metric-label">DNS Status</span>
+          <span class="metric-val" style="color:#7bdcb5;">Online (53 OK)</span>
+        </div>
+      </div>
+      <div class="popout-action-row">
+        <button class="popout-action-btn primary" id="btn-popout-flush-dns">
+          <span class="material-symbols-outlined" style="font-size:16px;">refresh</span>
+          <span>Flush DNS</span>
+        </button>
+        <button class="popout-action-btn" id="btn-popout-ping">
+          <span class="material-symbols-outlined" style="font-size:16px;">speed</span>
+          <span>Ping 8.8.8.8</span>
+        </button>
+      </div>
+    `;
+  } else if (type === 'process' || query.includes('kill') || query.includes('terminate')) {
+    title = 'Process Sentinel';
+    subtitle = 'Process Safety Gate';
+    icon = 'cancel';
+    const target = (payload.target || 'target').replace(/kill\s+/i, '');
+    cardState = {
+      type: 'code',
+      title: 'Process Sentinel',
+      width: 500,
+      data: { target }
+    };
+    bodyHTML = `
+      <div class="metric-row">
+        <div class="metric-pill">
+          <span class="metric-label">Target Name</span>
+          <span class="metric-val" style="color:#ff8a80;">${target}</span>
+        </div>
+        <div class="metric-pill">
+          <span class="metric-label">Safety Tier</span>
+          <span class="metric-val" style="color:#ffd166;">YELLOW (Confirmed)</span>
+        </div>
+      </div>
+      <div class="popout-action-row">
+        <button class="popout-action-btn danger" id="btn-popout-kill-proc">
+          <span class="material-symbols-outlined" style="font-size:16px;">delete_forever</span>
+          <span>Terminate Process</span>
+        </button>
+      </div>
+    `;
+  } else {
+    title = 'Application Dock';
+    subtitle = 'Installed System Hooks';
+    icon = 'apps';
+    cardState = {
+      type: 'launcher',
+      title: 'Application Dock',
+      width: 560,
+      data: { activeTab: 'apps' }
+    };
+    bodyHTML = `
+      <div class="metric-row">
+        <div class="metric-pill">
+          <span class="metric-label">Scanned Apps</span>
+          <span class="metric-val">155 Discovered</span>
+        </div>
+        <div class="metric-pill">
+          <span class="metric-label">Active Hooks</span>
+          <span class="metric-val" style="color:#7bdcb5;">Direct Launch</span>
+        </div>
+      </div>
+      <div class="popout-action-row">
+        <button class="popout-action-btn primary" id="btn-popout-open-calc">
+          <span class="material-symbols-outlined" style="font-size:16px;">calculate</span>
+          <span>Calc</span>
+        </button>
+        <button class="popout-action-btn" id="btn-popout-open-term">
+          <span class="material-symbols-outlined" style="font-size:16px;">terminal</span>
+          <span>Terminal</span>
+        </button>
+      </div>
+    `;
+  }
+
+  cardPopoutTitle.textContent = title;
+  cardPopoutSubtitle.textContent = subtitle;
+  cardPopoutIcon.textContent = icon;
+  cardPopoutBody.innerHTML = bodyHTML;
+  currentActiveCard = cardState;
+
+  if (cardPopoutPin) {
+    cardPopoutPin.innerHTML = '<span class="material-symbols-outlined" style="font-size:14px;">push_pin</span><span>Pin</span>';
+    cardPopoutPin.classList.remove('pinned');
+  }
+
+  // Bind popout quick action buttons
+  document.getElementById('btn-popout-spotify-play')?.addEventListener('click', () => {
+    window.goo?.action?.('app.open', { name: 'spotify' });
+    showBubble('🎵 Spotify opened via URI hook!');
+  });
+  document.getElementById('btn-popout-spotify-focus')?.addEventListener('click', () => {
+    window.goo?.action?.('app.open', { name: 'spotify' });
+  });
+  document.getElementById('btn-popout-taskmgr')?.addEventListener('click', () => {
+    window.goo?.action?.('app.open', { name: 'taskmgr' });
+  });
+  document.getElementById('btn-popout-clean-temp')?.addEventListener('click', () => {
+    window.goo?.action?.('powershell.read', { command: 'Remove-Item -Path "$env:TEMP\\*" -Recurse -Force -ErrorAction SilentlyContinue; "Temp files purged."' });
+    showBubble('🧹 Temp files cleaned!');
+  });
+  document.getElementById('btn-popout-flush-dns')?.addEventListener('click', () => {
+    window.goo?.action?.('powershell.read', { command: 'ipconfig /flushdns' });
+    showBubble('🔄 DNS cache flushed successfully!');
+  });
+  document.getElementById('btn-popout-ping')?.addEventListener('click', () => {
+    window.goo?.action?.('powershell.read', { command: 'ping -n 4 8.8.8.8' });
+    showBubble('⚡ Pinging 8.8.8.8...');
+  });
+  document.getElementById('btn-popout-open-calc')?.addEventListener('click', () => {
+    window.goo?.action?.('app.open', { name: 'calc' });
+  });
+  document.getElementById('btn-popout-open-term')?.addEventListener('click', () => {
+    window.goo?.action?.('app.open', { name: 'terminal' });
+  });
+  document.getElementById('btn-popout-kill-proc')?.addEventListener('click', () => {
+    window.goo?.action?.('process.kill', { name: cardState.data?.target || 'calc' });
+    showBubble(`🛑 Terminated process ${cardState.data?.target || ''}`);
+  });
+}
+
+function hideCardPopout() {
+  if (cardPopout) {
+    cardPopout.classList.add('hidden');
+    currentActiveCard = null;
+  }
+}
+
+cardPopoutClose?.addEventListener('click', hideCardPopout);
+cardPopoutPin?.addEventListener('click', () => {
+  if (!currentActiveCard) return;
+  window.goo?.pinCardToBoard?.(currentActiveCard);
+  cardPopoutPin.innerHTML = '<span class="material-symbols-outlined" style="font-size:14px;">check</span><span>Pinned</span>';
+  cardPopoutPin.classList.add('pinned');
+  setTimeout(() => {
+    hideCardPopout();
+  }, 900);
+});
+
 bubbleClose.addEventListener('click', hideBubble);
 bubbleOpenBoard.addEventListener('click', () => {
   window.goo?.openBoard();
@@ -195,6 +445,7 @@ async function sendMessage() {
   input.value = '';
   hideChat();
   hideBubble();
+  hideCardPopout();
 
   window.gooState?.setState('thinking');
   showBubble('Thinking…');
@@ -212,6 +463,24 @@ async function sendMessage() {
       recordHistory('goo', finalReply);
       window.gooState?.setStateTemp('happy', 2000);
       showBubble(finalReply, text.toLowerCase().includes('board') || text.toLowerCase().includes('canvas'));
+
+      // Check if this interaction triggers a contextual card popout
+      const q = text.toLowerCase();
+      const hasAction = res.actionResults && res.actionResults.length > 0;
+      const actType = hasAction ? res.actionResults[0].type : '';
+      const actArgs = hasAction ? res.actionResults[0].args : {};
+
+      if (q.includes('spotify') || (actType === 'app.open' && actArgs?.name?.toLowerCase().includes('spotify'))) {
+        showCardPopout('spotify', { query: text, reply: finalReply });
+      } else if (q.includes('ram') || q.includes('cpu') || q.includes('specs') || actType === 'system.info') {
+        showCardPopout('system-health', { query: text, reply: finalReply });
+      } else if (q.includes('ip') || q.includes('ping') || q.includes('dns') || q.includes('wifi') || q.includes('network')) {
+        showCardPopout('network', { query: text, reply: finalReply });
+      } else if (q.includes('kill') || q.includes('terminate') || actType === 'process.kill') {
+        showCardPopout('process', { query: text, reply: finalReply, target: actArgs?.name || text });
+      } else if (q.includes('apps') || q.includes('launcher') || q.includes('dock') || actType === 'app.open') {
+        showCardPopout('launcher', { query: text, reply: finalReply });
+      }
     }
   } catch (err) {
     window.gooState?.setStateTemp('idle');

@@ -16,8 +16,8 @@ function create(preloadPath) {
   const primaryDisplay = screen.getPrimaryDisplay();
   const { width, height } = primaryDisplay.workAreaSize;
 
-  const winW = 300;
-  const winH = 380;
+  const winW = 440;
+  const winH = 480;
 
   overlayWindow = new BrowserWindow({
     width: winW,

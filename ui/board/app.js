@@ -490,4 +490,33 @@ function updateZoomDisplay() {
   initPermissionsModal();
   initCommandPalette(addNewTool, toast);
   renderCards();
+
+  // Listen for Cards Pinned from Floating Mascot Popouts (Dual-Mode Engine)
+  if (window.goo?.onCardPinned) {
+    window.goo.onCardPinned((cardData) => {
+      if (!cardData) return;
+      const existing = state.cards.find((c) => c.id === cardData.id);
+      if (existing) {
+        existing.data = { ...existing.data, ...(cardData.data || {}) };
+        toast(`Updated "${cardData.title || existing.title}" on canvas`);
+      } else {
+        const offset = (state.cards.length % 5) * 40;
+        const newCard = {
+          id: cardData.id || `card-pinned-${Date.now()}`,
+          type: cardData.type || 'launcher',
+          title: cardData.title || 'Pinned Widget',
+          x: Math.max(60, 200 + offset),
+          y: Math.max(80, 160 + offset),
+          width: cardData.width || 540,
+          data: cardData.data || {},
+          zIndex: (state.cards.length || 0) + 1,
+        };
+        state.cards.push(newCard);
+        toast(`📌 Pinned "${newCard.title}" to canvas!`);
+      }
+      saveState();
+      renderCards();
+      updateMiniMap();
+    });
+  }
 })();

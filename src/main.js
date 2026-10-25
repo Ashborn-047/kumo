@@ -119,12 +119,12 @@ ipcMain.handle('ai:send', async (event, message) => {
       event.sender.send('ai:stream', token);
     });
 
-    if (result.source === 'offline') {
-      // Prefix offline indicator so user knows
-      return { ok: true, reply: result.reply, source: 'offline' };
-    }
-
-    return { ok: result.ok, reply: result.reply, source: result.source };
+    return {
+      ok: result.ok !== false,
+      reply: result.reply,
+      source: result.source,
+      actionResults: result.actionResults || [],
+    };
   } catch (err) {
     return { ok: false, error: err.message };
   }
@@ -240,6 +240,22 @@ ipcMain.on('app:notify', (_, { title, body }) => {
 // Board export handler
 ipcMain.handle('board:export', (_, { id, format }) => {
   return boardManager.exportBoard(id, format);
+});
+
+// Board: pin card from floating mascot popout directly to canvas
+ipcMain.on('board:pin-card', (_, cardData) => {
+  const boardWin = boardManager.get();
+  if (boardWin) {
+    boardWin.webContents.send('board:card-pinned', cardData);
+    boardWin.show();
+    boardWin.focus();
+  } else {
+    const win = boardManager.openBoardWindow(PRELOAD);
+    win.webContents.once('did-finish-load', () => {
+      win.webContents.send('board:card-pinned', cardData);
+    });
+  }
+  showNotification('Kumoboard', `Pinned "${cardData?.title || 'Widget'}" to your canvas!`);
 });
 
 // System actions (safety-gated)

@@ -11,7 +11,9 @@
     "test:unit": "playwright test tests/unit",
     "test:e2e": "playwright test tests/e2e",
     "build": "electron-builder --win",
-    "dist": "electron-builder --win --publish=never"
+    "dist": "electron-builder --win nsis portable --publish=never",
+    "dist:setup": "electron-builder --win nsis --publish=never",
+    "dist:portable": "electron-builder --win portable --publish=never"
   },
   "keywords": [
     "desktop-companion",
@@ -36,18 +38,39 @@
   "build": {
     "appId": "com.kumo.app",
     "productName": "Kumo",
+    "directories": {
+      "output": "dist"
+    },
     "win": {
-      "target": "nsis",
-      "icon": "assets/icon.ico"
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "assets/icon.ico",
+      "artifactName": "${productName}-${version}-${target}.${ext}"
     },
     "nsis": {
       "oneClick": false,
-      "allowToChangeInstallationDirectory": true
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Kumo"
     },
     "files": [
       "src/**/*",
       "ui/**/*",
-      "assets/**/*"
+      "assets/**/*",
+      "design-system/**/*"
     ]
   },
   "allowScripts": {

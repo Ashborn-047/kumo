@@ -977,43 +977,41 @@ class OfflineBrain {
 
 ## 11. Roadmap
 
-### Phase 1 — Foundation (Current)
+### Phase 1 — Foundation & Core Orchestration (COMPLETED ✅)
 - [x] Overlay mascot with drag, poke, and chat
 - [x] Online brain via OpenRouter + free models
-- [x] 11-action safety-gated registry
-- [x] Kumoboard with 5 dynamic tool cards
-- [x] Settings persistence (`%APPDATA%\Kumo\config.json`)
-- [x] Permission model (6 categories)
-- [x] Kumo Studio onboarding wizard
+- [x] Dual-Brain Intent Router (`src/intent-router.js`) — online LLM + deterministic offline fallback
+- [x] System Scanner & Capability Registry (`src/system-scanner.js`) — 155+ apps auto-discovered on Windows 10 Pro
+- [x] Safety-Gated Action Dispatcher (`src/actions.js`) — Green/Yellow/Red tiers, protocol execution (`spotify:`, `tg:`, `calc:`, UWP)
+- [x] Settings persistence (`%APPDATA%\Kumo\config.json`) with granular per-app permissions
+- [x] Kumoboard spatial workbench & 5 dynamic tool cards
+- [x] Kumo Studio onboarding wizard with live settings sync
+- [x] CI Test Suite (`.github/workflows/ci.yml`) + Playwright unit & E2E tests
 
-### Phase 2 — Deep Orchestration (Next)
-- [ ] `src/intent-router.js` — online/offline routing
-- [ ] `src/offline-brain.js` — local heuristic command engine
-- [ ] Expand action registry to 30+ actions
-- [ ] Spotify deep task handler (URI-based playback)
-- [ ] Office deep task handler (CLI flags + COM)
-- [ ] Browser deep task handler (search, navigate)
-- [ ] Multi-action parsing from LLM responses
-- [ ] Auto-confirm toggle for YELLOW actions
-- [ ] Enhanced system prompt with full action registry
+### Phase 2 — Dual-Mode Dynamic Card Engine (ACTIVE 🚀)
+- [ ] Contextual Mascot Popouts (`ui/overlay/`) — cards pop up directly beside the mascot during conversation
+- [ ] Real-time card interaction (playback controls, process kill, system gauges)
+- [ ] Card Canvas Pinning (`[ 📌 Pin to Canvas ]` / `[ × Close ]`) docking transient cards into Kumoboard
+- [ ] Standalone production packaging (`Kumo-Setup.exe` & `Kumo-Portable.exe`) with `.github/workflows/release.yml`
 
-### Phase 3 — Control Panel
-- [ ] Network diagnostics dashboard (offline-first)
-- [ ] Process monitor card
-- [ ] System status widget
-- [ ] Script runner with saved presets
-- [ ] Service manager
+### Phase 3 — Voice & Speech Architecture (Integrated Engine Spec)
+- [ ] **Speech-to-Text (STT) Input Layer**:
+  - Native Web Speech API (`webkitSpeechRecognition`) in Chromium overlay context.
+  - Shortcut trigger: Mascot hover mic button or `Alt+V`.
+  - Continuous silence detection feeds transcribed text directly into `intent-router.route(transcript)`.
+  - Zero-latency execution: routes seamlessly to online LLM or offline commands identically to typed chat.
+- [ ] **Text-to-Speech (TTS) & Procedural Sound Engine**:
+  - Dual Output Modes:
+    1. *Windows Natural Speech*: Windows System SpeechSynthesis voices with cheery pitch/rate tuning.
+    2. *Web Audio Procedural Sound*: Zero-asset formant frequency oscillator (`OscillatorNode`) producing retro companion chirps during streaming tokens.
+  - Action Executed Audio Cues: Rising 2-note sweep on `app.open`, soft squish on mascot poke, gentle chime on `Alt+Space`.
 
-### Phase 4 — Intelligence
+### Phase 4 — Intelligence & Continuous Automation
 - [ ] Context memory (remember user preferences across sessions)
 - [ ] Workflow recording (user teaches Kumo a multi-step task)
 - [ ] Scheduled tasks (cron-style recurring actions)
 - [ ] Smart suggestions (proactive assistance based on usage patterns)
 
-### Phase 5 — Voice & Vision (Future)
-- [ ] Speech-to-text input (Wake word: "Hey Kumo")
-- [ ] Text-to-speech response
-- [ ] Screen context awareness (what app is focused, clipboard content)
 
 ---
 
