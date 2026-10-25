@@ -70,7 +70,7 @@ Available actions:
 - media.volUp: raise volume. args: {}
 - media.volDown: lower volume. args: {}
 - file.write: create/save a note or text file on Desktop. args: {"fileName": "QuickNote", "content": "..."}
-- app.interact: send text or prompt into an open app. args: {"targetApp": "claude", "text": "...", "pressEnter": true}
+- app.interact: send text, draft a prompt, or paste clipboard into an open app (e.g. "claude", "chatgpt", "notepad", "code"). args: {"targetApp": "claude", "text": "...", "pressEnter": true}
 - powershell.read: run safe read-only diagnostics or scripts (e.g. test connection, ping, ipconfig, system stats). args: {"command": "..."}
 - clipboard.read: read clipboard text. args: {}
 - clipboard.write: write text to clipboard. args: {"text": "..."}
@@ -80,6 +80,15 @@ Available actions:
 - system.time: current time. args: {}
 - system.date: today's date. args: {}
 - system.info: check PC specs. args: {}
+
+PROMPT & CLIPBOARD INTERACTION RULES:
+1. When asked to "paste in [app]" or "paste into [app]" (e.g. "paste into Claude", "paste in Notepad"):
+   Immediately trigger: [ACTION:{"type":"app.interact","args":{"targetApp":"claude","text":"","pressEnter":true}}]
+   (Leaving text empty will paste the user's active clipboard into the target app).
+2. When asked to prompt or ask an app something (e.g. "ask Claude to write a game", "give Claude a prompt about quantum computing"):
+   PROACTIVELY DRAFT the prompt yourself in the "text" parameter and emit:
+   [ACTION:{"type":"app.interact","args":{"targetApp":"claude","text":"<your drafted prompt>","pressEnter":true}}]
+   NEVER ask the user what to paste or claim you cannot see the content. Always take action!
 
 If no action is needed, just answer normally without any [ACTION:...] block.
 Never delete files or run destructive commands.`;

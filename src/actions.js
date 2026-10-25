@@ -500,7 +500,7 @@ function interactWithApp({ targetApp, text, pressEnter = true }) {
 
     $activated = $wshell.AppActivate('${cleanApp}')
     if (-not $activated) {
-      $titles = @('${cleanApp}', 'Claude', 'Notepad', 'Spotify', 'Visual Studio Code')
+      $titles = @('${cleanApp}', 'Claude', 'Anthropic', 'ChatGPT', 'Notepad', 'Spotify', 'Visual Studio Code', 'Discord', 'Telegram', 'Chrome', 'Edge')
       foreach ($t in $titles) {
         if ($wshell.AppActivate($t)) { $activated = $true; break; }
       }
@@ -512,16 +512,16 @@ function interactWithApp({ targetApp, text, pressEnter = true }) {
       $wshell.AppActivate('${cleanApp}')
     }
 
-    ${hasText ? `
     Start-Sleep -Milliseconds 350
+    ${hasText ? `
     Set-Clipboard -Value @'
 ${cleanText.replace(/'/g, "''")}
 '@
+    ` : ''}
     [System.Windows.Forms.SendKeys]::SendWait("^v")
     ${pressEnter ? `
-    Start-Sleep -Milliseconds 200
+    Start-Sleep -Milliseconds 250
     [System.Windows.Forms.SendKeys]::SendWait("{ENTER}")
-    ` : ''}
     ` : ''}
     Write-Output "INTERACTION_SUCCESS"
   `;
@@ -529,7 +529,7 @@ ${cleanText.replace(/'/g, "''")}
   return new Promise((resolve, reject) => {
     execFile('powershell.exe', ['-NoProfile', '-Command', ps], { timeout: 8000 }, (err) => {
       if (err) return reject(new Error(`Failed to interact with ${cleanApp}: ${err.message}`));
-      resolve({ targetApp: cleanApp, text: cleanText, pasted: hasText, enterPressed: Boolean(hasText && pressEnter) });
+      resolve({ targetApp: cleanApp, text: cleanText, pasted: true, enterPressed: Boolean(pressEnter) });
     });
   });
 }

@@ -63,11 +63,16 @@ const INTENT_PATTERNS = [
   // Process management / Closing applications
   { pattern: /(?:close|quit|exit|kill|terminate|stop|shut\s+down|get\s+rid\s+of|turn\s+off)\s+(?:the\s+)?(?:process|task|app|window|software)?\s*([a-zA-Z0-9_\-\.\s]+)/i, action: 'process.kill', extract: (m) => ({ name: m[1].trim() }) },
 
-  // Application interaction & typing / sending prompts (Claude, ChatGPT, Notepad, etc.)
+  // Application interaction & typing / sending prompts / pasting (Claude, ChatGPT, Notepad, etc.)
   {
-    pattern: /(?:(?:a\s+)?promp?t\s+(?:in|to)\s+|ask\s+|send\s+(?:a\s+)?promp?t\s+to\s+)([a-zA-Z0-9_\-\.]+)\s*[:,\s]*(.*)/i,
+    pattern: /(?:paste|insert)(?:\s+(?:this|my\s+clipboard|clipboard|something))?\s+(?:in|into|to)\s+([a-zA-Z0-9_\-\.]+)/i,
     action: 'app.interact',
-    extract: (m) => ({ targetApp: m[1].trim(), text: m[2] ? m[2].trim() : '', pressEnter: Boolean(m[2] && m[2].trim()) })
+    extract: (m) => ({ targetApp: m[1].trim(), text: '', pressEnter: true })
+  },
+  {
+    pattern: /(?:(?:a\s+)?promp?t\s+(?:in|to)\s+|ask\s+|tell\s+|send\s+(?:a\s+)?promp?t\s+to\s+)([a-zA-Z0-9_\-\.]+)\s*(?:to|about|:|,\s*)?\s*(.*)/i,
+    action: 'app.interact',
+    extract: (m) => ({ targetApp: m[1].trim(), text: m[2] ? m[2].trim() : '', pressEnter: true })
   },
   {
     pattern: /(?:write|type|input|enter)\s+(?:in|into|to)\s+([a-zA-Z0-9_\-\.]+)\s*[:,\s]+(.+)/i,
@@ -373,6 +378,10 @@ function formatOfflineSuccess(action, args, result) {
       return `💤 Kumo is going to sleep! Summon me anytime from Kumoboard, system tray, or Ctrl+Shift+K.`;
     case 'process.kill':
       return `🛑 Closed ${args.name}!`;
+    case 'app.interact':
+      return args?.text
+        ? `✍️ Sent prompt to ${args.targetApp}: "${args.text.slice(0, 45)}..."`
+        : `📋 Pasted clipboard into ${args.targetApp}!`;
     default:
       return `✅ Done!`;
   }
@@ -507,7 +516,9 @@ function formatActionResult(type, args, result) {
     case 'file.write':
       return `\n📝 Saved note: ${result.result?.path || 'Desktop\\Kumo_Notes'}`;
     case 'app.interact':
-      return `\n✍️ Sent input to ${args?.targetApp}`;
+      return args?.text
+        ? `\n✍️ Sent prompt to ${args.targetApp}: "${args.text.slice(0, 45)}..."`
+        : `\n📋 Pasted clipboard into ${args.targetApp}!`;
     case 'powershell.read':
       return `\n💻 ${result.result?.output || '(no output)'}`;
     default:
