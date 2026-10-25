@@ -28,10 +28,13 @@ contextBridge.exposeInMainWorld('goo', {
   // System actions (safety-gated in actions.js)
   action:       (type, args) => ipcRenderer.invoke('action:run', { type, args }),
 
-  // Settings
-  getSettings:  ()         => ipcRenderer.invoke('settings:get'),
-  saveSettings: (data)     => ipcRenderer.invoke('settings:save', data),
-  onSettingsUpdated: (cb)  => ipcRenderer.on('settings:updated', (_e, data) => cb(data)),
+  // Settings & Capabilities
+  getSettings:        ()               => ipcRenderer.invoke('settings:get'),
+  saveSettings:       (data)           => ipcRenderer.invoke('settings:save', data),
+  onSettingsUpdated:  (cb)             => ipcRenderer.on('settings:updated', (_e, data) => cb(data)),
+  getCapabilities:    ()               => ipcRenderer.invoke('system:get-capabilities'),
+  rescanSystem:       ()               => ipcRenderer.invoke('system:rescan'),
+  updateAppPermission: (appId, allowed) => ipcRenderer.invoke('system:update-permission', { appId, allowed }),
 
   // Studio / onboarding
   openStudio:      (optionsOrTheme) => ipcRenderer.send('studio:open', optionsOrTheme || 'studio'),

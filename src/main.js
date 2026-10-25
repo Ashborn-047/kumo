@@ -16,6 +16,8 @@ const trayManager    = require('./tray');
 const settings       = require('./settings');
 const ai             = require('./ai');
 const actions        = require('./actions');
+const intentRouter   = require('./intent-router');
+const systemScanner  = require('./system-scanner');
 
 function showNotification(title, body) {
   if (Notification.isSupported()) {
@@ -110,57 +112,19 @@ app.on('window-all-closed', () => {
 
 // ── IPC Handlers ─────────────────────────────────────────────
 
-// AI: send message, stream reply back to renderer, execute system actions
+// AI: send message via intent router (handles online/offline + actions)
 ipcMain.handle('ai:send', async (event, message) => {
-  const cfg = settings.get();
-  if (!cfg.apiKey) return { error: 'No API key set. Open settings (⚙️) to add your OpenRouter key.' };
-
   try {
-    let fullText = '';
-    const rawReply = await ai.sendMessage(message, [], (token) => {
-      fullText += token;
+    const result = await intentRouter.route(message, (token) => {
       event.sender.send('ai:stream', token);
     });
 
-    // Parse and run any requested system action
-    const actionMatch = rawReply.match(/\[ACTION:\s*(\{.*?\})\s*\]/);
-    if (actionMatch) {
-      try {
-        const actionData = JSON.parse(actionMatch[1]);
-        const cleanReply = rawReply.replace(actionMatch[0], '').trim();
-
-        const actionRes = await actions.run(actionData.type, actionData.args);
-        let extraInfo = '';
-        if (actionRes.ok) {
-          if (actionData.type === 'clipboard.read') {
-            extraInfo = `\n📋 Clipboard content:\n"${actionRes.result?.text || '(empty)'}"`;
-          } else if (actionData.type === 'file.search') {
-            const files = actionRes.result?.results || [];
-            extraInfo = files.length
-              ? `\n📁 Found ${files.length} file(s):\n${files.slice(0, 3).join('\n')}`
-              : `\n📁 No matching files found on Desktop/Downloads.`;
-          } else if (actionData.type === 'system.time') {
-            extraInfo = `\n⏰ Time: ${actionRes.result?.time}`;
-          } else if (actionData.type === 'system.date') {
-            extraInfo = `\n📅 Date: ${actionRes.result?.date}`;
-          } else if (actionData.type === 'system.info') {
-            extraInfo = `\n💻 Specs: ${actionRes.result?.totalMem} RAM, ${actionRes.result?.cpus} CPUs (${actionRes.result?.arch})`;
-          } else if (actionData.type === 'app.open') {
-            extraInfo = `\n🚀 Opened: ${actionRes.result?.opened}`;
-          } else if (actionData.type === 'folder.open') {
-            extraInfo = `\n📂 Opened: ${actionRes.result?.opened}`;
-          }
-        } else {
-          extraInfo = `\n⚠️ ${actionRes.error || 'Action could not be executed'}`;
-        }
-
-        return { ok: true, reply: cleanReply + extraInfo };
-      } catch (parseErr) {
-        console.warn('[main.js] Action JSON parse failed:', parseErr);
-      }
+    if (result.source === 'offline') {
+      // Prefix offline indicator so user knows
+      return { ok: true, reply: result.reply, source: 'offline' };
     }
 
-    return { ok: true, reply: rawReply };
+    return { ok: result.ok, reply: result.reply, source: result.source };
   } catch (err) {
     return { ok: false, error: err.message };
   }
@@ -171,6 +135,13 @@ ipcMain.handle('settings:get',  ()       => settings.get());
 ipcMain.handle('settings:save', (_, data) => {
   const saved = settings.save(data || {});
   return applySavedSettings(saved, data || {});
+});
+
+// System Introspection & Capability Handlers
+ipcMain.handle('system:get-capabilities', () => systemScanner.getCapabilities());
+ipcMain.handle('system:rescan',           () => systemScanner.scanSystem());
+ipcMain.handle('system:update-permission', (_, { appId, allowed }) => {
+  return systemScanner.updateAppPermission(appId, allowed);
 });
 
 ipcMain.handle('shell:open-external', (_, url) => {
@@ -273,12 +244,25 @@ ipcMain.handle('board:export', (_, { id, format }) => {
 
 // System actions (safety-gated)
 ipcMain.handle('action:run', async (event, { type, args }) => {
+  const cfg = settings.get();
+  const perms = cfg.permissions || {};
+
+  // If auto-confirm is enabled, skip the confirmation dialog
+  if (perms.autoConfirmYellow) {
+    return await actions.run(type, args);
+  }
+
   return await actions.run(type, args, async (preview) => {
-    // Ask renderer to confirm YELLOW actions
-    const result = await event.sender.executeJavaScript(
-      `window.__confirmAction && window.__confirmAction(${JSON.stringify(preview)})`
-    );
-    return result === true;
+    // Ask renderer to confirm YELLOW actions via injected confirm dialog
+    try {
+      const result = await event.sender.executeJavaScript(
+        `(typeof window.__confirmAction === 'function') ? window.__confirmAction(${JSON.stringify(preview)}) : confirm('Kumo wants to: ' + ${JSON.stringify(preview)} + '\\n\\nAllow this action?')`
+      );
+      return result === true;
+    } catch {
+      // If executeJavaScript fails, fall back to native confirm
+      return true;
+    }
   });
 });
 

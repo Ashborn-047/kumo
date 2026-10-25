@@ -33,9 +33,6 @@ Desktop.ini
 graphify-out/
 .graphify*
 
-# Documentation
-Docs/
-docs/
 
 # Test artifacts
 test-results/

@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Assistant Components • Component Vault</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration verbatim from Design System -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary-container": "#b34533",
+            "on-surface-variant": "#474554",
+            "inverse-primary": "#c6bfff",
+            "surface-variant": "#dfe1f8",
+            "on-secondary": "#ffffff",
+            "on-error-container": "#93000a",
+            "surface-container-high": "#e5e7fe",
+            "on-surface": "#171b2b",
+            "on-background": "#171b2b",
+            "primary-container": "#6355d8",
+            "tertiary": "#922e1e",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#f3f2ff",
+            "on-primary-fixed-variant": "#402db4",
+            "on-primary-fixed": "#160066",
+            "outline": "#787585",
+            "inverse-surface": "#2c2f41",
+            "primary-fixed": "#e4dfff",
+            "primary": "#4a3abe",
+            "on-primary": "#ffffff",
+            "surface-container": "#ececff",
+            "surface-container-highest": "#dfe1f8",
+            "on-error": "#ffffff",
+            "on-tertiary-fixed": "#3f0300",
+            "secondary-fixed": "#d6e3ff",
+            "on-tertiary-container": "#ffe3de",
+            "tertiary-fixed-dim": "#ffb4a6",
+            "surface": "#fbf8ff",
+            "on-secondary-fixed": "#0e1c31",
+            "on-tertiary": "#ffffff",
+            "primary-fixed-dim": "#c6bfff",
+            "error-container": "#ffdad6",
+            "secondary-container": "#d3e0fd",
+            "on-secondary-container": "#56637c",
+            "outline-variant": "#c8c4d6",
+            "inverse-on-surface": "#efefff",
+            "surface-tint": "#5849cc",
+            "secondary-fixed-dim": "#b9c7e3",
+            "background": "#fbf8ff",
+            "on-primary-container": "#ece7ff",
+            "error": "#ba1a1a",
+            "on-secondary-fixed-variant": "#3a475f",
+            "on-tertiary-fixed-variant": "#842415",
+            "tertiary-fixed": "#ffdad4",
+            "secondary": "#525f77",
+            "surface-bright": "#fbf8ff",
+            "surface-dim": "#d6d9ef"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "gutter": "1.5rem",
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "margin": "2rem",
+            "gutter-sm": "0.75rem",
+            "space-xl": "2.5rem",
+            "space-lg": "1.5rem",
+            "margin-mobile": "1rem",
+            "space-md": "1rem"
+          },
+          "fontFamily": {
+            "headline-xl": [
+              "Plus Jakarta Sans"
+            ],
+            "headline-sm": [
+              "Plus Jakarta Sans"
+            ],
+            "label-lg": [
+              "JetBrains Mono"
+            ],
+            "headline-md": [
+              "Plus Jakarta Sans"
+            ],
+            "headline-xl-mobile": [
+              "Plus Jakarta Sans"
+            ],
+            "body-sm": [
+              "Inter"
+            ],
+            "label-sm": [
+              "JetBrains Mono"
+            ],
+            "label-md": [
+              "JetBrains Mono"
+            ],
+            "body-lg": [
+              "Inter"
+            ],
+            "headline-lg": [
+              "Plus Jakarta Sans"
+            ],
+            "body-md": [
+              "Inter"
+            ]
+          },
+          "fontSize": {
+            "headline-xl": [
+              "40px",
+              {
+                "lineHeight": "48px",
+                "letterSpacing": "-0.02em",
+                "fontWeight": "700"
+              }
+            ],
+            "headline-sm": [
+              "18px",
+              {
+                "lineHeight": "24px",
+                "fontWeight": "600"
+              }
+            ],
+            "label-lg": [
+              "13px",
+              {
+                "lineHeight": "18px",
+                "letterSpacing": "0.01em",
+                "fontWeight": "500"
+              }
+            ],
+            "headline-md": [
+              "22px",
+              {
+                "lineHeight": "28px",
+                "letterSpacing": "-0.01em",
+                "fontWeight": "600"
+              }
+            ],
+            "headline-xl-mobile": [
+              "30px",
+              {
+                "lineHeight": "38px",
+                "letterSpacing": "-0.02em",
+                "fontWeight": "700"
+              }
+            ],
+            "body-sm": [
+              "12px",
+              {
+                "lineHeight": "18px",
+                "fontWeight": "400"
+              }
+            ],
+            "label-sm": [
+              "10px",
+              {
+                "lineHeight": "14px",
+                "letterSpacing": "0.04em",
+                "fontWeight": "600"
+              }
+            ],
+            "label-md": [
+              "11px",
+              {
+                "lineHeight": "16px",
+                "letterSpacing": "0.02em",
+                "fontWeight": "500"
+              }
+            ],
+            "body-lg": [
+              "16px",
+              {
+                "lineHeight": "24px",
+                "fontWeight": "400"
+              }
+            ],
+            "headline-lg": [
+              "28px",
+              {
+                "lineHeight": "36px",
+                "letterSpacing": "-0.015em",
+                "fontWeight": "600"
+              }
+            ],
+            "body-md": [
+              "14px",
+              {
+                "lineHeight": "21px",
+                "fontWeight": "400"
+              }
+            ]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .tactile-card {
+      border-radius: 18px;
+      box-shadow: 0 4px 24px -4px rgba(46,59,82,0.08), 0 1px 3px rgba(46,59,82,0.04);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .tactile-card:hover {
+      box-shadow: 0 12px 32px -6px rgba(99, 85, 216, 0.12), 0 4px 12px rgba(46, 59, 82, 0.05);
+      transform: translateY(-2px);
+    }
+    .tilted-tag {
+      transform: rotate(-2.5deg);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface antialiased selection:bg-primary-fixed selection:text-on-primary-fixed min-h-screen flex flex-col font-body-md text-body-md">
+<!-- Shared TopNavBar Component -->
+<header class="sticky top-0 z-50 w-full bg-surface/80 backdrop-blur-md border-b border-outline-variant/30 shadow-sm transition-all">
+<div class="flex justify-between items-center w-full px-space-lg py-space-sm max-w-7xl mx-auto">
+<!-- Brand Logo / Product Name -->
+<div class="flex items-center gap-space-md">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center text-on-primary shadow-sm">
+<span class="material-symbols-outlined text-[20px]" data-icon="widgets">widgets</span>
+</div>
+<span class="text-headline-md font-headline-md font-bold text-primary tracking-tight">Assistant Components</span>
+</div>
+<span class="hidden md:inline-flex items-center text-label-sm font-label-sm px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-semibold">
+          VAULT v2.4
+        </span>
+</div>
+<!-- Navigation Links (Centered Desk) -->
+<nav class="hidden md:flex items-center gap-space-lg">
+<a class="text-on-surface-variant hover:text-on-surface transition-colors text-label-md font-label-md px-2 py-1" href="#">Showcase</a>
+<a class="text-primary font-semibold border-b-2 border-primary pb-1 text-label-md font-label-md px-2" href="#">Components</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors text-label-md font-label-md px-2 py-1" href="#">Tokens</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors text-label-md font-label-md px-2 py-1" href="#">Documentation</a>
+</nav>
+<!-- Trailing Controls & Search -->
+<div class="flex items-center gap-space-sm">
+<div class="relative hidden sm:block w-48 lg:w-60">
+<span class="absolute inset-y-0 left-2.5 flex items-center pointer-events-none text-outline">
+<span class="material-symbols-outlined text-[18px]" data-icon="search">search</span>
+</span>
+<input class="w-full bg-surface-container-lowest border border-outline-variant/40 rounded-lg pl-8 pr-3 py-1.5 text-body-sm font-body-sm focus:outline-none focus:ring-2 focus:ring-primary-container text-on-surface placeholder:text-outline/70" placeholder="Filter widgets..." type="text"/>
+</div>
+<button class="p-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high/60 transition-all active:scale-[0.98]" title="Grid View">
+<span class="material-symbols-outlined text-[20px]" data-icon="grid_view">grid_view</span>
+</button>
+<button class="p-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high/60 transition-all active:scale-[0.98]" title="Theme Toggle">
+<span class="material-symbols-outlined text-[20px]" data-icon="dark_mode">dark_mode</span>
+</button>
+<button class="p-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high/60 transition-all active:scale-[0.98]" title="Settings">
+<span class="material-symbols-outlined text-[20px]" data-icon="tune">tune</span>
+</button>
+<button class="hidden sm:inline-flex items-center gap-1.5 bg-primary-container text-on-primary text-label-md font-label-md px-3.5 py-1.5 rounded-lg font-medium shadow-sm hover:opacity-95 active:scale-[0.98] transition-all ml-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="download">download</span>
+<span>Export Cards</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Showcase Header & Category Filter Bar -->
+<section class="max-w-7xl mx-auto w-full px-space-lg pt-space-lg pb-space-md">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-space-md border-b border-outline-variant/20 pb-space-md">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="text-label-sm font-label-sm text-primary tracking-wide">PRECISION DESKTOP COPILOT SYSTEM</span>
+<span class="inline-block w-1.5 h-1.5 rounded-full bg-primary"></span>
+<span class="text-label-sm font-label-sm text-outline">STANDALONE ARTIFACTS</span>
+</div>
+<h1 class="text-headline-lg font-headline-lg text-on-surface tracking-tight">Component Vault • Assistant Cards</h1>
+<p class="text-body-md font-body-md text-on-surface-variant mt-1">7 Production-grade tactile interactive widgets with native OS hooks, hardware telemetry, and automated scripts.</p>
+</div>
+<!-- Action Chips & Category Filter Pills -->
+<div class="flex flex-wrap items-center gap-1.5">
+<button class="bg-primary text-on-primary text-label-md font-label-md px-3 py-1.5 rounded-full font-medium shadow-sm flex items-center gap-1.5 transition-all">
+<span>All Cards (7)</span>
+</button>
+<button class="bg-surface-container-lowest border border-outline-variant/40 hover:bg-surface-container-low text-on-surface-variant text-label-md font-label-md px-3 py-1.5 rounded-full font-medium transition-all">
+<span>System &amp; Hardware</span>
+</button>
+<button class="bg-surface-container-lowest border border-outline-variant/40 hover:bg-surface-container-low text-on-surface-variant text-label-md font-label-md px-3 py-1.5 rounded-full font-medium transition-all">
+<span>Dev &amp; Terminal</span>
+</button>
+<button class="bg-surface-container-lowest border border-outline-variant/40 hover:bg-surface-container-low text-on-surface-variant text-label-md font-label-md px-3 py-1.5 rounded-full font-medium transition-all">
+<span>Media &amp; Clipboard</span>
+</button>
+<button class="bg-surface-container-lowest border border-outline-variant/40 hover:bg-surface-container-low text-on-surface-variant text-label-md font-label-md px-3 py-1.5 rounded-full font-medium transition-all">
+<span>Automations</span>
+</button>
+<div class="h-5 w-[1px] bg-outline-variant/40 mx-1 hidden sm:block"></div>
+<button class="bg-surface-container-low border border-primary-container/20 text-primary text-label-md font-label-md px-3 py-1.5 rounded-full font-medium flex items-center gap-1 hover:bg-primary-fixed transition-all" id="copyTokensBtn" onclick="navigator.clipboard.writeText('--iris: #6355d8; --lilac: #eadfff; --sky: #dcedff; --mint: #dcf5e7;'); this.innerHTML='&lt;span class=\'material-symbols-outlined text-[16px]\'&gt;check&lt;/span&gt; Copied!'; setTimeout(()=&gt;this.innerHTML='&lt;span class=\'material-symbols-outlined text-[16px]\'&gt;content_copy&lt;/span&gt; Copy Tokens', 1800);">
+<span class="material-symbols-outlined text-[16px]" data-icon="content_copy">content_copy</span>
+<span>Copy Tokens</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Main Grid Showcase (7 Tactile Production-Ready Assistant Cards) -->
+<main class="max-w-7xl mx-auto w-full px-space-lg pb-space-xl flex-1">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-space-lg items-start">
+<!-- CARD 1: Dynamic App Dock & Launcher -->
+<div class="tactile-card bg-surface-container-lowest/95 border border-[#2e3b52]/10 flex flex-col overflow-hidden">
+<!-- 48px Header Strip (Sky Blue Archetype) -->
+<div class="h-12 px-space-md bg-[#dcedff] flex items-center justify-between border-b border-[#2e3b52]/5">
+<div class="flex items-center gap-2">
+<span class="p-1 rounded-md bg-white/70 text-primary shadow-xs">
+<span class="material-symbols-outlined text-[18px]" data-icon="apps">apps</span>
+</span>
+<span class="font-headline-sm text-headline-sm text-on-surface text-[15px]">Application Dock &amp; Launcher</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+</span>
+<span class="font-label-sm text-label-sm text-secondary font-medium">12 Monitored</span>
+</div>
+</div>
+<!-- Body -->
+<div class="p-space-md flex flex-col gap-2.5">
+<div class="flex items-center justify-between text-label-sm font-label-sm text-outline px-1">
+<span>DISCOVERED INSTALLED PROCESSES</span>
+<span>STATUS &amp; SECURITY</span>
+</div>
+<!-- Apps list -->
+<div class="flex flex-col gap-1.5">
+<!-- App 1: Spotify -->
+<div class="flex items-center justify-between p-2 rounded-xl bg-surface hover:bg-surface-container-low transition-colors border border-outline-variant/20">
+<div class="flex items-center gap-2.5">
+<div class="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xs">
+<span class="material-symbols-outlined text-[16px]" data-icon="graphic_eq">graphic_eq</span>
+</div>
+<div>
+<div class="flex items-center gap-1.5">
+<span class="font-headline-sm text-[13px] text-on-surface">Spotify</span>
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+</div>
+<span class="text-body-sm text-[11px] text-outline font-label-md">Running • Media Agent</span>
+</div>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">Verified</span>
+<button class="text-label-sm font-label-sm px-2.5 py-1 bg-surface-container-lowest border border-outline-variant/40 hover:border-primary-container text-primary font-medium rounded-md shadow-xs active:scale-95 transition-all">Focus</button>
+</div>
+</div>
+<!-- App 2: VS Code -->
+<div class="flex items-center justify-between p-2 rounded-xl bg-surface hover:bg-surface-container-low transition-colors border border-outline-variant/20">
+<div class="flex items-center gap-2.5">
+<div class="w-7 h-7 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-xs">
+<span class="material-symbols-outlined text-[16px]" data-icon="code">code</span>
+</div>
+<div>
+<div class="flex items-center gap-1.5">
+<span class="font-headline-sm text-[13px] text-on-surface">VS Code</span>
+<span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+</div>
+<span class="text-body-sm text-[11px] text-outline font-label-md">Active • PID 9204</span>
+</div>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200">Local Dev</span>
+<button class="text-label-sm font-label-sm px-2.5 py-1 bg-surface-container-lowest border border-outline-variant/40 hover:border-primary-container text-primary font-medium rounded-md shadow-xs active:scale-95 transition-all">Focus</button>
+</div>
+</div>
+<!-- App 3: Telegram -->
+<div class="flex items-center justify-between p-2 rounded-xl bg-surface hover:bg-surface-container-low transition-colors border border-outline-variant/20">
+<div class="flex items-center gap-2.5">
+<div class="w-7 h-7 rounded-lg bg-sky-100 text-sky-700 flex items-center justify-center font-bold text-xs">
+<span class="material-symbols-outlined text-[16px]" data-icon="send">send</span>
+</div>
+<div>
+<div class="flex items-center gap-1.5">
+<span class="font-headline-sm text-[13px] text-on-surface">Telegram</span>
+<span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+</div>
+<span class="text-body-sm text-[11px] text-outline font-label-md">Idle • In Tray</span>
+</div>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">Verified</span>
+<button class="text-label-sm font-label-sm px-2.5 py-1 bg-surface-container-low hover:bg-surface-container text-on-surface-variant font-medium rounded-md active:scale-95 transition-all">Launch</button>
+</div>
+</div>
+<!-- App 4: Blender 5.2 -->
+<div class="flex items-center justify-between p-2 rounded-xl bg-surface hover:bg-surface-container-low transition-colors border border-outline-variant/20">
+<div class="flex items-center gap-2.5">
+<div class="w-7 h-7 rounded-lg bg-orange-100 text-orange-700 flex items-center justify-center font-bold text-xs">
+<span class="material-symbols-outlined text-[16px]" data-icon="view_in_ar">view_in_ar</span>
+</div>
+<div>
+<div class="flex items-center gap-1.5">
+<span class="font-headline-sm text-[13px] text-on-surface">Blender 5.2</span>
+</div>
+<span class="text-body-sm text-[11px] text-outline font-label-md">Idle • GPU Render</span>
+</div>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">Verified</span>
+<button class="text-label-sm font-label-sm px-2.5 py-1 bg-surface-container-low hover:bg-surface-container text-on-surface-variant font-medium rounded-md active:scale-95 transition-all">Launch</button>
+</div>
+</div>
+<!-- App 5: Terminal pwsh -->
+<div class="flex items-center justify-between p-2 rounded-xl bg-surface hover:bg-surface-container-low transition-colors border border-outline-variant/20">
+<div class="flex items-center gap-2.5">
+<div class="w-7 h-7 rounded-lg bg-purple-100 text-purple-700 flex items-center justify-center font-bold text-xs">
+<span class="material-symbols-outlined text-[16px]" data-icon="terminal">terminal</span>
+</div>
+<div>
+<div class="flex items-center gap-1.5">
+<span class="font-headline-sm text-[13px] text-on-surface">Terminal (pwsh)</span>
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+</div>
+<span class="text-body-sm text-[11px] text-outline font-label-md">Running (Canary)</span>
+</div>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-amber-50 text-amber-700 border border-amber-200">Elevated</span>
+<button class="text-label-sm font-label-sm px-2.5 py-1 bg-surface-container-lowest border border-outline-variant/40 hover:border-primary-container text-primary font-medium rounded-md shadow-xs active:scale-95 transition-all">Focus</button>
+</div>
+</div>
+<!-- App 6: Docker Desktop -->
+<div class="flex items-center justify-between p-2 rounded-xl bg-surface hover:bg-surface-container-low transition-colors border border-outline-variant/20">
+<div class="flex items-center gap-2.5">
+<div class="w-7 h-7 rounded-lg bg-sky-100 text-sky-800 flex items-center justify-center font-bold text-xs">
+<span class="material-symbols-outlined text-[16px]" data-icon="developer_board">developer_board</span>
+</div>
+<div>
+<div class="flex items-center gap-1.5">
+<span class="font-headline-sm text-[13px] text-on-surface">Docker Desktop</span>
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+</div>
+<span class="text-body-sm text-[11px] text-outline font-label-md">Running • 3 containers</span>
+</div>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">Verified</span>
+<button class="text-label-sm font-label-sm px-2.5 py-1 bg-surface-container-lowest border border-outline-variant/40 hover:border-primary-container text-primary font-medium rounded-md shadow-xs active:scale-95 transition-all">Focus</button>
+</div>
+</div>
+<!-- App 7: DevToys -->
+<div class="flex items-center justify-between p-2 rounded-xl bg-surface hover:bg-surface-container-low transition-colors border border-outline-variant/20">
+<div class="flex items-center gap-2.5">
+<div class="w-7 h-7 rounded-lg bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-xs">
+<span class="material-symbols-outlined text-[16px]" data-icon="handyman">handyman</span>
+</div>
+<div>
+<div class="flex items-center gap-1.5">
+<span class="font-headline-sm text-[13px] text-on-surface">DevToys 2.0</span>
+</div>
+<span class="text-body-sm text-[11px] text-outline font-label-md">Idle • Offline Tools</span>
+</div>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">Verified</span>
+<button class="text-label-sm font-label-sm px-2.5 py-1 bg-surface-container-low hover:bg-surface-container text-on-surface-variant font-medium rounded-md active:scale-95 transition-all">Launch</button>
+</div>
+</div>
+</div>
+<!-- Bottom bar -->
+<div class="pt-2 border-t border-outline-variant/20 flex items-center justify-between text-body-sm">
+<button class="text-label-sm font-label-sm text-primary hover:text-on-primary-fixed-variant flex items-center gap-1 font-semibold">
+<span class="material-symbols-outlined text-[15px]" data-icon="sync">sync</span>
+<span>Rescan Apps</span>
+</button>
+<a class="text-label-sm font-label-sm text-outline hover:text-on-surface transition-colors flex items-center gap-0.5" href="#">
+<span>Permissions &amp; Access</span>
+<span class="material-symbols-outlined text-[13px]" data-icon="arrow_forward">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+<!-- CARD 2: System Health & Hardware Hub -->
+<div class="tactile-card bg-surface-container-lowest/95 border border-[#2e3b52]/10 flex flex-col overflow-hidden">
+<!-- 48px Header Strip (Lilac Archetype) -->
+<div class="h-12 px-space-md bg-[#eadfff] flex items-center justify-between border-b border-[#2e3b52]/5">
+<div class="flex items-center gap-2">
+<span class="p-1 rounded-md bg-white/70 text-primary shadow-xs">
+<span class="material-symbols-outlined text-[18px]" data-icon="memory">memory</span>
+</span>
+<span class="font-headline-sm text-headline-sm text-on-surface text-[15px]">System Health &amp; Telemetry</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant bg-white/60 px-2 py-0.5 rounded-full font-medium">Windows 10 Pro • 12 Cores</span>
+</div>
+</div>
+<!-- Body -->
+<div class="p-space-md flex flex-col gap-4">
+<!-- RAM Usage Section -->
+<div class="flex flex-col gap-1.5 p-3 rounded-xl bg-surface border border-outline-variant/20">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-primary" data-icon="memory_alt">memory_alt</span>
+<span class="font-headline-sm text-[13px] text-on-surface">RAM Allocation</span>
+</div>
+<span class="font-label-md text-label-md font-semibold text-primary">10.4 GB / 16 GB (65%)</span>
+</div>
+<!-- Dual-tone smooth progress bar -->
+<div class="w-full h-2.5 rounded-full bg-surface-container-highest overflow-hidden flex">
+<div class="h-full bg-primary-container" style="width: 52%"></div>
+<div class="h-full bg-primary-fixed-dim" style="width: 13%"></div>
+</div>
+<div class="flex items-center justify-between text-label-sm font-label-sm text-outline pt-0.5">
+<span>App In-Use: 8.3 GB</span>
+<span>Modified Cache: 2.1 GB</span>
+<span>Available: 5.6 GB</span>
+</div>
+</div>
+<!-- CPU Thread Load with 12-bar Sparkline -->
+<div class="flex flex-col gap-2 p-3 rounded-xl bg-surface border border-outline-variant/20">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-primary" data-icon="speed">speed</span>
+<span class="font-headline-sm text-[13px] text-on-surface">CPU Thread Activity</span>
+</div>
+<span class="font-label-md text-label-md text-secondary font-medium">38% Load (12 Cores)</span>
+</div>
+<!-- Mini 12-bar thread sparkline graph -->
+<div class="grid grid-cols-12 gap-1 items-end h-10 px-1 py-1 bg-surface-container-low rounded-lg">
+<div class="bg-primary/80 rounded-t-sm h-[40%]" title="Core 0: 40%"></div>
+<div class="bg-primary/90 rounded-t-sm h-[65%]" title="Core 1: 65%"></div>
+<div class="bg-primary rounded-t-sm h-[82%]" title="Core 2: 82%"></div>
+<div class="bg-primary/70 rounded-t-sm h-[30%]" title="Core 3: 30%"></div>
+<div class="bg-primary/80 rounded-t-sm h-[45%]" title="Core 4: 45%"></div>
+<div class="bg-primary/60 rounded-t-sm h-[20%]" title="Core 5: 20%"></div>
+<div class="bg-primary/90 rounded-t-sm h-[58%]" title="Core 6: 58%"></div>
+<div class="bg-primary rounded-t-sm h-[75%]" title="Core 7: 75%"></div>
+<div class="bg-primary/50 rounded-t-sm h-[18%]" title="Core 8: 18%"></div>
+<div class="bg-primary/60 rounded-t-sm h-[24%]" title="Core 9: 24%"></div>
+<div class="bg-primary/70 rounded-t-sm h-[36%]" title="Core 10: 36%"></div>
+<div class="bg-primary/80 rounded-t-sm h-[42%]" title="Core 11: 42%"></div>
+</div>
+<div class="flex items-center justify-between text-label-sm font-label-sm text-outline">
+<span>Ryzen 5 5600X @ 3.70GHz</span>
+<span>Clock: 4.22 GHz Boost</span>
+</div>
+</div>
+<!-- Storage Volumes -->
+<div class="flex flex-col gap-2 p-3 rounded-xl bg-surface border border-outline-variant/20">
+<span class="font-label-sm text-label-sm text-outline">LOCAL STORAGE DRIVES</span>
+<!-- Drive C: -->
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between text-body-sm font-body-sm">
+<span class="font-medium text-on-surface">Drive C: (System NVMe)</span>
+<span class="font-label-sm text-outline">142 GB free / 500 GB</span>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-container-highest overflow-hidden">
+<div class="h-full bg-primary-container rounded-full" style="width: 71.6%"></div>
+</div>
+</div>
+<!-- Drive G: -->
+<div class="flex flex-col gap-1 pt-1">
+<div class="flex items-center justify-between text-body-sm font-body-sm">
+<span class="font-medium text-on-surface">Drive G: (Data SSD)</span>
+<span class="font-label-sm text-outline">890 GB free / 2 TB</span>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-container-highest overflow-hidden">
+<div class="h-full bg-secondary rounded-full" style="width: 55.5%"></div>
+</div>
+</div>
+</div>
+<!-- Quick diagnostic pill actions -->
+<div class="flex flex-wrap items-center gap-1.5 pt-1">
+<button class="text-label-sm font-label-sm px-2.5 py-1.5 bg-surface-container-low hover:bg-surface-container text-on-surface font-medium rounded-lg border border-outline-variant/30 flex items-center gap-1 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[15px]" data-icon="task">task</span>
+<span>Open Task Manager</span>
+</button>
+<button class="text-label-sm font-label-sm px-2.5 py-1.5 bg-surface-container-low hover:bg-surface-container text-on-surface font-medium rounded-lg border border-outline-variant/30 flex items-center gap-1 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[15px]" data-icon="cleaning_services">cleaning_services</span>
+<span>Clean Temp (1.2 GB)</span>
+</button>
+<button class="text-label-sm font-label-sm px-2.5 py-1.5 bg-surface-container-low hover:bg-surface-container text-on-surface font-medium rounded-lg border border-outline-variant/30 flex items-center gap-1 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[15px]" data-icon="analytics">analytics</span>
+<span>Resource Monitor</span>
+</button>
+</div>
+</div>
+</div>
+<!-- CARD 3: Network Sentinel & Diagnostics -->
+<div class="tactile-card bg-surface-container-lowest/95 border border-[#2e3b52]/10 flex flex-col overflow-hidden">
+<!-- 48px Header Strip (Mint Archetype) -->
+<div class="h-12 px-space-md bg-[#dcf5e7] flex items-center justify-between border-b border-[#2e3b52]/5">
+<div class="flex items-center gap-2">
+<span class="p-1 rounded-md bg-white/70 text-emerald-700 shadow-xs">
+<span class="material-symbols-outlined text-[18px]" data-icon="wifi_tethering">wifi_tethering</span>
+</span>
+<span class="font-headline-sm text-headline-sm text-on-surface text-[15px]">Network Sentinel &amp; Offline</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+<span class="font-label-sm text-label-sm text-emerald-900 font-semibold">Connected • 18ms</span>
+</div>
+</div>
+<!-- Body -->
+<div class="p-space-md flex flex-col gap-3.5">
+<!-- IP & Gateway telemetry pill -->
+<div class="p-2.5 rounded-xl bg-surface-container-low border border-outline-variant/30 flex items-center justify-between font-label-md text-label-md">
+<div>
+<span class="text-outline">IPv4:</span>
+<span class="font-semibold text-on-surface ml-1">192.168.0.9</span>
+</div>
+<div>
+<span class="text-outline">Gateway:</span>
+<span class="font-semibold text-on-surface ml-1">192.168.0.1</span>
+</div>
+<div>
+<span class="text-outline">DNS:</span>
+<span class="font-semibold text-emerald-700 ml-1">1.1.1.1</span>
+</div>
+</div>
+<!-- Real-time Ping Latency Sparkline -->
+<div class="flex flex-col gap-1.5 p-3 rounded-xl bg-surface border border-outline-variant/20">
+<div class="flex items-center justify-between text-body-sm font-body-sm">
+<span class="text-on-surface font-medium">Ping Latency to 8.8.8.8</span>
+<span class="font-label-md text-emerald-700 font-bold">16 ms (0% Loss)</span>
+</div>
+<!-- SVG Sparkline for Ping Fluctuations -->
+<div class="h-14 w-full pt-1">
+<svg class="w-full h-full overflow-visible" preserveaspectratio="none" viewbox="0 0 300 50">
+<defs>
+<lineargradient id="pingGrad" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#10b981" stop-opacity="0.25"></stop>
+<stop offset="100%" stop-color="#10b981" stop-opacity="0.0"></stop>
+</lineargradient>
+</defs>
+<path d="M0,32 L25,30 L50,36 L75,22 L100,28 L125,24 L150,34 L175,18 L200,22 L225,20 L250,26 L275,18 L300,20 L300,50 L0,50 Z" fill="url(#pingGrad)"></path>
+<path d="M0,32 L25,30 L50,36 L75,22 L100,28 L125,24 L150,34 L175,18 L200,22 L225,20 L250,26 L275,18 L300,20" fill="none" stroke="#10b981" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+</svg>
+</div>
+<div class="flex items-center justify-between text-label-sm font-label-sm text-outline pt-1">
+<span>Min: 14ms</span>
+<span>Avg: 18.2ms</span>
+<span>Max: 26ms</span>
+</div>
+</div>
+<!-- Offline Brain Fallback Trigger Switch -->
+<div class="p-3 rounded-xl bg-[#dcf5e7]/40 border border-emerald-300/40 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px] text-emerald-800" data-icon="cloud_off">cloud_off</span>
+<div>
+<div class="text-headline-sm text-[13px] text-on-surface">Offline Fallback Engine</div>
+<div class="text-body-sm text-[11px] text-outline">Local Ollama mistral-7b ready</div>
+</div>
+</div>
+<!-- Accessible Toggle Switch (Active) -->
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-10 h-5 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-600"></div>
+</label>
+</div>
+<!-- Action Triggers -->
+<div class="grid grid-cols-3 gap-1.5 pt-1">
+<button class="px-2 py-1.5 rounded-lg bg-surface-container-low hover:bg-surface-container border border-outline-variant/30 text-on-surface font-label-sm text-label-sm text-center transition-all active:scale-95" onclick="this.innerText='Flushed!'; setTimeout(()=&gt;this.innerText='Flush DNS', 1500)">
+              Flush DNS
+            </button>
+<button class="px-2 py-1.5 rounded-lg bg-surface-container-low hover:bg-surface-container border border-outline-variant/30 text-on-surface font-label-sm text-label-sm text-center transition-all active:scale-95">
+              Ping Gateway
+            </button>
+<button class="px-2 py-1.5 rounded-lg bg-surface-container-low hover:bg-surface-container border border-outline-variant/30 text-on-surface font-label-sm text-label-sm text-center transition-all active:scale-95">
+              Speed Test
+            </button>
+</div>
+</div>
+</div>
+<!-- CARD 4: Developer Workspace & Repo Card -->
+<div class="tactile-card bg-surface-container-lowest/95 border border-[#2e3b52]/10 flex flex-col overflow-hidden">
+<!-- 48px Header Strip (Midnight Slate Archetype) -->
+<div class="h-12 px-space-md bg-[#e8ecf2] flex items-center justify-between border-b border-[#2e3b52]/10">
+<div class="flex items-center gap-2">
+<span class="p-1 rounded-md bg-[#2e3b52] text-white shadow-xs">
+<span class="material-symbols-outlined text-[18px]" data-icon="terminal">terminal</span>
+</span>
+<span class="font-headline-sm text-headline-sm text-on-surface text-[15px]">Dev Workspace &amp; Repos</span>
+</div>
+<div class="flex items-center gap-1 bg-white/70 px-2 py-0.5 rounded-md border border-[#2e3b52]/10">
+<span class="material-symbols-outlined text-[14px] text-primary" data-icon="commit">commit</span>
+<span class="font-label-sm text-label-sm font-semibold text-on-surface">main • #4f9a2d</span>
+</div>
+</div>
+<!-- Body -->
+<div class="p-space-md flex flex-col gap-3.5">
+<!-- Active Repo Widget -->
+<div class="p-3 rounded-xl bg-surface border border-outline-variant/20 flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-primary" data-icon="folder_managed">folder_managed</span>
+<span class="font-headline-sm text-[14px] text-on-surface font-bold">Mochi / Kumo</span>
+</div>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200">2 uncommitted</span>
+</div>
+<p class="text-body-sm text-on-surface-variant font-body-sm leading-snug">
+              feat(spatial): tactile glassmorphic assistant widgets (12m ago)
+            </p>
+<div class="flex items-center gap-3 text-label-sm font-label-sm text-outline pt-1">
+<span>TypeScript 5.3</span>
+<span>Tailwind v3.4</span>
+<span>Electron v28</span>
+</div>
+</div>
+<!-- Environment status indicators -->
+<div class="flex flex-col gap-2">
+<span class="font-label-sm text-label-sm text-outline">ENVIRONMENT CONTAINMENT</span>
+<!-- WSL2 Indicator -->
+<div class="flex items-center justify-between p-2 rounded-lg bg-surface border border-outline-variant/20">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+<span class="font-headline-sm text-[12px] text-on-surface">WSL2 Subsystem</span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary font-medium">Ubuntu 22.04 LTS (Running)</span>
+</div>
+<!-- Docker Daemon Indicator -->
+<div class="flex items-center justify-between p-2 rounded-lg bg-surface border border-outline-variant/20">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+<span class="font-headline-sm text-[12px] text-on-surface">Docker Engine</span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary font-medium">Ports: 4020, 5432, 8080</span>
+</div>
+</div>
+<!-- Action Triggers -->
+<div class="grid grid-cols-3 gap-2 pt-1">
+<button class="px-2.5 py-1.5 rounded-lg bg-primary-container text-on-primary font-label-sm text-label-sm text-center flex items-center justify-center gap-1 shadow-sm hover:opacity-95 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[15px]" data-icon="open_in_new">open_in_new</span>
+<span>VS Code</span>
+</button>
+<button class="px-2.5 py-1.5 rounded-lg bg-surface-container-low hover:bg-surface-container border border-outline-variant/30 text-on-surface font-label-sm text-label-sm text-center flex items-center justify-center gap-1 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[15px]" data-icon="terminal">terminal</span>
+<span>Terminal</span>
+</button>
+<button class="px-2.5 py-1.5 rounded-lg bg-surface-container-low hover:bg-surface-container border border-outline-variant/30 text-on-surface font-label-sm text-label-sm text-center flex items-center justify-center gap-1 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[15px]" data-icon="play_arrow">play_arrow</span>
+<span>npm test</span>
+</button>
+</div>
+</div>
+</div>
+<!-- CARD 5: Spotify & Media Orchestrator -->
+<div class="tactile-card bg-surface-container-lowest/95 border border-[#2e3b52]/10 flex flex-col overflow-hidden">
+<!-- 48px Header Strip (Spotify Soft Green Archetype) -->
+<div class="h-12 px-space-md bg-[#dcf5e7] flex items-center justify-between border-b border-[#2e3b52]/5">
+<div class="flex items-center gap-2">
+<span class="p-1 rounded-md bg-[#1db954] text-white shadow-xs">
+<span class="material-symbols-outlined text-[18px]" data-icon="music_note">music_note</span>
+</span>
+<span class="font-headline-sm text-headline-sm text-on-surface text-[15px]">Spotify Media Controller</span>
+</div>
+<div class="flex items-center gap-1 bg-white/70 px-2 py-0.5 rounded-full border border-emerald-300">
+<span class="w-1.5 h-1.5 rounded-full bg-[#1db954]"></span>
+<span class="font-label-sm text-label-sm text-emerald-950 font-medium">Playing • Spotify AB</span>
+</div>
+</div>
+<!-- Body -->
+<div class="p-space-md flex flex-col gap-3.5">
+<!-- Rich Player Row -->
+<div class="flex items-center gap-3 p-3 rounded-2xl bg-surface border border-outline-variant/20 shadow-inner">
+<!-- Album Art Visual Thumbnail with data-alt and placeholder -->
+<div class="relative w-16 h-16 rounded-xl overflow-hidden shadow-sm flex-shrink-0 bg-primary-container">
+<img class="w-full h-full object-cover" data-alt="A modern abstract album artwork featuring smooth swirling gradients of neon violet, soft iris purple, and mint green in a minimalist studio environment. The composition exhibits gentle diffused ambient lighting with subtle spherical glass refractions and soft tactile shadows suited for a high-end music player interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBh0buBh6oVWer0zlvcFROppo0nx0VBTlbFgZ8mTx83QX29a8oyHs0Bm5C-qi1BclYWfqzVSDBM2WffNwAjaG6sQpyOLEueb0PN2URajOspbCt8a0b5SDskSoztTgYEO1pDaqwYuaCk29KFmIJ1K983sFbrlCi6VAf4DYvuPI1LCTue8wJZ5-GRRH3aM7bRIBkpONmccyFYiAErsSKjXfgtgi7PhjfwxCfttXWcX4Xmcz-8Yk_fewmSl9foKbQrhuIzSGQ_Gw1XYi8"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent flex items-end p-1">
+<span class="material-symbols-outlined text-white text-[14px]" data-icon="equalizer">equalizer</span>
+</div>
+</div>
+<!-- Track Info -->
+<div class="flex-1 min-w-0">
+<h3 class="font-headline-sm text-headline-sm text-[14px] text-on-surface truncate">Midnight Lo-Fi Chill</h3>
+<p class="text-body-sm font-body-sm text-on-surface-variant truncate">Kumo Cloud Sessions</p>
+<span class="inline-block text-label-sm font-label-sm text-outline font-medium mt-0.5">Tactile Beats v2</span>
+</div>
+</div>
+<!-- Scrubbing Bar & Timers -->
+<div class="flex flex-col gap-1">
+<div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden cursor-pointer">
+<div class="h-full bg-primary-container rounded-full" style="width: 58%"></div>
+</div>
+<div class="flex items-center justify-between text-label-sm font-label-sm text-outline">
+<span>02:14</span>
+<span>03:48</span>
+</div>
+</div>
+<!-- Playback Controls -->
+<div class="flex items-center justify-center gap-4 py-1">
+<button class="p-1.5 text-on-surface-variant hover:text-on-surface transition-colors" title="Shuffle">
+<span class="material-symbols-outlined text-[18px]" data-icon="shuffle">shuffle</span>
+</button>
+<button class="p-1.5 text-on-surface-variant hover:text-on-surface transition-colors" title="Previous">
+<span class="material-symbols-outlined text-[22px]" data-icon="skip_previous">skip_previous</span>
+</button>
+<!-- Glowing Play/Pause Iris Circle -->
+<button class="w-11 h-11 rounded-full bg-primary-container text-on-primary flex items-center justify-center shadow-md hover:scale-105 active:scale-95 transition-all" title="Pause">
+<span class="material-symbols-outlined text-[24px]" data-icon="pause">pause</span>
+</button>
+<button class="p-1.5 text-on-surface-variant hover:text-on-surface transition-colors" title="Next">
+<span class="material-symbols-outlined text-[22px]" data-icon="skip_next">skip_next</span>
+</button>
+<button class="p-1.5 text-on-surface-variant hover:text-on-surface transition-colors" title="Repeat">
+<span class="material-symbols-outlined text-[18px]" data-icon="repeat">repeat</span>
+</button>
+</div>
+<!-- Volume slider row -->
+<div class="flex items-center gap-2 px-2 text-outline">
+<span class="material-symbols-outlined text-[18px]" data-icon="volume_down">volume_down</span>
+<div class="w-full h-1 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-secondary rounded-full" style="width: 68%"></div>
+</div>
+<span class="font-label-sm text-label-sm">68%</span>
+</div>
+<!-- Preset Playlist Pills -->
+<div class="flex items-center justify-between gap-1 pt-1 border-t border-outline-variant/20">
+<button class="text-label-sm font-label-sm px-2 py-1 rounded bg-surface-container-low hover:bg-surface-container text-on-surface-variant transition-colors">Deep Focus</button>
+<button class="text-label-sm font-label-sm px-2 py-1 rounded bg-primary-fixed text-primary font-semibold">Coding Flow</button>
+<button class="text-label-sm font-label-sm px-2 py-1 rounded bg-surface-container-low hover:bg-surface-container text-on-surface-variant transition-colors">Lo-Fi Chill</button>
+<button class="text-label-sm font-label-sm px-2 py-1 rounded bg-surface-container-low hover:bg-surface-container text-on-surface-variant transition-colors">Binaural</button>
+</div>
+</div>
+</div>
+<!-- CARD 6: Clipboard History & Snippet Vault -->
+<div class="tactile-card bg-surface-container-lowest/95 border border-[#2e3b52]/10 flex flex-col overflow-hidden">
+<!-- 48px Header Strip (Peach Archetype) -->
+<div class="h-12 px-space-md bg-[#ffe9d6] flex items-center justify-between border-b border-[#2e3b52]/5">
+<div class="flex items-center gap-2">
+<span class="p-1 rounded-md bg-white/70 text-tertiary shadow-xs">
+<span class="material-symbols-outlined text-[18px]" data-icon="content_paste">content_paste</span>
+</span>
+<span class="font-headline-sm text-headline-sm text-on-surface text-[15px]">Clipboard &amp; Snippet Vault</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="font-label-sm text-label-sm text-tertiary-container bg-white/70 px-2 py-0.5 rounded-full font-semibold">5 items stored</span>
+</div>
+</div>
+<!-- Body -->
+<div class="p-space-md flex flex-col gap-2.5">
+<!-- Recent clips feed -->
+<!-- Item 1: Bash -->
+<div class="p-2.5 rounded-xl bg-surface hover:bg-surface-container-low transition-colors border border-outline-variant/20 flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm px-1.5 py-0.2 rounded bg-blue-100 text-blue-800 font-semibold">Bash</span>
+<div class="flex items-center gap-2">
+<span class="text-label-sm font-label-sm text-outline">2m ago</span>
+<button class="text-outline hover:text-primary transition-colors" onclick="navigator.clipboard.writeText('npm install @kumo/spatial-engine --save');" title="Copy item">
+<span class="material-symbols-outlined text-[16px]" data-icon="content_copy">content_copy</span>
+</button>
+</div>
+</div>
+<code class="font-label-sm text-label-sm text-on-surface font-mono truncate select-all">
+              npm install @kumo/spatial-engine --save
+            </code>
+</div>
+<!-- Item 2: JSON -->
+<div class="p-2.5 rounded-xl bg-surface hover:bg-surface-container-low transition-colors border border-outline-variant/20 flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm px-1.5 py-0.2 rounded bg-purple-100 text-purple-800 font-semibold">JSON</span>
+<div class="flex items-center gap-2">
+<span class="text-label-sm font-label-sm text-outline">14m ago</span>
+<button class="text-outline hover:text-primary transition-colors" title="Copy item">
+<span class="material-symbols-outlined text-[16px]" data-icon="content_copy">content_copy</span>
+</button>
+</div>
+</div>
+<code class="font-label-sm text-label-sm text-on-surface font-mono truncate select-all">
+              {"status": "ok", "latency": 18, "mode": "spatial"}
+            </code>
+</div>
+<!-- Item 3: URL -->
+<div class="p-2.5 rounded-xl bg-surface hover:bg-surface-container-low transition-colors border border-outline-variant/20 flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm px-1.5 py-0.2 rounded bg-emerald-100 text-emerald-800 font-semibold">URL</span>
+<div class="flex items-center gap-2">
+<span class="text-label-sm font-label-sm text-outline">1h ago</span>
+<button class="text-outline hover:text-primary transition-colors" title="Copy item">
+<span class="material-symbols-outlined text-[16px]" data-icon="content_copy">content_copy</span>
+</button>
+</div>
+</div>
+<code class="font-label-sm text-label-sm text-primary font-mono truncate select-all">
+              https://github.com/mochi-kumo/assistant-cards
+            </code>
+</div>
+<!-- Item 4: Plain Text Note -->
+<div class="p-2.5 rounded-xl bg-surface hover:bg-surface-container-low transition-colors border border-outline-variant/20 flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm px-1.5 py-0.2 rounded bg-amber-100 text-amber-800 font-semibold">Text</span>
+<div class="flex items-center gap-2">
+<span class="text-label-sm font-label-sm text-outline">3h ago</span>
+<button class="text-outline hover:text-primary transition-colors" title="Copy item">
+<span class="material-symbols-outlined text-[16px]" data-icon="content_copy">content_copy</span>
+</button>
+</div>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface line-clamp-2">
+              Remember to run cargo build --release before packaging electron app
+            </p>
+</div>
+<!-- Vault bottom bar -->
+<div class="pt-2 border-t border-outline-variant/20 flex items-center justify-between">
+<button class="text-label-sm font-label-sm text-primary hover:underline font-semibold">Copy back</button>
+<button class="text-label-sm font-label-sm text-secondary hover:text-on-surface">Format as JSON</button>
+<button class="text-label-sm font-label-sm text-error hover:underline">Clear History</button>
+</div>
+</div>
+</div>
+<!-- CARD 7: Automation & Script Runner (Spans 1 or 2 columns based on screen) -->
+<div class="tactile-card bg-surface-container-lowest/95 border border-[#2e3b52]/10 flex flex-col overflow-hidden md:col-span-2 lg:col-span-3">
+<!-- 48px Header Strip (Warm Butter / Amber Archetype) -->
+<div class="h-12 px-space-md bg-[#fff5c8] flex items-center justify-between border-b border-[#2e3b52]/5">
+<div class="flex items-center gap-2">
+<span class="p-1 rounded-md bg-amber-500 text-white shadow-xs">
+<span class="material-symbols-outlined text-[18px]" data-icon="bolt">bolt</span>
+</span>
+<span class="font-headline-sm text-headline-sm text-on-surface text-[15px]">Automation &amp; Script Runner</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="font-label-sm text-label-sm bg-amber-100 text-amber-900 border border-amber-300 px-2 py-0.5 rounded-full font-bold">
+              Sandbox Active
+            </span>
+</div>
+</div>
+<!-- Body with 2-Column Split (Scripts on Left, Terminal Well on Right) -->
+<div class="p-space-md grid grid-cols-1 lg:grid-cols-12 gap-space-md items-start">
+<!-- Script Triggers Column (Left 5 Cols) -->
+<div class="lg:col-span-5 flex flex-col gap-2.5">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-outline">STANDALONE AUTOMATION PRESETS</span>
+<span class="tilted-tag font-label-sm text-label-sm bg-[#ffe9d6] text-[#b84a14] px-1.5 py-0.5 rounded">POWERSHELL CORE</span>
+</div>
+<!-- Script 1: Export Git Log -->
+<div class="p-3 rounded-xl bg-surface border border-outline-variant/20 flex items-center justify-between gap-2">
+<div>
+<div class="font-headline-sm text-[13px] text-on-surface">Export Git Log (PowerShell)</div>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="font-label-sm text-label-sm text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.2 rounded font-semibold">GREEN TIER</span>
+<span class="text-body-sm text-[11px] text-outline">Auto Run</span>
+</div>
+</div>
+<button class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-label-sm text-label-sm font-semibold active:scale-95 transition-all shadow-xs">
+                Execute
+              </button>
+</div>
+<!-- Script 2: Diagnostics Suite -->
+<div class="p-3 rounded-xl bg-surface border border-outline-variant/20 flex items-center justify-between gap-2">
+<div>
+<div class="font-headline-sm text-[13px] text-on-surface">Network Diagnostics Suite</div>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="font-label-sm text-label-sm text-amber-700 bg-amber-50 border border-amber-200 px-1.5 py-0.2 rounded font-semibold">YELLOW TIER</span>
+<span class="text-body-sm text-[11px] text-outline">Consent Required</span>
+</div>
+</div>
+<button class="px-3 py-1.5 rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface border border-outline-variant/30 font-label-sm text-label-sm font-semibold active:scale-95 transition-all">
+                Review &amp; Run
+              </button>
+</div>
+<!-- Script 3: Flush DNS & Winsock -->
+<div class="p-3 rounded-xl bg-surface border border-outline-variant/20 flex items-center justify-between gap-2">
+<div>
+<div class="font-headline-sm text-[13px] text-on-surface">Flush DNS &amp; Reset Winsock</div>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="font-label-sm text-label-sm text-amber-700 bg-amber-50 border border-amber-200 px-1.5 py-0.2 rounded font-semibold">YELLOW TIER</span>
+<span class="text-body-sm text-[11px] text-outline">Consent Required</span>
+</div>
+</div>
+<button class="px-3 py-1.5 rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface border border-outline-variant/30 font-label-sm text-label-sm font-semibold active:scale-95 transition-all">
+                Review &amp; Run
+              </button>
+</div>
+</div>
+<!-- Live Obsidian Terminal Well (Right 7 Cols) -->
+<div class="lg:col-span-7 flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-semibold">POWERSHELL REPL STREAM</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="text-label-sm font-label-sm text-outline hover:text-on-surface" onclick="document.getElementById('terminal-content').innerHTML='PS C:\\Kumo&gt; &lt;span class=\'animate-pulse\'&gt;_&lt;/span&gt;';">Clear</button>
+<button class="text-label-sm font-label-sm text-primary hover:underline font-semibold" onclick="navigator.clipboard.writeText(document.getElementById('terminal-content').innerText);">Export Logs</button>
+</div>
+</div>
+<!-- Obsidian Terminal Box -->
+<div class="bg-[#12141c] text-[#a5b4fc] p-4 rounded-xl border border-white/10 font-mono text-xs shadow-inner flex flex-col gap-1.5 h-48 overflow-y-auto">
+<div class="text-[#717488]">// PowerShell Core 7.4.1 Session Initialized</div>
+<div class="flex flex-col gap-1 leading-relaxed" id="terminal-content">
+<div><span class="text-[#dcf5e7]">PS C:\Kumo&gt;</span> .\scripts\sync-workspace.ps1 -Channel "canary"</div>
+<div class="text-[#dcedff]">[INFO] Scanning 7 active assistant cards...</div>
+<div class="text-[#dcf5e7]">[OK] System telemetry hooks bound to 12 cores.</div>
+<div class="text-[#dcf5e7]">[OK] Spotify media IPC orchestrator connected.</div>
+<div class="text-[#dcf5e7]">[OK] Diagnostics verified. Spring dynamics steady.</div>
+<div class="text-[#ff7e67]">[READY] Standalone vault listening on IPC://assistant-runtime.sock</div>
+<div class="text-white mt-1"><span class="text-[#dcf5e7]">PS C:\Kumo&gt;</span> <span class="animate-pulse">▌</span></div>
+</div>
+</div>
+<div class="flex items-center justify-between text-label-sm font-label-sm text-outline px-1">
+<span>Encoding: UTF-8</span>
+<span>Memory Heap: 42.1 MB</span>
+<span>Exit Code: 0 (SUCCESS)</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Clean Minimalist Footer -->
+<footer class="w-full bg-surface-container-lowest border-t border-outline-variant/30 py-space-md text-on-surface-variant">
+<div class="max-w-7xl mx-auto px-space-lg flex flex-col sm:flex-row items-center justify-between gap-space-sm text-body-sm font-body-sm">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="font-semibold text-on-surface">Assistant Components</span>
+<span>• 7 Tactile Cards Ready for Production</span>
+</div>
+<div class="flex items-center gap-space-md text-label-md font-label-md text-outline">
+<a class="hover:text-primary transition-colors" href="#">Documentation</a>
+<a class="hover:text-primary transition-colors" href="#">Design Tokens</a>
+<a class="hover:text-primary transition-colors" href="#">Component Vault</a>
+<a class="hover:text-primary transition-colors" href="#">GitHub</a>
+</div>
+</div>
+</footer>
+</body></html>

@@ -3,11 +3,14 @@
 // Stores user preferences in %APPDATA%\Kumo\config.json
 // ============================================================
 
-const { app } = require('electron');
+const electron = require('electron');
+const app = electron?.app;
 const path = require('path');
 const fs   = require('fs');
+const os   = require('os');
 
-const CONFIG_PATH = path.join(app.getPath('userData'), 'config.json');
+const userDataDir = app ? app.getPath('userData') : path.join(process.env.APPDATA || os.homedir(), 'Kumo');
+const CONFIG_PATH = path.join(userDataDir, 'config.json');
 
 const DEFAULTS = {
   apiKey:          '',

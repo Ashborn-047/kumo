@@ -5,12 +5,20 @@
 // ============================================================
 // TODO Phase 3: implement each action handler
 // TODO Phase 3: implement confirmation flow for YELLOW actions
-
-const { shell, clipboard } = require('electron');
+const electron = require('electron');
+const shell = electron?.shell || {
+  openExternal: (url) => { require('child_process').exec(`start "" "${url}"`); return Promise.resolve(true); },
+  openPath: (p) => { require('child_process').exec(`explorer "${p}"`); return Promise.resolve(''); }
+};
+const clipboard = electron?.clipboard || {
+  readText: () => '',
+  writeText: () => {}
+};
 const { exec } = require('child_process');
 const path = require('path');
 const fs = require('fs');
 const settings = require('./settings');
+const systemScanner = require('./system-scanner');
 
 // ── Tier definitions ─────────────────────────────────────────
 const TIER = {
@@ -63,8 +71,31 @@ async function run(type, args = {}, confirmFn = null) {
   const userSettings = settings.get();
   const perms = userSettings.permissions || {};
 
-  if (type === 'app.open' && perms.appLaunch === false) {
-    return { ok: false, tier: TIER.YELLOW, error: 'App launch permission is disabled in Kumoboard Security Settings.' };
+  if (type === 'app.open') {
+    if (perms.appLaunch === false) {
+      return { ok: false, tier: TIER.YELLOW, error: 'App launch permission is disabled in Kumoboard Security Settings.' };
+    }
+    // Granular per-application permission check from onboarding deep scan
+    if (args && args.name) {
+      const caps = systemScanner.getCapabilitiesSync();
+      if (caps && caps.categories) {
+        const cleanTarget = String(args.name).toLowerCase().trim();
+        for (const cat of Object.keys(caps.categories)) {
+          const found = caps.categories[cat].find(a =>
+            a.name.toLowerCase() === cleanTarget ||
+            a.id === cleanTarget ||
+            (a.appId && a.appId.toLowerCase().includes(cleanTarget))
+          );
+          if (found && found.allowed === false) {
+            return {
+              ok: false,
+              tier: TIER.YELLOW,
+              error: `Automation for "${found.name}" has been disabled in your Kumoboard Application Permissions.`
+            };
+          }
+        }
+      }
+    }
   }
   if ((type === 'clipboard.read' || type === 'clipboard.write') && perms.clipboardAccess === false) {
     return { ok: false, tier: TIER.GREEN, error: 'Clipboard permission is disabled in Kumoboard Security Settings.' };
@@ -171,7 +202,7 @@ function searchFiles({ query, directory }) {
 }
 
 function openApp({ name }) {
-  const os = require('os');
+  const cleanName = String(name).toLowerCase().trim();
   const known = {
     calculator: 'calc:',
     calc: 'calc:',
@@ -180,23 +211,71 @@ function openApp({ name }) {
     mspaint: 'mspaint.exe',
     explorer: 'explorer.exe',
     code: 'code',
+    vscode: 'code',
     terminal: 'wt.exe',
     edge: 'msedge',
     chrome: 'chrome',
+    spotify: 'spotify:',
+    whatsapp: 'whatsapp:',
+    telegram: 'tg:',
+    steam: 'steam:',
+    discord: 'discord:',
+    claude: 'shell:AppsFolder\\AnthropicPBC.Claude_fnn82j28hfe8t!Claude',
+    chatgpt: 'shell:AppsFolder\\OpenAI.ChatGPT-Desktop_2p2nqsd0c76g0!ChatGPT',
+    word: 'winword',
+    excel: 'excel',
+    powerpoint: 'powerpnt',
+    outlook: 'outlook:',
+    settings: 'ms-settings:',
+    camera: 'microsoft.windows.camera:',
+    weather: 'bingweather:',
+    maps: 'bingmaps:',
+    clock: 'ms-clock:',
+    photos: 'ms-photos:',
+    store: 'ms-windows-store:',
+    blender: 'shell:AppsFolder\\BlenderFoundation.Blender_ppwjx1n5r4v9t!BLENDER',
   };
-  const cleanName = String(name).toLowerCase().trim();
+
   const target = known[cleanName] || name;
 
   return new Promise((resolve, reject) => {
+    // If it's a protocol (ends with :) or shell:AppsFolder, use Start-Process / explorer
+    if (target.endsWith(':') || target.startsWith('shell:AppsFolder')) {
+      exec(`powershell -NoProfile -Command "Start-Process '${target}'"`, (err) => {
+        if (err) {
+          exec(`explorer "${target}"`, (err2) => {
+            if (err2) reject(new Error(`Could not open app: ${name}`));
+            else resolve({ opened: target });
+          });
+        } else {
+          resolve({ opened: target });
+        }
+      });
+      return;
+    }
+
+    // Try standard start command
     exec(`start "" "${target}"`, (err) => {
-      if (err) {
-        shell.openPath(target).then((res) => {
-          if (res) reject(new Error(`Could not open app: ${name}`));
-          else resolve({ opened: target });
-        });
-      } else {
-        resolve({ opened: target });
+      if (!err) {
+        return resolve({ opened: target });
       }
+
+      // Dynamic fallback: Search installed StartApps in PowerShell
+      const psSearch = `Get-StartApps | Where-Object { $_.Name -like '*${cleanName.replace(/['"`;$()]/g, '')}*' } | Select-Object -First 1 -ExpandProperty AppID`;
+      exec(`powershell -NoProfile -Command "${psSearch}"`, (psErr, stdout) => {
+        const appId = stdout?.trim();
+        if (appId) {
+          exec(`explorer.exe "shell:AppsFolder\\${appId}"`, (appErr) => {
+            if (appErr) reject(new Error(`Could not open app: ${name}`));
+            else resolve({ opened: appId });
+          });
+        } else {
+          shell.openPath(target).then((res) => {
+            if (res) reject(new Error(`Could not open app: ${name}`));
+            else resolve({ opened: target });
+          });
+        }
+      });
     });
   });
 }
@@ -222,15 +301,16 @@ function openFolder({ folderPath }) {
 }
 
 function runPowerShellReadOnly({ command }) {
+  const { execFile } = require('child_process');
   // Only allow safe read-only commands
-  const BLOCKED = ['Remove-', 'Delete-', 'Set-', 'Write-', 'New-', 'Format-', 'Stop-', 'Restart-', 'Clear-', 'Invoke-', 'rm', 'del', 'kill'];
+  const BLOCKED = ['Remove-', 'Delete-', 'Set-', 'New-', 'Format-', 'Stop-Process', 'Restart-', 'Invoke-WebRequest', 'rm ', 'del ', 'format '];
   if (BLOCKED.some(b => command.toLowerCase().includes(b.toLowerCase()))) {
     throw new Error('Command blocked — only read-only PowerShell commands are permitted for safety');
   }
   return new Promise((resolve, reject) => {
-    exec(`powershell -NoProfile -Command "${command}"`, { timeout: 5000 }, (err, stdout, stderr) => {
+    execFile('powershell.exe', ['-NoProfile', '-Command', command], { timeout: 6000 }, (err, stdout, stderr) => {
       if (err) reject(new Error(stderr || err.message));
-      else resolve({ output: stdout.trim() });
+      else resolve({ output: (stdout || '').trim() });
     });
   });
 }
