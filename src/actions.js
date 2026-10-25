@@ -210,8 +210,8 @@ function searchFiles({ query, directory }) {
 function openApp({ name }) {
   const cleanName = String(name).toLowerCase().trim();
   const known = {
-    calculator: 'calc:',
-    calc: 'calc:',
+    calculator: 'calc.exe',
+    calc: 'calc.exe',
     notepad: 'notepad.exe',
     paint: 'mspaint.exe',
     mspaint: 'mspaint.exe',
