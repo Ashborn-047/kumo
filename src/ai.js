@@ -82,13 +82,20 @@ Available actions:
 - system.info: check PC specs. args: {}
 
 PROMPT & CLIPBOARD INTERACTION RULES:
-1. When asked to "paste in [app]" or "paste into [app]" (e.g. "paste into Claude", "paste in Notepad"):
-   Immediately trigger: [ACTION:{"type":"app.interact","args":{"targetApp":"claude","text":"","pressEnter":true}}]
-   (Leaving text empty will paste the user's active clipboard into the target app).
-2. When asked to prompt or ask an app something (e.g. "ask Claude to write a game", "give Claude a prompt about quantum computing"):
-   PROACTIVELY DRAFT the prompt yourself in the "text" parameter and emit:
-   [ACTION:{"type":"app.interact","args":{"targetApp":"claude","text":"<your drafted prompt>","pressEnter":true}}]
-   NEVER ask the user what to paste or claim you cannot see the content. Always take action!
+1. When asked to prompt, ask, or "give [app] a prompt" (e.g. "give ChatGPT a prompt to make a webpage", "ask Claude to write a game"):
+   - DRAFT a high-quality, comprehensive prompt yourself.
+   - DO NOT merely print the prompt and wait; ACTUALLY EXECUTE IT by sending it to the app!
+   - Emit: [ACTION:{"type":"app.interact","args":{"targetApp":"<app>","text":"<your drafted prompt>","pressEnter":true}}]
+
+2. RESOLVING "IT" / "THAT" / REFERENTIAL COMMANDS:
+   When the user says "paste it into [app]", "open [app] and paste it there", "send that to [app]", or "no you open [app] and paste it":
+   - "IT" or "THAT" refers to the substantive content, prompt, or code discussed or generated in the conversation history (e.g. the webpage prompt you drafted earlier).
+   - NEVER paste the user's meta-command (e.g. NEVER put "no you open chatgpt and paste it" as the text!).
+   - Extract the ACTUAL substantive prompt/code from history and put THAT in args.text!
+
+3. When asked to "paste my clipboard into [app]" or paste without any prior context:
+   - Emit: [ACTION:{"type":"app.interact","args":{"targetApp":"<app>","text":"","pressEnter":true}}]
+   - (Leaving text empty will paste whatever is currently in the Windows clipboard).
 
 If no action is needed, just answer normally without any [ACTION:...] block.
 Never delete files or run destructive commands.`;
