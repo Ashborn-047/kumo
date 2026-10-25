@@ -759,7 +759,7 @@
 </button>
 <button id="btn-launch-companion" class="flex-1 sm:flex-none py-3.5 px-6 rounded-2xl bg-primary hover:bg-primary-container text-on-primary font-headline-sm text-[15px] font-bold shadow-lg shadow-primary/25 hover:shadow-primary/35 transition-all flex items-center justify-center gap-2 active:scale-95 cursor-pointer" onclick="launchCompanion()" type="button">
 <span class="material-symbols-outlined text-[20px]">rocket_launch</span>
-<span>✨ Launch Kumo</span>
+<span>Launch Kumo</span>
 </button>
 </div>
 </div>
@@ -2221,14 +2221,14 @@ async function launchCompanion() {
       launchBtn.disabled = false;
       launchBtn.innerHTML = '<span class="material-symbols-outlined text-[20px] text-emerald-400">check_circle</span><span>Active (Re-launch)</span>';
       setTimeout(() => {
-        launchBtn.innerHTML = '<span class="material-symbols-outlined text-[20px]">rocket_launch</span><span>✨ Re-apply &amp; Launch</span>';
+        launchBtn.innerHTML = '<span class="material-symbols-outlined text-[20px]">rocket_launch</span><span>Re-apply &amp; Launch</span>';
       }, 2000);
     }
   } catch (err) {
     console.error('Launch failed:', err);
     if (launchBtn) {
       launchBtn.disabled = false;
-      launchBtn.innerHTML = '<span class="material-symbols-outlined text-[20px]">rocket_launch</span><span>✨ Launch Kumo</span>';
+      launchBtn.innerHTML = '<span class="material-symbols-outlined text-[20px]">rocket_launch</span><span>Launch Kumo</span>';
     }
   }
 }

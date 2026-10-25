@@ -188,6 +188,7 @@ export class MascotController {
   }
 
   setColor(hex) {
+    if (!hex) return;
     const match = COLOR_HEX_MAP[hex.toLowerCase()];
     if (match) {
       if (this.options.type === 'vector') {
@@ -197,6 +198,8 @@ export class MascotController {
       } else {
         this.setPalette(match.p3d);
       }
+    } else if (this.options.type === 'vector') {
+      this.setPalette(hex);
     }
   }
 

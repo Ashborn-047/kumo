@@ -3,6 +3,7 @@
 // Dynamic SVG companion engine with animated mood states:
 // idle, speaking, listening, happy, thinking.
 // Supports: Kumo Cloud, Cotton Cloud, Mochi Droplet, and Kubo Bot.
+// Uses resilient self-contained styling (works without Tailwind).
 // ─────────────────────────────────────────────────────────────
 
 export const VECTOR_PALETTES = {
@@ -19,7 +20,12 @@ export function getVectorPalette(val) {
     if (VECTOR_PALETTES[lower]) return VECTOR_PALETTES[lower];
     for (const k in VECTOR_PALETTES) {
       const p = VECTOR_PALETTES[k];
-      if (p.tint.toLowerCase() === lower || p.main.toLowerCase() === lower || p.name.toLowerCase() === lower) {
+      if (
+        lower.includes(k) ||
+        lower.includes(p.name.toLowerCase()) ||
+        p.tint.toLowerCase() === lower ||
+        p.main.toLowerCase() === lower
+      ) {
         return p;
       }
     }
@@ -66,9 +72,9 @@ function getKumoCloudSvg(mood, pal, blushVal) {
   }
 
   return `
-    <div class="vector-mascot-inner relative flex flex-col items-center select-none w-full h-full justify-center">
-      <div class="w-full h-full max-w-[150px] max-h-[140px] relative ${animClass} transition-transform active:scale-95 duration-150 flex items-center justify-center">
-        <svg class="w-full h-full drop-shadow-[0_8px_16px_${pal.main}45]" fill="none" viewBox="0 0 240 200" xmlns="http://www.w3.org/2000/svg">
+    <div class="vector-mascot-inner" style="width:150px; height:150px; display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative; pointer-events:none; user-select:none;">
+      <div class="vector-mascot-frame ${animClass}" style="width:145px; height:120px; display:flex; align-items:center; justify-content:center; position:relative;">
+        <svg style="width:100%; height:100%; overflow:visible; display:block; filter:drop-shadow(0px 8px 16px ${pal.main}45);" fill="none" viewBox="0 0 240 200" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <linearGradient id="cloudBodyGradOverlay" x1="20" x2="220" y1="20" y2="180" gradientUnits="userSpaceOnUse">
               <stop offset="0%" stop-color="#ffffff"></stop>
@@ -93,7 +99,7 @@ function getKumoCloudSvg(mood, pal, blushVal) {
           ${sparklesSvg}
         </svg>
       </div>
-      <div class="w-28 h-3 rounded-full blur-sm animate-mochi-shadow -mt-1" style="background-color: ${pal.main}35;"></div>
+      <div class="vector-mascot-shadow animate-mochi-shadow" style="width:100px; height:10px; border-radius:9999px; filter:blur(4px); margin-top:-2px; background-color: ${pal.main}35;"></div>
     </div>
   `;
 }
@@ -125,9 +131,9 @@ function getCottonCloudSvg(mood, pal, blushVal) {
   }
 
   return `
-    <div class="vector-mascot-inner relative flex flex-col items-center select-none w-full h-full justify-center">
-      <div class="w-full h-full max-w-[150px] max-h-[140px] relative ${animClass} transition-transform active:scale-95 duration-150 flex items-center justify-center">
-        <svg class="w-full h-full drop-shadow-[0_8px_16px_${pal.main}40]" fill="none" viewBox="0 0 160 120" xmlns="http://www.w3.org/2000/svg">
+    <div class="vector-mascot-inner" style="width:150px; height:150px; display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative; pointer-events:none; user-select:none;">
+      <div class="vector-mascot-frame ${animClass}" style="width:145px; height:120px; display:flex; align-items:center; justify-content:center; position:relative;">
+        <svg style="width:100%; height:100%; overflow:visible; display:block; filter:drop-shadow(0px 8px 16px ${pal.main}40);" fill="none" viewBox="0 0 160 120" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <linearGradient id="cotton_grad_dyn" x1="72" y1="12" x2="72" y2="100" gradientUnits="userSpaceOnUse">
               <stop stop-color="#FFFFFF" />
@@ -143,7 +149,7 @@ function getCottonCloudSvg(mood, pal, blushVal) {
           <path d="${mouthPath}" stroke="#2E3B52" stroke-width="2.5" stroke-linecap="round" fill="${mood === 'happy' || mood === 'speaking' ? '#2E3B52' : 'none'}" />
         </svg>
       </div>
-      <div class="w-28 h-3 rounded-full blur-sm animate-mochi-shadow -mt-1" style="background-color: ${pal.main}30;"></div>
+      <div class="vector-mascot-shadow animate-mochi-shadow" style="width:100px; height:10px; border-radius:9999px; filter:blur(4px); margin-top:-2px; background-color: ${pal.main}30;"></div>
     </div>
   `;
 }
@@ -179,9 +185,9 @@ function getDropletSvg(mood, pal, blushVal) {
   }
 
   return `
-    <div class="vector-mascot-inner relative flex flex-col items-center select-none w-full h-full justify-center">
-      <div class="w-full h-full max-w-[145px] max-h-[140px] relative ${animClass} transition-transform active:scale-95 duration-150 flex items-center justify-center">
-        <svg class="w-full h-full drop-shadow-[0_8px_16px_${pal.main}45]" fill="none" viewBox="0 0 128 116" xmlns="http://www.w3.org/2000/svg">
+    <div class="vector-mascot-inner" style="width:150px; height:150px; display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative; pointer-events:none; user-select:none;">
+      <div class="vector-mascot-frame ${animClass}" style="width:145px; height:120px; display:flex; align-items:center; justify-content:center; position:relative;">
+        <svg style="width:100%; height:100%; overflow:visible; display:block; filter:drop-shadow(0px 8px 16px ${pal.main}45);" fill="none" viewBox="0 0 128 116" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <linearGradient id="mochi_drop_dyn" x1="64" y1="6" x2="64" y2="108" gradientUnits="userSpaceOnUse">
               <stop stop-color="${pal.tint}" />
@@ -203,7 +209,7 @@ function getDropletSvg(mood, pal, blushVal) {
           <ellipse cx="88" cy="80" rx="5" ry="3" fill="#ff7e67" opacity="${blushOpacity}" />
         </svg>
       </div>
-      <div class="w-28 h-3 rounded-full blur-sm animate-mochi-shadow -mt-1" style="background-color: ${pal.main}35;"></div>
+      <div class="vector-mascot-shadow animate-mochi-shadow" style="width:100px; height:10px; border-radius:9999px; filter:blur(4px); margin-top:-2px; background-color: ${pal.main}35;"></div>
     </div>
   `;
 }
@@ -246,9 +252,9 @@ function getKuboBotSvg(mood, pal, blushVal) {
   }
 
   return `
-    <div class="vector-mascot-inner relative flex flex-col items-center select-none w-full h-full justify-center">
-      <div class="w-full h-full max-w-[145px] max-h-[140px] relative ${animClass} transition-transform active:scale-95 duration-150 flex items-center justify-center">
-        <svg class="w-full h-full drop-shadow-[0_8px_16px_${pal.main}40]" fill="none" viewBox="0 0 130 140" xmlns="http://www.w3.org/2000/svg">
+    <div class="vector-mascot-inner" style="width:150px; height:150px; display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative; pointer-events:none; user-select:none;">
+      <div class="vector-mascot-frame ${animClass}" style="width:145px; height:120px; display:flex; align-items:center; justify-content:center; position:relative;">
+        <svg style="width:100%; height:100%; overflow:visible; display:block; filter:drop-shadow(0px 8px 16px ${pal.main}40);" fill="none" viewBox="0 0 130 140" xmlns="http://www.w3.org/2000/svg">
           <rect x="62" y="14" width="6" height="24" rx="3" fill="#525F77" />
           <circle cx="65" cy="12" r="10" fill="${pal.main}" opacity="0.45" />
           <circle cx="65" cy="12" r="6" fill="${pal.main}" stroke="#FFFFFF" stroke-width="2" />
@@ -261,7 +267,7 @@ function getKuboBotSvg(mood, pal, blushVal) {
           <text x="70" y="113" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="600" fill="#8A92A6" letter-spacing="1">KUBO-04</text>
         </svg>
       </div>
-      <div class="w-28 h-3 rounded-full blur-sm animate-mochi-shadow -mt-1" style="background-color: ${pal.main}30;"></div>
+      <div class="vector-mascot-shadow animate-mochi-shadow" style="width:100px; height:10px; border-radius:9999px; filter:blur(4px); margin-top:-2px; background-color: ${pal.main}30;"></div>
     </div>
   `;
 }

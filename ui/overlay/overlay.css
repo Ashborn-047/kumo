@@ -157,12 +157,52 @@ html, body {
 }
 
 .goo-vector-mount {
-  width: 100%;
-  height: 100%;
+  width: 160px;
+  height: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+.vector-mascot-inner {
+  width: 150px;
+  height: 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  pointer-events: none;
+  user-select: none;
+}
+
+.vector-mascot-frame {
+  width: 145px;
+  height: 120px;
   display: flex;
   align-items: center;
   justify-content: center;
-  pointer-events: none;
+  position: relative;
+}
+
+.vector-mascot-frame svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  display: block;
+}
+
+.vector-mascot-shadow {
+  width: 100px;
+  height: 10px;
+  border-radius: 9999px;
+  filter: blur(4px);
+  margin-top: -2px;
 }
 
 /* ── Vector Companion Keyframes ───────────────────────────── */
