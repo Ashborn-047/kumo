@@ -742,12 +742,18 @@
 </div>
 <!-- Step 4 Final Dedicated Action Bar -->
 <div class="pt-3 border-t border-surface-container flex flex-col sm:flex-row items-center justify-between gap-3">
-<button class="w-full sm:w-auto py-2.5 px-4 rounded-xl border border-outline-variant/60 text-secondary hover:text-on-surface font-label-md text-label-md transition-colors flex items-center justify-center gap-1.5" onclick="goToStep(3)" type="button">
-<span class="material-symbols-outlined text-[16px]">arrow_back</span>
-<span>Back to Persona</span>
-</button>
+<div class="flex items-center gap-3 w-full sm:w-auto">
+  <button class="w-full sm:w-auto py-2.5 px-4 rounded-xl border border-outline-variant/60 text-secondary hover:text-on-surface font-label-md text-label-md transition-colors flex items-center justify-center gap-1.5 cursor-pointer" onclick="goToStep(3)" type="button">
+    <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+    <span>Back to Persona</span>
+  </button>
+  <label class="hidden sm:inline-flex items-center gap-2 text-secondary hover:text-on-surface text-[12px] font-medium cursor-pointer select-none">
+    <input type="checkbox" id="keepStudioOpenCheck" class="w-4 h-4 rounded text-primary focus:ring-primary accent-primary" checked>
+    <span>Keep Studio open (Dev mode)</span>
+  </label>
+</div>
 <div class="flex items-center gap-2.5 w-full sm:w-auto">
-<button class="flex-1 sm:flex-none py-3 px-4 rounded-2xl bg-surface-container-low hover:bg-surface-container text-secondary hover:text-on-surface border border-outline-variant/50 font-body-md text-body-md font-semibold transition-all flex items-center justify-center gap-1.5 active:scale-95" onclick="triggerSpeechBubblePreview()" type="button">
+<button class="flex-1 sm:flex-none py-3 px-4 rounded-2xl bg-surface-container-low hover:bg-surface-container text-secondary hover:text-on-surface border border-outline-variant/50 font-body-md text-body-md font-semibold transition-all flex items-center justify-center gap-1.5 active:scale-95 cursor-pointer" onclick="triggerSpeechBubblePreview()" type="button">
 <span class="material-symbols-outlined text-[18px]">volume_up</span>
 <span>Test Speech</span>
 </button>
@@ -2178,21 +2184,25 @@ function resetStageView() {
 
 async function launchCompanion() {
   const launchBtn = document.getElementById('btn-launch-companion');
+  const keepOpen = document.getElementById('keepStudioOpenCheck')?.checked ?? true;
+
   if (launchBtn) {
     launchBtn.disabled = true;
     launchBtn.innerHTML = '<span class="material-symbols-outlined text-[20px] animate-spin">progress_activity</span><span>Launching Kumo…</span>';
   }
 
   const keyVal = document.getElementById('apiKeyInput')?.value?.trim() || '';
+  const mascotInfo = MASCOT_PREVIEWS[selectedEngineKey] || { type: 'vector' };
   const launchConfig = {
     apiKey: keyVal,
     firstRun: false,
-    avatarType: MASCOT_PREVIEWS[selectedEngineKey]?.type === '2d' ? '2d' : '3d',
-    engine: selectedEngineKey,
-    style3d: MASCOT_PREVIEWS[selectedEngineKey]?.geometryMode || 'voxel',
+    avatarType: mascotInfo.type, // 'vector' | '3d' | '2d'
+    engine: selectedEngineKey, // 'kumo', 'cotton', 'droplet', 'kubo', 'voxel3d', 'gel3d', 'pixel2d'
+    style3d: mascotInfo.geometryMode || 'voxel',
     palette: selectedPaletteName,
     color: selectedPaletteHex,
     blush: currentBlushVal / 100,
+    keepOpen: keepOpen,
   };
 
   try {
@@ -2202,7 +2212,17 @@ async function launchCompanion() {
       await window.goo?.saveSettings?.(launchConfig);
       window.goo?.showOverlay?.();
       window.goo?.openBoard?.();
-      window.goo?.closeStudio?.();
+      if (!keepOpen) {
+        window.goo?.closeStudio?.();
+      }
+    }
+
+    if (keepOpen && launchBtn) {
+      launchBtn.disabled = false;
+      launchBtn.innerHTML = '<span class="material-symbols-outlined text-[20px] text-emerald-400">check_circle</span><span>Active (Re-launch)</span>';
+      setTimeout(() => {
+        launchBtn.innerHTML = '<span class="material-symbols-outlined text-[20px]">rocket_launch</span><span>✨ Re-apply &amp; Launch</span>';
+      }, 2000);
     }
   } catch (err) {
     console.error('Launch failed:', err);

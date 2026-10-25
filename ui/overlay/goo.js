@@ -37,13 +37,18 @@ function applySettings(cfg) {
   if (!cfg) return;
   currentConfig = { ...currentConfig, ...cfg };
 
-  if (cfg.avatarType) {
+  if (cfg.engine) {
+    mascot.setEngine(cfg.engine);
+  } else if (cfg.avatarType) {
     mascot.setType(cfg.avatarType);
   }
   if (cfg.palette) {
     mascot.setPalette(cfg.palette);
-  } else if (cfg.mascotColor) {
-    mascot.setColor(cfg.mascotColor);
+  } else if (cfg.color || cfg.mascotColor) {
+    mascot.setColor(cfg.color || cfg.mascotColor);
+  }
+  if (typeof cfg.blush === 'number') {
+    mascot.setBlush(cfg.blush);
   }
   if (cfg.style3d) {
     mascot.setGeometryMode(cfg.style3d);

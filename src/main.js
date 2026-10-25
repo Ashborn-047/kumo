@@ -203,7 +203,9 @@ ipcMain.handle('studio:launch', (_, data) => {
   if (!saved.startMinimized) {
     boardManager.openBoardWindow(PRELOAD);
   }
-  studioManager.close();
+  if (!data?.keepOpen) {
+    studioManager.close();
+  }
   return saved;
 });
 
