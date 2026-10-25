@@ -10,13 +10,7 @@ const settings = require('./settings');
 
 // ── Intent patterns for offline brain ────────────────────────
 const INTENT_PATTERNS = [
-  // App launching
-  { pattern: /(?:open|launch|start|run)\s+(.+)/i, action: 'app.open', extract: (m) => ({ name: m[1].trim() }) },
-
-  // File search
-  { pattern: /(?:find|search|look\s+for|locate)\s+(?:file\s+|files?\s+)?(.+)/i, action: 'file.search', extract: (m) => ({ query: m[1].trim() }) },
-
-  // Folder open
+  // Folder open (specific folders)
   { pattern: /(?:open|show)\s+(?:my\s+)?(desktop|downloads|documents|pictures|home)\s*(?:folder)?/i, action: 'folder.open', extract: (m) => ({ folderPath: m[1].toLowerCase() }) },
 
   // URL open
@@ -24,6 +18,9 @@ const INTENT_PATTERNS = [
 
   // Web search
   { pattern: /(?:search|google|look\s+up)\s+(?:for\s+|the\s+web\s+for\s+)?(.+)/i, action: 'url.open', extract: (m) => ({ url: `https://www.google.com/search?q=${encodeURIComponent(m[1].trim())}` }) },
+
+  // File search
+  { pattern: /(?:find|search|look\s+for|locate)\s+(?:file\s+|files?\s+)?(.+)/i, action: 'file.search', extract: (m) => ({ query: m[1].trim() }) },
 
   // Clipboard
   { pattern: /(?:read|show|paste|what(?:'s| is) (?:on|in) (?:my\s+)?)\s*clipboard/i, action: 'clipboard.read', extract: () => ({}) },
@@ -46,6 +43,9 @@ const INTENT_PATTERNS = [
 
   // Process management
   { pattern: /(?:kill|terminate|stop)\s+(?:process|task|app)?\s*([a-zA-Z0-9_\-\.]+)/i, action: 'process.kill', extract: (m) => ({ name: m[1].trim() }) },
+
+  // App launching (general fallback for launch/open/start)
+  { pattern: /(?:open|launch|start|run)\s+(.+)/i, action: 'app.open', extract: (m) => ({ name: m[1].trim() }) },
 ];
 
 // ── Known app name aliases ──────────────────────────────────
