@@ -199,6 +199,8 @@
   </style>
   <!-- Kumo Canonical Design System Tokens -->
   <link rel="stylesheet" href="../../design-system/tokens.css"/>
+  <!-- Three.js r128 for 3D Mascot WebGL Rendering -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body class="bg-[#fbf8fc] bg-dot-matrix text-on-surface antialiased min-h-screen selection:bg-primary-fixed selection:text-on-primary-fixed font-body-md overflow-x-hidden relative flex flex-col justify-between">
 <!-- Ambient Background Lighting / Diffused Pastel Orbs -->
@@ -392,161 +394,167 @@
 </div>
 </div>
 <!-- ================= STEP 2 PANEL: CHOOSE COMPANION ENGINE (ACTIVE VIEW) ================= -->
-<div class="flex flex-col gap-5" id="step-panel-2">
-<div class="flex items-center justify-between pb-1">
-<div class="flex items-center gap-2">
-<span class="material-symbols-outlined text-primary text-[20px]">smart_toy</span>
-<h2 class="text-headline-sm font-headline-sm text-on-surface text-[16px] font-bold">2. Choose Companion Engine</h2>
-</div>
-<span class="font-label-sm text-label-sm text-primary font-semibold bg-primary-fixed px-2.5 py-0.5 rounded-full border border-primary/20">
-              Reactive Shaders Active
-            </span>
-</div>
-<!-- 5 Real Mascot Selection Grid -->
-<div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="engineSelectionGrid">
-<!-- Mascot 1: Interactive Gel Cloud (ACTIVE by default) -->
-<div class="cursor-pointer relative p-3.5 rounded-2xl border-2 border-primary bg-primary-fixed/20 shadow-sm transition-all flex flex-col justify-between mascot-engine-card" id="card-mascot-mochi" data-mascot="mochi" onclick="selectMascot('mochi')">
-  <div class="flex items-start justify-between mb-2">
-    <div class="w-10 h-10 rounded-xl bg-primary text-on-primary flex items-center justify-center shadow-md shadow-primary/25">
-      <span class="material-symbols-outlined text-[22px]">auto_awesome</span>
+<div class="flex flex-col gap-4" id="step-panel-2">
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-1">
+    <div class="flex items-center gap-2">
+      <span class="material-symbols-outlined text-primary text-[20px]">smart_toy</span>
+      <h2 class="text-headline-sm font-headline-sm text-on-surface text-[16px] font-bold">2. Choose Companion Engine</h2>
     </div>
-    <div class="flex items-center gap-1.5 mascot-status-pill" id="pill-mascot-mochi">
-      <span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-primary text-on-primary font-bold">ACTIVE</span>
-      <div class="w-5 h-5 rounded-full bg-primary text-on-primary flex items-center justify-center">
-        <span class="material-symbols-outlined text-[14px]">check</span>
+    <!-- 2D / 3D Category Switcher -->
+    <div class="flex items-center gap-1 bg-surface-container p-1 rounded-xl border border-outline-variant/30 self-start sm:self-auto">
+      <button type="button" id="filter-btn-all" onclick="filterMascotCategory('all')" class="px-2.5 py-1 rounded-lg text-label-sm font-label-sm font-bold bg-primary text-on-primary shadow-xs transition-all category-filter-btn">
+        All
+      </button>
+      <button type="button" id="filter-btn-3d" onclick="filterMascotCategory('3d')" class="px-2.5 py-1 rounded-lg text-label-sm font-label-sm font-semibold text-secondary hover:text-on-surface transition-all category-filter-btn flex items-center gap-1">
+        <span class="material-symbols-outlined text-[14px]">view_in_ar</span> 3D WebGL
+      </button>
+      <button type="button" id="filter-btn-2d" onclick="filterMascotCategory('2d')" class="px-2.5 py-1 rounded-lg text-label-sm font-label-sm font-semibold text-secondary hover:text-on-surface transition-all category-filter-btn flex items-center gap-1">
+        <span class="material-symbols-outlined text-[14px]">brush</span> 2D Pixel/Vector
+      </button>
+    </div>
+  </div>
+
+  <!-- Horizontal Mascot Carousel Slider -->
+  <div class="relative group/carousel my-1">
+    <!-- Prev Arrow Button -->
+    <button type="button" onclick="scrollMascotCarousel(-1)" class="absolute -left-3 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-surface-container-lowest/90 backdrop-blur-md border border-outline-variant/50 shadow-md flex items-center justify-center text-secondary hover:text-primary hover:border-primary transition-all cursor-pointer opacity-80 hover:opacity-100 hover:scale-105 active:scale-95" title="Previous Companion">
+      <span class="material-symbols-outlined text-[18px]">chevron_left</span>
+    </button>
+    <!-- Next Arrow Button -->
+    <button type="button" onclick="scrollMascotCarousel(1)" class="absolute -right-3 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-surface-container-lowest/90 backdrop-blur-md border border-outline-variant/50 shadow-md flex items-center justify-center text-secondary hover:text-primary hover:border-primary transition-all cursor-pointer opacity-80 hover:opacity-100 hover:scale-105 active:scale-95" title="Next Companion">
+      <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+    </button>
+
+    <!-- Carousel Cards Track -->
+    <div id="mascotCarouselTrack" class="flex gap-3 overflow-x-auto scroll-smooth snap-x snap-mandatory py-2 px-1" style="scrollbar-width: none; -ms-overflow-style: none;">
+
+      <!-- Card 1: 3D Voxel Bot -->
+      <div class="cursor-pointer snap-start shrink-0 w-[240px] sm:w-[260px] relative p-4 rounded-2xl border-2 border-primary bg-primary-fixed/20 shadow-sm transition-all flex flex-col justify-between mascot-engine-card" id="card-mascot-voxel3d" data-mascot="voxel3d" data-category="3d" onclick="selectMascot('voxel3d')">
+        <div class="flex items-start justify-between mb-2">
+          <div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center overflow-hidden p-1 shadow-xs">
+            <img src="../../assets/mascot/3d/voxel-bot-3d.png" alt="3D Voxel Bot" class="w-8 h-8 object-contain [image-rendering:pixelated]"/>
+          </div>
+          <div class="flex items-center gap-1.5 mascot-status-pill" id="pill-mascot-voxel3d">
+            <span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-primary text-on-primary font-bold">ACTIVE</span>
+            <div class="w-5 h-5 rounded-full bg-primary text-on-primary flex items-center justify-center">
+              <span class="material-symbols-outlined text-[14px]">check</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="flex items-center gap-1.5">
+            <h3 class="text-headline-sm font-headline-sm text-[15px] font-bold text-on-surface">3D Voxel Bot (Cube)</h3>
+          </div>
+          <p class="text-body-sm font-body-sm text-secondary mt-1">Chunky isometric 3D voxel cube robot, real 360° drag orbit, reactive smile.</p>
+        </div>
+        <div class="mt-3 pt-2 border-t border-primary/20 flex items-center justify-between text-secondary">
+          <span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-primary-fixed text-primary font-bold">3D WebGL</span>
+          <span class="font-label-sm text-label-sm text-primary font-semibold">360° Orbit</span>
+        </div>
       </div>
-    </div>
-  </div>
-  <div>
-    <h3 class="text-headline-sm font-headline-sm text-[15px] font-bold text-on-surface">Interactive Gel Cloud</h3>
-    <p class="text-body-sm font-body-sm text-secondary mt-0.5">Squishy procedural gelatin companion, reactive blush, organic jiggle physics.</p>
-  </div>
-  <div class="mt-2.5 pt-2 border-t border-primary/20 flex items-center justify-between text-secondary">
-    <span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-[#eadfff] text-primary font-semibold">Live Procedural</span>
-    <span class="font-label-sm text-label-sm text-primary font-semibold">Spring 60fps</span>
-  </div>
-</div>
 
-<!-- Mascot 2: 2D Pixel Cloud (Puff) -->
-<div class="cursor-pointer relative p-3.5 rounded-2xl border border-outline-variant/50 bg-surface-container-lowest hover:border-primary/40 transition-all flex flex-col justify-between mascot-engine-card" id="card-mascot-pixel2d" data-mascot="pixel2d" onclick="selectMascot('pixel2d')">
-  <div class="flex items-start justify-between mb-2">
-    <div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center overflow-hidden p-1 shadow-xs">
-      <img src="../../assets/mascot/2d/pixel-cloud-2d.png" alt="2D Pixel Cloud" class="w-8 h-8 object-contain [image-rendering:pixelated]"/>
-    </div>
-    <div class="flex items-center gap-1.5 mascot-status-pill" id="pill-mascot-pixel2d">
-      <div class="w-5 h-5 rounded-full border-2 border-outline-variant flex items-center justify-center"></div>
-    </div>
-  </div>
-  <div>
-    <h3 class="text-headline-sm font-headline-sm text-[15px] font-semibold text-on-surface">2D Pixel Cloud (Puff)</h3>
-    <p class="text-body-sm font-body-sm text-secondary mt-0.5">Retro dithering 16-bit pixel cloud, blushing cheeks, lightweight footprint.</p>
-  </div>
-  <div class="mt-2.5 pt-2 border-t border-surface-container flex items-center justify-between text-secondary">
-    <span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-surface-container text-secondary">Canvas 2D</span>
-    <span class="font-label-sm text-label-sm text-secondary">&lt; 1% CPU</span>
-  </div>
-</div>
+      <!-- Card 2: 3D Mochi Gel Bot -->
+      <div class="cursor-pointer snap-start shrink-0 w-[240px] sm:w-[260px] relative p-4 rounded-2xl border border-outline-variant/50 bg-surface-container-lowest hover:border-primary/40 transition-all flex flex-col justify-between mascot-engine-card" id="card-mascot-gel3d" data-mascot="gel3d" data-category="3d" onclick="selectMascot('gel3d')">
+        <div class="flex items-start justify-between mb-2">
+          <div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center overflow-hidden p-1 shadow-xs">
+            <img src="../../assets/mascot/3d-mochi-gel/mochi-gel-3d.png" alt="3D Mochi Gel Bot" class="w-8 h-8 object-contain"/>
+          </div>
+          <div class="flex items-center gap-1.5 mascot-status-pill" id="pill-mascot-gel3d">
+            <div class="w-5 h-5 rounded-full border-2 border-outline-variant flex items-center justify-center"></div>
+          </div>
+        </div>
+        <div>
+          <h3 class="text-headline-sm font-headline-sm text-[15px] font-semibold text-on-surface">3D Mochi Gel Bot</h3>
+          <p class="text-body-sm font-body-sm text-secondary mt-1">Purple spherical gelatinous companion, Blinn-Phong specular shader, Fresnel rim.</p>
+        </div>
+        <div class="mt-3 pt-2 border-t border-surface-container flex items-center justify-between text-secondary">
+          <span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-[#eadfff] text-primary font-bold">3D Smooth</span>
+          <span class="font-label-sm text-label-sm text-secondary">Free Shader</span>
+        </div>
+      </div>
 
-<!-- Mascot 3: 3D Voxel Bot -->
-<div class="cursor-pointer relative p-3.5 rounded-2xl border border-outline-variant/50 bg-surface-container-lowest hover:border-primary/40 transition-all flex flex-col justify-between mascot-engine-card" id="card-mascot-voxel3d" data-mascot="voxel3d" onclick="selectMascot('voxel3d')">
-  <div class="flex items-start justify-between mb-2">
-    <div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center overflow-hidden p-1 shadow-xs">
-      <img src="../../assets/mascot/3d/voxel-bot-3d.png" alt="3D Voxel Bot" class="w-8 h-8 object-contain [image-rendering:pixelated]"/>
-    </div>
-    <div class="flex items-center gap-1.5 mascot-status-pill" id="pill-mascot-voxel3d">
-      <div class="w-5 h-5 rounded-full border-2 border-outline-variant flex items-center justify-center"></div>
-    </div>
-  </div>
-  <div>
-    <h3 class="text-headline-sm font-headline-sm text-[15px] font-semibold text-on-surface">3D Voxel Bot (Cube)</h3>
-    <p class="text-body-sm font-body-sm text-secondary mt-0.5">Chunky cyan isometric voxel cube robot, expressive smile, retro aesthetic.</p>
-  </div>
-  <div class="mt-2.5 pt-2 border-t border-surface-container flex items-center justify-between text-secondary">
-    <span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-surface-container text-secondary">3D Voxel</span>
-    <span class="font-label-sm text-label-sm text-secondary">Pixel Shaders</span>
-  </div>
-</div>
+      <!-- Card 3: 2D Pixel Cloud (Puff) -->
+      <div class="cursor-pointer snap-start shrink-0 w-[240px] sm:w-[260px] relative p-4 rounded-2xl border border-outline-variant/50 bg-surface-container-lowest hover:border-primary/40 transition-all flex flex-col justify-between mascot-engine-card" id="card-mascot-pixel2d" data-mascot="pixel2d" data-category="2d" onclick="selectMascot('pixel2d')">
+        <div class="flex items-start justify-between mb-2">
+          <div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center overflow-hidden p-1 shadow-xs">
+            <img src="../../assets/mascot/2d/pixel-cloud-2d.png" alt="2D Pixel Cloud" class="w-8 h-8 object-contain [image-rendering:pixelated]"/>
+          </div>
+          <div class="flex items-center gap-1.5 mascot-status-pill" id="pill-mascot-pixel2d">
+            <div class="w-5 h-5 rounded-full border-2 border-outline-variant flex items-center justify-center"></div>
+          </div>
+        </div>
+        <div>
+          <h3 class="text-headline-sm font-headline-sm text-[15px] font-semibold text-on-surface">2D Pixel Cloud (Puff)</h3>
+          <p class="text-body-sm font-body-sm text-secondary mt-1">Retro 16-bit Bayer dithered 64x64 SDF pixel cloud, cute blushes, lightweight.</p>
+        </div>
+        <div class="mt-3 pt-2 border-t border-surface-container flex items-center justify-between text-secondary">
+          <span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-surface-container text-secondary">Canvas 2D</span>
+          <span class="font-label-sm text-label-sm text-secondary">&lt; 1% CPU</span>
+        </div>
+      </div>
 
-<!-- Mascot 4: 3D Mochi Gel Bot -->
-<div class="cursor-pointer relative p-3.5 rounded-2xl border border-outline-variant/50 bg-surface-container-lowest hover:border-primary/40 transition-all flex flex-col justify-between mascot-engine-card" id="card-mascot-gel3d" data-mascot="gel3d" onclick="selectMascot('gel3d')">
-  <div class="flex items-start justify-between mb-2">
-    <div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center overflow-hidden p-1 shadow-xs">
-      <img src="../../assets/mascot/3d-mochi-gel/mochi-gel-3d.png" alt="3D Mochi Gel Bot" class="w-8 h-8 object-contain"/>
-    </div>
-    <div class="flex items-center gap-1.5 mascot-status-pill" id="pill-mascot-gel3d">
-      <div class="w-5 h-5 rounded-full border-2 border-outline-variant flex items-center justify-center"></div>
-    </div>
-  </div>
-  <div>
-    <h3 class="text-headline-sm font-headline-sm text-[15px] font-semibold text-on-surface">3D Mochi Gel Bot</h3>
-    <p class="text-body-sm font-body-sm text-secondary mt-0.5">Purple spherical organic gelatin buddy, ray-traced lighting, cute smile.</p>
-  </div>
-  <div class="mt-2.5 pt-2 border-t border-surface-container flex items-center justify-between text-secondary">
-    <span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-[#eadfff] text-primary font-semibold">PBR Gel</span>
-    <span class="font-label-sm text-label-sm text-secondary">Smooth 3D</span>
-  </div>
-</div>
+      <!-- Card 4: Cotton Cloud (Puff) -->
+      <div class="cursor-pointer snap-start shrink-0 w-[240px] sm:w-[260px] relative p-4 rounded-2xl border border-outline-variant/50 bg-surface-container-lowest hover:border-primary/40 transition-all flex flex-col justify-between mascot-engine-card" id="card-mascot-cotton" data-mascot="cotton" data-category="2d" onclick="selectMascot('cotton')">
+        <div class="flex items-start justify-between mb-2">
+          <div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center overflow-hidden p-1 shadow-xs">
+            <img src="../../assets/mascot/cotton-cloud/cotton-cloud.png" alt="Cotton Cloud" class="w-8 h-8 object-contain"/>
+          </div>
+          <div class="flex items-center gap-1.5 mascot-status-pill" id="pill-mascot-cotton">
+            <div class="w-5 h-5 rounded-full border-2 border-outline-variant flex items-center justify-center"></div>
+          </div>
+        </div>
+        <div>
+          <h3 class="text-headline-sm font-headline-sm text-[15px] font-semibold text-on-surface">Cotton Cloud</h3>
+          <p class="text-body-sm font-body-sm text-secondary mt-1">Pure vector SVG bezier curves, serene floating aura, gentle companion.</p>
+        </div>
+        <div class="mt-3 pt-2 border-t border-surface-container flex items-center justify-between text-secondary">
+          <span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-surface-container text-secondary">Vector SVG</span>
+          <span class="font-label-sm text-label-sm text-secondary">5 States</span>
+        </div>
+      </div>
 
-<!-- Mascot 5: Cotton Cloud (Stitch) -->
-<div class="cursor-pointer relative p-3.5 rounded-2xl border border-outline-variant/50 bg-surface-container-lowest hover:border-primary/40 transition-all flex flex-col justify-between mascot-engine-card" id="card-mascot-cotton" data-mascot="cotton" onclick="selectMascot('cotton')">
-  <div class="flex items-start justify-between mb-2">
-    <div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center overflow-hidden p-1 shadow-xs">
-      <img src="../../assets/mascot/cotton-cloud/cotton-cloud.png" alt="Cotton Cloud" class="w-8 h-8 object-contain"/>
-    </div>
-    <div class="flex items-center gap-1.5 mascot-status-pill" id="pill-mascot-cotton">
-      <div class="w-5 h-5 rounded-full border-2 border-outline-variant flex items-center justify-center"></div>
-    </div>
-  </div>
-  <div>
-    <h3 class="text-headline-sm font-headline-sm text-[15px] font-semibold text-on-surface">Cotton Cloud (Puff)</h3>
-    <p class="text-body-sm font-body-sm text-secondary mt-0.5">Pure vector SVG bezier curves, serene floating aura, gentle companion.</p>
-  </div>
-  <div class="mt-2.5 pt-2 border-t border-surface-container flex items-center justify-between text-secondary">
-    <span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-surface-container text-secondary">Vector 5-State</span>
-    <span class="font-label-sm text-label-sm text-secondary">Zero CPU</span>
-  </div>
-</div>
+      <!-- Card 5: Kubo Bot (CRT) -->
+      <div class="cursor-pointer snap-start shrink-0 w-[240px] sm:w-[260px] relative p-4 rounded-2xl border border-outline-variant/50 bg-surface-container-lowest hover:border-primary/40 transition-all flex flex-col justify-between mascot-engine-card" id="card-mascot-kubo" data-mascot="kubo" data-category="2d" onclick="selectMascot('kubo')">
+        <div class="flex items-start justify-between mb-2">
+          <div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center overflow-hidden p-1 shadow-xs">
+            <img src="../../assets/mascot/kubo-bot/kubo-bot.png" alt="Kubo Bot" class="w-8 h-8 object-contain"/>
+          </div>
+          <div class="flex items-center gap-1.5 mascot-status-pill" id="pill-mascot-kubo">
+            <div class="w-5 h-5 rounded-full border-2 border-outline-variant flex items-center justify-center"></div>
+          </div>
+        </div>
+        <div>
+          <h3 class="text-headline-sm font-headline-sm text-[15px] font-semibold text-on-surface">Kubo Bot (CRT)</h3>
+          <p class="text-body-sm font-body-sm text-secondary mt-1">Chunky CRT screen robot with equalizer audio mouth and glowing antenna.</p>
+        </div>
+        <div class="mt-3 pt-2 border-t border-surface-container flex items-center justify-between text-secondary">
+          <span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-surface-container text-secondary">CRT Display</span>
+          <span class="font-label-sm text-label-sm text-secondary">Reactive VU</span>
+        </div>
+      </div>
 
-<!-- Mascot 6: Kubo Bot (Stitch) -->
-<div class="cursor-pointer relative p-3.5 rounded-2xl border border-outline-variant/50 bg-surface-container-lowest hover:border-primary/40 transition-all flex flex-col justify-between mascot-engine-card" id="card-mascot-kubo" data-mascot="kubo" onclick="selectMascot('kubo')">
-  <div class="flex items-start justify-between mb-2">
-    <div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center overflow-hidden p-1 shadow-xs">
-      <img src="../../assets/mascot/kubo-bot/kubo-bot.png" alt="Kubo Bot" class="w-8 h-8 object-contain"/>
-    </div>
-    <div class="flex items-center gap-1.5 mascot-status-pill" id="pill-mascot-kubo">
-      <div class="w-5 h-5 rounded-full border-2 border-outline-variant flex items-center justify-center"></div>
-    </div>
-  </div>
-  <div>
-    <h3 class="text-headline-sm font-headline-sm text-[15px] font-semibold text-on-surface">Kubo Bot (CRT)</h3>
-    <p class="text-body-sm font-body-sm text-secondary mt-0.5">Chunky CRT screen robot with equalizer audio mouth and glowing antenna.</p>
-  </div>
-  <div class="mt-2.5 pt-2 border-t border-surface-container flex items-center justify-between text-secondary">
-    <span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-surface-container text-secondary">CRT Display</span>
-    <span class="font-label-sm text-label-sm text-secondary">Reactive VU</span>
-  </div>
-</div>
+      <!-- Card 6: Mochi Droplet -->
+      <div class="cursor-pointer snap-start shrink-0 w-[240px] sm:w-[260px] relative p-4 rounded-2xl border border-outline-variant/50 bg-surface-container-lowest hover:border-primary/40 transition-all flex flex-col justify-between mascot-engine-card" id="card-mascot-droplet" data-mascot="droplet" data-category="2d" onclick="selectMascot('droplet')">
+        <div class="flex items-start justify-between mb-2">
+          <div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center overflow-hidden p-1 shadow-xs">
+            <img src="../../assets/mascot/mochi-droplet/mochi-droplet.png" alt="Mochi Droplet" class="w-8 h-8 object-contain"/>
+          </div>
+          <div class="flex items-center gap-1.5 mascot-status-pill" id="pill-mascot-droplet">
+            <div class="w-5 h-5 rounded-full border-2 border-outline-variant flex items-center justify-center"></div>
+          </div>
+        </div>
+        <div>
+          <h3 class="text-headline-sm font-headline-sm text-[15px] font-semibold text-on-surface">Mochi Droplet</h3>
+          <p class="text-body-sm font-body-sm text-secondary mt-1">Translucent mint aquatic jelly buddy with gloss rim reflection and hydro-viscosity.</p>
+        </div>
+        <div class="mt-3 pt-2 border-t border-surface-container flex items-center justify-between text-secondary">
+          <span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-surface-container text-secondary">Aqua Jelly</span>
+          <span class="font-label-sm text-label-sm text-secondary">Gloss Rim</span>
+        </div>
+      </div>
 
-<!-- Mascot 7: Mochi Droplet (Stitch - Span 2) -->
-<div class="cursor-pointer relative p-3.5 rounded-2xl border border-outline-variant/50 bg-surface-container-lowest hover:border-primary/40 transition-all flex flex-col justify-between mascot-engine-card sm:col-span-2" id="card-mascot-droplet" data-mascot="droplet" onclick="selectMascot('droplet')">
-  <div class="flex items-start justify-between mb-2">
-    <div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center overflow-hidden p-1 shadow-xs">
-      <img src="../../assets/mascot/mochi-droplet/mochi-droplet.png" alt="Mochi Droplet" class="w-8 h-8 object-contain"/>
-    </div>
-    <div class="flex items-center gap-1.5 mascot-status-pill" id="pill-mascot-droplet">
-      <div class="w-5 h-5 rounded-full border-2 border-outline-variant flex items-center justify-center"></div>
     </div>
   </div>
-  <div>
-    <h3 class="text-headline-sm font-headline-sm text-[15px] font-semibold text-on-surface">Mochi Droplet (Aquatic)</h3>
-    <p class="text-body-sm font-body-sm text-secondary mt-0.5">Translucent mint aquatic jelly buddy with gloss rim reflection and water physics.</p>
-  </div>
-  <div class="mt-2.5 pt-2 border-t border-surface-container flex items-center justify-between text-secondary">
-    <span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-surface-container text-secondary">Aqua Jelly</span>
-    <span class="font-label-sm text-label-sm text-secondary">Gloss Shaders</span>
-  </div>
-</div>
-</div>
 <!-- Fluid Jiggle Physics Toggle -->
 <div class="flex items-center justify-between p-3.5 rounded-2xl bg-surface-container-low border border-outline-variant/30">
 <div class="flex items-center gap-3">
@@ -773,60 +781,24 @@
 <!-- Tail of speech bubble -->
 <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-surface-container-lowest border-r border-b border-[#2e3b52]/10 transform rotate-45"></div>
 </div>
-<!-- The 3D Mochi Cloud Creature Artwork (Custom Tactile Geometric SVG) -->
-<div class="relative flex flex-col items-center cursor-pointer group select-none" onclick="pokeCompanion()">
-<!-- Floating Poke Hint Pill -->
-<div class="absolute -top-7 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none bg-inverse-surface text-inverse-on-surface px-2.5 py-0.5 rounded-full font-label-sm text-label-sm flex items-center gap-1 shadow-md">
-<span class="material-symbols-outlined text-[13px]">touch_app</span>
-                Click companion to poke
-              </div>
-<!-- Mochi Vector Geometry with Soft Gradient & Blushing Cheeks -->
-<div class="w-64 h-52 relative animate-mochi transition-transform active:scale-95 duration-150" id="mochiFigure">
-<svg class="w-full h-full drop-shadow-[0_16px_24px_rgba(99,85,216,0.18)]" fill="none" viewbox="0 0 240 200" xmlns="http://www.w3.org/2000/svg">
-<!-- Gradient Definitions -->
-<defs>
-<lineargradient gradientunits="userSpaceOnUse" id="cloudBodyGrad" x1="20" x2="220" y1="20" y2="180">
-<stop offset="0%" stop-color="#ffffff"></stop>
-<stop id="cloudGradMid" offset="40%" stop-color="#eadfff"></stop>
-<stop offset="100%" stop-color="#dcedff"></stop>
-</lineargradient>
-<radialgradient cx="0" cy="0" gradienttransform="translate(70 125) scale(20 12)" gradientunits="userSpaceOnUse" id="blushLeft" r="1">
-<stop offset="0%" stop-color="#ff7e67" stop-opacity="0.75"></stop>
-<stop offset="100%" stop-color="#ff7e67" stop-opacity="0"></stop>
-</radialgradient>
-<radialgradient cx="0" cy="0" gradienttransform="translate(170 125) scale(20 12)" gradientunits="userSpaceOnUse" id="blushRight" r="1">
-<stop offset="0%" stop-color="#ff7e67" stop-opacity="0.75"></stop>
-<stop offset="100%" stop-color="#ff7e67" stop-opacity="0"></stop>
-</radialgradient>
-<lineargradient id="eyeGleam" x1="0" x2="1" y1="0" y2="1">
-<stop offset="0%" stop-color="#ffffff"></stop>
-<stop offset="100%" stop-color="#dfe1f8"></stop>
-</lineargradient>
-</defs>
-<!-- Main Squishy Cloud Body Curves -->
-<path d="M70 170 C40 170 20 145 20 115 C20 85 45 68 70 68 C76 40 105 20 135 22 C165 24 185 45 192 68 C215 70 230 90 230 115 C230 145 210 170 175 170 Z" fill="url(#cloudBodyGrad)" stroke="#ffffff" stroke-width="3"></path>
-<!-- Specular highlight rim on top -->
-<path d="M80 62 C105 32 145 32 170 58" opacity="0.8" stroke="#ffffff" stroke-linecap="round" stroke-width="4"></path>
-<!-- Left Cute Blushing Cheek -->
-<ellipse cx="72" cy="122" fill="url(#blushLeft)" id="blushCircleL" rx="18" ry="11"></ellipse>
-<!-- Right Cute Blushing Cheek -->
-<ellipse cx="168" cy="122" fill="url(#blushRight)" id="blushCircleR" rx="18" ry="11"></ellipse>
-<!-- Left Expressive Eye (Happy curved arc) -->
-<path d="M85 106 C85 96 99 96 99 106" stroke="#171b2b" stroke-linecap="round" stroke-width="4.5"></path>
-<circle cx="89" cy="100" fill="#ffffff" r="1.5"></circle>
-<!-- Right Expressive Eye (Happy curved arc) -->
-<path d="M141 106 C141 96 155 96 155 106" stroke="#171b2b" stroke-linecap="round" stroke-width="4.5"></path>
-<circle cx="145" cy="100" fill="#ffffff" r="1.5"></circle>
-<!-- Cute Smiling Mouth -->
-<path d="M114 116 Q120 126 126 116" stroke="#171b2b" stroke-linecap="round" stroke-width="3.5"></path>
-<!-- Little Thought Sparkle Float -->
-<path d="M198 42 L202 30 L206 42 L218 46 L206 50 L202 62 L198 50 L186 46 Z" fill="#6355d8" opacity="0.85"></path>
-<circle cx="218" cy="28" fill="#ffb4a6" r="2.5"></circle>
-</svg>
+<!-- Unbound 3D & 2D Free-Floating Companion Viewport (No Box Bounds) -->
+<div class="relative w-full h-[320px] flex items-center justify-center select-none" id="stageMascotViewport">
+  <!-- 3D Three.js WebGL Canvas (Full 360° Drag Orbit & Mouse Gaze Tracking) -->
+  <canvas id="bot-canvas" class="w-full h-full block cursor-grab active:cursor-grabbing" style="background: transparent;"></canvas>
+
+  <!-- 2D Pixel Puff Canvas (Active for 2D mode) -->
+  <canvas id="pixel-canvas" width="64" height="64" class="hidden w-56 h-56 block cursor-pointer transition-transform" style="image-rendering: pixelated;"></canvas>
+
+  <!-- Vector SVG Container (Active for vector companions) -->
+  <div id="vector-stage-container" class="hidden w-60 h-60 flex items-center justify-center cursor-pointer"></div>
 </div>
-<!-- Organic Soft Floor Shadow -->
-<div class="w-44 h-5 rounded-full bg-primary/20 blur-md animate-mochi-shadow -mt-3"></div>
-</div>
+
+<!-- Interaction Telemetry Bar -->
+<div class="text-center my-1 z-10">
+  <span id="stageInteractionHint" class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-lowest/90 backdrop-blur-md border border-outline-variant/40 text-label-sm font-label-sm text-secondary shadow-xs">
+    <span class="material-symbols-outlined text-[15px] text-primary">3d_rotation</span>
+    <span id="hintActionText">Drag to rotate 360° • Click to boop • Scroll to zoom</span>
+  </span>
 </div>
 <!-- Bottom Stage Controls Container -->
 <div class="relative z-10 flex flex-col gap-3 bg-surface-container-lowest/80 backdrop-blur-md p-3.5 rounded-2xl border border-white/70 shadow-sm">
@@ -919,457 +891,947 @@
   let currentStep = 1;
   let selectedPaletteHex = '#eadfff';
   let selectedPaletteName = 'Lilac';
-  let selectedEngineName = '3D Mochi Gel Cloud';
-  let selectedEngineKey = 'mochi';
   let currentBlushVal = 75;
 
-  let currentMood = 'idle';
+  // ============================================================
+// COMPLETE 3D & 2D UNIFIED ENGINE (Extracted from Gemini Studio)
+// ============================================================
 
-  function getProceduralSvg(state) {
-    let eyes = `
-      <path d="M85 106 C85 96 99 96 99 106" stroke="#171b2b" stroke-linecap="round" stroke-width="4.5"></path>
-      <circle cx="89" cy="100" fill="#ffffff" r="1.5"></circle>
-      <path d="M141 106 C141 96 155 96 155 106" stroke="#171b2b" stroke-linecap="round" stroke-width="4.5"></path>
-      <circle cx="145" cy="100" fill="#ffffff" r="1.5"></circle>
-    `;
-    let mouth = `<path d="M114 116 Q120 126 126 116" stroke="#171b2b" stroke-linecap="round" stroke-width="3.5"></path>`;
-    let sparkles = `
-      <path d="M198 42 L202 30 L206 42 L218 46 L206 50 L202 62 L198 50 L186 46 Z" fill="#6355d8" opacity="0.85"></path>
-      <circle cx="218" cy="28" fill="#ffb4a6" r="2.5"></circle>
-    `;
+let currentMood = 'idle'; // 'idle' | 'speaking' | 'listening' | 'happy' | 'thinking'
+let selectedEngineKey = 'voxel3d';
+let selectedEngineName = '3D Voxel Bot (Cube)';
 
-    if (state === 'speaking') {
-      mouth = `<ellipse cx="120" cy="120" rx="7" ry="5" fill="#171b2b"/>`;
-    } else if (state === 'thinking') {
-      eyes = `
-        <circle cx="94" cy="98" r="4" fill="#171b2b"/>
-        <circle cx="95.5" cy="96.5" r="1.5" fill="#ffffff"/>
-        <circle cx="150" cy="98" r="4" fill="#171b2b"/>
-        <circle cx="151.5" cy="96.5" r="1.5" fill="#ffffff"/>
-      `;
-      sparkles = `
-        <path d="M198 32 L204 18 L210 32 L224 38 L210 44 L204 58 L198 44 L184 38 Z" fill="#ff7e67" opacity="0.95"></path>
-        <circle cx="228" cy="22" fill="#ffd166" r="3.5"></circle>
-      `;
-    } else if (state === 'happy') {
-      eyes = `
-        <path d="M83 108 Q91 96 99 108" stroke="#171b2b" stroke-width="4.5" stroke-linecap="round" fill="none"/>
-        <path d="M139 108 Q147 96 155 108" stroke="#171b2b" stroke-width="4.5" stroke-linecap="round" fill="none"/>
-      `;
-      mouth = `<path d="M112 115 Q120 128 128 115 Z" fill="#ff7e67" stroke="#171b2b" stroke-width="2.5"/>`;
-    }
+// ------------------------------------------
+// 1. CAROUSEL & CATEGORY FILTER LOGIC
+// ------------------------------------------
+function filterMascotCategory(cat) {
+  const allBtn = document.getElementById('filter-btn-all');
+  const btn3d = document.getElementById('filter-btn-3d');
+  const btn2d = document.getElementById('filter-btn-2d');
 
-    return `<svg class="w-full h-full drop-shadow-[0_16px_24px_rgba(99,85,216,0.18)] ${state === 'happy' ? 'animate-bounce' : (state === 'speaking' ? 'animate-pulse' : 'animate-mochi-float')}" fill="none" viewbox="0 0 240 200" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <lineargradient gradientunits="userSpaceOnUse" id="cloudBodyGrad" x1="20" x2="220" y1="20" y2="180">
-          <stop offset="0%" stop-color="#ffffff"></stop>
-          <stop id="cloudGradMid" offset="40%" stop-color="${selectedPaletteHex || '#eadfff'}"></stop>
-          <stop offset="100%" stop-color="#dcedff"></stop>
-        </lineargradient>
-        <radialgradient cx="0" cy="0" gradienttransform="translate(70 125) scale(20 12)" gradientunits="userSpaceOnUse" id="blushLeft" r="1">
-          <stop offset="0%" stop-color="#ff7e67" stop-opacity="0.75"></stop>
-          <stop offset="100%" stop-color="#ff7e67" stop-opacity="0"></stop>
-        </radialgradient>
-        <radialgradient cx="0" cy="0" gradienttransform="translate(170 125) scale(20 12)" gradientunits="userSpaceOnUse" id="blushRight" r="1">
-          <stop offset="0%" stop-color="#ff7e67" stop-opacity="0.75"></stop>
-          <stop offset="100%" stop-color="#ff7e67" stop-opacity="0"></stop>
-        </radialgradient>
-      </defs>
-      <path d="M70 170 C40 170 20 145 20 115 C20 85 45 68 70 68 C76 40 105 20 135 22 C165 24 185 45 192 68 C215 70 230 90 230 115 C230 145 210 170 175 170 Z" fill="url(#cloudBodyGrad)" stroke="#ffffff" stroke-width="3"></path>
-      <path d="M80 62 C105 32 145 32 170 58" opacity="0.8" stroke="#ffffff" stroke-linecap="round" stroke-width="4"></path>
-      <ellipse cx="72" cy="122" fill="url(#blushLeft)" id="blushCircleL" rx="18" ry="11"></ellipse>
-      <ellipse cx="168" cy="122" fill="url(#blushRight)" id="blushCircleR" rx="18" ry="11"></ellipse>
-      ${eyes}
-      ${mouth}
-      ${sparkles}
-    </svg>`;
+  [allBtn, btn3d, btn2d].forEach(b => {
+    b.className = 'px-2.5 py-1 rounded-lg text-label-sm font-label-sm font-semibold text-secondary hover:text-on-surface transition-all category-filter-btn flex items-center gap-1 cursor-pointer';
+  });
+
+  const activeBtn = cat === '3d' ? btn3d : (cat === '2d' ? btn2d : allBtn);
+  if (activeBtn) {
+    activeBtn.className = 'px-2.5 py-1 rounded-lg text-label-sm font-label-sm font-bold bg-primary text-on-primary shadow-xs transition-all category-filter-btn flex items-center gap-1 cursor-pointer';
   }
 
-  const MASCOT_PREVIEWS = {
-    mochi: {
-      name: 'Interactive Gel Cloud',
-      type: 'procedural',
-      speech: {
-        idle: '“Hi! I am <span class=\"font-bold text-primary\">Kumo</span>, your desktop thinking buddy. Ready to pair-program and ideate together!”',
-        thinking: '“Synthesizing logic flow across workspace buffers... Hold on!”',
-        speaking: '“Reading aloud response at 160 WPM using neural speech engine.”',
-        happy: '“All local checks pass! Ready to build amazing things together!”'
-      },
-      render(st) { return getProceduralSvg(st); }
+  const cards = document.querySelectorAll('.mascot-engine-card');
+  cards.forEach(card => {
+    const cardCat = card.dataset.category;
+    if (cat === 'all' || cardCat === cat) {
+      card.classList.remove('hidden');
+    } else {
+      card.classList.add('hidden');
+    }
+  });
+}
+
+function scrollMascotCarousel(dir) {
+  const track = document.getElementById('mascotCarouselTrack');
+  if (track) {
+    track.scrollBy({ left: dir * 260, behavior: 'smooth' });
+  }
+}
+
+// ------------------------------------------
+// 2. 3D THREE.JS ENGINE (User's Exact Code)
+// ------------------------------------------
+let geometryMode = 'voxel'; // 'voxel' | 'smooth'
+let animSpeed = 1.0;
+let squishIntensity = 1.0;
+let trackMouse = true;
+let showSmileMouth = true;
+
+let bodyHex = '#29b6f6';
+let baseRimHex = '#1976d2';
+let shineHex = '#e1f5fe';
+let eyeHex = '#0f172a';
+let blushHex = '#ff80ab';
+
+let pokeImpulse = 0.0;
+let stateWeights = { normal: 1, animated: 0, listening: 0, happy: 0, thinking: 0 };
+let totalTime = 0;
+
+let isDragging = false;
+let prevMouse = { x: 0, y: 0 };
+let cameraSpherical = { radius: 6.4, theta: 0.0, phi: Math.PI / 2.05 };
+let mouseNormalized = { x: 0, y: 0 };
+
+let scene, camera, renderer;
+let botRoot, slimeBodyGroup, voxelBodyGroup, smoothBodyGroup;
+let faceGroup, leftEyeBlock, rightEyeBlock;
+let leftBlushMesh, rightBlushMesh;
+let mouthGroup, mouthSmileMesh, mouthTalkMesh, mouthThinkDot;
+let auraRingsGroup, particlesGroup, thinkingDotsGroup, glowBackSprite;
+let matBody, matBaseRim, matShine, matEye, matBlush, matSmoothShader;
+
+const SLIME_GRID = [
+  "....BBBB....",
+  "..BBHHBBBB..",
+  ".BBHHBBBBBB.",
+  ".BHBBBBBBBB.",
+  "BBBBBBBBBBBB",
+  "BBBBBBBBBBBB",
+  "BBBBBBBBBBBB",
+  "BBBBBBBBBBBB",
+  "BBBBBBBBBBBB",
+  "DBBBBBBBBBBD",
+  "DDDDDDDDDDDD"
+];
+
+function createSoftGlowTexture(hexColor) {
+  const cvs = document.createElement('canvas');
+  cvs.width = 256; cvs.height = 256;
+  const ctx = cvs.getContext('2d');
+  const grad = ctx.createRadialGradient(128, 128, 10, 128, 128, 120);
+  grad.addColorStop(0, hexColor + '66');
+  grad.addColorStop(0.5, hexColor + '22');
+  grad.addColorStop(1, hexColor + '00');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, 256, 256);
+  return new THREE.CanvasTexture(cvs);
+}
+
+function createSmoothSlimeShader() {
+  return new THREE.ShaderMaterial({
+    uniforms: {
+      uBodyColor: { value: new THREE.Color(bodyHex) },
+      uBaseColor: { value: new THREE.Color(baseRimHex) },
+      uShineColor: { value: new THREE.Color(shineHex) },
+      uLightDir: { value: new THREE.Vector3(-0.45, 0.75, 0.65).normalize() }
     },
-    pixel2d: {
-      name: '2D Pixel Cloud (Puff)',
-      type: '2d',
-      speech: {
-        idle: '“Puff is here! Lightweight 16-bit pixel cloud, floating smoothly by your side.”',
-        thinking: '“Puff is processing thoughts in retro 16-bit dithered pixels…”',
-        speaking: '“Puff is speaking! Chime frequencies active across the audio bus.”',
-        happy: '“Yay! Puff did a joyful hop across your workspace!”'
-      },
-      render(st) {
-        const file = st === 'speaking' ? 'speaking.png' : (st === 'thinking' ? 'thinking.png' : (st === 'happy' ? 'happy.png' : 'idle.png'));
-        const anim = st === 'happy' ? 'animate-bounce' : (st === 'speaking' ? 'animate-pulse' : 'animate-mochi-float');
-        return `<div class="w-full h-full flex items-center justify-center ${anim}"><img src="../../assets/mascot/2d/${file}" alt="2D Pixel Cloud" class="w-52 h-52 object-contain drop-shadow-[0_16px_24px_rgba(99,85,216,0.25)] [image-rendering:pixelated]"/></div>`;
+    vertexShader: `
+      varying vec3 vNormal; varying vec3 vPos;
+      void main() {
+        vNormal = normalize(normalMatrix * normal);
+        vPos = position;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
       }
-    },
-    voxel3d: {
-      name: '3D Voxel Bot (Cube)',
-      type: '3d',
-      speech: {
-        idle: '“Voxel Bot active! Chunky isometric 3D cube ready to assist across your desktop canvas.”',
-        thinking: '“Calculating voxel ray intersections... Thinking routine active!”',
-        speaking: '“Broadcasting telemetry through cube audio synthesizer.”',
-        happy: '“Voxel Bot celebrates! System status green across all modules.”'
-      },
-      render(st) {
-        const file = st === 'speaking' ? 'speaking.png' : (st === 'thinking' ? 'thinking.png' : (st === 'happy' ? 'happy.png' : 'idle.png'));
-        const anim = st === 'happy' ? 'animate-bounce' : (st === 'speaking' ? 'animate-pulse' : 'animate-mochi-float');
-        return `<div class="w-full h-full flex items-center justify-center ${anim}"><img src="../../assets/mascot/3d/${file}" alt="3D Voxel Bot" class="w-52 h-52 object-contain drop-shadow-[0_16px_24px_rgba(46,59,82,0.3)] [image-rendering:pixelated]"/></div>`;
+    `,
+    fragmentShader: `
+      uniform vec3 uBodyColor; uniform vec3 uBaseColor; uniform vec3 uShineColor; uniform vec3 uLightDir;
+      varying vec3 vNormal; varying vec3 vPos;
+      void main() {
+        vec3 n = normalize(vNormal);
+        float baseBand = smoothstep(-0.88, -0.78, vPos.y);
+        vec3 col = mix(uBaseColor, uBodyColor, baseBand);
+        float spec = dot(n, uLightDir);
+        float shineMask = smoothstep(0.68, 0.74, spec) * step(0.15, vPos.y) * step(vPos.x, 0.15);
+        col = mix(col, uShineColor, shineMask * 0.9);
+        float rim = 1.0 - max(dot(n, vec3(0.0, 0.0, 1.0)), 0.0);
+        col = mix(col, uShineColor, smoothstep(0.65, 0.95, rim) * 0.25);
+        gl_FragColor = vec4(col, 1.0);
       }
-    },
-    gel3d: {
-      name: '3D Mochi Gel Bot',
-      type: '3d',
-      speech: {
-        idle: '“Mochi Gel ready! Smooth gelatinous physics companion with reactive specular shading.”',
-        thinking: '“Simulating fluid spring tensors and organic viscosity…”',
-        speaking: '“Vibrating surface ripples to produce acoustic vocal harmonics.”',
-        happy: '“Super squishy happy jiggle! High bounce coefficient enabled.”'
-      },
-      render(st) {
-        const anim = st === 'happy' ? 'animate-bounce' : (st === 'speaking' ? 'animate-pulse' : 'animate-mochi-float');
-        return `<div class="w-full h-full flex items-center justify-center ${anim}"><img src="../../assets/mascot/3d-mochi-gel/mochi-gel-3d.png" alt="3D Mochi Gel Bot" class="w-52 h-52 object-contain drop-shadow-[0_16px_24px_rgba(99,85,216,0.3)]"/></div>`;
-      }
-    },
-    cotton: {
-      name: 'Cotton Cloud (Puff)',
-      type: 'svg',
-      speech: {
-        idle: '“Cotton Cloud is drifting peacefully. Calming presence for focused deep work.”',
-        thinking: '“Floating up into the ideation stratosphere... pondering.”',
-        speaking: '“Whispering thoughts gently through soft cloud aura.”',
-        happy: '“Warm golden sparkles! A joyful breeze passes through.”'
-      },
-      render(st) {
-        const file = st === 'speaking' ? 'speaking.png' : (st === 'thinking' ? 'thinking.png' : (st === 'happy' ? 'happy.png' : 'idle.png'));
-        const anim = st === 'happy' ? 'animate-bounce' : (st === 'speaking' ? 'animate-pulse' : 'animate-mochi-float');
-        return `<div class="w-full h-full flex items-center justify-center ${anim}"><img src="../../assets/mascot/cotton-cloud/${file}" alt="Cotton Cloud" class="w-52 h-52 object-contain drop-shadow-[0_16px_24px_rgba(99,85,216,0.2)]"/></div>`;
-      }
-    },
-    kubo: {
-      name: 'Kubo Bot (CRT)',
-      type: 'svg',
-      speech: {
-        idle: '“KUBO-04 online. Terminal link established on localhost:4429.”',
-        thinking: '“Executing background daemon compilation... Memory optimal.”',
-        speaking: '“Transmitting audio packets through CRT speaker grille.”',
-        happy: '“Success! VU meters pegged at 100% joyful harmony.”'
-      },
-      render(st) {
-        const file = st === 'speaking' ? 'speaking.png' : (st === 'thinking' ? 'thinking.png' : (st === 'happy' ? 'happy.png' : 'idle.png'));
-        const anim = st === 'happy' ? 'animate-bounce' : (st === 'speaking' ? 'animate-pulse' : 'animate-mochi-float');
-        return `<div class="w-full h-full flex items-center justify-center ${anim}"><img src="../../assets/mascot/kubo-bot/${file}" alt="Kubo Bot" class="w-52 h-52 object-contain drop-shadow-[0_16px_24px_rgba(46,59,82,0.3)]"/></div>`;
-      }
-    },
-    droplet: {
-      name: 'Mochi Droplet (Aquatic)',
-      type: 'svg',
-      speech: {
-        idle: '“Mochi Droplet hydrated! Crisp fresh mint essence for your desktop.”',
-        thinking: '“Bubbles of thought rising to the surface... Ideating!”',
-        speaking: '“Rippling calm aquatic voice through the desktop workspace.”',
-        happy: '“Splash! High tide of good energy and clean code.”'
-      },
-      render(st) {
-        const file = st === 'speaking' ? 'speaking.png' : (st === 'thinking' ? 'thinking.png' : (st === 'happy' ? 'happy.png' : 'idle.png'));
-        const anim = st === 'happy' ? 'animate-bounce' : (st === 'speaking' ? 'animate-pulse' : 'animate-mochi-float');
-        return `<div class="w-full h-full flex items-center justify-center ${anim}"><img src="../../assets/mascot/mochi-droplet/${file}" alt="Mochi Droplet" class="w-52 h-52 object-contain drop-shadow-[0_16px_24px_rgba(20,184,166,0.25)]"/></div>`;
+    `
+  });
+}
+
+function buildMochiCloudBot() {
+  botRoot = new THREE.Group();
+  scene.add(botRoot);
+
+  matBody = new THREE.MeshToonMaterial({ color: bodyHex, emissive: bodyHex, emissiveIntensity: 0.22 });
+  matBaseRim = new THREE.MeshToonMaterial({ color: baseRimHex, emissive: baseRimHex, emissiveIntensity: 0.15 });
+  matShine = new THREE.MeshBasicMaterial({ color: shineHex });
+  matEye = new THREE.MeshBasicMaterial({ color: eyeHex });
+  matBlush = new THREE.MeshBasicMaterial({ color: blushHex });
+  matSmoothShader = createSmoothSlimeShader();
+
+  const glowMat = new THREE.SpriteMaterial({
+    map: createSoftGlowTexture(bodyHex),
+    transparent: true,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false
+  });
+  glowBackSprite = new THREE.Sprite(glowMat);
+  glowBackSprite.scale.set(5.2, 5.2, 1);
+  glowBackSprite.position.set(0, 0, -0.5);
+  botRoot.add(glowBackSprite);
+
+  slimeBodyGroup = new THREE.Group();
+  botRoot.add(slimeBodyGroup);
+
+  // Voxel Body
+  voxelBodyGroup = new THREE.Group();
+  slimeBodyGroup.add(voxelBodyGroup);
+  const voxSize = 0.22;
+  const rows = SLIME_GRID.length, cols = SLIME_GRID[0].length;
+  const boxGeo = new THREE.BoxGeometry(voxSize * 1.01, voxSize * 1.01, voxSize * 1.01);
+
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const ch = SLIME_GRID[r][c];
+      if (ch === '.') continue;
+      const distFromEdge = Math.min(c, cols - 1 - c, r, rows - 1 - r);
+      const depthLayers = distFromEdge === 0 ? 5 : (distFromEdge === 1 ? 7 : 8);
+
+      for (let z = -Math.floor(depthLayers / 2); z <= Math.floor(depthLayers / 2); z++) {
+        let mat = matBody;
+        if (ch === 'D') mat = matBaseRim;
+        if (ch === 'H' && z >= Math.floor(depthLayers / 2) - 1) mat = matShine;
+        const vox = new THREE.Mesh(boxGeo, mat);
+        vox.position.set((c - (cols - 1) / 2) * voxSize, ((rows - 1) / 2 - r) * voxSize, z * voxSize);
+        voxelBodyGroup.add(vox);
       }
     }
+  }
+
+  // Smooth Body
+  smoothBodyGroup = new THREE.Group();
+  smoothBodyGroup.visible = false;
+  slimeBodyGroup.add(smoothBodyGroup);
+  const domeGeo = new THREE.SphereGeometry(1.38, 64, 64);
+  const posAttr = domeGeo.attributes.position;
+  const v = new THREE.Vector3();
+  for (let i = 0; i < posAttr.count; i++) {
+    v.fromBufferAttribute(posAttr, i);
+    if (v.y < 0) {
+      v.y = Math.max(-1.05, v.y * 0.82);
+      const flatFactor = Math.min(1.0, Math.abs(v.y / 1.05));
+      v.x *= 1.0 + flatFactor * 0.08; v.z *= 1.0 + flatFactor * 0.08;
+    } else { v.y *= 0.92; }
+    posAttr.setXYZ(i, v.x, v.y, v.z);
+  }
+  domeGeo.computeVertexNormals();
+  smoothBodyGroup.add(new THREE.Mesh(domeGeo, matSmoothShader));
+
+  // Face
+  faceGroup = new THREE.Group();
+  faceGroup.position.set(0, 0, 1.04);
+  slimeBodyGroup.add(faceGroup);
+
+  const eyeGeo = new THREE.BoxGeometry(voxSize * 1.05, voxSize * 2.1, 0.08);
+  leftEyeBlock = new THREE.Mesh(eyeGeo, matEye);
+  leftEyeBlock.position.set(-voxSize * 2.5, -voxSize * 0.5, 0);
+  faceGroup.add(leftEyeBlock);
+
+  rightEyeBlock = new THREE.Mesh(eyeGeo, matEye);
+  rightEyeBlock.position.set(voxSize * 2.5, -voxSize * 0.5, 0);
+  faceGroup.add(rightEyeBlock);
+
+  const blushGeo = new THREE.BoxGeometry(voxSize * 1.15, voxSize * 0.95, 0.07);
+  leftBlushMesh = new THREE.Mesh(blushGeo, matBlush);
+  leftBlushMesh.position.set(-voxSize * 3.55, -voxSize * 1.95, 0);
+  faceGroup.add(leftBlushMesh);
+  rightBlushMesh = new THREE.Mesh(blushGeo, matBlush);
+  rightBlushMesh.position.set(voxSize * 3.55, -voxSize * 1.95, 0);
+  faceGroup.add(rightBlushMesh);
+
+  mouthGroup = new THREE.Group();
+  mouthGroup.position.set(0, -voxSize * 1.85, 0.01);
+  faceGroup.add(mouthGroup);
+
+  mouthSmileMesh = new THREE.Group();
+  const mCenter = new THREE.Mesh(new THREE.BoxGeometry(voxSize * 1.4, voxSize * 0.45, 0.07), matEye);
+  const mLeft = new THREE.Mesh(new THREE.BoxGeometry(voxSize * 0.5, voxSize * 0.45, 0.07), matEye);
+  mLeft.position.set(-voxSize * 0.85, voxSize * 0.35, 0);
+  const mRight = new THREE.Mesh(new THREE.BoxGeometry(voxSize * 0.5, voxSize * 0.45, 0.07), matEye);
+  mRight.position.set(voxSize * 0.85, voxSize * 0.35, 0);
+  mouthSmileMesh.add(mCenter, mLeft, mRight);
+  mouthGroup.add(mouthSmileMesh);
+
+  mouthTalkMesh = new THREE.Group();
+  mouthTalkMesh.visible = false;
+  const talkBack = new THREE.Mesh(new THREE.BoxGeometry(voxSize * 1.8, voxSize * 1.4, 0.06), matEye);
+  const talkTongue = new THREE.Mesh(new THREE.BoxGeometry(voxSize * 1.1, voxSize * 0.65, 0.08), matBlush);
+  talkTongue.position.set(0, -voxSize * 0.35, 0.01);
+  mouthTalkMesh.add(talkBack, talkTongue);
+  mouthGroup.add(mouthTalkMesh);
+
+  mouthThinkDot = new THREE.Mesh(new THREE.BoxGeometry(voxSize * 0.7, voxSize * 0.7, 0.07), matEye);
+  mouthThinkDot.visible = false;
+  mouthGroup.add(mouthThinkDot);
+
+  // Aura & Effects
+  auraRingsGroup = new THREE.Group();
+  botRoot.add(auraRingsGroup);
+  for (let r = 0; r < 3; r++) {
+    const ringGeo = new THREE.RingGeometry(1.55 + r * 0.35, 1.63 + r * 0.35, 32);
+    ringGeo.rotateX(-Math.PI / 2);
+    auraRingsGroup.add(new THREE.Mesh(ringGeo, new THREE.MeshBasicMaterial({ color: bodyHex, side: THREE.DoubleSide, transparent: true, opacity: 0.0 })));
+  }
+
+  particlesGroup = new THREE.Group();
+  botRoot.add(particlesGroup);
+  const miniVoxGeo = new THREE.BoxGeometry(0.16, 0.16, 0.16);
+  for (let i = 0; i < 12; i++) {
+    const pMesh = new THREE.Mesh(miniVoxGeo, new THREE.MeshBasicMaterial({ color: i % 2 === 0 ? shineHex : bodyHex, transparent: true, opacity: 0 }));
+    pMesh.userData = { angle: (i / 12) * Math.PI * 2, radius: 1.75 + (i % 3) * 0.28, yBase: -0.6 + (i % 4) * 0.45, speed: 0.8 + (i % 3) * 0.3 };
+    particlesGroup.add(pMesh);
+  }
+
+  thinkingDotsGroup = new THREE.Group();
+  botRoot.add(thinkingDotsGroup);
+  [0.16, 0.24, 0.34].forEach((sz, idx) => {
+    const dMesh = new THREE.Mesh(new THREE.BoxGeometry(sz, sz, sz), matShine);
+    dMesh.position.copy([new THREE.Vector3(1.35, 0.95, 0.2), new THREE.Vector3(1.72, 1.32, 0.2), new THREE.Vector3(2.18, 1.75, 0.2)][idx]);
+    dMesh.scale.set(0, 0, 0);
+    thinkingDotsGroup.add(dMesh);
+  });
+}
+
+function updateCameraOrbit() {
+  if (!camera) return;
+  const { radius, theta, phi } = cameraSpherical;
+  camera.position.x = radius * Math.sin(phi) * Math.sin(theta);
+  camera.position.y = radius * Math.cos(phi);
+  camera.position.z = radius * Math.sin(phi) * Math.cos(theta);
+  camera.lookAt(0, 0.1, 0);
+}
+
+function triggerPokeSquish() {
+  pokeImpulse = 1.0;
+  const telem = document.getElementById('tensorTelemetry');
+  if (telem) {
+    telem.textContent = "Mass: 0.8kg • Stiffness: 120 • Velocity: 0.55 m/s (Squish)";
+    setTimeout(() => {
+      telem.textContent = "Mass: 0.8kg • Stiffness: 120 • Velocity: 0.00 m/s";
+    }, 1800);
+  }
+}
+
+function set3DGeometryMode(mode) {
+  geometryMode = mode;
+  if (voxelBodyGroup) voxelBodyGroup.visible = (mode === 'voxel');
+  if (smoothBodyGroup) smoothBodyGroup.visible = (mode === 'smooth');
+  if (faceGroup) faceGroup.position.z = mode === 'voxel' ? 1.02 : 1.40;
+  triggerPokeSquish();
+}
+
+function setSlimePalette(mainHex, rimHex, topShineHex) {
+  bodyHex = mainHex; baseRimHex = rimHex; shineHex = topShineHex;
+  if (matBody) { matBody.color.set(mainHex); matBody.emissive.set(mainHex); }
+  if (matBaseRim) { matBaseRim.color.set(rimHex); matBaseRim.emissive.set(rimHex); }
+  if (matShine) matShine.color.set(topShineHex);
+  if (matSmoothShader) {
+    matSmoothShader.uniforms.uBodyColor.value.set(mainHex);
+    matSmoothShader.uniforms.uBaseColor.value.set(rimHex);
+    matSmoothShader.uniforms.uShineColor.value.set(topShineHex);
+  }
+  if (glowBackSprite) {
+    glowBackSprite.material.map = createSoftGlowTexture(mainHex);
+    glowBackSprite.material.needsUpdate = true;
+  }
+  if (auraRingsGroup) {
+    auraRingsGroup.children.forEach(r => r.material.color.set(mainHex));
+  }
+}
+
+function step3DSimulation(dt) {
+  if (!botRoot) return;
+  totalTime += dt * animSpeed;
+  const t = totalTime;
+  if (pokeImpulse > 0) pokeImpulse = Math.max(0, pokeImpulse - dt * 2.8);
+
+  const stateKey = (currentMood === 'speaking' ? 'animated' : (currentMood === 'idle' ? 'normal' : currentMood));
+  ['normal', 'animated', 'listening', 'happy', 'thinking'].forEach(st => {
+    const target = stateKey === st ? 1.0 : 0.0;
+    stateWeights[st] += (target - stateWeights[st]) * Math.min(1.0, dt * 7.0);
+  });
+
+  const wNorm = stateWeights.normal, wAnim = stateWeights.animated, wListen = stateWeights.listening, wHappy = stateWeights.happy, wThink = stateWeights.thinking;
+  const voxSize = 0.22;
+  const lookX = trackMouse ? mouseNormalized.x : Math.sin(t * 0.8) * 0.25;
+  const lookY = trackMouse ? mouseNormalized.y : Math.cos(t * 1.1) * 0.18;
+  const isHappy = currentMood === 'happy' || pokeImpulse > 0.35;
+  const isSpeaking = currentMood === 'speaking';
+  const isListening = currentMood === 'listening';
+  const isThinking = currentMood === 'thinking';
+
+  const blinkCycle = t % 3.8;
+  let blinkScaleY = (blinkCycle > 3.64) ? 0.12 : 1.0;
+  const offsetX = isThinking ? Math.sin(t * 2.0) * 0.08 : lookX * 0.14;
+  const offsetY = isThinking ? 0.10 : lookY * 0.10;
+  const listenTall = isListening ? 1.18 : 1.0;
+
+  if (leftEyeBlock && rightEyeBlock) {
+    leftEyeBlock.position.set(-voxSize * 2.5 + offsetX, -voxSize * 0.5 + offsetY, 0);
+    rightEyeBlock.position.set(voxSize * 2.5 + offsetX, -voxSize * 0.5 + offsetY, 0);
+    leftEyeBlock.scale.set(1.0, blinkScaleY * listenTall, 1.0);
+    rightEyeBlock.scale.set(1.0, blinkScaleY * listenTall, 1.0);
+  }
+
+  if (leftBlushMesh && rightBlushMesh) {
+    leftBlushMesh.position.set(-voxSize * 3.55 + offsetX * 0.85, -voxSize * 1.95 + offsetY * 0.85, 0);
+    rightBlushMesh.position.set(voxSize * 3.55 + offsetX * 0.85, -voxSize * 1.95 + offsetY * 0.85, 0);
+  }
+
+  if (mouthGroup) {
+    mouthSmileMesh.visible = false; mouthTalkMesh.visible = false; mouthThinkDot.visible = false;
+    mouthGroup.position.set(offsetX * 0.9, -voxSize * 1.85 + offsetY * 0.9, 0.01);
+
+    if (isSpeaking) {
+      mouthTalkMesh.visible = true;
+      const openY = 0.35 + Math.abs(Math.sin(t * 13) * Math.cos(t * 6)) * 1.15 * squishIntensity;
+      mouthTalkMesh.scale.set(0.9 + openY * 0.15, openY, 1);
+    } else if (isHappy) {
+      mouthTalkMesh.visible = true;
+      mouthTalkMesh.scale.set(1.1, 1.0 + Math.sin(t * 9) * 0.12, 1);
+    } else if (isThinking) {
+      mouthThinkDot.visible = true;
+    } else if (showSmileMouth) {
+      mouthSmileMesh.visible = true;
+    }
+  }
+
+  const idleSquish = Math.sin(t * 2.6) * 0.045;
+  const speakSquish = Math.sin(t * 10.5) * 0.085 * squishIntensity;
+  const listenStretch = 0.06 + Math.sin(t * 3.5) * 0.025;
+  const happySquish = Math.sin(t * 11.0) * 0.14 * squishIntensity;
+  const pokeSquish = -Math.sin(pokeImpulse * Math.PI * 3) * 0.28 * pokeImpulse;
+
+  const scaleY = 1.0 + idleSquish * wNorm + speakSquish * wAnim + listenStretch * wListen + happySquish * wHappy + pokeSquish;
+  const invXZ = 1.0 / Math.sqrt(Math.max(0.55, scaleY));
+  if (slimeBodyGroup) {
+    slimeBodyGroup.scale.set(invXZ, scaleY, invXZ);
+    const hopY = Math.sin(t * 2.6) * 0.08 * wNorm + Math.abs(Math.sin(t * 5.25)) * 0.22 * wAnim + Math.abs(Math.sin(t * 5.5)) * 0.55 * wHappy;
+    slimeBodyGroup.position.y = (scaleY - 1.0) * 0.85 + hopY;
+  }
+
+  if (auraRingsGroup) {
+    const activeAura = Math.max(wAnim, wListen * 0.9, wHappy * 0.6);
+    auraRingsGroup.children.forEach((ring, idx) => {
+      const prog = ((t * 0.9 + idx * 0.33) % 1.0);
+      const sc = 0.75 + prog * 0.65;
+      ring.scale.set(sc, sc, sc);
+      ring.material.opacity = activeAura * (1.0 - prog) * 0.55;
+    });
+  }
+
+  if (particlesGroup) {
+    const pWeight = Math.max(wAnim * 0.9, wHappy, wListen * 0.4);
+    particlesGroup.children.forEach((p, idx) => {
+      const d = p.userData; const ang = d.angle + t * d.speed;
+      p.position.set(Math.cos(ang) * d.radius, d.yBase + Math.sin(t * 3 + idx) * 0.25, Math.sin(ang) * d.radius);
+      const pulse = 0.5 + 0.5 * Math.sin(t * 6 + idx);
+      p.material.opacity = pWeight * pulse;
+    });
+  }
+
+  if (thinkingDotsGroup) {
+    thinkingDotsGroup.children.forEach((dot, idx) => {
+      const pop = wThink * (0.85 + Math.sin(t * 4.5 - idx * 0.9) * 0.18);
+      dot.scale.set(pop, pop, pop);
+    });
+  }
+}
+
+function initThreeScene() {
+  const canvas = document.getElementById('bot-canvas');
+  const container = document.getElementById('stageMascotViewport');
+  if (!canvas || !container || typeof THREE === 'undefined') return;
+
+  scene = new THREE.Scene();
+  scene.add(new THREE.AmbientLight(0xffffff, 0.9));
+  const dirLight = new THREE.DirectionalLight(0xffffff, 0.6);
+  dirLight.position.set(-3, 6, 5);
+  scene.add(dirLight);
+
+  camera = new THREE.PerspectiveCamera(35, container.clientWidth / container.clientHeight, 0.1, 100);
+  updateCameraOrbit();
+
+  renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true, preserveDrawingBuffer: true });
+  renderer.setSize(container.clientWidth, container.clientHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.setClearColor(0x000000, 0);
+
+  buildMochiCloudBot();
+
+  // Mouse Drag Orbit & Boop handlers
+  canvas.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    prevMouse = { x: e.clientX, y: e.clientY };
+  });
+  window.addEventListener('mouseup', () => { isDragging = false; });
+  window.addEventListener('mousemove', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    mouseNormalized.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    mouseNormalized.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+    if (!isDragging) return;
+    const dx = e.clientX - prevMouse.x, dy = e.clientY - prevMouse.y;
+    prevMouse = { x: e.clientX, y: e.clientY };
+    cameraSpherical.theta -= dx * 0.008;
+    cameraSpherical.phi = Math.max(0.25, Math.min(Math.PI - 0.25, cameraSpherical.phi - dy * 0.008));
+    updateCameraOrbit();
+  });
+  canvas.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    cameraSpherical.radius = Math.max(4.0, Math.min(14.0, cameraSpherical.radius + e.deltaY * 0.005));
+    updateCameraOrbit();
+  }, { passive: false });
+  canvas.addEventListener('click', () => triggerPokeSquish());
+}
+
+// ------------------------------------------
+// 3. 2D PIXEL PUFF CANVAS ENGINE
+// ------------------------------------------
+const N = 64, BASE = 52;
+const puffS = { state: 'idle', tones: [], poke: 0, mx: 0, my: 0, speed: 1 };
+const BY = [0,8,2,10,12,4,14,6,3,11,1,9,15,7,13,5].map(v => (v + .5) / 16);
+
+function hsl2d(h, s, l) {
+  s /= 100; l /= 100;
+  const a = s * Math.min(l, 1 - l);
+  const f = n => { const k = (n + h / 30) % 12; return Math.round(255 * (l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1)))); };
+  return [f(0), f(8), f(4)];
+}
+
+const PAL2D = [['Sky', 205, 85], ['Peach', 350, 85], ['Lilac', 262, 80], ['Mint', 155, 60], ['Butter', 45, 90], ['Cloud', 220, 28]];
+
+function setPuffPalette(i) {
+  const [, h, s] = PAL2D[i] || PAL2D[0];
+  puffS.tones = [60, 74, 83, 90, 97].map(l => hsl2d(h, s, l));
+}
+
+const smin2d = (a, b, k) => { const h = Math.max(k - Math.abs(a - b), 0) / k; return Math.min(a, b) - h * h * k / 4; };
+const circ2d = (x, y, cx, cy, r) => Math.hypot(x - cx, y - cy) - r;
+function puffSdf(x, y, sx, sy, oy) {
+  x = 32 + (x - 32) / sx; y = BASE + (y - oy - BASE) / sy;
+  let d = circ2d(x, y, 32, 40, 14);
+  d = smin2d(d, circ2d(x, y, 20, 43, 9), 6); d = smin2d(d, circ2d(x, y, 44, 43, 9), 6);
+  d = smin2d(d, circ2d(x, y, 28, 30, 10), 6); d = smin2d(d, circ2d(x, y, 40, 32, 8), 6);
+  return Math.max(d, y - BASE);
+}
+
+function renderPuffFrame(t, st, D) {
+  D.fill(0);
+  const tt = t * puffS.speed; let sy = 1 + Math.sin(tt * 2.2) * .035, oy = 0;
+  if (st === 'happy') { const b = Math.abs(Math.sin(tt * 4)); oy = -b * 9; sy = 1 + .08 * b - .16 * Math.pow(1 - b, 6); }
+  if (st === 'listening') sy += .06;
+  sy -= puffS.poke * Math.cos(t * 16) * .28;
+  const sx = 1 / Math.pow(sy, .8), T = puffS.tones.length ? puffS.tones : [[200,220,255],[180,200,250],[160,180,245],[140,160,240],[120,140,235]];
+
+  const put = (x, y, c, a = 255) => {
+    x = Math.round(x); y = Math.round(y);
+    if (x < 0 || y < 0 || x >= N || y >= N) return;
+    const i = (y * N + x) * 4; D[i] = c[0]; D[i + 1] = c[1]; D[i + 2] = c[2]; D[i + 3] = a;
   };
+  const rect = (x, y, w, h, c, a) => { for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) put(x + i, y + j, c, a); };
 
-  function selectMascot(key) {
-    if (!MASCOT_PREVIEWS[key]) return;
-    selectedEngineKey = key;
-    selectedEngineName = MASCOT_PREVIEWS[key].name;
+  const sw = Math.round(13 - oy * .5);
+  for (let x = -sw; x <= sw; x++) put(32 + x, 55, [60, 50, 90], 38);
 
-    // 1. Update Card Styles in Step 2
-    document.querySelectorAll('.mascot-engine-card').forEach(card => {
-      const isSelected = card.dataset.mascot === key;
-      const pill = card.querySelector('.mascot-status-pill');
-      if (isSelected) {
-        card.className = 'cursor-pointer relative p-3.5 rounded-2xl border-2 border-primary bg-primary-fixed/20 shadow-sm transition-all flex flex-col justify-between mascot-engine-card';
-        if (pill) {
-          pill.innerHTML = '<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-primary text-on-primary font-bold">ACTIVE</span><div class="w-5 h-5 rounded-full bg-primary text-on-primary flex items-center justify-center"><span class="material-symbols-outlined text-[14px]">check</span></div>';
-        }
-      } else {
-        card.className = 'cursor-pointer relative p-3.5 rounded-2xl border border-outline-variant/50 bg-surface-container-lowest hover:border-primary/40 transition-all flex flex-col justify-between mascot-engine-card';
-        if (pill) {
-          pill.innerHTML = '<div class="w-5 h-5 rounded-full border-2 border-outline-variant flex items-center justify-center"></div>';
-        }
-      }
-    });
-
-    // 2. Update Interactive Stage on the Right with currentMood
-    const figure = document.getElementById('mochiFigure');
-    if (figure && MASCOT_PREVIEWS[key].render) {
-      figure.innerHTML = MASCOT_PREVIEWS[key].render(currentMood);
-      pokeCompanion();
-    }
-
-    // 3. Update Speech Bubble Greeting
-    const speech = document.getElementById('companionSpeechText');
-    if (speech && MASCOT_PREVIEWS[key].speech) {
-      speech.innerHTML = MASCOT_PREVIEWS[key].speech[currentMood] || MASCOT_PREVIEWS[key].speech.idle;
-    }
-
-    // 4. Update Summary Review
-    const sumEngine = document.getElementById('summaryReviewEngine');
-    if (sumEngine) {
-      sumEngine.textContent = selectedEngineName;
+  const F = (x, y) => puffSdf(x, y, sx, sy, oy);
+  for (let y = 0; y < N; y++) {
+    for (let x = 0; x < N; x++) {
+      const px = x + .5, py = y + .5, d = F(px, py);
+      if (d > 1) continue;
+      if (d > 0) { put(x, y, T[0]); continue; }
+      const gx = F(px + 1, py) - F(px - 1, py), gy = F(px, py + 1) - F(px, py - 1), gl = Math.hypot(gx, gy) || 1;
+      const lit = (gx * -.55 + gy * -.83) / gl, e = Math.max(0, 1 - (-d) / 7);
+      const yy = BASE + (py - oy - BASE) / sy, xx = 32 + (px - 32) / sx;
+      let i = Math.floor((.55 + .5 * lit * e - (yy - 38) * .012) * 4 + (BY[(y & 3) * 4 + (x & 3)] - .5) * 1.2) + 1;
+      i = Math.max(1, Math.min(4, i));
+      if (yy > BASE - 2.5) i = 1;
+      if (((xx - 23) / 3.6) ** 2 + ((yy - 31.5) / 2) ** 2 < 1) i = 4;
+      put(x, y, T[i]);
     }
   }
 
-  function setMood(button, moodName) {
-    currentMood = moodName.toLowerCase();
+  const tr = st === 'thinking'; let lx = tr ? 3 : Math.max(-1, Math.min(1, puffS.mx)) * 3, ly = tr ? -2 : puffS.my * 2;
+  const fx = Math.round(32 + lx * .5), fy = Math.round(BASE + oy - (BASE - 41) * sy), ink = [38, 32, 70], pink = [255, 150, 185];
+  const L = fx - 8 + Math.round(lx * .5), R = fx + 5 + Math.round(lx * .5), blink = (tt % 4.2) < .14;
 
-    // 1. Update Mood Pills UI
-    document.querySelectorAll('.mood-btn').forEach(btn => {
-      btn.className = "px-2.5 py-1 rounded-lg hover:bg-surface-container text-secondary hover:text-on-surface font-label-sm text-label-sm flex items-center gap-1 transition-colors mood-btn cursor-pointer";
-    });
-    button.className = "px-2.5 py-1 rounded-lg bg-primary-fixed text-primary font-label-sm text-label-sm font-bold shadow-xs transition-colors mood-btn flex items-center gap-1 cursor-pointer";
+  if (st === 'happy') {
+    [L - 1, R - 1].forEach(x => { [[0, 2], [1, 1], [2, 0], [3, 1], [4, 2]].forEach(p => put(x + p[0], fy - 1 + p[1] + Math.round(ly), ink)); });
+  } else {
+    const h = blink ? 1 : (st === 'listening' ? 6 : 5), w = st === 'listening' ? 4 : 3;
+    const ty = fy - 2 + Math.round(ly) + Math.round((5 - h) / 2);
+    [L, R].forEach(x => { rect(x, ty, w, h, ink); if (h > 2) put(x, ty, [255, 255, 255]); });
+  }
+  rect(fx - 14, fy + 4, 4, 2, pink, 200); rect(fx + 10, fy + 4, 4, 2, pink, 200);
 
-    // 2. Actively re-render the mascot figure for this state!
-    const figure = document.getElementById('mochiFigure');
-    const mascot = MASCOT_PREVIEWS[selectedEngineKey];
-    if (figure && mascot && mascot.render) {
-      figure.innerHTML = mascot.render(currentMood);
-      pokeCompanion();
+  const my = fy + 5;
+  if (st === 'speaking') {
+    const o = Math.abs(Math.sin(tt * 9) + Math.sin(tt * 5.3)) / 2, h = 1 + Math.round(o * 3);
+    rect(fx - 2, my - 1, 4, h, ink); if (h > 2) rect(fx - 1, my + h - 2, 2, 1, pink);
+  } else if (st === 'happy') {
+    rect(fx - 2, my - 1, 5, 1, ink); rect(fx - 1, my, 3, 2, ink); put(fx, my + 1, pink);
+  } else if (tr) {
+    rect(fx + 1, my, 2, 1, ink);
+  } else {
+    put(fx - 2, my - 1, ink); put(fx + 2, my - 1, ink); rect(fx - 1, my, 3, 1, ink);
+  }
+}
+
+// ------------------------------------------
+// 4. CANONICAL MASCOT PREVIEWS & SPEECH
+// ------------------------------------------
+const MASCOT_PREVIEWS = {
+  voxel3d: {
+    name: '3D Voxel Bot (Cube)',
+    type: '3d',
+    geometryMode: 'voxel',
+    speech: {
+      idle: '“Voxel Bot active! Chunky isometric 3D cube ready to assist across your desktop canvas.”',
+      thinking: '“Calculating voxel ray intersections... Thinking routine active!”',
+      speaking: '“Broadcasting telemetry through cube audio synthesizer.”',
+      happy: '“Voxel Bot celebrates! System status green across all modules.”'
+    }
+  },
+  gel3d: {
+    name: '3D Mochi Gel Bot',
+    type: '3d',
+    geometryMode: 'smooth',
+    speech: {
+      idle: '“Mochi Gel ready! Smooth gelatinous physics companion with reactive specular shading.”',
+      thinking: '“Simulating fluid spring tensors and organic viscosity…”',
+      speaking: '“Vibrating surface ripples to produce acoustic vocal harmonics.”',
+      happy: '“Super squishy happy jiggle! High bounce coefficient enabled.”'
+    }
+  },
+  pixel2d: {
+    name: '2D Pixel Cloud (Puff)',
+    type: '2d',
+    speech: {
+      idle: '“Puff is here! Lightweight 16-bit pixel cloud, floating smoothly by your side.”',
+      thinking: '“Puff is processing thoughts in retro 16-bit dithered pixels…”',
+      speaking: '“Puff is speaking! Chime frequencies active across the audio bus.”',
+      happy: '“Yay! Puff did a joyful hop across your workspace!”'
+    }
+  },
+  cotton: {
+    name: 'Cotton Cloud (Puff)',
+    type: 'vector',
+    assetFolder: 'cotton-cloud',
+    speech: {
+      idle: '“Cotton Cloud is drifting peacefully. Calming presence for focused deep work.”',
+      thinking: '“Floating up into the ideation stratosphere... pondering.”',
+      speaking: '“Whispering thoughts gently through soft cloud aura.”',
+      happy: '“Warm golden sparkles! A joyful breeze passes through.”'
+    }
+  },
+  kubo: {
+    name: 'Kubo Bot (CRT)',
+    type: 'vector',
+    assetFolder: 'kubo-bot',
+    speech: {
+      idle: '“KUBO-04 online. Terminal link established on localhost:4429.”',
+      thinking: '“Executing background daemon compilation... Memory optimal.”',
+      speaking: '“Transmitting audio packets through CRT speaker grille.”',
+      happy: '“Success! VU meters pegged at 100% joyful harmony.”'
+    }
+  },
+  droplet: {
+    name: 'Mochi Droplet (Aquatic)',
+    type: 'vector',
+    assetFolder: 'mochi-droplet',
+    speech: {
+      idle: '“Mochi Droplet hydrated! Crisp fresh mint essence for your desktop.”',
+      thinking: '“Bubbles of thought rising to the surface... Ideating!”',
+      speaking: '“Rippling calm aquatic voice through the desktop workspace.”',
+      happy: '“Splash! High tide of good energy and clean code.”'
+    }
+  }
+};
+
+function selectMascot(key) {
+  if (!MASCOT_PREVIEWS[key]) return;
+  selectedEngineKey = key;
+  selectedEngineName = MASCOT_PREVIEWS[key].name;
+
+  // 1. Update Carousel Cards Styling
+  document.querySelectorAll('.mascot-engine-card').forEach(card => {
+    const isSelected = card.dataset.mascot === key;
+    const pill = card.querySelector('.mascot-status-pill');
+    if (isSelected) {
+      card.className = 'cursor-pointer snap-start shrink-0 w-[240px] sm:w-[260px] relative p-4 rounded-2xl border-2 border-primary bg-primary-fixed/20 shadow-sm transition-all flex flex-col justify-between mascot-engine-card';
+      if (pill) {
+        pill.innerHTML = '<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-primary text-on-primary font-bold">ACTIVE</span><div class="w-5 h-5 rounded-full bg-primary text-on-primary flex items-center justify-center"><span class="material-symbols-outlined text-[14px]">check</span></div>';
+      }
+      card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    } else {
+      card.className = 'cursor-pointer snap-start shrink-0 w-[240px] sm:w-[260px] relative p-4 rounded-2xl border border-outline-variant/50 bg-surface-container-lowest hover:border-primary/40 transition-all flex flex-col justify-between mascot-engine-card';
+      if (pill) {
+        pill.innerHTML = '<div class="w-5 h-5 rounded-full border-2 border-outline-variant flex items-center justify-center"></div>';
+      }
+    }
+  });
+
+  // 2. Switch Stage Viewport between Real 3D Canvas, 2D Canvas, and Vector SVG
+  const botCanvas = document.getElementById('bot-canvas');
+  const pixelCanvas = document.getElementById('pixel-canvas');
+  const vectorContainer = document.getElementById('vector-stage-container');
+  const hintText = document.getElementById('hintActionText');
+  const mascotInfo = MASCOT_PREVIEWS[key];
+
+  if (mascotInfo.type === '3d') {
+    botCanvas.classList.remove('hidden');
+    pixelCanvas.classList.add('hidden');
+    vectorContainer.classList.add('hidden');
+    set3DGeometryMode(mascotInfo.geometryMode);
+    if (mascotInfo.geometryMode === 'smooth') {
+      setSlimePalette('#a78bfa', '#7c3aed', '#ede9fe');
+    } else {
+      setSlimePalette('#29b6f6', '#1976d2', '#e1f5fe');
+    }
+    if (hintText) hintText.textContent = "Drag to rotate 360° • Click to boop • Scroll to zoom";
+  } else if (mascotInfo.type === '2d') {
+    botCanvas.classList.add('hidden');
+    pixelCanvas.classList.remove('hidden');
+    vectorContainer.classList.add('hidden');
+    puffS.state = currentMood;
+    triggerPokeSquish();
+    if (hintText) hintText.textContent = "Click Puff to boop • Move mouse to look";
+  } else {
+    botCanvas.classList.add('hidden');
+    pixelCanvas.classList.add('hidden');
+    vectorContainer.classList.remove('hidden');
+    const folder = mascotInfo.assetFolder;
+    const file = currentMood === 'speaking' ? 'speaking.png' : (currentMood === 'thinking' ? 'thinking.png' : (currentMood === 'happy' ? 'happy.png' : 'idle.png'));
+    const anim = currentMood === 'happy' ? 'animate-bounce' : (currentMood === 'speaking' ? 'animate-pulse' : 'animate-mochi-float');
+    vectorContainer.innerHTML = `<img src="../../assets/mascot/${folder}/${file}" alt="${mascotInfo.name}" class="w-52 h-52 object-contain drop-shadow-[0_16px_24px_rgba(99,85,216,0.2)] ${anim}"/>`;
+    if (hintText) hintText.textContent = "Click companion to poke • Dynamic 5-state animations";
+  }
+
+  // 3. Update Speech Text
+  const speech = document.getElementById('companionSpeechText');
+  if (speech && mascotInfo.speech) {
+    speech.innerHTML = mascotInfo.speech[currentMood] || mascotInfo.speech.idle;
+  }
+
+  // 4. Update Summary Review
+  const sumEngine = document.getElementById('summaryReviewEngine');
+  if (sumEngine) sumEngine.textContent = selectedEngineName;
+}
+
+function setMood(button, moodName) {
+  currentMood = moodName.toLowerCase();
+
+  // 1. Update Mood Pills UI
+  document.querySelectorAll('.mood-btn').forEach(btn => {
+    btn.className = "px-2.5 py-1 rounded-lg hover:bg-surface-container text-secondary hover:text-on-surface font-label-sm text-label-sm flex items-center gap-1 transition-colors mood-btn cursor-pointer";
+  });
+  button.className = "px-2.5 py-1 rounded-lg bg-primary-fixed text-primary font-label-sm text-label-sm font-bold shadow-xs transition-colors mood-btn flex items-center gap-1 cursor-pointer";
+
+  // 2. Update active mascot state
+  const mascotInfo = MASCOT_PREVIEWS[selectedEngineKey];
+  if (mascotInfo) {
+    if (mascotInfo.type === '3d') {
+      triggerPokeSquish();
+    } else if (mascotInfo.type === '2d') {
+      puffS.state = currentMood;
+      puffS.poke = 1;
+    } else if (mascotInfo.type === 'vector') {
+      const vectorContainer = document.getElementById('vector-stage-container');
+      const folder = mascotInfo.assetFolder;
+      const file = currentMood === 'speaking' ? 'speaking.png' : (currentMood === 'thinking' ? 'thinking.png' : (currentMood === 'happy' ? 'happy.png' : 'idle.png'));
+      const anim = currentMood === 'happy' ? 'animate-bounce' : (currentMood === 'speaking' ? 'animate-pulse' : 'animate-mochi-float');
+      if (vectorContainer) {
+        vectorContainer.innerHTML = `<img src="../../assets/mascot/${folder}/${file}" alt="${mascotInfo.name}" class="w-52 h-52 object-contain drop-shadow-[0_16px_24px_rgba(99,85,216,0.2)] ${anim}"/>`;
+      }
     }
 
     // 3. Update speech bubble text
     const speechText = document.getElementById('companionSpeechText');
-    if (speechText && mascot && mascot.speech) {
-      speechText.innerHTML = mascot.speech[currentMood] || mascot.speech.idle;
-    }
-
-    // 4. Update resting smile indicator
-    const smileIndicator = document.querySelector('#stageRightColumn .text-secondary .text-on-surface');
-    if (smileIndicator) {
-      smileIndicator.textContent = moodName === 'Happy' ? 'Joyful Smile' : (moodName === 'Thinking' ? 'Curious Focus' : (moodName === 'Speaking' ? 'Vocal Wave' : 'Resting Smile'));
+    if (speechText && mascotInfo.speech) {
+      speechText.innerHTML = mascotInfo.speech[currentMood] || mascotInfo.speech.idle;
     }
   }
 
-  const stepMeta = {
-    1: { title: "Step 1 of 4 • Connect Brain", short: "1. Connect" },
-    2: { title: "Step 2 of 4 • Engine Selection", short: "2. Engine" },
-    3: { title: "Step 3 of 4 • Persona & Palette", short: "3. Persona" },
-    4: { title: "Step 4 of 4 • Hotkeys & Review", short: "4. Hotkeys" }
-  };
+  // 4. Update Resting Smile indicator
+  const smileIndicator = document.querySelector('#stageRightColumn .text-secondary .text-on-surface');
+  if (smileIndicator) {
+    smileIndicator.textContent = moodName === 'Happy' ? 'Joyful Hop' : (moodName === 'Thinking' ? 'Thought Spark' : (moodName === 'Speaking' ? 'Vocal Wave' : 'Resting Smile'));
+  }
+}
 
-  function updateKeyStatusBadge(val) {
-    const badge = document.getElementById('apiKeyStatusBadge');
-    const dot = document.getElementById('apiKeyStatusDot');
-    const text = document.getElementById('apiKeyStatusText');
-    if (!badge || !dot || !text) return;
+const stepMeta = {
+  1: { title: "Step 1 of 4 • Connect Brain", short: "1. Connect" },
+  2: { title: "Step 2 of 4 • Engine Selection", short: "2. Engine" },
+  3: { title: "Step 3 of 4 • Persona & Palette", short: "3. Persona" },
+  4: { title: "Step 4 of 4 • Hotkeys & Review", short: "4. Hotkeys" }
+};
 
-    if (val && val.trim().length > 6) {
-      dot.className = 'w-1.5 h-1.5 rounded-full bg-emerald-500';
-      text.textContent = 'Key Configured';
-      badge.className = 'flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-label-sm text-label-sm font-semibold';
+function updateKeyStatusBadge(val) {
+  const badge = document.getElementById('apiKeyStatusBadge');
+  const dot = document.getElementById('apiKeyStatusDot');
+  const text = document.getElementById('apiKeyStatusText');
+  if (!badge || !dot || !text) return;
+
+  if (val && val.trim().length > 6) {
+    dot.className = 'w-1.5 h-1.5 rounded-full bg-emerald-500';
+    text.textContent = 'Key Configured';
+    badge.className = 'flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-label-sm text-label-sm font-semibold';
+  } else {
+    dot.className = 'w-1.5 h-1.5 rounded-full bg-amber-500';
+    text.textContent = 'No Key Configured';
+    badge.className = 'flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-surface-container-high text-secondary border border-outline-variant/40 font-label-sm text-label-sm font-semibold';
+  }
+}
+
+function goToStep(stepNumber) {
+  if (stepNumber < 1 || stepNumber > 4) return;
+  currentStep = stepNumber;
+
+  // 1. Update Panels Visibility
+  for (let i = 1; i <= 4; i++) {
+    const panel = document.getElementById(`step-panel-${i}`);
+    if (panel) {
+      if (i === stepNumber) {
+        panel.classList.remove('hidden');
+        panel.classList.add('flex');
+      } else {
+        panel.classList.add('hidden');
+        panel.classList.remove('flex');
+      }
+    }
+  }
+
+  // Stage Column visibility: Hidden ONLY in Step 1, visible from Step 2 onwards
+  const stageCol = document.getElementById('stageRightColumn');
+  const wizardCol = document.getElementById('wizardLeftColumn');
+  if (stageCol && wizardCol) {
+    if (stepNumber === 1) {
+      stageCol.classList.add('hidden');
+      stageCol.classList.remove('flex');
+      wizardCol.className = "lg:col-span-8 lg:col-start-3 bg-surface-container-lowest rounded-3xl border border-[#2e3b52]/10 shadow-[0px_8px_32px_-6px_rgba(46,59,82,0.08),0px_1px_3px_rgba(46,59,82,0.04)] p-6 sm:p-7 flex flex-col gap-6 transition-all";
     } else {
-      dot.className = 'w-1.5 h-1.5 rounded-full bg-amber-500';
-      text.textContent = 'No Key Configured';
-      badge.className = 'flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-surface-container-high text-secondary border border-outline-variant/40 font-label-sm text-label-sm font-semibold';
-    }
-  }
-
-  function goToStep(stepNumber) {
-    if (stepNumber < 1 || stepNumber > 4) return;
-    currentStep = stepNumber;
-
-    // 1. Update Panels Visibility
-    for (let i = 1; i <= 4; i++) {
-      const panel = document.getElementById(`step-panel-${i}`);
-      if (panel) {
-        if (i === stepNumber) {
-          panel.classList.remove('hidden');
-          panel.classList.add('flex');
-        } else {
-          panel.classList.add('hidden');
-          panel.classList.remove('flex');
+      stageCol.classList.remove('hidden');
+      stageCol.classList.add('flex');
+      wizardCol.className = "lg:col-span-7 bg-surface-container-lowest rounded-3xl border border-[#2e3b52]/10 shadow-[0px_8px_32px_-6px_rgba(46,59,82,0.08),0px_1px_3px_rgba(46,59,82,0.04)] p-6 sm:p-7 flex flex-col gap-6 transition-all";
+      // Resize Three.js renderer if container was previously hidden
+      if (renderer && camera) {
+        const container = document.getElementById('stageMascotViewport');
+        if (container && container.clientWidth > 0) {
+          camera.aspect = container.clientWidth / container.clientHeight;
+          camera.updateProjectionMatrix();
+          renderer.setSize(container.clientWidth, container.clientHeight);
         }
       }
     }
+  }
 
-    // Stage Column visibility: Hidden ONLY in Step 1, visible from Step 2 onwards
-    const stageCol = document.getElementById('stageRightColumn');
-    const wizardCol = document.getElementById('wizardLeftColumn');
-    if (stageCol && wizardCol) {
-      if (stepNumber === 1) {
-        stageCol.classList.add('hidden');
-        stageCol.classList.remove('flex');
-        wizardCol.className = "lg:col-span-8 lg:col-start-3 bg-surface-container-lowest rounded-3xl border border-[#2e3b52]/10 shadow-[0px_8px_32px_-6px_rgba(46,59,82,0.08),0px_1px_3px_rgba(46,59,82,0.04)] p-6 sm:p-7 flex flex-col gap-6 transition-all";
-      } else {
-        stageCol.classList.remove('hidden');
-        stageCol.classList.add('flex');
-        wizardCol.className = "lg:col-span-7 bg-surface-container-lowest rounded-3xl border border-[#2e3b52]/10 shadow-[0px_8px_32px_-6px_rgba(46,59,82,0.08),0px_1px_3px_rgba(46,59,82,0.04)] p-6 sm:p-7 flex flex-col gap-6 transition-all";
-      }
-    }
+  // 2. Update Header Badges
+  const badge = document.getElementById('stepCounterBadge');
+  if (badge) badge.textContent = stepMeta[stepNumber].title;
 
-    // 2. Update Header Badges
-    const badge = document.getElementById('stepCounterBadge');
-    if (badge) badge.textContent = stepMeta[stepNumber].title;
+  const headerText = document.getElementById('headerStepText');
+  if (headerText) headerText.textContent = `Step ${stepNumber} of 4 Active`;
 
-    const headerText = document.getElementById('headerStepText');
-    if (headerText) headerText.textContent = `Step ${stepNumber} of 4 Active`;
-
-    // 3. Update Stepper Tabs Styling
-    for (let i = 1; i <= 4; i++) {
-      const btn = document.getElementById(`tab-btn-${i}`);
-      if (!btn) continue;
-
-      btn.className = "flex items-center justify-center gap-1.5 py-2 px-2 rounded-xl transition-all font-label-md text-label-md cursor-pointer";
-
-      if (i === stepNumber) {
-        btn.classList.add('bg-primary', 'text-on-primary', 'shadow-sm', 'font-bold');
-      } else if (i < stepNumber) {
-        btn.classList.add('bg-surface-container-lowest', 'text-on-surface', 'shadow-xs', 'font-semibold');
-      } else {
-        btn.classList.add('text-secondary', 'hover:text-on-surface');
-      }
-    }
-
-    // 4. Update Summary Review when entering Step 4
-    if (stepNumber === 4) {
-      const sumEngine = document.getElementById('summaryReviewEngine');
-      if (sumEngine) sumEngine.textContent = selectedEngineName;
+  // 3. Update Stepper Tabs Styling
+  for (let i = 1; i <= 4; i++) {
+    const btn = document.getElementById(`tab-btn-${i}`);
+    if (!btn) continue;
+    btn.className = "flex items-center justify-center gap-1.5 py-2 px-2 rounded-xl transition-all font-label-md text-label-md cursor-pointer";
+    if (i === stepNumber) {
+      btn.classList.add('bg-primary', 'text-on-primary', 'shadow-sm', 'font-bold');
+    } else if (i < stepNumber) {
+      btn.classList.add('bg-surface-container-lowest', 'text-on-surface', 'shadow-xs', 'font-semibold');
+    } else {
+      btn.classList.add('text-secondary', 'hover:text-on-surface');
     }
   }
 
-  function toggleKeyVisibility() {
-    const input = document.getElementById('apiKeyInput');
-    const icon = document.getElementById('keyToggleIcon');
-    if (input && icon) {
-      if (input.type === 'password') {
-        input.type = 'text';
-        icon.textContent = 'visibility_off';
-      } else {
-        input.type = 'password';
-        icon.textContent = 'visibility';
-      }
+  // 4. Update Summary Review when entering Step 4
+  if (stepNumber === 4) {
+    const sumEngine = document.getElementById('summaryReviewEngine');
+    if (sumEngine) sumEngine.textContent = selectedEngineName;
+  }
+}
+
+function toggleKeyVisibility() {
+  const input = document.getElementById('apiKeyInput');
+  const icon = document.getElementById('keyToggleIcon');
+  if (input && icon) {
+    if (input.type === 'password') {
+      input.type = 'text';
+      icon.textContent = 'visibility_off';
+    } else {
+      input.type = 'password';
+      icon.textContent = 'visibility';
     }
   }
+}
 
-  function selectPalette(btn, hex) {
-    selectedPaletteHex = hex;
-    const nameEl = btn.querySelector('span');
-    if (nameEl) selectedPaletteName = nameEl.textContent.trim();
+function selectPalette(btn, hex) {
+  selectedPaletteHex = hex;
+  const nameEl = btn.querySelector('span');
+  if (nameEl) selectedPaletteName = nameEl.textContent.trim();
 
-    document.querySelectorAll('.palette-swatch').forEach(sw => {
-      sw.classList.remove('border-2', 'border-primary', 'shadow-xs');
-      sw.classList.add('border-outline-variant/40');
-      const inner = sw.querySelector('div');
-      if (inner) inner.innerHTML = '';
-    });
-    btn.classList.remove('border-outline-variant/40');
-    btn.classList.add('border-2', 'border-primary', 'shadow-xs');
-    const inner = btn.querySelector('div');
-    if (inner) inner.innerHTML = '<span class="material-symbols-outlined text-primary text-[15px]">check</span>';
+  document.querySelectorAll('.palette-swatch').forEach(sw => {
+    sw.classList.remove('border-2', 'border-primary', 'shadow-xs');
+    sw.classList.add('border-outline-variant/40');
+    const inner = sw.querySelector('div');
+    if (inner) inner.innerHTML = '';
+  });
+  btn.classList.remove('border-outline-variant/40');
+  btn.classList.add('border-2', 'border-primary', 'shadow-xs');
+  const inner = btn.querySelector('div');
+  if (inner) inner.innerHTML = '<span class="material-symbols-outlined text-primary text-[15px]">check</span>';
 
-    const gradMid = document.getElementById('cloudGradMid');
-    if (gradMid) gradMid.setAttribute('stop-color', hex);
+  // Live update 3D shader colors!
+  if (hex) {
+    setSlimePalette(hex, hex, '#ffffff');
+  }
+}
+
+function updateBlush(val) {
+  currentBlushVal = val;
+  const badge = document.getElementById('blushPercentBadge');
+  if (badge) badge.textContent = `${val}%`;
+  if (leftBlushMesh && rightBlushMesh) {
+    const sc = 0.5 + (val / 100) * 0.7;
+    leftBlushMesh.scale.set(sc, sc, sc);
+    rightBlushMesh.scale.set(sc, sc, sc);
+  }
+}
+
+function setBlush(val) {
+  const slider = document.getElementById('blushRange');
+  if (slider) slider.value = val;
+  updateBlush(val);
+}
+
+function pokeCompanion() {
+  triggerPokeSquish();
+}
+
+function resetStageView() {
+  cameraSpherical = { radius: 6.4, theta: 0, phi: Math.PI / 2.05 };
+  updateCameraOrbit();
+  triggerPokeSquish();
+}
+
+async function launchCompanion() {
+  const launchBtn = document.getElementById('btn-launch-companion');
+  if (launchBtn) {
+    launchBtn.disabled = true;
+    launchBtn.innerHTML = '<span class="material-symbols-outlined text-[20px] animate-spin">progress_activity</span><span>Launching Kumo…</span>';
   }
 
-  function updateBlush(val) {
-    currentBlushVal = val;
-    const badge = document.getElementById('blushPercentBadge');
-    if (badge) badge.textContent = `${val}%`;
+  const keyVal = document.getElementById('apiKeyInput')?.value?.trim() || '';
+  const launchConfig = {
+    apiKey: keyVal,
+    firstRun: false,
+    avatarType: MASCOT_PREVIEWS[selectedEngineKey]?.type === '2d' ? '2d' : '3d',
+    engine: selectedEngineKey,
+    style3d: MASCOT_PREVIEWS[selectedEngineKey]?.geometryMode || 'voxel',
+    palette: selectedPaletteName,
+    color: selectedPaletteHex,
+    blush: currentBlushVal / 100,
+  };
 
-    const l = document.getElementById('blushCircleL');
-    const r = document.getElementById('blushCircleR');
-    const opacity = (val / 100).toFixed(2);
-    if (l) l.style.opacity = opacity;
-    if (r) r.style.opacity = opacity;
-  }
-
-  function setBlush(val) {
-    const slider = document.getElementById('blushRange');
-    if (slider) slider.value = val;
-    updateBlush(val);
-  }
-
-  function pokeCompanion() {
-    const figure = document.getElementById('mochiFigure');
-    const telem = document.getElementById('tensorTelemetry');
-    if (figure) {
-      figure.style.transform = "scale(1.15, 0.85)";
-      setTimeout(() => {
-        figure.style.transform = "scale(0.92, 1.08)";
-        setTimeout(() => {
-          figure.style.transform = "";
-        }, 180);
-      }, 150);
+  try {
+    if (window.goo?.launchCompanion) {
+      await window.goo.launchCompanion(launchConfig);
+    } else {
+      await window.goo?.saveSettings?.(launchConfig);
+      window.goo?.showOverlay?.();
+      window.goo?.openBoard?.();
+      window.goo?.closeStudio?.();
     }
-    if (telem) {
-      telem.textContent = "Mass: 0.8kg • Stiffness: 120 • Velocity: 0.42 m/s (Damping)";
-      setTimeout(() => {
-        telem.textContent = "Mass: 0.8kg • Stiffness: 120 • Velocity: 0.00 m/s";
-      }, 1800);
-    }
-  }
-
-  function triggerSpeechBubblePreview() {
-    const bubble = document.getElementById('companionSpeechBubble');
-    if (bubble) {
-      bubble.classList.remove('animate-speech');
-      void bubble.offsetWidth;
-      bubble.classList.add('animate-speech');
-    }
-    pokeCompanion();
-  }
-
-  function resetStageView() {
-    pokeCompanion();
-  }
-
-  async function launchCompanion() {
-    const launchBtn = document.getElementById('btn-launch-companion');
+  } catch (err) {
+    console.error('Launch failed:', err);
     if (launchBtn) {
-      launchBtn.disabled = true;
-      launchBtn.innerHTML = '<span class="material-symbols-outlined text-[20px] animate-spin">progress_activity</span><span>Launching Kumo…</span>';
-    }
-
-    const keyVal = document.getElementById('apiKeyInput')?.value?.trim() || '';
-    const checkedEngine = document.querySelector('input[name="companion_engine_choice"]:checked')?.value || 'mochi';
-
-    const launchConfig = {
-      apiKey: keyVal,
-      firstRun: false,
-      avatarType: checkedEngine === 'puff' ? '2d' : '3d',
-      engine: checkedEngine,
-      palette: selectedPaletteName,
-      color: selectedPaletteHex,
-      blush: currentBlushVal / 100,
-    };
-
-    try {
-      if (window.goo?.launchCompanion) {
-        await window.goo.launchCompanion(launchConfig);
-      } else {
-        await window.goo?.saveSettings?.(launchConfig);
-        window.goo?.showOverlay?.();
-        window.goo?.openBoard?.();
-        window.goo?.closeStudio?.();
-      }
-    } catch (err) {
-      console.error('Launch failed:', err);
-      if (launchBtn) {
-        launchBtn.disabled = false;
-        launchBtn.innerHTML = '<span class="material-symbols-outlined text-[20px]">rocket_launch</span><span>✨ Launch Kumo</span>';
-      }
+      launchBtn.disabled = false;
+      launchBtn.innerHTML = '<span class="material-symbols-outlined text-[20px]">rocket_launch</span><span>✨ Launch Kumo</span>';
     }
   }
+}
 
   document.addEventListener('DOMContentLoaded', async () => {
     // 1. Ensure Step 1 is active on initial open
@@ -1401,6 +1863,43 @@
         updateKeyStatusBadge(e.target.value);
       });
     }
+
+    
+    // 5. Initialize Real 3D Scene and 2D Unified Animation Loop
+    initThreeScene();
+    setPuffPalette(0);
+
+    const pCanvas = document.getElementById('pixel-canvas');
+    if (pCanvas) {
+      const pCtx = pCanvas.getContext('2d');
+      const pImg = pCtx.createImageData(N, N);
+      pCanvas.addEventListener('pointerdown', () => { puffS.poke = 1; });
+      window.addEventListener('pointermove', e => {
+        puffS.mx = (e.clientX / innerWidth - .5) * 2;
+        puffS.my = (e.clientY / innerHeight - .5) * 2;
+      });
+
+      let lastTime = performance.now();
+      function studioLoop(now) {
+        const dt = Math.min(.05, (now - lastTime) / 1000);
+        lastTime = now;
+
+        const currentMascot = MASCOT_PREVIEWS[selectedEngineKey];
+        if (currentMascot && currentMascot.type === '3d' && renderer && scene && camera) {
+          step3DSimulation(dt);
+          renderer.render(scene, camera);
+        } else if (currentMascot && currentMascot.type === '2d') {
+          puffS.poke *= Math.exp(-dt * 3.2);
+          renderPuffFrame(now / 1000, puffS.state, pImg.data);
+          pCtx.putImageData(pImg, 0, 0);
+        }
+        requestAnimationFrame(studioLoop);
+      }
+      requestAnimationFrame(studioLoop);
+    }
+
+    // Default select 3D Voxel Bot
+    selectMascot('voxel3d');
 
     // 4. Provider switchers
     const providerBtns = document.querySelectorAll('.provider-choice');

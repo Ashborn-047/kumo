@@ -73,23 +73,39 @@ test.describe('Kumo Studio & Onboarding Window', () => {
     await expect(studioPage.locator('text=2. Choose Companion Engine')).toBeVisible();
     await expect(studioPage.locator('#stageRightColumn')).toBeVisible();
 
-    // Verify mascot cards exist and can be selected
+    // Verify 3D WebGL Canvas is active and visible by default on stage
+    const botCanvas = studioPage.locator('#bot-canvas');
+    await expect(botCanvas).toBeVisible();
+
+    // Verify Category Filter buttons work (Filter 2D)
+    await studioPage.locator('#filter-btn-2d').click();
     const pixelCard = studioPage.locator('#card-mascot-pixel2d');
     await expect(pixelCard).toBeVisible();
+
+    // Click 2D Pixel Cloud card
     await pixelCard.click();
     await expect(pixelCard).toHaveClass(/border-primary/);
 
-    // Verify 2D Pixel Cloud is rendered on the stage
-    const figure = studioPage.locator('#mochiFigure');
-    await expect(figure.locator('img')).toHaveAttribute('src', /pixel-cloud-2d\.png|idle\.png/);
+    // Verify 2D Pixel Canvas becomes active on stage
+    const pixelCanvas = studioPage.locator('#pixel-canvas');
+    await expect(pixelCanvas).toBeVisible();
 
-    // Click 'Happy' mood button and verify mascot switches to happy.png
-    await studioPage.locator('.mood-btn', { hasText: 'Happy' }).click();
-    await expect(figure.locator('img')).toHaveAttribute('src', /happy\.png/);
+    // Click 'Happy' mood button and verify mood pill state
+    const happyBtn = studioPage.locator('.mood-btn', { hasText: 'Happy' });
+    await happyBtn.click();
+    await expect(happyBtn).toHaveClass(/bg-primary-fixed/);
 
-    // Click 'Thinking' mood button and verify mascot switches to thinking.png
-    await studioPage.locator('.mood-btn', { hasText: 'Thinking' }).click();
-    await expect(figure.locator('img')).toHaveAttribute('src', /thinking\.png/);
+    // Click 'Thinking' mood button and verify mood pill state
+    const thinkingBtn = studioPage.locator('.mood-btn', { hasText: 'Thinking' });
+    await thinkingBtn.click();
+    await expect(thinkingBtn).toHaveClass(/bg-primary-fixed/);
+
+    // Switch back to 3D category and select 3D Voxel Bot
+    await studioPage.locator('#filter-btn-3d').click();
+    const voxelCard = studioPage.locator('#card-mascot-voxel3d');
+    await expect(voxelCard).toBeVisible();
+    await voxelCard.click();
+    await expect(botCanvas).toBeVisible();
 
     // Step to Step 3 (Persona & Swatches)
     await studioPage.locator('#tab-btn-3').click();
