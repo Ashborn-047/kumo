@@ -64,6 +64,22 @@ const INTENT_PATTERNS = [
   { pattern: /(?:close|quit|exit|kill|terminate|stop|shut\s+down|get\s+rid\s+of|turn\s+off)\s+(?:the\s+)?(?:process|task|app|window|software)?\s*([a-zA-Z0-9_\-\.\s]+)/i, action: 'process.kill', extract: (m) => ({ name: m[1].trim() }) },
 
   // Application interaction & typing / sending prompts / pasting (Claude, ChatGPT, Notepad, etc.)
+  // Compound: "open chatgpt, give it a prompt to make a simple webpage" or "open chatgpt and paste it"
+  {
+    pattern: /(?:open|launch|start)\s+([a-zA-Z0-9_\-\.]+)[,;\s]+(?:and\s+)?(?:give\s+(?:it\s+)?(?:a\s+)?promp?t\s*(?:to\s+|for\s+|about\s+|:\s*)?|(?:send|write|type)\s+(?:a\s+)?promp?t\s*(?:to\s+)?)(.*)/i,
+    action: 'app.interact',
+    extract: (m) => ({ targetApp: m[1].trim(), text: m[2] ? m[2].trim() : '', pressEnter: true })
+  },
+  {
+    pattern: /(?:open|launch|start)\s+([a-zA-Z0-9_\-\.]+)[,;\s]+(?:and\s+)?(?:paste\s+(?:it|that|this|clipboard)?(?:\s+(?:in|into|there))?)/i,
+    action: 'app.interact',
+    extract: (m) => ({ targetApp: m[1].trim(), text: '', pressEnter: true })
+  },
+  {
+    pattern: /(?:give|send)\s+([a-zA-Z0-9_\-\.]+)\s+(?:a\s+)?promp?t\s*(?:to\s+|for\s+|about\s+|:\s*)(.+)/i,
+    action: 'app.interact',
+    extract: (m) => ({ targetApp: m[1].trim(), text: m[2].trim(), pressEnter: true })
+  },
   {
     pattern: /(?:paste|insert)(?:\s+(?:this|my\s+clipboard|clipboard|something))?\s+(?:in|into|to)\s+([a-zA-Z0-9_\-\.]+)/i,
     action: 'app.interact',
@@ -447,10 +463,11 @@ async function route(text, historyOrOnChunk = [], maybeOnChunk = null) {
         for (const actionData of actionList) {
           const res = await actions.run(actionData.type, actionData.args);
           actionResults.push({ type: actionData.type, args: actionData.args, result: res });
-          cleanReply += '\n' + formatActionResult(actionData.type, actionData.args, res);
+          const desc = formatActionResult(actionData.type, actionData.args, res);
+          if (desc) cleanReply += (cleanReply ? '\n' : '') + desc;
         }
 
-        return { ok: true, reply: cleanReply, source: 'online', actionResults };
+        return { ok: true, reply: cleanReply || '✅ Done!', source: 'online', actionResults };
       } catch (e) {
         console.warn('[intent-router] Multi-action parse failed:', e);
       }
@@ -466,8 +483,9 @@ async function route(text, historyOrOnChunk = [], maybeOnChunk = null) {
         const res = await actions.run(actionData.type, actionData.args);
         actionResults.push({ type: actionData.type, args: actionData.args, result: res });
         const extra = formatActionResult(actionData.type, actionData.args, res);
+        const finalReply = (cleanReply ? cleanReply + '\n' + extra : extra).trim();
 
-        return { ok: true, reply: cleanReply + extra, source: 'online', actionResults };
+        return { ok: true, reply: finalReply || '✅ Done!', source: 'online', actionResults };
       } catch (e) {
         console.warn('[intent-router] Single-action parse failed:', e.message);
       }
