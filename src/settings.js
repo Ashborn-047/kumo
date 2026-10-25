@@ -22,6 +22,15 @@ const DEFAULTS = {
   autostart:       false,
   startMinimized:  false,
   studioTheme:     'light',
+  permissions: {
+    appLaunch:         true,
+    clipboardAccess:   true,
+    shellSandbox:      true,
+    fileSearch:        true,
+    systemInfo:        true,
+    browserOpen:       true,
+    autoConfirmYellow: false,
+  },
 };
 
 function get() {

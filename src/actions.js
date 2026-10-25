@@ -10,6 +10,7 @@ const { shell, clipboard } = require('electron');
 const { exec } = require('child_process');
 const path = require('path');
 const fs = require('fs');
+const settings = require('./settings');
 
 // ── Tier definitions ─────────────────────────────────────────
 const TIER = {
@@ -56,6 +57,29 @@ async function run(type, args = {}, confirmFn = null) {
 
   if (!action) {
     return { ok: false, error: `Unknown action: ${type}` };
+  }
+
+  // Check user-configured permissions
+  const userSettings = settings.get();
+  const perms = userSettings.permissions || {};
+
+  if (type === 'app.open' && perms.appLaunch === false) {
+    return { ok: false, tier: TIER.YELLOW, error: 'App launch permission is disabled in Kumoboard Security Settings.' };
+  }
+  if ((type === 'clipboard.read' || type === 'clipboard.write') && perms.clipboardAccess === false) {
+    return { ok: false, tier: TIER.GREEN, error: 'Clipboard permission is disabled in Kumoboard Security Settings.' };
+  }
+  if (type === 'powershell.read' && perms.shellSandbox === false) {
+    return { ok: false, tier: TIER.YELLOW, error: 'PowerShell sandbox execution is disabled in Kumoboard Security Settings.' };
+  }
+  if ((type === 'file.search' || type === 'folder.open') && perms.fileSearch === false) {
+    return { ok: false, tier: TIER.GREEN, error: 'File system access is disabled in Kumoboard Security Settings.' };
+  }
+  if ((type === 'system.info' || type === 'system.time') && perms.systemInfo === false) {
+    return { ok: false, tier: TIER.GREEN, error: 'System telemetry access is disabled in Kumoboard Security Settings.' };
+  }
+  if (type === 'url.open' && perms.browserOpen === false) {
+    return { ok: false, tier: TIER.GREEN, error: 'Browser launch is disabled in Kumoboard Security Settings.' };
   }
 
   // RED — refuse immediately

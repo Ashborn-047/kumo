@@ -218,6 +218,121 @@ function initFloatingActions() {
   $('#btn-settings')?.addEventListener('click', () => {
     window.goo?.openStudio?.('studio');
   });
+
+  // Open Permissions & Security Modal
+  $('#btn-permissions')?.addEventListener('click', () => {
+    openPermissionsModal();
+  });
+
+  // Topbar Quick App Launchers
+  $$('.topbar-quick-app').forEach((btn) => {
+    btn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      const appKey = btn.dataset.app;
+      toast(`Assistant launching ${appKey}…`);
+      try {
+        const res = await window.goo?.action?.('app.open', { name: appKey });
+        if (res?.ok) {
+          toast(`✓ ${appKey} launched`);
+        } else if (res?.error) {
+          toast(`⚠ ${res.error}`);
+        }
+      } catch (err) {
+        toast(`Could not open ${appKey}`);
+      }
+    });
+  });
+}
+
+// ── Permissions & Security Modal ──
+async function openPermissionsModal() {
+  const modal = $('#modal-permissions');
+  if (!modal) return;
+  modal.classList.remove('hidden');
+
+  // Load existing permissions
+  try {
+    const cfg = await window.goo?.getSettings?.();
+    const perms = cfg?.permissions || {};
+    if ($('#perm-app-launch')) $('#perm-app-launch').checked = perms.appLaunch !== false;
+    if ($('#perm-clipboard'))  $('#perm-clipboard').checked  = perms.clipboardAccess !== false;
+    if ($('#perm-shell'))      $('#perm-shell').checked      = perms.shellSandbox !== false;
+    if ($('#perm-files'))      $('#perm-files').checked      = perms.fileSearch !== false;
+    if ($('#perm-system'))     $('#perm-system').checked     = perms.systemInfo !== false;
+  } catch (err) {
+    console.warn('Failed to load permissions:', err);
+  }
+}
+
+function closePermissionsModal() {
+  const modal = $('#modal-permissions');
+  if (modal) modal.classList.add('hidden');
+  const testOut = $('#perm-test-output');
+  if (testOut) testOut.classList.add('hidden');
+}
+
+function initPermissionsModal() {
+  $('#btn-close-permissions')?.addEventListener('click', closePermissionsModal);
+  $('#btn-cancel-permissions')?.addEventListener('click', closePermissionsModal);
+
+  // Close on backdrop click
+  $('#modal-permissions')?.addEventListener('click', (e) => {
+    if (e.target.id === 'modal-permissions') closePermissionsModal();
+  });
+
+  // Save Permissions
+  $('#btn-save-permissions')?.addEventListener('click', async () => {
+    const updated = {
+      appLaunch:       $('#perm-app-launch')?.checked ?? true,
+      clipboardAccess: $('#perm-clipboard')?.checked ?? true,
+      shellSandbox:    $('#perm-shell')?.checked ?? true,
+      fileSearch:      $('#perm-files')?.checked ?? true,
+      systemInfo:      $('#perm-system')?.checked ?? true,
+      browserOpen:     true,
+    };
+    try {
+      await window.goo?.saveSettings?.({ permissions: updated });
+      toast('🛡️ Assistant permissions updated & active');
+      closePermissionsModal();
+    } catch (err) {
+      toast('Failed to save permissions');
+    }
+  });
+
+  // Reset Permissions
+  $('#btn-reset-permissions')?.addEventListener('click', () => {
+    if ($('#perm-app-launch')) $('#perm-app-launch').checked = true;
+    if ($('#perm-clipboard'))  $('#perm-clipboard').checked  = true;
+    if ($('#perm-shell'))      $('#perm-shell').checked      = true;
+    if ($('#perm-files'))      $('#perm-files').checked      = true;
+    if ($('#perm-system'))     $('#perm-system').checked     = true;
+    toast('Permissions reset to recommended defaults');
+  });
+
+  // Test Assistant Capabilities
+  $$('.test-perm-btn').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const act = btn.dataset.action;
+      const testOut = $('#perm-test-output');
+      if (!testOut) return;
+      testOut.classList.remove('hidden');
+      testOut.textContent = `[Testing ${act}...] Executing through Safety Gate...`;
+
+      try {
+        let res;
+        if (act === 'app') {
+          res = await window.goo?.action?.('app.open', { name: btn.dataset.name || 'calc' });
+        } else if (act === 'clipboard') {
+          res = await window.goo?.action?.('clipboard.read');
+        } else if (act === 'system') {
+          res = await window.goo?.action?.('system.info');
+        }
+        testOut.textContent = JSON.stringify(res, null, 2);
+      } catch (err) {
+        testOut.textContent = `Error: ${err.message}`;
+      }
+    });
+  });
 }
 
 function updateZoomDisplay() {
@@ -231,6 +346,7 @@ function updateZoomDisplay() {
   initCanvasControls(updateZoomDisplay);
   initFilters();
   initFloatingActions();
+  initPermissionsModal();
   initCommandPalette(addNewTool, toast);
   renderCards();
 })();

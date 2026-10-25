@@ -152,75 +152,122 @@
 </head>
 <body class="bg-dot-matrix text-on-surface font-body-md select-none overflow-hidden min-h-screen relative w-full h-full">
 
-  <!-- ================= TOP FLOATING NAVIGATION BAR ================= -->
-  <nav class="fixed top-4 left-1/2 -translate-x-1/2 w-[calc(100%-3rem)] max-w-7xl z-50 flex items-center justify-between px-4 py-2.5 rounded-full bg-surface-container-lowest/70 dark:bg-inverse-surface/70 backdrop-blur-md shadow-xl ring-1 ring-white/60 dark:ring-white/10 transition-all">
-    <!-- Left Section: Logo & Search -->
-    <div class="flex items-center gap-4">
-      <div class="flex items-center gap-2 pr-2">
-        <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary shadow-sm shadow-primary/30">
-          <span class="material-symbols-outlined text-[19px]">cloud</span>
+  <!-- ================= TOP STACKED NAVIGATION & COMMAND DECK ================= -->
+  <header class="fixed top-3 left-1/2 -translate-x-1/2 w-[calc(100%-2.5rem)] max-w-7xl z-50 flex flex-col items-center gap-2 pointer-events-none transition-all">
+    
+    <!-- TIER 1: Main Omnibar, Assistant Status & Global Tools -->
+    <nav class="pointer-events-auto w-full flex items-center justify-between px-5 py-2.5 rounded-2xl bg-surface-container-lowest/85 dark:bg-inverse-surface/85 backdrop-blur-md shadow-lg ring-1 ring-white/80 dark:ring-white/10 transition-all">
+      <!-- Left: Logo & Live AI Daemon Status -->
+      <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-primary to-purple-500 flex items-center justify-center text-on-primary shadow-sm shadow-primary/30">
+            <span class="material-symbols-outlined text-[19px]">cloud</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-headline-md font-headline-md font-bold text-on-surface dark:text-inverse-on-surface tracking-tight leading-none">Kumo</span>
+            <span class="text-[10px] font-mono font-medium text-secondary/80 leading-tight">Spatial AI Workbench</span>
+          </div>
         </div>
-        <span class="text-headline-md font-headline-md font-bold text-on-surface dark:text-inverse-on-surface tracking-tight">Kumo</span>
-      </div>
-      <!-- Quick Command Search Pill -->
-      <div class="hidden lg:flex items-center gap-2.5 bg-surface-container-low/90 hover:bg-surface-container-high/60 transition-colors px-3.5 py-1.5 rounded-full border border-outline-variant/30 text-secondary cursor-pointer" id="command-bar">
-        <span class="material-symbols-outlined text-[17px] text-secondary">search</span>
-        <span class="font-body-sm text-body-sm text-secondary">Ask Kumo or command...</span>
-        <span class="font-label-sm text-label-sm bg-surface-container-lowest px-1.5 py-0.5 rounded shadow-sm border border-outline-variant/40 text-on-surface-variant font-semibold">⌘K</span>
-      </div>
-    </div>
 
-    <!-- Center Navigation Links -->
-    <div class="hidden md:flex items-center gap-1 bg-surface-container/50 p-1 rounded-full border border-outline-variant/20">
-      <button class="nav-filter-btn text-primary dark:text-inverse-primary bg-primary-fixed dark:bg-primary-container font-semibold rounded-full px-3 py-1.5 transition-all text-label-md font-label-md flex items-center gap-1.5 active:scale-95" data-filter="all">
-        <span class="material-symbols-outlined text-[16px]">apps</span>
-        All Tools
-      </button>
-      <button class="nav-filter-btn text-secondary dark:text-secondary-fixed hover:text-on-surface dark:hover:text-inverse-on-surface rounded-full px-3 py-1.5 transition-all text-label-md font-label-md flex items-center gap-1.5 hover:bg-surface-container-high/60 active:scale-95" data-filter="launcher">
-        <span class="material-symbols-outlined text-[16px]">settings_suggest</span>
-        System
-      </button>
-      <button class="nav-filter-btn text-secondary dark:text-secondary-fixed hover:text-on-surface dark:hover:text-inverse-on-surface rounded-full px-3 py-1.5 transition-all text-label-md font-label-md flex items-center gap-1.5 hover:bg-surface-container-high/60 active:scale-95" data-filter="writer">
-        <span class="material-symbols-outlined text-[16px]">edit_note</span>
-        Writing
-      </button>
-      <button class="nav-filter-btn text-secondary dark:text-secondary-fixed hover:text-on-surface dark:hover:text-inverse-on-surface rounded-full px-3 py-1.5 transition-all text-label-md font-label-md flex items-center gap-1.5 hover:bg-surface-container-high/60 active:scale-95" data-filter="code">
-        <span class="material-symbols-outlined text-[16px]">code</span>
-        Code
-      </button>
-      <button class="nav-filter-btn text-secondary dark:text-secondary-fixed hover:text-on-surface dark:hover:text-inverse-on-surface rounded-full px-3 py-1.5 transition-all text-label-md font-label-md flex items-center gap-1.5 hover:bg-surface-container-high/60 active:scale-95" data-filter="design">
-        <span class="material-symbols-outlined text-[16px]">palette</span>
-        Design
-      </button>
-      <button class="nav-filter-btn text-secondary dark:text-secondary-fixed hover:text-on-surface dark:hover:text-inverse-on-surface rounded-full px-3 py-1.5 transition-all text-label-md font-label-md flex items-center gap-1.5 hover:bg-surface-container-high/60 active:scale-95" data-filter="notes">
-        <span class="material-symbols-outlined text-[16px]">sticky_note_2</span>
-        Notes
-      </button>
-    </div>
-
-    <!-- Right Trailing Actions -->
-    <div class="flex items-center gap-2">
-      <!-- Trailing Icon: Notifications -->
-      <button class="relative w-9 h-9 rounded-full flex items-center justify-center text-secondary hover:text-on-surface hover:bg-surface-container-high/60 transition-colors active:scale-95">
-        <span class="material-symbols-outlined text-[20px]">notifications</span>
-        <span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-primary ring-2 ring-white"></span>
-      </button>
-      <!-- Studio & Mascot Quick Access Button -->
-      <button class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container-high/60 hover:bg-surface-container-high border border-outline-variant/30 text-secondary hover:text-on-surface transition-all cursor-pointer shadow-xs active:scale-95" id="btn-settings" title="Open Kumo Studio to customize mascots, colors & LLM keys">
-        <span class="material-symbols-outlined text-[18px] text-primary">palette</span>
-        <span class="font-label-md text-label-md font-semibold">Studio &amp; Mascot</span>
-      </button>
-      <!-- User Avatar / Profile -->
-      <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-primary to-purple-400 text-white font-label-sm text-label-sm font-bold flex items-center justify-center shadow-xs ring-1 ring-white/60 hover:ring-primary transition-all cursor-pointer" title="User Profile">
-        KM
+        <div class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-800 dark:text-emerald-300 text-label-sm font-label-sm font-semibold ml-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span>Daemon :4429</span>
+        </div>
       </div>
-      <!-- Primary Action: + New Tool -->
-      <button class="flex items-center gap-1.5 bg-primary hover:bg-primary-container text-on-primary font-semibold text-label-md font-label-md px-3.5 py-2 rounded-full shadow-md shadow-primary/25 hover:shadow-lg transition-all active:scale-95 ml-1 cursor-pointer" id="btn-add-tool">
-        <span class="material-symbols-outlined text-[18px]">add</span>
-        <span>+ New Tool</span>
-      </button>
+
+      <!-- Center: Expanded AI Command Bar -->
+      <div class="flex-1 max-w-lg mx-3 hidden md:flex items-center justify-between bg-surface-container-low/90 hover:bg-surface-container-high/80 transition-all px-4 py-2 rounded-xl border border-outline-variant/30 text-secondary cursor-pointer shadow-xs group" id="command-bar" title="Quick AI Command Bar (Press Ctrl+K or Cmd+K)">
+        <div class="flex items-center gap-2.5 text-secondary group-hover:text-on-surface transition-colors">
+          <span class="material-symbols-outlined text-[18px] text-primary">search</span>
+          <span class="font-body-sm text-body-sm">Ask Kumo, open apps, or run system command…</span>
+        </div>
+        <span class="font-label-sm text-label-sm bg-surface-container-lowest px-2 py-0.5 rounded-md shadow-xs border border-outline-variant/40 text-on-surface-variant font-semibold">⌘K</span>
+      </div>
+
+      <!-- Right Trailing Actions -->
+      <div class="flex items-center gap-2">
+        <!-- System Permissions & Security Settings Modal Trigger -->
+        <button class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100/80 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/50 border border-emerald-200/60 dark:border-emerald-800/40 text-emerald-800 dark:text-emerald-200 transition-all cursor-pointer shadow-xs active:scale-95" id="btn-permissions" title="Assistant Security & System Permissions">
+          <span class="material-symbols-outlined text-[18px] text-emerald-600 dark:text-emerald-400">shield</span>
+          <span class="font-label-md text-label-md font-semibold">Permissions</span>
+        </button>
+
+        <!-- Studio & Mascot Quick Access Button -->
+        <button class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface-container-high/60 hover:bg-surface-container-high border border-outline-variant/30 text-secondary hover:text-on-surface transition-all cursor-pointer shadow-xs active:scale-95" id="btn-settings" title="Open Kumo Studio to customize mascots, colors & LLM keys">
+          <span class="material-symbols-outlined text-[18px] text-primary">palette</span>
+          <span class="font-label-md text-label-md font-semibold">Studio &amp; Mascot</span>
+        </button>
+
+        <!-- Trailing Icon: Notifications -->
+        <button class="relative w-8 h-8 rounded-xl flex items-center justify-center text-secondary hover:text-on-surface hover:bg-surface-container-high/60 transition-colors active:scale-95" title="Notifications">
+          <span class="material-symbols-outlined text-[19px]">notifications</span>
+          <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-primary ring-2 ring-white"></span>
+        </button>
+
+        <!-- User Avatar / Profile -->
+        <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-primary to-purple-400 text-white font-label-sm text-label-sm font-bold flex items-center justify-center shadow-xs ring-1 ring-white/60 hover:ring-primary transition-all cursor-pointer" title="User Profile">
+          KM
+        </div>
+
+        <!-- Primary Action: + New Tool -->
+        <button class="flex items-center gap-1.5 bg-primary hover:bg-primary-container text-on-primary font-semibold text-label-md font-label-md px-3.5 py-2 rounded-xl shadow-md shadow-primary/25 hover:shadow-lg transition-all active:scale-95 ml-1 cursor-pointer" id="btn-add-tool">
+          <span class="material-symbols-outlined text-[18px]">add</span>
+          <span>+ New Tool</span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- TIER 2: Stacked Category Shelf & Quick System Launch Tray -->
+    <div class="pointer-events-auto flex items-center justify-between w-full max-w-5xl px-3 py-1.5 rounded-xl bg-surface-container-lowest/80 dark:bg-inverse-surface/80 backdrop-blur-md shadow-md ring-1 ring-white/70 dark:ring-white/10 transition-all">
+      <!-- Category Filter Pills -->
+      <div class="flex items-center gap-1 overflow-x-auto py-0.5 custom-scrollbar">
+        <button class="nav-filter-btn text-primary dark:text-inverse-primary bg-primary-fixed dark:bg-primary-container font-semibold rounded-lg px-2.5 py-1 transition-all text-label-md font-label-md flex items-center gap-1.5 active:scale-95 cursor-pointer" data-filter="all">
+          <span class="material-symbols-outlined text-[15px]">apps</span>
+          <span>All Tools</span>
+        </button>
+        <button class="nav-filter-btn text-secondary dark:text-secondary-fixed hover:text-on-surface dark:hover:text-inverse-on-surface rounded-lg px-2.5 py-1 transition-all text-label-md font-label-md flex items-center gap-1.5 hover:bg-surface-container-high/60 active:scale-95 cursor-pointer" data-filter="launcher">
+          <span class="material-symbols-outlined text-[15px]">settings_suggest</span>
+          <span>System &amp; Apps</span>
+        </button>
+        <button class="nav-filter-btn text-secondary dark:text-secondary-fixed hover:text-on-surface dark:hover:text-inverse-on-surface rounded-lg px-2.5 py-1 transition-all text-label-md font-label-md flex items-center gap-1.5 hover:bg-surface-container-high/60 active:scale-95 cursor-pointer" data-filter="writer">
+          <span class="material-symbols-outlined text-[15px]">edit_note</span>
+          <span>Writing</span>
+        </button>
+        <button class="nav-filter-btn text-secondary dark:text-secondary-fixed hover:text-on-surface dark:hover:text-inverse-on-surface rounded-lg px-2.5 py-1 transition-all text-label-md font-label-md flex items-center gap-1.5 hover:bg-surface-container-high/60 active:scale-95 cursor-pointer" data-filter="code">
+          <span class="material-symbols-outlined text-[15px]">code</span>
+          <span>Code &amp; Scripts</span>
+        </button>
+        <button class="nav-filter-btn text-secondary dark:text-secondary-fixed hover:text-on-surface dark:hover:text-inverse-on-surface rounded-lg px-2.5 py-1 transition-all text-label-md font-label-md flex items-center gap-1.5 hover:bg-surface-container-high/60 active:scale-95 cursor-pointer" data-filter="design">
+          <span class="material-symbols-outlined text-[15px]">palette</span>
+          <span>Design Studio</span>
+        </button>
+        <button class="nav-filter-btn text-secondary dark:text-secondary-fixed hover:text-on-surface dark:hover:text-inverse-on-surface rounded-lg px-2.5 py-1 transition-all text-label-md font-label-md flex items-center gap-1.5 hover:bg-surface-container-high/60 active:scale-95 cursor-pointer" data-filter="notes">
+          <span class="material-symbols-outlined text-[15px]">sticky_note_2</span>
+          <span>Notes</span>
+        </button>
+      </div>
+
+      <!-- Quick System Assistant App Launcher Tray -->
+      <div class="hidden sm:flex items-center gap-1 pl-3 border-l border-outline-variant/30 text-secondary">
+        <span class="text-[10px] font-mono font-semibold uppercase tracking-wider text-secondary/70 mr-1">Quick Apps:</span>
+        <button class="w-7 h-7 rounded-lg hover:bg-surface-container-high hover:text-emerald-600 flex items-center justify-center transition-colors cursor-pointer topbar-quick-app" data-app="spotify" title="Launch Spotify">
+          <span class="material-symbols-outlined text-[16px]">graphic_eq</span>
+        </button>
+        <button class="w-7 h-7 rounded-lg hover:bg-surface-container-high hover:text-blue-600 flex items-center justify-center transition-colors cursor-pointer topbar-quick-app" data-app="code" title="Launch VS Code">
+          <span class="material-symbols-outlined text-[16px]">terminal</span>
+        </button>
+        <button class="w-7 h-7 rounded-lg hover:bg-surface-container-high hover:text-amber-600 flex items-center justify-center transition-colors cursor-pointer topbar-quick-app" data-app="chrome" title="Launch Chrome">
+          <span class="material-symbols-outlined text-[16px]">language</span>
+        </button>
+        <button class="w-7 h-7 rounded-lg hover:bg-surface-container-high hover:text-purple-600 flex items-center justify-center transition-colors cursor-pointer topbar-quick-app" data-app="notepad" title="Launch Notepad">
+          <span class="material-symbols-outlined text-[16px]">description</span>
+        </button>
+        <button class="w-7 h-7 rounded-lg hover:bg-surface-container-high hover:text-sky-600 flex items-center justify-center transition-colors cursor-pointer topbar-quick-app" data-app="explorer" title="Open File Explorer">
+          <span class="material-symbols-outlined text-[16px]">folder_open</span>
+        </button>
+      </div>
     </div>
-  </nav>
+  </header>
 
   <!-- ================= CANVAS WORKBENCH AREA ================= -->
   <main class="stage fixed inset-0 overflow-hidden cursor-default select-none" id="canvas-viewport">
@@ -297,6 +344,177 @@
         </div>
       </div>
       <div class="cmd-modal-response hidden p-3 bg-slate-50 rounded-xl border border-slate-200 text-body-sm text-slate-700 max-h-48 overflow-y-auto" id="cmd-response"></div>
+    </div>
+  </div>
+
+  <!-- ================= ASSISTANT PERMISSIONS & SECURITY MODAL ================= -->
+  <div class="modal-backdrop hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4" id="modal-permissions">
+    <div class="w-full max-w-2xl bg-surface-container-lowest rounded-3xl shadow-2xl border border-slate-200/80 overflow-hidden flex flex-col max-h-[90vh]">
+      <!-- Header -->
+      <div class="px-6 py-5 bg-gradient-to-r from-emerald-500/10 via-teal-500/5 to-surface-container-lowest border-b border-slate-100 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-700 shadow-sm">
+            <span class="material-symbols-outlined text-[24px]">shield</span>
+          </div>
+          <div>
+            <h3 class="text-headline-sm font-headline-sm font-bold text-on-surface">Assistant System Permissions</h3>
+            <p class="text-body-sm text-secondary">Control what Kumo can inspect, automate, and execute across your workstation.</p>
+          </div>
+        </div>
+        <button class="w-8 h-8 rounded-full flex items-center justify-center text-secondary hover:text-on-surface hover:bg-slate-100 transition-colors cursor-pointer" id="btn-close-permissions">
+          <span class="material-symbols-outlined text-[20px]">close</span>
+        </button>
+      </div>
+
+      <!-- Scrollable Body -->
+      <div class="p-6 overflow-y-auto custom-scrollbar flex flex-col gap-6">
+        <!-- 3-Tier Security Overview -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div class="p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex flex-col gap-1">
+            <div class="flex items-center gap-1.5 text-emerald-800 font-bold text-label-md font-label-md">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+              <span>GREEN TIER</span>
+            </div>
+            <p class="text-[12px] text-emerald-900/80 leading-relaxed">Silent safe read operations. Clipboard reads, system info, file search.</p>
+          </div>
+          <div class="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex flex-col gap-1">
+            <div class="flex items-center gap-1.5 text-amber-800 font-bold text-label-md font-label-md">
+              <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+              <span>YELLOW TIER</span>
+            </div>
+            <p class="text-[12px] text-amber-900/80 leading-relaxed">App launches, folder opening, and sandbox PowerShell queries.</p>
+          </div>
+          <div class="p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/20 flex flex-col gap-1">
+            <div class="flex items-center gap-1.5 text-rose-800 font-bold text-label-md font-label-md">
+              <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+              <span>RED TIER</span>
+            </div>
+            <p class="text-[12px] text-rose-900/80 leading-relaxed">File deletions, registry writes, and installers are always strictly refused.</p>
+          </div>
+        </div>
+
+        <!-- Capability Toggles -->
+        <div class="flex flex-col gap-3">
+          <span class="text-label-sm font-label-sm uppercase tracking-wider font-bold text-secondary/80">Configurable Workstation Permissions</span>
+
+          <!-- Permission Item: App Launching -->
+          <div class="flex items-center justify-between p-3.5 rounded-2xl bg-surface-container-low border border-slate-200/70 hover:border-primary/30 transition-all">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center">
+                <span class="material-symbols-outlined text-[20px]">launch</span>
+              </div>
+              <div>
+                <h4 class="text-body-md font-semibold text-on-surface">Application Launching</h4>
+                <p class="text-body-sm text-secondary">Allow assistant to summon and launch desktop apps (Spotify, VS Code, Chrome, Terminal, etc.)</p>
+              </div>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer ml-3">
+              <input type="checkbox" id="perm-app-launch" class="sr-only peer" checked>
+              <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+            </label>
+          </div>
+
+          <!-- Permission Item: Clipboard Intelligence -->
+          <div class="flex items-center justify-between p-3.5 rounded-2xl bg-surface-container-low border border-slate-200/70 hover:border-primary/30 transition-all">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center">
+                <span class="material-symbols-outlined text-[20px]">content_paste</span>
+              </div>
+              <div>
+                <h4 class="text-body-md font-semibold text-on-surface">Clipboard Read &amp; Write</h4>
+                <p class="text-body-sm text-secondary">Allow Kumo to inspect copied text and paste generated AI drafts or code snippets</p>
+              </div>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer ml-3">
+              <input type="checkbox" id="perm-clipboard" class="sr-only peer" checked>
+              <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+            </label>
+          </div>
+
+          <!-- Permission Item: PowerShell & Sandbox -->
+          <div class="flex items-center justify-between p-3.5 rounded-2xl bg-surface-container-low border border-slate-200/70 hover:border-primary/30 transition-all">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center">
+                <span class="material-symbols-outlined text-[20px]">terminal</span>
+              </div>
+              <div>
+                <h4 class="text-body-md font-semibold text-on-surface">PowerShell &amp; Script Sandbox</h4>
+                <p class="text-body-sm text-secondary">Execute read-only scripts, Git diagnostics, and environment queries in PowerShell sandbox</p>
+              </div>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer ml-3">
+              <input type="checkbox" id="perm-shell" class="sr-only peer" checked>
+              <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+            </label>
+          </div>
+
+          <!-- Permission Item: File Search -->
+          <div class="flex items-center justify-between p-3.5 rounded-2xl bg-surface-container-low border border-slate-200/70 hover:border-primary/30 transition-all">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center">
+                <span class="material-symbols-outlined text-[20px]">folder_open</span>
+              </div>
+              <div>
+                <h4 class="text-body-md font-semibold text-on-surface">File System Search &amp; Folder Opening</h4>
+                <p class="text-body-sm text-secondary">Allow assistant to find files in Desktop/Documents and open folders in File Explorer</p>
+              </div>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer ml-3">
+              <input type="checkbox" id="perm-files" class="sr-only peer" checked>
+              <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+            </label>
+          </div>
+
+          <!-- Permission Item: System Telemetry -->
+          <div class="flex items-center justify-between p-3.5 rounded-2xl bg-surface-container-low border border-slate-200/70 hover:border-primary/30 transition-all">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center">
+                <span class="material-symbols-outlined text-[20px]">memory</span>
+              </div>
+              <div>
+                <h4 class="text-body-md font-semibold text-on-surface">System Diagnostics &amp; Telemetry</h4>
+                <p class="text-body-sm text-secondary">Inspect CPU specs, memory utilization, and OS details for system health reports</p>
+              </div>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer ml-3">
+              <input type="checkbox" id="perm-system" class="sr-only peer" checked>
+              <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Live Capability Testbed -->
+        <div class="p-4 rounded-2xl bg-surface-container-high/60 border border-slate-200 flex flex-col gap-2.5">
+          <div class="flex items-center justify-between">
+            <span class="text-label-sm font-label-sm font-bold text-on-surface">Test System Assistance Capabilities:</span>
+            <span class="text-[11px] font-mono text-secondary">Live IPC Safety Gate</span>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <button class="px-3 py-1.5 rounded-xl bg-surface-container-lowest hover:bg-slate-50 border border-slate-200 text-body-sm font-medium flex items-center gap-1.5 cursor-pointer active:scale-95 transition-all test-perm-btn" data-action="app" data-name="calc">
+              <span class="material-symbols-outlined text-[16px] text-sky-600">calculate</span>
+              <span>Launch Calculator</span>
+            </button>
+            <button class="px-3 py-1.5 rounded-xl bg-surface-container-lowest hover:bg-slate-50 border border-slate-200 text-body-sm font-medium flex items-center gap-1.5 cursor-pointer active:scale-95 transition-all test-perm-btn" data-action="clipboard">
+              <span class="material-symbols-outlined text-[16px] text-purple-600">content_paste</span>
+              <span>Read Clipboard</span>
+            </button>
+            <button class="px-3 py-1.5 rounded-xl bg-surface-container-lowest hover:bg-slate-50 border border-slate-200 text-body-sm font-medium flex items-center gap-1.5 cursor-pointer active:scale-95 transition-all test-perm-btn" data-action="system">
+              <span class="material-symbols-outlined text-[16px] text-emerald-600">monitoring</span>
+              <span>System Telemetry</span>
+            </button>
+          </div>
+          <div id="perm-test-output" class="hidden p-2.5 rounded-xl bg-slate-900 text-slate-100 font-mono text-[12px] overflow-x-auto"></div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="px-6 py-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
+        <button id="btn-reset-permissions" class="text-body-sm text-secondary hover:text-rose-600 font-medium transition-colors cursor-pointer" type="button">Reset to Defaults</button>
+        <div class="flex items-center gap-2">
+          <button id="btn-cancel-permissions" class="px-4 py-2 rounded-xl border border-slate-200 text-body-sm text-secondary hover:text-on-surface hover:bg-slate-100 font-medium transition-colors cursor-pointer" type="button">Cancel</button>
+          <button id="btn-save-permissions" class="px-5 py-2 rounded-xl bg-primary hover:bg-primary-container text-on-primary font-semibold text-body-sm shadow-md shadow-primary/20 transition-all cursor-pointer active:scale-95" type="button">Save &amp; Apply</button>
+        </div>
+      </div>
     </div>
   </div>
 
