@@ -167,5 +167,35 @@ test.describe('Infrastructure: Execution & Security Gating', () => {
     expect(caps.categories).toBeDefined();
     expect(Array.isArray(caps.cliTools)).toBe(true);
   });
+
+  test('generalizes vague, compound, and conversational offline commands', async () => {
+    // Compound conversational request with typo
+    const resOpen = await intentRouter.route('how about we open calcualtor and do something');
+    expect(resOpen.ok).toBe(true);
+    expect(resOpen.actionResults[0].type).toBe('app.open');
+    expect(resOpen.actionResults[0].args.name).toBe('calc.exe');
+
+    // Polite app closing command
+    const resClose = await intentRouter.route('can you please close notepad');
+    expect(resClose.ok).toBe(true);
+    expect(resClose.actionResults[0].type).toBe('process.kill');
+    expect(resClose.actionResults[0].args.name).toBe('notepad');
+
+    // Audio mute command
+    const resMute = await intentRouter.route('mute the volume');
+    expect(resMute.ok).toBe(true);
+    expect(resMute.actionResults[0].type).toBe('media.mute');
+
+    // Mascot sleep command
+    const resSleep = await intentRouter.route('sleep kumo');
+    expect(resSleep.ok).toBe(true);
+    expect(resSleep.actionResults[0].type).toBe('mascot.sleep');
+
+    // Generic software alias
+    const resSheets = await intentRouter.route('sheets');
+    expect(resSheets.ok).toBe(true);
+    expect(resSheets.actionResults[0].type).toBe('app.open');
+    expect(resSheets.actionResults[0].args.name).toBe('excel');
+  });
 });
 

@@ -7,11 +7,16 @@
 const ai = require('./ai');
 const actions = require('./actions');
 const settings = require('./settings');
+const systemScanner = require('./system-scanner');
 
 // ── Intent patterns for offline brain ────────────────────────
 const INTENT_PATTERNS = [
+  // Mascot sleep / hide commands
+  { pattern: /^(?:sleep|hide|minimize|dismiss|bye|goodnight)\s*(?:the\s+)?(?:kumo|mascot|cloud|overlay)?$/i, action: 'mascot.sleep', extract: () => ({}) },
+  { pattern: /^(?:go\s+to\s+sleep|take\s+a\s+nap)$/i, action: 'mascot.sleep', extract: () => ({}) },
+
   // Folder open (specific folders)
-  { pattern: /(?:open|show)\s+(?:my\s+)?(desktop|downloads|documents|pictures|home)\s*(?:folder)?/i, action: 'folder.open', extract: (m) => ({ folderPath: m[1].toLowerCase() }) },
+  { pattern: /(?:open|show)\s+(?:my\s+)?(desktop|downloads|documents|pictures|home|boards)\s*(?:folder)?/i, action: 'folder.open', extract: (m) => ({ folderPath: m[1].toLowerCase() }) },
 
   // URL open
   { pattern: /(?:open|go\s+to|browse|visit)\s+(https?:\/\/\S+)/i, action: 'url.open', extract: (m) => ({ url: m[1] }) },
@@ -31,24 +36,32 @@ const INTENT_PATTERNS = [
   { pattern: /(?:what\s+date\s+is\s+it|today(?:'s)?\s+date|what(?:'s|\s+is)\s+(?:the\s+)?(?:today(?:'s)?\s+)?date)/i, action: 'system.date', extract: () => ({}) },
   { pattern: /what\s+(?:day|date)\s+(?:is\s+)?(?:it\s+)?today/i, action: 'system.date', extract: () => ({}) },
 
-  // System info
-  { pattern: /(?:system|pc|computer)\s+(?:info|specs?|details|status)/i, action: 'system.info', extract: () => ({}) },
-  { pattern: /(?:how\s+much\s+)?(?:ram|memory|cpu|disk)/i, action: 'system.info', extract: () => ({}) },
+  // System info & running processes
+  { pattern: /(?:what(?:'s|\s+is)\s+running|running\s+(?:apps|tasks|processes)|top\s+(?:tasks|processes|apps)|show\s+(?:tasks|processes|task\s*manager))/i, action: 'system.tasks', extract: () => ({}) },
+  { pattern: /(?:lock\s+(?:my\s+)?(?:pc|computer|screen|workstation))/i, action: 'system.lock', extract: () => ({}) },
+  { pattern: /(?:system|pc|computer|hardware)\s+(?:info|specs?|details|status|health)/i, action: 'system.info', extract: () => ({}) },
+  { pattern: /(?:how\s+much\s+)?(?:ram|memory|cpu|disk|storage)/i, action: 'system.info', extract: () => ({}) },
 
   // Network diagnostics (offline-specific)
-  { pattern: /(?:check|test|diagnose)\s+(?:my\s+)?(?:internet|network|connection|wifi|connectivity)/i, action: 'powershell.read', extract: () => ({ command: 'Test-NetConnection -ComputerName 8.8.8.8 -Port 53 -InformationLevel Quiet; ipconfig | Select-String "IPv4|Default Gateway|DNS"' }) },
+  { pattern: /(?:check|test|diagnose|is\s+my|how\s+is\s+my)\s+(?:the\s+)?(?:internet|network|connection|wifi|connectivity)/i, action: 'powershell.read', extract: () => ({ command: 'Test-NetConnection -ComputerName 8.8.8.8 -Port 53 -InformationLevel Quiet; ipconfig | Select-String "IPv4|Default Gateway|DNS"' }) },
+  { pattern: /(?:am\s+i\s+online|do\s+i\s+have\s+internet)/i, action: 'powershell.read', extract: () => ({ command: 'Test-NetConnection -ComputerName 8.8.8.8 -Port 53 -InformationLevel Quiet' }) },
   { pattern: /(?:what(?:'s|\s+is)\s+my\s+)?ip\s*(?:address)?/i, action: 'powershell.read', extract: () => ({ command: 'ipconfig | Select-String "IPv4|Subnet|Default Gateway"' }) },
   { pattern: /(?:flush|reset|clear)\s+(?:my\s+)?dns/i, action: 'powershell.read', extract: () => ({ command: 'ipconfig /flushdns' }) },
   { pattern: /ping\s+(.+)/i, action: 'powershell.read', extract: (m) => ({ command: `ping -n 4 ${m[1].trim().replace(/[;&|`$]/g, '')}` }) },
 
-  // Process management / Closing applications
-  { pattern: /(?:close|quit|exit|kill|terminate|stop|shut\s+down)\s+(?:the\s+)?(?:process|task|app|window)?\s*([a-zA-Z0-9_\-\.]+)/i, action: 'process.kill', extract: (m) => ({ name: m[1].trim() }) },
+  // Audio & Volume controls
+  { pattern: /^(?:mute|unmute|silence|toggle\s+mute)(?:\s+(?:the\s+)?(?:sound|audio|volume|speaker))?$/i, action: 'media.mute', extract: () => ({}) },
+  { pattern: /(?:volume\s+up|turn\s+up\s+(?:the\s+)?(?:volume|sound)|increase\s+(?:the\s+)?volume|make\s+it\s+louder|louder)/i, action: 'media.volUp', extract: () => ({}) },
+  { pattern: /(?:volume\s+down|turn\s+down\s+(?:the\s+)?(?:volume|sound)|decrease\s+(?:the\s+)?volume|lower\s+(?:the\s+)?volume|make\s+it\s+quieter|quieter)/i, action: 'media.volDown', extract: () => ({}) },
 
-  // Media controls (Spotify / System audio playback)
-  { pattern: /(?:pause|resume|play|toggle)\s+(?:the\s+)?(?:music|song|track|playback|spotify)/i, action: 'media.playPause', extract: () => ({}) },
-  { pattern: /(?:next\s+(?:song|track)|skip\s+(?:song|track)|next\s+spotify)/i, action: 'media.next', extract: () => ({}) },
-  { pattern: /(?:previous\s+(?:song|track)|prev\s+(?:song|track)|prev\s+spotify)/i, action: 'media.previous', extract: () => ({}) },
-  { pattern: /^(?:play|pause|resume|play\/pause)$/i, action: 'media.playPause', extract: () => ({}) },
+  // Media playback controls (Spotify / System audio)
+  { pattern: /(?:pause|resume|play|toggle|stop)\s+(?:the\s+)?(?:music|song|track|playback|spotify|audio)/i, action: 'media.playPause', extract: () => ({}) },
+  { pattern: /(?:next|skip)\s+(?:song|track|music|spotify)/i, action: 'media.next', extract: () => ({}) },
+  { pattern: /(?:previous|prev|replay|last)\s+(?:song|track|music|spotify)/i, action: 'media.previous', extract: () => ({}) },
+  { pattern: /^(?:play|pause|resume|toggle\s+music)$/i, action: 'media.playPause', extract: () => ({}) },
+
+  // Process management / Closing applications
+  { pattern: /(?:close|quit|exit|kill|terminate|stop|shut\s+down|get\s+rid\s+of|turn\s+off)\s+(?:the\s+)?(?:process|task|app|window|software)?\s*([a-zA-Z0-9_\-\.\s]+)/i, action: 'process.kill', extract: (m) => ({ name: m[1].trim() }) },
 
   // Application interaction & typing / sending prompts (Claude, ChatGPT, Notepad, etc.)
   {
@@ -69,20 +82,23 @@ const INTENT_PATTERNS = [
     extract: (m) => ({ fileName: m[1].trim() || 'QuickNote', content: m[2].trim() })
   },
   {
-    pattern: /(?:take\s+a\s+note|new\s+note|save\s+note)\s*[:,\s]+(.+)/i,
+    pattern: /(?:take\s+a\s+note|new\s+note|save\s+note|remember|write\s+down|note\s+down|memo)\s*[:,\s]+(.+)/i,
     action: 'file.write',
     extract: (m) => ({ fileName: 'QuickNote', content: m[1].trim() })
   },
 
+  // Screen capture / Snipping
+  { pattern: /(?:take\s+a\s+)?(?:screenshot|screen\s+capture|snip|screen\s*shot)/i, action: 'app.open', extract: () => ({ name: 'SnippingTool' }) },
+
   // App launching (general fallback for launch/open/start)
-  { pattern: /(?:open|launch|start|run)\s+(.+)/i, action: 'app.open', extract: (m) => ({ name: m[1].trim() }) },
+  { pattern: /(?:open|launch|start|run|fire\s+up|bring\s+up|pop\s+open|switch\s+to|spin\s+up)\s+(.+)/i, action: 'app.open', extract: (m) => ({ name: m[1].trim() }) },
 ];
 
-// ── Known app name aliases ──────────────────────────────────
+// ── Known app name aliases & generic software categories ─────
 const APP_ALIASES = {
   spotify: 'spotify', chrome: 'chrome', brave: 'brave', edge: 'msedge',
   word: 'winword', excel: 'excel', powerpoint: 'powerpnt', outlook: 'outlook',
-  notepad: 'notepad', calculator: 'calc', calc: 'calc', paint: 'mspaint',
+  notepad: 'notepad', calculator: 'calc.exe', calc: 'calc.exe', paint: 'mspaint',
   explorer: 'explorer', 'file explorer': 'explorer', terminal: 'wt',
   powershell: 'powershell', cmd: 'cmd', code: 'code', 'vs code': 'code',
   vscode: 'code', cursor: 'cursor', discord: 'discord', telegram: 'telegram',
@@ -92,7 +108,21 @@ const APP_ALIASES = {
   snipping: 'SnippingTool', 'snip and sketch': 'SnippingTool',
   settings: 'ms-settings:', camera: 'microsoft.windows.camera:',
   maps: 'bingmaps:', weather: 'bingweather:', clock: 'ms-clock:',
-  photos: 'ms-photos:', 'task manager': 'taskmgr',
+  photos: 'ms-photos:', 'task manager': 'taskmgr', taskmgr: 'taskmgr',
+  // Generic application aliases
+  browser: 'chrome', 'web browser': 'chrome', internet: 'chrome',
+  editor: 'code', 'code editor': 'code', ide: 'code',
+  math: 'calc.exe', calculation: 'calc.exe',
+  notes: 'notepad', 'note pad': 'notepad', 'text editor': 'notepad',
+  sheets: 'excel', spreadsheet: 'excel',
+  docs: 'winword', document: 'winword',
+  slides: 'powerpnt', presentation: 'powerpnt',
+  tasks: 'taskmgr', 'task list': 'taskmgr', 'activity monitor': 'taskmgr',
+  snip: 'SnippingTool', screenshot: 'SnippingTool', 'screen snip': 'SnippingTool',
+  music: 'spotify', songs: 'spotify', 'music player': 'spotify',
+  cam: 'microsoft.windows.camera:', webcam: 'microsoft.windows.camera:',
+  alarm: 'ms-clock:', timer: 'ms-clock:', stopwatch: 'ms-clock:',
+  postman: 'postman', slack: 'slack', notion: 'notion', figma: 'figma',
 };
 
 /**
@@ -125,17 +155,41 @@ function levenshtein(a, b) {
   return matrix[a.length][b.length];
 }
 
+/**
+ * Normalizes conversational padding and polite phrases.
+ * e.g. "Can you please open calcualtor and do something" -> "open calcualtor"
+ */
+function normalizeConversationalText(text) {
+  if (!text) return '';
+  let s = text.toLowerCase().trim();
+
+  // Strip conversational polite prefixes & openers
+  s = s.replace(/^(?:hey|hi|hello|ok|okay|yo)?\s*(?:kumo|mochi|assistant)?\s*[,;:]?\s*/i, '');
+  s = s.replace(/^(?:can\s+you\s+please|could\s+you\s+please|would\s+you\s+mind|can\s+you|could\s+you|would\s+you|will\s+you|how\s+about\s+we|how\s+about|why\s+don't\s+you|please|i\s+want\s+to|i\s+need\s+to|i'd\s+like\s+to|help\s+me|let's|let\s+us|go\s+ahead\s+and|just|tell\s+me|give\s+me)\s+/i, '');
+
+  // Strip conversational suffixes & trailing clauses
+  s = s.replace(/[,;]?\s*(?:and\s+do\s+something|and\s+then\b.*|and\s+also\b.*|and\s+give\b.*|right\s+now|for\s+me|if\s+you\s+can|quickly|asap|please)\s*$/i, '');
+
+  return s.trim();
+}
+
+/**
+ * Resolves an application name across aliases, typos, and 155+ scanned host apps.
+ */
 function resolveFuzzyAppName(raw) {
   if (!raw) return '';
   let clean = raw.toLowerCase().trim();
 
-  // Strip conversational suffixes / compound clauses: ", and do something", " and then ...", " please", " for me"
+  // Strip compound conversational clauses
   clean = clean.replace(/[,;]?\s*(?:and\s+then|and\s+do\s+something|and\s+give\s+.*|and\s+also|and|then|please|for\s+me)\b.*/i, '').trim();
 
-  // Direct alias match
+  // Strip trailing punctuation
+  clean = clean.replace(/[.,;!?]+$/, '').trim();
+
+  // 1. Direct alias match
   if (APP_ALIASES[clean]) return APP_ALIASES[clean];
 
-  // Common typo tolerance (e.g. 'calcualtor' -> 'calc', 'spotfy' -> 'spotify')
+  // 2. Fuzzy alias match (e.g. 'calcualtor' -> 'calc.exe', 'spotfy' -> 'spotify')
   for (const [alias, real] of Object.entries(APP_ALIASES)) {
     if (clean === alias) return real;
     if (alias.length >= 4 && Math.abs(clean.length - alias.length) <= 2) {
@@ -143,53 +197,117 @@ function resolveFuzzyAppName(raw) {
     }
   }
 
+  // 3. Match against all 155+ scanned host apps dynamically
+  try {
+    const caps = systemScanner.getCapabilitiesSync();
+    if (caps && caps.categories) {
+      let bestMatch = null;
+      for (const cat of Object.keys(caps.categories)) {
+        for (const app of caps.categories[cat]) {
+          const appName = (app.name || '').toLowerCase();
+          const appId = (app.appId || '').toLowerCase();
+          if (appName === clean) return app.name;
+
+          // Word subset match (e.g. "acrobat" matches "Adobe Acrobat")
+          const words = appName.split(/\s+/);
+          if (words.some(w => w === clean)) return app.name;
+
+          if (appName.includes(clean) || (clean.length >= 4 && appId.includes(clean))) {
+            if (!bestMatch) bestMatch = app.name;
+          }
+          if (clean.length >= 5 && levenshtein(clean, appName) <= 2) {
+            return app.name;
+          }
+        }
+      }
+      if (bestMatch) return bestMatch;
+    }
+  } catch {}
+
   return clean;
 }
 
 /**
  * Process user input through the offline brain.
- * Uses pattern matching — no LLM needed.
+ * Uses pattern matching & generalized semantic classification.
  * @param {string} text - User's input text
  * @returns {{ reply: string, actionResults: Array }}
  */
 async function processOffline(text) {
-  const normalized = text.toLowerCase().trim();
+  const rawNormalized = text.toLowerCase().trim();
+  const normalized = normalizeConversationalText(text) || rawNormalized;
   const actionResults = [];
 
-  // Try intent patterns
-  for (const { pattern, action, extract } of INTENT_PATTERNS) {
-    const match = normalized.match(pattern);
-    if (match) {
-      const args = extract(match);
+  // Help command check
+  if (/^(?:help|what\s+can\s+you\s+do|commands|features|capabilities)$/i.test(normalized)) {
+    return {
+      reply: `🌟 **Kumo Offline Mode Capabilities**:\n• **Apps**: "open spotify", "close notepad", "launch docker", "calculator"\n• **Audio**: "pause music", "next song", "volume up", "volume down", "mute"\n• **System**: "what's running", "system specs", "lock screen", "check internet"\n• **Notes & Typing**: "take a note: ideas", "a prompt in claude: write code"\n• **Mascot**: "sleep kumo", "minimize mascot"\n• **Files & Folders**: "open downloads", "find budget.xlsx"`,
+      actionResults: [],
+    };
+  }
 
-      // Resolve app aliases & fuzzy typos
-      if (action === 'app.open' && args.name) {
-        args.name = resolveFuzzyAppName(args.name);
-      }
-      if (action === 'app.interact' && args.targetApp) {
-        args.targetApp = resolveFuzzyAppName(args.targetApp);
-      }
+  // Try intent patterns on normalized text, then fallback to raw
+  for (const candidate of [normalized, rawNormalized]) {
+    for (const { pattern, action, extract } of INTENT_PATTERNS) {
+      const match = candidate.match(pattern);
+      if (match) {
+        const args = extract(match);
 
-      const result = await actions.run(action, args);
-      actionResults.push({ type: action, args, result });
+        // Resolve app aliases & fuzzy typos across host apps
+        if (action === 'app.open' && args.name) {
+          args.name = resolveFuzzyAppName(args.name);
+        }
+        if (action === 'process.kill' && args.name) {
+          args.name = resolveFuzzyAppName(args.name);
+        }
+        if (action === 'app.interact' && args.targetApp) {
+          args.targetApp = resolveFuzzyAppName(args.targetApp);
+        }
 
-      if (result.ok) {
-        return {
-          reply: formatOfflineSuccess(action, args, result),
-          actionResults,
-        };
-      } else {
-        return {
-          reply: `⚠️ ${result.error || 'Could not complete that action.'}`,
-          actionResults,
-        };
+        const result = await actions.run(action, args);
+        actionResults.push({ type: action, args, result });
+
+        if (result.ok) {
+          return {
+            reply: formatOfflineSuccess(action, args, result),
+            actionResults,
+          };
+        } else {
+          return {
+            reply: `⚠️ ${result.error || 'Could not complete that action.'}`,
+            actionResults,
+          };
+        }
       }
     }
   }
 
+  // Fallback 1: User just typed an application name! (e.g. "calculator", "docker", "cursor", "spotify")
+  const directApp = resolveFuzzyAppName(normalized);
+  if (directApp && (APP_ALIASES[normalized] || directApp !== normalized)) {
+    const result = await actions.run('app.open', { name: directApp });
+    actionResults.push({ type: 'app.open', args: { name: directApp }, result });
+    if (result.ok) {
+      return {
+        reply: formatOfflineSuccess('app.open', { name: directApp }, result),
+        actionResults,
+      };
+    }
+  }
+
+  // Fallback 2: General music query
+  if (/^(?:music|songs?|play\s+something|listen\s+to\s+music)$/i.test(normalized)) {
+    const result = await actions.run('media.playPause', {});
+    actionResults.push({ type: 'media.playPause', args: {}, result });
+    return {
+      reply: formatOfflineSuccess('media.playPause', {}, result),
+      actionResults,
+    };
+  }
+
   // No pattern matched — friendly fallback
   return {
-    reply: `I'm in offline mode right now (no internet connection). I can still:\n• Open apps — "open spotify", "launch notepad"\n• Search files — "find project notes"\n• Run diagnostics — "check my internet", "ping google.com"\n• System info — "show system specs"\n• Open folders — "open my downloads"\n\nTry one of these!`,
+    reply: `I'm in offline mode right now (no internet connection). I can still:\n• Open & close apps — "open spotify", "close notepad"\n• Media & volume — "pause spotify", "volume up", "mute"\n• System & tasks — "what's running", "system specs", "lock screen"\n• Send prompts & notes — "a prompt in claude: write a game", "take a note: ideas"\n• Sleep mascot — "sleep kumo"\n\nTry one of these!`,
     actionResults: [],
   };
 }
@@ -223,6 +341,14 @@ function formatOfflineSuccess(action, args, result) {
       const r = result.result || {};
       return `💻 ${r.hostname || 'PC'}: ${r.totalMem} RAM, ${r.cpus} CPUs (${r.arch})`;
     }
+    case 'system.lock':
+      return `🔒 Workstation screen locked!`;
+    case 'system.tasks': {
+      const tasks = result.result?.tasks || [];
+      if (!tasks.length) return `💻 No active foreground tasks retrieved.`;
+      const formatted = tasks.map(t => `• ${t.Name || 'App'}: ${t.MainWindowTitle ? `"${t.MainWindowTitle.slice(0, 35)}"` : ''} (${t.MemoryMB || 0} MB)`).join('\n');
+      return `💻 **Top Running Tasks**:\n${formatted}`;
+    }
     case 'powershell.read':
       return `💻 Output:\n${result.result?.output || '(no output)'}`;
     case 'powershell.write':
@@ -237,6 +363,14 @@ function formatOfflineSuccess(action, args, result) {
       return `⏭️ Skipped to next track!`;
     case 'media.previous':
       return `⏮️ Rewound to previous track!`;
+    case 'media.mute':
+      return `🔇 Toggled audio mute!`;
+    case 'media.volUp':
+      return `🔊 Volume raised!`;
+    case 'media.volDown':
+      return `🔉 Volume lowered!`;
+    case 'mascot.sleep':
+      return `💤 Kumo is going to sleep! Summon me anytime from Kumoboard, system tray, or Ctrl+Shift+K.`;
     case 'process.kill':
       return `🛑 Closed ${args.name}!`;
     default:

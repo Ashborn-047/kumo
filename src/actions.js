@@ -40,6 +40,10 @@ const ACTIONS = {
   'media.playPause':  { tier: TIER.GREEN,  fn: () => sendMediaKey('Toggle') },
   'media.next':       { tier: TIER.GREEN,  fn: () => sendMediaKey('Next') },
   'media.previous':   { tier: TIER.GREEN,  fn: () => sendMediaKey('Prev') },
+  'media.mute':       { tier: TIER.GREEN,  fn: () => sendMediaKey('Mute') },
+  'media.volUp':      { tier: TIER.GREEN,  fn: () => sendMediaKey('VolumeUp') },
+  'media.volDown':    { tier: TIER.GREEN,  fn: () => sendMediaKey('VolumeDown') },
+  'mascot.sleep':     { tier: TIER.GREEN,  fn: sleepMascot },
 
   // YELLOW — needs confirmation (or auto-confirm in settings)
   'app.open':         { tier: TIER.YELLOW, fn: openApp },
@@ -50,6 +54,8 @@ const ACTIONS = {
   'process.kill':     { tier: TIER.YELLOW, fn: killProcess },
   'file.write':       { tier: TIER.YELLOW, fn: writeFileContent },
   'file.move':        { tier: TIER.YELLOW, fn: moveFile },
+  'system.tasks':     { tier: TIER.YELLOW, fn: getRunningTasks },
+  'system.lock':      { tier: TIER.YELLOW, fn: lockWorkstation },
 
   // RED — always refused, never executed
   'file.delete':      { tier: TIER.RED },
@@ -221,6 +227,7 @@ function openApp({ name }) {
     terminal: 'wt.exe',
     edge: 'msedge',
     chrome: 'chrome',
+    brave: 'brave',
     spotify: 'spotify:',
     whatsapp: 'whatsapp:',
     telegram: 'tg:',
@@ -240,9 +247,37 @@ function openApp({ name }) {
     photos: 'ms-photos:',
     store: 'ms-windows-store:',
     blender: 'shell:AppsFolder\\BlenderFoundation.Blender_ppwjx1n5r4v9t!BLENDER',
+    taskmgr: 'taskmgr.exe',
+    'task manager': 'taskmgr.exe',
+    snippingtool: 'SnippingTool.exe',
+    snip: 'SnippingTool.exe',
   };
 
-  const target = known[cleanName] || name;
+  let target = known[cleanName];
+
+  // Check deep system scan capabilities cache for exact or fuzzy match across all 155+ host apps
+  if (!target) {
+    try {
+      const caps = systemScanner.getCapabilitiesSync();
+      if (caps && caps.categories) {
+        for (const cat of Object.keys(caps.categories)) {
+          const match = caps.categories[cat].find(a =>
+            a.name.toLowerCase() === cleanName ||
+            a.id === cleanName ||
+            (cleanName.length >= 3 && a.name.toLowerCase().includes(cleanName))
+          );
+          if (match && match.appId) {
+            target = (match.appId.includes('\\') || match.appId.includes('.') || match.appId.includes('!'))
+              ? `shell:AppsFolder\\${match.appId}`
+              : match.appId;
+            break;
+          }
+        }
+      }
+    } catch {}
+  }
+
+  if (!target) target = name;
 
   return new Promise((resolve, reject) => {
     const safeTarget = target.replace(/['"`;$()]/g, '');
@@ -337,6 +372,13 @@ function killProcess({ name }) {
     }
 
     const cleanName = name.replace(/[;&|`$]/g, '').toLowerCase().trim();
+
+    // Special case: closing Kumo mascot itself
+    if (cleanName === 'kumo' || cleanName === 'mascot' || cleanName === 'overlay') {
+      sleepMascot();
+      return resolve({ killed: true, name: 'Kumo Mascot', message: 'Mascot is now asleep' });
+    }
+
     const aliasMap = {
       calculator: 'calc',
       calc: 'calc',
@@ -349,14 +391,21 @@ function killProcess({ name }) {
       code: 'code',
       chrome: 'chrome',
       edge: 'msedge',
+      brave: 'brave',
       spotify: 'spotify',
       discord: 'discord',
       telegram: 'telegram',
+      slack: 'slack',
+      steam: 'steam',
+      vlc: 'vlc',
+      blender: 'blender',
+      postman: 'postman',
+      docker: 'docker',
     };
 
     const targetProc = aliasMap[cleanName] || cleanName;
     const ps = `
-      $procs = Get-Process -Name "*${targetProc}*" -ErrorAction SilentlyContinue
+      $procs = Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.Name -like "*${targetProc}*" -or $_.ProcessName -like "*${targetProc}*" }
       if ($procs) {
         $procs | Stop-Process -Force -ErrorAction SilentlyContinue
         Write-Output "OK"
@@ -395,6 +444,22 @@ function sendMediaKey(actionType = 'Toggle') {
         public static void Prev() {
             keybd_event(0xB1, 0, 0, UIntPtr.Zero);
             keybd_event(0xB1, 0, 2, UIntPtr.Zero);
+        }
+        public static void Mute() {
+            keybd_event(0xAD, 0, 0, UIntPtr.Zero);
+            keybd_event(0xAD, 0, 2, UIntPtr.Zero);
+        }
+        public static void VolumeDown() {
+            for (int i = 0; i < 3; i++) {
+                keybd_event(0xAE, 0, 0, UIntPtr.Zero);
+                keybd_event(0xAE, 0, 2, UIntPtr.Zero);
+            }
+        }
+        public static void VolumeUp() {
+            for (int i = 0; i < 3; i++) {
+                keybd_event(0xAF, 0, 0, UIntPtr.Zero);
+                keybd_event(0xAF, 0, 2, UIntPtr.Zero);
+            }
         }
     }
 '@
@@ -516,6 +581,42 @@ function runPowerShellCommand({ command }) {
   });
 }
 
+function sleepMascot() {
+  try {
+    const overlayManager = require('./overlay-manager');
+    if (overlayManager && typeof overlayManager.hide === 'function') {
+      overlayManager.hide();
+      return Promise.resolve({ sleeping: true });
+    }
+  } catch {}
+  return Promise.resolve({ sleeping: true });
+}
+
+function lockWorkstation() {
+  return new Promise((resolve, reject) => {
+    exec('rundll32.exe user32.dll,LockWorkStation', (err) => {
+      if (err) reject(err);
+      else resolve({ locked: true });
+    });
+  });
+}
+
+function getRunningTasks() {
+  return new Promise((resolve) => {
+    const ps = `Get-Process | Where-Object { $_.MainWindowTitle -ne '' } | Sort-Object WorkingSet -Descending | Select-Object -First 8 Name, MainWindowTitle, @{Name='MemoryMB';Expression={[math]::Round($_.WorkingSet / 1MB, 1)}} | ConvertTo-Json -Compress`;
+    execFile('powershell.exe', ['-NoProfile', '-Command', ps], { timeout: 4500 }, (err, stdout) => {
+      if (err || !stdout) return resolve({ tasks: [] });
+      try {
+        const parsed = JSON.parse(stdout);
+        const list = Array.isArray(parsed) ? parsed : [parsed];
+        resolve({ tasks: list });
+      } catch {
+        resolve({ tasks: [] });
+      }
+    });
+  });
+}
+
 // ── Helper: human-readable preview for YELLOW actions ─────────
 function getPreview(type, args) {
   const previews = {
@@ -527,6 +628,8 @@ function getPreview(type, args) {
     'file.write':       `Write file to: ${args.filePath || args.fileName || 'Desktop Note'}`,
     'process.kill':     `Terminate process: ${args.name}`,
     'file.move':        `Move file from ${args.from} to ${args.to}`,
+    'system.tasks':     `Retrieve active running tasks and memory usage`,
+    'system.lock':      `Lock Windows workstation screen`,
   };
   return previews[type] || `Run action: ${type}`;
 }

@@ -243,11 +243,11 @@ Every card is declared as a JSON-serializable node containing:
 
 ---
 
-## 6. Mascot Direct Instruction Verification
+## 6. Mascot Direct Instruction Verification & Generalized Offline Engine
 
-The direct instruction pipeline has been verified and hardened:
+The direct instruction pipeline has been verified, hardened, and generalized across all 155+ host applications with no LLM required:
 
-### Verification Results
+### 6.1 Verification Results Matrix
 1. **Instruction:** `"what is the time"`  
    - **Route:** Offline Brain  
    - **Result:** `⏰ 5:22:26 pm` (Verified ✅)
@@ -257,12 +257,24 @@ The direct instruction pipeline has been verified and hardened:
 3. **Instruction:** `"what is my ip"`  
    - **Route:** Offline Brain (execFile powershell)  
    - **Result:** IPv4 `192.168.0.9`, Subnet `255.255.255.0` (Verified ✅)
-4. **Instruction:** `"open calculator"`  
-   - **Route:** `app.open` ➔ `calc:`  
-   - **Result:** Calculator launched (Verified ✅)
-5. **Instruction:** `"open spotify"`  
-   - **Route:** `app.open` ➔ `spotify:` protocol handler  
-   - **Result:** Spotify launched (Verified ✅)
+4. **Instruction:** `"how about we open calcualtor and do something"`  
+   - **Route:** Generalized Normalizer ➔ `calc.exe` native binary (bypasses Microsoft Store popup)  
+   - **Result:** Calculator launched directly (Verified ✅)
+5. **Instruction:** `"can you please close notepad"` / `"turn off spotify"`  
+   - **Route:** Process Killer ➔ Wildcard Process & Alias Engine  
+   - **Result:** Process terminated cleanly (Verified ✅)
+6. **Instruction:** `"pause spotify"` / `"volume up"` / `"mute the volume"`  
+   - **Route:** Windows Virtual Media Keys (`keybd_event 0xB3, 0xAF, 0xAD`)  
+   - **Result:** System audio and playback controlled instantly (Verified ✅)
+7. **Instruction:** `"sleep kumo"` / `"hide mascot"`  
+   - **Route:** Mascot Sleep Engine ➔ `window:toggle-overlay`  
+   - **Result:** Mascot dismissed to tray; wakeable from Kumoboard top bar or hotkey (Verified ✅)
+8. **Instruction:** `"what is running"` / `"top processes"`  
+   - **Route:** System Task Telemetry (`system.tasks`)  
+   - **Result:** Active foreground applications & RAM consumption displayed (Verified ✅)
+9. **Instruction:** `"sheets"` / `"browser"` / `"editor"`  
+   - **Route:** Generic Software Taxonomy Matcher  
+   - **Result:** Dispatches to Excel, Chrome, or VS Code (Verified ✅)
 
 ---
 
