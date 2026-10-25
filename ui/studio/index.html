@@ -493,6 +493,31 @@
         </div>
       </div>
 
+      <!-- Card 4: Kumo Cloud (Stitch Original) -->
+      <div class="cursor-pointer snap-start shrink-0 w-[240px] sm:w-[260px] relative p-4 rounded-2xl border border-outline-variant/50 bg-surface-container-lowest hover:border-primary/40 transition-all flex flex-col justify-between mascot-engine-card" id="card-mascot-kumo" data-mascot="kumo" data-category="2d" onclick="selectMascot('kumo')">
+        <div class="flex items-start justify-between mb-2">
+          <div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center overflow-hidden p-1 shadow-xs">
+            <svg class="w-8 h-8" fill="none" viewBox="0 0 240 200">
+              <path d="M70 170 C40 170 20 145 20 115 C20 85 45 68 70 68 C76 40 105 20 135 22 C165 24 185 45 192 68 C215 70 230 90 230 115 C230 145 210 170 175 170 Z" fill="#eadfff" stroke="#6355d8" stroke-width="6"></path>
+              <circle cx="89" cy="115" r="7" fill="#171b2b"></circle>
+              <circle cx="145" cy="115" r="7" fill="#171b2b"></circle>
+              <path d="M112 126 Q117 134 122 126" stroke="#171b2b" stroke-width="5" stroke-linecap="round"></path>
+            </svg>
+          </div>
+          <div class="flex items-center gap-1.5 mascot-status-pill" id="pill-mascot-kumo">
+            <div class="w-5 h-5 rounded-full border-2 border-outline-variant flex items-center justify-center"></div>
+          </div>
+        </div>
+        <div>
+          <h3 class="text-headline-sm font-headline-sm text-[15px] font-semibold text-on-surface">Kumo Cloud (Stitch Original)</h3>
+          <p class="text-body-sm font-body-sm text-secondary mt-1">The iconic tactile geometric squishy cloud with reactive mood sparkles.</p>
+        </div>
+        <div class="mt-3 pt-2 border-t border-surface-container flex items-center justify-between text-secondary">
+          <span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-primary-fixed/50 text-primary font-bold">Stitch Hero</span>
+          <span class="font-label-sm text-label-sm text-secondary">Vector SVG</span>
+        </div>
+      </div>
+
       <!-- Card 4: Cotton Cloud (Puff) -->
       <div class="cursor-pointer snap-start shrink-0 w-[240px] sm:w-[260px] relative p-4 rounded-2xl border border-outline-variant/50 bg-surface-container-lowest hover:border-primary/40 transition-all flex flex-col justify-between mascot-engine-card" id="card-mascot-cotton" data-mascot="cotton" data-category="2d" onclick="selectMascot('cotton')">
         <div class="flex items-start justify-between mb-2">
@@ -904,13 +929,18 @@ let selectedEngineName = '3D Voxel Bot (Cube)';
 // ------------------------------------------
 // 1. CAROUSEL & CATEGORY FILTER LOGIC
 // ------------------------------------------
+let currentCategoryFilter = 'all';
+
 function filterMascotCategory(cat) {
+  currentCategoryFilter = cat;
   const allBtn = document.getElementById('filter-btn-all');
   const btn3d = document.getElementById('filter-btn-3d');
   const btn2d = document.getElementById('filter-btn-2d');
 
   [allBtn, btn3d, btn2d].forEach(b => {
-    b.className = 'px-2.5 py-1 rounded-lg text-label-sm font-label-sm font-semibold text-secondary hover:text-on-surface transition-all category-filter-btn flex items-center gap-1 cursor-pointer';
+    if (b) {
+      b.className = 'px-2.5 py-1 rounded-lg text-label-sm font-label-sm font-semibold text-secondary hover:text-on-surface transition-all category-filter-btn flex items-center gap-1 cursor-pointer';
+    }
   });
 
   const activeBtn = cat === '3d' ? btn3d : (cat === '2d' ? btn2d : allBtn);
@@ -919,14 +949,35 @@ function filterMascotCategory(cat) {
   }
 
   const cards = document.querySelectorAll('.mascot-engine-card');
+  let firstVisibleMascot = null;
+  let currentSelectedVisible = false;
+
   cards.forEach(card => {
     const cardCat = card.dataset.category;
-    if (cat === 'all' || cardCat === cat) {
+    const shouldShow = (cat === 'all' || cardCat === cat);
+    if (shouldShow) {
+      card.style.display = 'flex';
       card.classList.remove('hidden');
+      if (!firstVisibleMascot) {
+        firstVisibleMascot = card.dataset.mascot;
+      }
+      if (card.dataset.mascot === selectedEngineKey) {
+        currentSelectedVisible = true;
+      }
     } else {
+      card.style.display = 'none';
       card.classList.add('hidden');
     }
   });
+
+  if (!currentSelectedVisible && firstVisibleMascot) {
+    selectMascot(firstVisibleMascot);
+  }
+
+  const track = document.getElementById('mascotCarouselTrack');
+  if (track) {
+    track.scrollTo({ left: 0, behavior: 'smooth' });
+  }
 }
 
 function scrollMascotCarousel(dir) {
@@ -1466,6 +1517,7 @@ function renderPuffFrame(t, st, D) {
 }
 
 // ------------------------------------------
+// ------------------------------------------
 // 4. CANONICAL MASCOT PREVIEWS & SPEECH
 // ------------------------------------------
 const MASCOT_PREVIEWS = {
@@ -1501,10 +1553,19 @@ const MASCOT_PREVIEWS = {
       happy: '“Yay! Puff did a joyful hop across your workspace!”'
     }
   },
+  kumo: {
+    name: 'Kumo Cloud (Stitch Original)',
+    type: 'vector',
+    speech: {
+      idle: '“Hi! I am Kumo, your desktop thinking buddy. Ready to pair-program and ideate together!”',
+      thinking: '“Drifting up into the creative stratosphere... Pondering your architectural design.”',
+      speaking: '“Streaming thoughts softly through ambient cloud aura!”',
+      happy: '“Yay! Sparkles of joy across the desktop canvas!”'
+    }
+  },
   cotton: {
     name: 'Cotton Cloud (Puff)',
     type: 'vector',
-    assetFolder: 'cotton-cloud',
     speech: {
       idle: '“Cotton Cloud is drifting peacefully. Calming presence for focused deep work.”',
       thinking: '“Floating up into the ideation stratosphere... pondering.”',
@@ -1515,7 +1576,6 @@ const MASCOT_PREVIEWS = {
   kubo: {
     name: 'Kubo Bot (CRT)',
     type: 'vector',
-    assetFolder: 'kubo-bot',
     speech: {
       idle: '“KUBO-04 online. Terminal link established on localhost:4429.”',
       thinking: '“Executing background daemon compilation... Memory optimal.”',
@@ -1526,9 +1586,8 @@ const MASCOT_PREVIEWS = {
   droplet: {
     name: 'Mochi Droplet (Aquatic)',
     type: 'vector',
-    assetFolder: 'mochi-droplet',
     speech: {
-      idle: '“Mochi Droplet hydrated! Crisp fresh mint essence for your desktop.”',
+      idle: '“Mochi Droplet hydrated! Crisp fresh aquatic essence for your desktop.”',
       thinking: '“Bubbles of thought rising to the surface... Ideating!”',
       speaking: '“Rippling calm aquatic voice through the desktop workspace.”',
       happy: '“Splash! High tide of good energy and clean code.”'
@@ -1536,23 +1595,289 @@ const MASCOT_PREVIEWS = {
   }
 };
 
+// ------------------------------------------
+// 5. DYNAMIC VECTOR SVG ENGINES (Color Responsive)
+// ------------------------------------------
+function getKumoCloudSvg(mood, pal, blushVal) {
+  const blushOpacity = Math.max(0.15, (blushVal / 100) * 0.9);
+  let mouthPath = 'M114 116 Q120 126 126 116';
+  let eyesSvg = `
+    <path d="M85 106 C85 96 99 96 99 106" stroke="#171b2b" stroke-linecap="round" stroke-width="4.5"></path>
+    <circle cx="89" cy="100" fill="#ffffff" r="1.5"></circle>
+    <path d="M141 106 C141 96 155 96 155 106" stroke="#171b2b" stroke-linecap="round" stroke-width="4.5"></path>
+    <circle cx="145" cy="100" fill="#ffffff" r="1.5"></circle>
+  `;
+  let sparklesSvg = `
+    <path d="M198 42 L202 30 L206 42 L218 46 L206 50 L202 62 L198 50 L186 46 Z" fill="${pal.main}" opacity="0.9"></path>
+    <circle cx="218" cy="28" fill="${pal.main}" r="2.5"></circle>
+  `;
+  let animClass = 'animate-mochi';
+
+  if (mood === 'happy') {
+    mouthPath = 'M112 114 Q120 130 128 114 Z';
+    animClass = 'animate-bounce';
+    sparklesSvg += `
+      <circle cx="45" cy="40" fill="${pal.main}" r="3.5" opacity="0.8"></circle>
+      <circle cx="195" cy="140" fill="${pal.main}" r="3" opacity="0.8"></circle>
+    `;
+  } else if (mood === 'speaking') {
+    mouthPath = 'M112 114 Q120 128 128 114 Z';
+    animClass = 'animate-pulse';
+  } else if (mood === 'thinking') {
+    eyesSvg = `
+      <circle cx="92" cy="98" r="6" fill="#171b2b"></circle>
+      <circle cx="94" cy="96" r="2" fill="#ffffff"></circle>
+      <circle cx="148" cy="98" r="6" fill="#171b2b"></circle>
+      <circle cx="150" cy="96" r="2" fill="#ffffff"></circle>
+    `;
+    sparklesSvg += `
+      <circle cx="180" cy="22" fill="${pal.main}" r="4" opacity="0.9"></circle>
+      <circle cx="166" cy="12" fill="${pal.main}" r="2.5" opacity="0.7"></circle>
+    `;
+  }
+
+  return `
+    <div id="companion-poke-container" class="relative flex flex-col items-center cursor-pointer select-none" onclick="pokeCompanion()">
+      <div class="w-64 h-52 relative ${animClass} transition-transform active:scale-95 duration-150">
+        <svg class="w-full h-full drop-shadow-[0_16px_24px_${pal.main}45]" fill="none" viewBox="0 0 240 200" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="cloudBodyGradDynamic" x1="20" x2="220" y1="20" y2="180" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#ffffff"></stop>
+              <stop offset="45%" stop-color="${pal.tint}"></stop>
+              <stop offset="100%" stop-color="${pal.main}"></stop>
+            </linearGradient>
+            <radialGradient id="blushLeftDyn" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(72 122) scale(18 11)">
+              <stop offset="0%" stop-color="#ff7e67" stop-opacity="${blushOpacity}"></stop>
+              <stop offset="100%" stop-color="#ff7e67" stop-opacity="0"></stop>
+            </radialGradient>
+            <radialGradient id="blushRightDyn" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(168 122) scale(18 11)">
+              <stop offset="0%" stop-color="#ff7e67" stop-opacity="${blushOpacity}"></stop>
+              <stop offset="100%" stop-color="#ff7e67" stop-opacity="0"></stop>
+            </radialGradient>
+          </defs>
+          <path d="M70 170 C40 170 20 145 20 115 C20 85 45 68 70 68 C76 40 105 20 135 22 C165 24 185 45 192 68 C215 70 230 90 230 115 C230 145 210 170 175 170 Z" fill="url(#cloudBodyGradDynamic)" stroke="#ffffff" stroke-width="3"></path>
+          <path d="M80 62 C105 32 145 32 170 58" opacity="0.85" stroke="#ffffff" stroke-linecap="round" stroke-width="4"></path>
+          <ellipse cx="72" cy="122" fill="url(#blushLeftDyn)" rx="18" ry="11"></ellipse>
+          <ellipse cx="168" cy="122" fill="url(#blushRightDyn)" rx="18" ry="11"></ellipse>
+          ${eyesSvg}
+          <path d="${mouthPath}" stroke="#171b2b" stroke-linecap="round" stroke-width="3.5" fill="${mood === 'happy' || mood === 'speaking' ? '#171b2b' : 'none'}"></path>
+          ${sparklesSvg}
+        </svg>
+      </div>
+      <div class="w-44 h-5 rounded-full blur-md animate-mochi-shadow -mt-3" style="background-color: ${pal.main}35;"></div>
+    </div>
+  `;
+}
+
+function getDropletSvg(mood, pal, blushVal) {
+  const blushOpacity = Math.max(0.15, (blushVal / 100) * 0.9);
+  let mouthPath = 'M60 80C62 83 66 83 68 80';
+  let eyesSvg = `
+    <ellipse cx="50" cy="74" rx="4" ry="6" fill="#1C3833" />
+    <ellipse cx="78" cy="74" rx="4" ry="6" fill="#1C3833" />
+    <circle cx="51.5" cy="72" r="1.5" fill="#FFFFFF" />
+    <circle cx="79.5" cy="72" r="1.5" fill="#FFFFFF" />
+  `;
+  let animClass = 'animate-mochi';
+
+  if (mood === 'happy') {
+    eyesSvg = `
+      <path d="M46 74L50 68L54 74" stroke="#1C3833" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M74 74L78 68L82 74" stroke="#1C3833" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+    `;
+    mouthPath = 'M59 79C61 84 67 84 69 79 Z';
+    animClass = 'animate-bounce';
+  } else if (mood === 'speaking') {
+    mouthPath = 'M60 78C60 83 68 83 68 78 Z';
+    animClass = 'animate-pulse';
+  } else if (mood === 'thinking') {
+    eyesSvg = `
+      <ellipse cx="51" cy="71" rx="4" ry="5" fill="#1C3833" />
+      <ellipse cx="79" cy="71" rx="4" ry="5" fill="#1C3833" />
+      <circle cx="52" cy="69" r="1.5" fill="#FFFFFF" />
+      <circle cx="80" cy="69" r="1.5" fill="#FFFFFF" />
+    `;
+  }
+
+  return `
+    <div id="companion-poke-container" class="relative flex flex-col items-center cursor-pointer select-none" onclick="pokeCompanion()">
+      <div class="w-56 h-52 relative ${animClass} transition-transform active:scale-95 duration-150 flex items-center justify-center">
+        <svg class="w-full h-full drop-shadow-[0_16px_24px_${pal.main}45]" fill="none" viewBox="0 0 128 116" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="mochi_gel_dynamic" x1="64" y1="6" x2="64" y2="108" gradientUnits="userSpaceOnUse">
+              <stop stop-color="${pal.tint}" />
+              <stop offset="0.55" stop-color="${pal.main}" />
+              <stop offset="1" stop-color="${pal.rim}" />
+            </linearGradient>
+            <linearGradient id="mochi_inner_dynamic" x1="64" y1="14" x2="64" y2="98" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#FFFFFF" />
+              <stop offset="0.6" stop-color="${pal.tint}" />
+              <stop offset="1" stop-color="${pal.main}" />
+            </linearGradient>
+          </defs>
+          <path d="M64 6C46 32 16 54 16 80C16 96.5685 37.4853 108 64 108C90.5147 108 112 96.5685 112 80C112 54 82 32 64 6Z" fill="url(#mochi_gel_dynamic)" />
+          <path d="M64 14C52 36 28 56 28 78C28 89.5 44 98 64 98C84 98 100 89.5 100 78C100 56 76 36 64 14Z" fill="url(#mochi_inner_dynamic)" opacity="0.8" />
+          <ellipse cx="46" cy="46" rx="14" ry="7" fill="#FFFFFF" opacity="0.8" transform="rotate(-30 46 46)" />
+          ${eyesSvg}
+          <path d="${mouthPath}" stroke="#1C3833" stroke-width="2.5" stroke-linecap="round" fill="${mood === 'happy' || mood === 'speaking' ? '#1C3833' : 'none'}" />
+          <ellipse cx="40" cy="80" rx="5" ry="3" fill="#ff7e67" opacity="${blushOpacity}" />
+          <ellipse cx="88" cy="80" rx="5" ry="3" fill="#ff7e67" opacity="${blushOpacity}" />
+        </svg>
+      </div>
+      <div class="w-40 h-5 rounded-full blur-md animate-mochi-shadow -mt-3" style="background-color: ${pal.main}35;"></div>
+    </div>
+  `;
+}
+
+function getKuboBotSvg(mood, pal, blushVal) {
+  let eyesSvg = `
+    <rect x="38" y="62" width="16" height="16" rx="4" fill="${pal.tint}" />
+    <path d="M42 72L46 66L50 72" stroke="#171B2B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+    <rect x="76" y="62" width="16" height="16" rx="4" fill="${pal.tint}" />
+    <path d="M80 72L84 66L88 72" stroke="#171B2B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+  `;
+  let mouthSvg = `<rect x="58" y="76" width="14" height="4" rx="2" fill="${pal.main}" />`;
+  let animClass = 'animate-mochi';
+
+  if (mood === 'happy') {
+    animClass = 'animate-bounce';
+    eyesSvg = `
+      <rect x="38" y="60" width="16" height="16" rx="4" fill="${pal.main}" />
+      <path d="M41 71L46 64L51 71" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+      <rect x="76" y="60" width="16" height="16" rx="4" fill="${pal.main}" />
+      <path d="M79 71L84 64L89 71" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+    `;
+    mouthSvg = `<rect x="56" y="75" width="18" height="6" rx="3" fill="${pal.tint}" stroke="${pal.main}" stroke-width="1.5" />`;
+  } else if (mood === 'speaking') {
+    animClass = 'animate-pulse';
+    mouthSvg = `
+      <rect x="54" y="74" width="4" height="8" rx="2" fill="${pal.main}" />
+      <rect x="60" y="72" width="4" height="12" rx="2" fill="${pal.main}" />
+      <rect x="66" y="75" width="4" height="7" rx="2" fill="${pal.main}" />
+      <rect x="72" y="73" width="4" height="10" rx="2" fill="${pal.main}" />
+    `;
+  } else if (mood === 'thinking') {
+    eyesSvg = `
+      <rect x="38" y="62" width="16" height="16" rx="4" fill="${pal.tint}" />
+      <circle cx="46" cy="70" r="3.5" fill="#171B2B" />
+      <rect x="76" y="62" width="16" height="16" rx="4" fill="${pal.tint}" />
+      <circle cx="84" cy="70" r="3.5" fill="#171B2B" />
+    `;
+    mouthSvg = `<circle cx="65" cy="78" r="3" fill="${pal.main}" />`;
+  }
+
+  return `
+    <div id="companion-poke-container" class="relative flex flex-col items-center cursor-pointer select-none" onclick="pokeCompanion()">
+      <div class="w-60 h-56 relative ${animClass} transition-transform active:scale-95 duration-150 flex items-center justify-center">
+        <svg class="w-full h-full drop-shadow-[0_16px_24px_${pal.main}40]" fill="none" viewBox="0 0 130 140" xmlns="http://www.w3.org/2000/svg">
+          <rect x="62" y="14" width="6" height="24" rx="3" fill="#525F77" />
+          <circle cx="65" cy="12" r="10" fill="${pal.main}" opacity="0.45" />
+          <circle cx="65" cy="12" r="6" fill="${pal.main}" stroke="#FFFFFF" stroke-width="2" />
+          <rect x="15" y="36" width="100" height="88" rx="20" fill="#2E3B52" stroke="${pal.rim}" stroke-width="2" />
+          <rect x="25" y="46" width="80" height="52" rx="14" fill="#171B2B" stroke="#3A475F" stroke-width="2" />
+          ${eyesSvg}
+          ${mouthSvg}
+          <circle cx="35" cy="110" r="4" fill="${pal.main}" />
+          <circle cx="47" cy="110" r="4" fill="#FB7185" />
+          <text x="70" y="113" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="600" fill="#8A92A6" letter-spacing="1">KUBO-04</text>
+        </svg>
+      </div>
+      <div class="w-44 h-5 rounded-full blur-md animate-mochi-shadow -mt-3" style="background-color: ${pal.main}30;"></div>
+    </div>
+  `;
+}
+
+function getCottonCloudSvg(mood, pal, blushVal) {
+  const blushOpacity = Math.max(0.15, (blushVal / 100) * 0.9);
+  let eyesSvg = `
+    <circle cx="68" cy="54" r="4.5" fill="#2E3B52" />
+    <circle cx="102" cy="54" r="4.5" fill="#2E3B52" />
+    <circle cx="69.5" cy="52.5" r="1.5" fill="#FFFFFF" />
+    <circle cx="103.5" cy="52.5" r="1.5" fill="#FFFFFF" />
+  `;
+  let mouthPath = 'M80 61C82.5 64.5 87.5 64.5 90 61';
+  let animClass = 'animate-mochi';
+
+  if (mood === 'happy') {
+    animClass = 'animate-bounce';
+    eyesSvg = `
+      <path d="M64 56L68 50L72 56" stroke="#2E3B52" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M98 56L102 50L106 56" stroke="#2E3B52" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+    `;
+    mouthPath = 'M79 60C82 65 88 65 91 60 Z';
+  } else if (mood === 'speaking') {
+    animClass = 'animate-pulse';
+    mouthPath = 'M80 59C80 64 90 64 90 59 Z';
+  } else if (mood === 'thinking') {
+    eyesSvg = `
+      <circle cx="70" cy="51" r="4.5" fill="#2E3B52" />
+      <circle cx="104" cy="51" r="4.5" fill="#2E3B52" />
+      <circle cx="71.5" cy="49.5" r="1.5" fill="#FFFFFF" />
+      <circle cx="105.5" cy="49.5" r="1.5" fill="#FFFFFF" />
+    `;
+  }
+
+  return `
+    <div id="companion-poke-container" class="relative flex flex-col items-center cursor-pointer select-none" onclick="pokeCompanion()">
+      <div class="w-64 h-52 relative ${animClass} transition-transform active:scale-95 duration-150 flex items-center justify-center">
+        <svg class="w-full h-full drop-shadow-[0_16px_24px_${pal.main}40]" fill="none" viewBox="0 0 150 96" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="cotton_grad_dynamic" x1="10" y1="4" x2="142" y2="97" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#FFFFFF" />
+              <stop offset="0.6" stop-color="${pal.tint}" />
+              <stop offset="1" stop-color="${pal.main}" />
+            </linearGradient>
+          </defs>
+          <ellipse cx="75" cy="8" rx="36" ry="6" fill="${pal.main}" opacity="0.25" />
+          <path d="M120 72C133.255 72 144 61.2548 144 48C144 35.8456 134.975 25.7981 123.279 24.2386C120.485 10.3707 108.204 0 93.5 0C82.1066 0 72.1388 6.27315 66.8601 15.5492C62.4638 13.2922 57.481 12 52.2 12C36.736 12 24.2 24.536 24.2 40C24.2 41.229 24.2793 42.4395 24.433 43.627C10.6698 46.126 0 58.1256 0 72.6C0 88.6163 12.9837 101.6 29 101.6H120C133.255 101.6 144 90.8548 144 77.6" fill="#FFFFFF" />
+          <path d="M120 70C132.15 70 142 60.1503 142 48C142 36.8778 133.743 27.6833 123.042 26.252C120.486 13.5658 109.248 4 95.8 4C85.3748 4 76.2625 9.74088 71.4326 18.228C67.41 16.1627 62.8504 15 58 15C43.6406 15 32 26.6406 32 41C32 42.1246 32.0712 43.2329 32.2098 44.3197C19.6152 46.6063 10 57.5855 10 70.8C10 85.4355 21.8645 97.3 36.5 97.3H120C132.15 97.3 142 87.4503 142 75.3" fill="url(#cotton_grad_dynamic)" />
+          ${eyesSvg}
+          <ellipse cx="59" cy="61" rx="6" ry="3.5" fill="#FF7E67" opacity="${blushOpacity}" />
+          <ellipse cx="111" cy="61" rx="6" ry="3.5" fill="#FF7E67" opacity="${blushOpacity}" />
+          <path d="${mouthPath}" stroke="#2E3B52" stroke-width="2.5" stroke-linecap="round" fill="${mood === 'happy' || mood === 'speaking' ? '#2E3B52' : 'none'}" />
+        </svg>
+      </div>
+      <div class="w-44 h-5 rounded-full blur-md animate-mochi-shadow -mt-3" style="background-color: ${pal.main}30;"></div>
+    </div>
+  `;
+}
+
+function renderVectorCompanion(key, mood, pal) {
+  if (key === 'kumo') return getKumoCloudSvg(mood, pal, currentBlushVal);
+  if (key === 'cotton') return getCottonCloudSvg(mood, pal, currentBlushVal);
+  if (key === 'droplet') return getDropletSvg(mood, pal, currentBlushVal);
+  if (key === 'kubo') return getKuboBotSvg(mood, pal, currentBlushVal);
+  return getKumoCloudSvg(mood, pal, currentBlushVal);
+}
+
+function updateVectorStage() {
+  const vectorContainer = document.getElementById('vector-stage-container');
+  const currentMascot = MASCOT_PREVIEWS[selectedEngineKey];
+  if (vectorContainer && currentMascot && currentMascot.type === 'vector') {
+    const pal = getPaletteConfig(selectedPaletteName || selectedPaletteHex);
+    vectorContainer.innerHTML = renderVectorCompanion(selectedEngineKey, currentMood, pal);
+  }
+}
+
 function selectMascot(key) {
   if (!MASCOT_PREVIEWS[key]) return;
   selectedEngineKey = key;
   selectedEngineName = MASCOT_PREVIEWS[key].name;
 
-  // 1. Update Carousel Cards Styling
+  // 1. Update Carousel Cards Styling WITHOUT wiping display/filter states
   document.querySelectorAll('.mascot-engine-card').forEach(card => {
-    const isSelected = card.dataset.mascot === key;
+    const isSelected = (card.dataset.mascot === key);
     const pill = card.querySelector('.mascot-status-pill');
     if (isSelected) {
-      card.className = 'cursor-pointer snap-start shrink-0 w-[240px] sm:w-[260px] relative p-4 rounded-2xl border-2 border-primary bg-primary-fixed/20 shadow-sm transition-all flex flex-col justify-between mascot-engine-card';
+      card.classList.add('border-2', 'border-primary', 'bg-primary-fixed/20', 'shadow-sm');
+      card.classList.remove('border-outline-variant/50', 'bg-surface-container-lowest');
       if (pill) {
         pill.innerHTML = '<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-primary text-on-primary font-bold">ACTIVE</span><div class="w-5 h-5 rounded-full bg-primary text-on-primary flex items-center justify-center"><span class="material-symbols-outlined text-[14px]">check</span></div>';
       }
       card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
     } else {
-      card.className = 'cursor-pointer snap-start shrink-0 w-[240px] sm:w-[260px] relative p-4 rounded-2xl border border-outline-variant/50 bg-surface-container-lowest hover:border-primary/40 transition-all flex flex-col justify-between mascot-engine-card';
+      card.classList.remove('border-2', 'border-primary', 'bg-primary-fixed/20', 'shadow-sm');
+      card.classList.add('border-outline-variant/50', 'bg-surface-container-lowest');
       if (pill) {
         pill.innerHTML = '<div class="w-5 h-5 rounded-full border-2 border-outline-variant flex items-center justify-center"></div>';
       }
@@ -1565,33 +1890,28 @@ function selectMascot(key) {
   const vectorContainer = document.getElementById('vector-stage-container');
   const hintText = document.getElementById('hintActionText');
   const mascotInfo = MASCOT_PREVIEWS[key];
+  const pal = getPaletteConfig(selectedPaletteName || selectedPaletteHex);
 
   if (mascotInfo.type === '3d') {
     botCanvas.classList.remove('hidden');
     pixelCanvas.classList.add('hidden');
     vectorContainer.classList.add('hidden');
     set3DGeometryMode(mascotInfo.geometryMode);
-    if (mascotInfo.geometryMode === 'smooth') {
-      setSlimePalette('#a78bfa', '#7c3aed', '#ede9fe');
-    } else {
-      setSlimePalette('#29b6f6', '#1976d2', '#e1f5fe');
-    }
+    setSlimePalette(pal.main, pal.rim, pal.shine);
     if (hintText) hintText.textContent = "Drag to rotate 360° • Click to boop • Scroll to zoom";
   } else if (mascotInfo.type === '2d') {
     botCanvas.classList.add('hidden');
     pixelCanvas.classList.remove('hidden');
     vectorContainer.classList.add('hidden');
     puffS.state = currentMood;
+    setPuffPalette(pal.puffIndex);
     triggerPokeSquish();
     if (hintText) hintText.textContent = "Click Puff to boop • Move mouse to look";
   } else {
     botCanvas.classList.add('hidden');
     pixelCanvas.classList.add('hidden');
     vectorContainer.classList.remove('hidden');
-    const folder = mascotInfo.assetFolder;
-    const file = currentMood === 'speaking' ? 'speaking.png' : (currentMood === 'thinking' ? 'thinking.png' : (currentMood === 'happy' ? 'happy.png' : 'idle.png'));
-    const anim = currentMood === 'happy' ? 'animate-bounce' : (currentMood === 'speaking' ? 'animate-pulse' : 'animate-mochi-float');
-    vectorContainer.innerHTML = `<img src="../../assets/mascot/${folder}/${file}" alt="${mascotInfo.name}" class="w-52 h-52 object-contain drop-shadow-[0_16px_24px_rgba(99,85,216,0.2)] ${anim}"/>`;
+    updateVectorStage();
     if (hintText) hintText.textContent = "Click companion to poke • Dynamic 5-state animations";
   }
 
@@ -1624,13 +1944,7 @@ function setMood(button, moodName) {
       puffS.state = currentMood;
       puffS.poke = 1;
     } else if (mascotInfo.type === 'vector') {
-      const vectorContainer = document.getElementById('vector-stage-container');
-      const folder = mascotInfo.assetFolder;
-      const file = currentMood === 'speaking' ? 'speaking.png' : (currentMood === 'thinking' ? 'thinking.png' : (currentMood === 'happy' ? 'happy.png' : 'idle.png'));
-      const anim = currentMood === 'happy' ? 'animate-bounce' : (currentMood === 'speaking' ? 'animate-pulse' : 'animate-mochi-float');
-      if (vectorContainer) {
-        vectorContainer.innerHTML = `<img src="../../assets/mascot/${folder}/${file}" alt="${mascotInfo.name}" class="w-52 h-52 object-contain drop-shadow-[0_16px_24px_rgba(99,85,216,0.2)] ${anim}"/>`;
-      }
+      updateVectorStage();
     }
 
     // 3. Update speech bubble text
@@ -1819,6 +2133,9 @@ function selectPalette(btn, keyOrHex) {
   if (typeof setPuffPalette === 'function' && typeof pal.puffIndex === 'number') {
     setPuffPalette(pal.puffIndex);
   }
+
+  // Synchronize Vector/Stitch mascots instantly!
+  updateVectorStage();
 }
 
 function updateBlush(val) {
@@ -1830,6 +2147,7 @@ function updateBlush(val) {
     leftBlushMesh.scale.set(sc, sc, sc);
     rightBlushMesh.scale.set(sc, sc, sc);
   }
+  updateVectorStage();
 }
 
 function setBlush(val) {
@@ -1840,6 +2158,16 @@ function setBlush(val) {
 
 function pokeCompanion() {
   triggerPokeSquish();
+  const vectorContainer = document.getElementById('vector-stage-container');
+  if (vectorContainer && !vectorContainer.classList.contains('hidden')) {
+    const inner = vectorContainer.firstElementChild;
+    if (inner) {
+      inner.style.transform = 'scale(0.92, 1.08)';
+      setTimeout(() => {
+        inner.style.transform = '';
+      }, 180);
+    }
+  }
 }
 
 function resetStageView() {
