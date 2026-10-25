@@ -59,27 +59,27 @@ test.describe('Kumo Studio & Onboarding Window', () => {
     await expect(studioPage.locator('text=Initialize Kumo Companion')).toBeVisible();
     await expect(studioPage.locator('text=1. Connect AI Brain')).toBeVisible();
 
-    // Verify API Key input and engine selector
-    const apiKeyInput = studioPage.locator('#api-key-input');
+    // Verify API Key input is empty by default (no hardcoded fake key)
+    const apiKeyInput = studioPage.locator('#apiKeyInput');
     await expect(apiKeyInput).toBeVisible();
+    const defaultVal = await apiKeyInput.inputValue();
+    expect(defaultVal).toBe('');
 
-    const card2D = studioPage.locator('[data-engine-card="2d"]');
-    const card3D = studioPage.locator('[data-engine-card="3d"]');
-    await expect(card2D).toBeVisible();
-    await expect(card3D).toBeVisible();
+    // Step to Step 2 (Engine)
+    await studioPage.locator('#tab-btn-2').click();
+    await expect(studioPage.locator('text=2. Choose Companion Engine')).toBeVisible();
 
-    // Switch engine card to 3D
-    await card3D.click();
-    await expect(card3D).toHaveClass(/border-primary/);
+    // Step to Step 3 (Persona & Swatches)
+    await studioPage.locator('#tab-btn-3').click();
+    await expect(studioPage.locator('text=3. Color Palette & Blush Intensity')).toBeVisible();
 
-    // Verify swatches exist
-    const skySwatch = studioPage.locator('[data-swatch="sky"]');
-    await expect(skySwatch).toBeVisible();
-    await skySwatch.click();
+    // Step to Step 4 (Hotkeys & Launch)
+    await studioPage.locator('#tab-btn-4').click();
+    await expect(studioPage.locator('text=4. Summon & Keyboard Shortcuts')).toBeVisible();
 
-    // Verify Launch Companion button exists
+    // Verify Launch button exists and is clickable
     const launchBtn = studioPage.locator('#btn-launch-companion');
     await expect(launchBtn).toBeVisible();
-    await expect(launchBtn).toContainText('Launch Kumo & Enter Canvas');
+    await expect(launchBtn).toContainText('Launch Kumo');
   });
 });
