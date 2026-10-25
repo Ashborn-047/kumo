@@ -595,35 +595,35 @@
 <!-- Color Swatches -->
 <div class="flex flex-col gap-2">
 <label class="font-label-sm text-label-sm text-secondary uppercase tracking-wider font-semibold">Aura Tint Selection</label>
-<div class="grid grid-cols-5 gap-2.5" id="paletteGrid">
-<!-- Lilac (Active) -->
-<button class="group relative flex flex-col items-center gap-1.5 p-2 rounded-xl bg-surface-container-lowest border-2 border-primary shadow-xs transition-all palette-swatch" onclick="selectPalette(this, '#eadfff')" type="button">
-<div class="w-9 h-9 rounded-full bg-[#eadfff] shadow-inner ring-2 ring-primary flex items-center justify-center">
-<span class="material-symbols-outlined text-primary text-[15px]">check</span>
-</div>
-<span class="font-label-sm text-label-sm text-on-surface font-bold">Lilac</span>
-</button>
-<!-- Sky -->
-<button class="group relative flex flex-col items-center gap-1.5 p-2 rounded-xl bg-surface-container-lowest border border-outline-variant/40 hover:border-primary/50 transition-all palette-swatch" onclick="selectPalette(this, '#dcedff')" type="button">
-<div class="w-9 h-9 rounded-full bg-[#dcedff] shadow-inner"></div>
-<span class="font-label-sm text-label-sm text-secondary">Sky</span>
-</button>
-<!-- Matcha -->
-<button class="group relative flex flex-col items-center gap-1.5 p-2 rounded-xl bg-surface-container-lowest border border-outline-variant/40 hover:border-primary/50 transition-all palette-swatch" onclick="selectPalette(this, '#dcf5e7')" type="button">
-<div class="w-9 h-9 rounded-full bg-[#dcf5e7] shadow-inner"></div>
-<span class="font-label-sm text-label-sm text-secondary">Matcha</span>
-</button>
-<!-- Peach -->
-<button class="group relative flex flex-col items-center gap-1.5 p-2 rounded-xl bg-surface-container-lowest border border-outline-variant/40 hover:border-primary/50 transition-all palette-swatch" onclick="selectPalette(this, '#ffe9d6')" type="button">
-<div class="w-9 h-9 rounded-full bg-[#ffe9d6] shadow-inner"></div>
-<span class="font-label-sm text-label-sm text-secondary">Peach</span>
-</button>
-<!-- Solar -->
-<button class="group relative flex flex-col items-center gap-1.5 p-2 rounded-xl bg-surface-container-lowest border border-outline-variant/40 hover:border-primary/50 transition-all palette-swatch" onclick="selectPalette(this, '#fff5c8')" type="button">
-<div class="w-9 h-9 rounded-full bg-[#fff5c8] shadow-inner"></div>
-<span class="font-label-sm text-label-sm text-secondary">Solar</span>
-</button>
-</div>
+        <div class="grid grid-cols-5 gap-2.5" id="paletteGrid">
+          <!-- Lilac (Active) -->
+          <button class="group relative flex flex-col items-center gap-1.5 p-2 rounded-xl bg-surface-container-lowest border-2 border-primary shadow-xs transition-all palette-swatch" onclick="selectPalette(this, 'lilac')" type="button">
+            <div class="w-9 h-9 rounded-full bg-[#eadfff] shadow-inner ring-2 ring-primary flex items-center justify-center">
+              <span class="material-symbols-outlined text-primary text-[15px]">check</span>
+            </div>
+            <span class="font-label-sm text-label-sm text-on-surface font-bold">Lilac</span>
+          </button>
+          <!-- Sky -->
+          <button class="group relative flex flex-col items-center gap-1.5 p-2 rounded-xl bg-surface-container-lowest border border-outline-variant/40 hover:border-primary/50 transition-all palette-swatch" onclick="selectPalette(this, 'sky')" type="button">
+            <div class="w-9 h-9 rounded-full bg-[#dcedff] shadow-inner"></div>
+            <span class="font-label-sm text-label-sm text-secondary">Sky</span>
+          </button>
+          <!-- Matcha -->
+          <button class="group relative flex flex-col items-center gap-1.5 p-2 rounded-xl bg-surface-container-lowest border border-outline-variant/40 hover:border-primary/50 transition-all palette-swatch" onclick="selectPalette(this, 'matcha')" type="button">
+            <div class="w-9 h-9 rounded-full bg-[#dcf5e7] shadow-inner"></div>
+            <span class="font-label-sm text-label-sm text-secondary">Matcha</span>
+          </button>
+          <!-- Peach -->
+          <button class="group relative flex flex-col items-center gap-1.5 p-2 rounded-xl bg-surface-container-lowest border border-outline-variant/40 hover:border-primary/50 transition-all palette-swatch" onclick="selectPalette(this, 'peach')" type="button">
+            <div class="w-9 h-9 rounded-full bg-[#ffe9d6] shadow-inner"></div>
+            <span class="font-label-sm text-label-sm text-secondary">Peach</span>
+          </button>
+          <!-- Solar -->
+          <button class="group relative flex flex-col items-center gap-1.5 p-2 rounded-xl bg-surface-container-lowest border border-outline-variant/40 hover:border-primary/50 transition-all palette-swatch" onclick="selectPalette(this, 'solar')" type="button">
+            <div class="w-9 h-9 rounded-full bg-[#fff5c8] shadow-inner"></div>
+            <span class="font-label-sm text-label-sm text-secondary">Solar</span>
+          </button>
+        </div>
 </div>
 <!-- Blush Intensity Slider Card -->
 <div class="bg-surface-container-low p-4 rounded-2xl border border-outline-variant/30 flex flex-col gap-3">
@@ -1033,8 +1033,8 @@ function buildMochiCloudBot() {
   botRoot = new THREE.Group();
   scene.add(botRoot);
 
-  matBody = new THREE.MeshToonMaterial({ color: bodyHex, emissive: bodyHex, emissiveIntensity: 0.22 });
-  matBaseRim = new THREE.MeshToonMaterial({ color: baseRimHex, emissive: baseRimHex, emissiveIntensity: 0.15 });
+  matBody = new THREE.MeshToonMaterial({ color: bodyHex, emissive: bodyHex, emissiveIntensity: 0.12 });
+  matBaseRim = new THREE.MeshToonMaterial({ color: baseRimHex, emissive: baseRimHex, emissiveIntensity: 0.08 });
   matShine = new THREE.MeshBasicMaterial({ color: shineHex });
   matEye = new THREE.MeshBasicMaterial({ color: eyeHex });
   matBlush = new THREE.MeshBasicMaterial({ color: blushHex });
@@ -1043,7 +1043,7 @@ function buildMochiCloudBot() {
   const glowMat = new THREE.SpriteMaterial({
     map: createSoftGlowTexture(bodyHex),
     transparent: true,
-    blending: THREE.AdditiveBlending,
+    opacity: 0.35,
     depthWrite: false
   });
   glowBackSprite = new THREE.Sprite(glowMat);
@@ -1203,8 +1203,16 @@ function set3DGeometryMode(mode) {
 
 function setSlimePalette(mainHex, rimHex, topShineHex) {
   bodyHex = mainHex; baseRimHex = rimHex; shineHex = topShineHex;
-  if (matBody) { matBody.color.set(mainHex); matBody.emissive.set(mainHex); }
-  if (matBaseRim) { matBaseRim.color.set(rimHex); matBaseRim.emissive.set(rimHex); }
+  if (matBody) {
+    matBody.color.set(mainHex);
+    matBody.emissive.set(mainHex);
+    matBody.emissiveIntensity = 0.12;
+  }
+  if (matBaseRim) {
+    matBaseRim.color.set(rimHex);
+    matBaseRim.emissive.set(rimHex);
+    matBaseRim.emissiveIntensity = 0.08;
+  }
   if (matShine) matShine.color.set(topShineHex);
   if (matSmoothShader) {
     matSmoothShader.uniforms.uBodyColor.value.set(mainHex);
@@ -1747,25 +1755,69 @@ function toggleKeyVisibility() {
   }
 }
 
-function selectPalette(btn, hex) {
-  selectedPaletteHex = hex;
-  const nameEl = btn.querySelector('span');
-  if (nameEl) selectedPaletteName = nameEl.textContent.trim();
+const PALETTE_DEFINITIONS = {
+  lilac: { name: 'Lilac', main: '#a78bfa', rim: '#7c3aed', shine: '#ede9fe', tint: '#eadfff', puffIndex: 2 },
+  sky: { name: 'Sky', main: '#29b6f6', rim: '#1976d2', shine: '#e1f5fe', tint: '#dcedff', puffIndex: 0 },
+  matcha: { name: 'Matcha', main: '#34d399', rim: '#059669', shine: '#d1fae5', tint: '#dcf5e7', puffIndex: 3 },
+  peach: { name: 'Peach', main: '#f472b6', rim: '#db2777', shine: '#fce7f3', tint: '#ffe9d6', puffIndex: 1 },
+  solar: { name: 'Solar', main: '#fbbf24', rim: '#d97706', shine: '#fef3c7', tint: '#fff5c8', puffIndex: 4 }
+};
+
+function getPaletteConfig(val) {
+  if (typeof val === 'string') {
+    const lower = val.toLowerCase().trim();
+    if (PALETTE_DEFINITIONS[lower]) return PALETTE_DEFINITIONS[lower];
+    for (const k in PALETTE_DEFINITIONS) {
+      const p = PALETTE_DEFINITIONS[k];
+      if (p.tint.toLowerCase() === lower || p.main.toLowerCase() === lower || p.name.toLowerCase() === lower) {
+        return p;
+      }
+    }
+  }
+  return PALETTE_DEFINITIONS.lilac;
+}
+
+function selectPalette(btn, keyOrHex) {
+  const pal = getPaletteConfig(keyOrHex);
+  selectedPaletteHex = pal.main;
+  selectedPaletteName = pal.name;
 
   document.querySelectorAll('.palette-swatch').forEach(sw => {
     sw.classList.remove('border-2', 'border-primary', 'shadow-xs');
     sw.classList.add('border-outline-variant/40');
+    const label = sw.querySelector('span:not(.material-symbols-outlined)');
+    if (label) {
+      label.classList.remove('text-on-surface', 'font-bold');
+      label.classList.add('text-secondary');
+    }
     const inner = sw.querySelector('div');
-    if (inner) inner.innerHTML = '';
+    if (inner) {
+      inner.classList.remove('ring-2', 'ring-primary');
+      inner.innerHTML = '';
+    }
   });
-  btn.classList.remove('border-outline-variant/40');
-  btn.classList.add('border-2', 'border-primary', 'shadow-xs');
-  const inner = btn.querySelector('div');
-  if (inner) inner.innerHTML = '<span class="material-symbols-outlined text-primary text-[15px]">check</span>';
 
-  // Live update 3D shader colors!
-  if (hex) {
-    setSlimePalette(hex, hex, '#ffffff');
+  if (btn) {
+    btn.classList.remove('border-outline-variant/40');
+    btn.classList.add('border-2', 'border-primary', 'shadow-xs');
+    const label = btn.querySelector('span:not(.material-symbols-outlined)');
+    if (label) {
+      label.classList.add('text-on-surface', 'font-bold');
+      label.classList.remove('text-secondary');
+    }
+    const inner = btn.querySelector('div');
+    if (inner) {
+      inner.classList.add('ring-2', 'ring-primary');
+      inner.innerHTML = '<span class="material-symbols-outlined text-primary text-[15px]">check</span>';
+    }
+  }
+
+  // Live update 3D shader colors with strong contrast and rich tone
+  setSlimePalette(pal.main, pal.rim, pal.shine);
+
+  // Synchronize 2D Puff palette if in 2D mode
+  if (typeof setPuffPalette === 'function' && typeof pal.puffIndex === 'number') {
+    setPuffPalette(pal.puffIndex);
   }
 }
 
