@@ -1,213 +1,718 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kumo Studio — Desktop Customizer & Lab</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      --bg-dark: #0a0d14;
-      --bg-bar: rgba(15, 20, 32, 0.95);
-      --border-subtle: rgba(255, 255, 255, 0.1);
-      --accent: #38bdf8;
-      --accent-glow: 0 0 16px rgba(56, 189, 248, 0.4);
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kumo — Studio Wizard &amp; Companion Setup</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono & Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500;600;700&amp;family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS with theme config -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-error-container": "#93000a",
+            "surface-tint": "#5849cc",
+            "primary-container": "#6355d8",
+            "on-surface-variant": "#474554",
+            "inverse-primary": "#c6bfff",
+            "on-tertiary": "#ffffff",
+            "tertiary-fixed-dim": "#ffb4a6",
+            "outline": "#787585",
+            "on-secondary-fixed-variant": "#3a475f",
+            "outline-variant": "#c8c4d6",
+            "surface-container": "#ececff",
+            "tertiary": "#922e1e",
+            "primary": "#4a3abe",
+            "on-tertiary-container": "#ffe3de",
+            "on-primary-fixed": "#160066",
+            "on-secondary": "#ffffff",
+            "on-primary": "#ffffff",
+            "surface-dim": "#d6d9ef",
+            "on-primary-fixed-variant": "#402db4",
+            "background": "#fbf8ff",
+            "surface-container-high": "#e5e7fe",
+            "surface-container-low": "#f3f2ff",
+            "error": "#ba1a1a",
+            "tertiary-container": "#b34533",
+            "primary-fixed": "#e4dfff",
+            "on-tertiary-fixed": "#3f0300",
+            "surface": "#fbf8ff",
+            "secondary-fixed": "#d6e3ff",
+            "secondary-container": "#d3e0fd",
+            "on-tertiary-fixed-variant": "#842415",
+            "secondary": "#525f77",
+            "surface-container-lowest": "#ffffff",
+            "tertiary-fixed": "#ffdad4",
+            "on-background": "#171b2b",
+            "error-container": "#ffdad6",
+            "on-error": "#ffffff",
+            "secondary-fixed-dim": "#b9c7e3",
+            "on-primary-container": "#ece7ff",
+            "surface-variant": "#dfe1f8",
+            "primary-fixed-dim": "#c6bfff",
+            "inverse-on-surface": "#efefff",
+            "on-secondary-fixed": "#0e1c31",
+            "inverse-surface": "#2c2f41",
+            "surface-container-highest": "#dfe1f8",
+            "surface-bright": "#fbf8ff",
+            "on-surface": "#171b2b",
+            "on-secondary-container": "#56637c"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "2xl": "1rem",
+            "3xl": "1.5rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xl": "2.5rem",
+            "space-sm": "0.5rem",
+            "gutter": "1.5rem",
+            "space-lg": "1.5rem",
+            "margin": "2rem",
+            "space-xs": "0.25rem",
+            "space-md": "1rem",
+            "margin-mobile": "1rem",
+            "gutter-sm": "0.75rem"
+          },
+          "fontFamily": {
+            "label-sm": ["JetBrains Mono"],
+            "label-lg": ["JetBrains Mono"],
+            "label-md": ["JetBrains Mono"],
+            "headline-xl-mobile": ["Plus Jakarta Sans"],
+            "headline-xl": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "body-sm": ["Inter"],
+            "body-md": ["Inter"],
+            "body-lg": ["Inter"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "label-sm": ["10px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600" }],
+            "label-lg": ["13px", { "lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "label-md": ["11px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "headline-xl-mobile": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-xl": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "body-sm": ["12px", { "lineHeight": "18px", "fontWeight": "400" }],
+            "body-md": ["14px", { "lineHeight": "21px", "fontWeight": "400" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "headline-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "headline-md": ["22px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+          }
+        }
+      }
     }
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+  </script>
+<style>
+    /* Dot Matrix Spatial Coordinate Grid */
+    .bg-dot-matrix {
+      background-image: radial-gradient(circle, rgba(113, 116, 136, 0.16) 1.25px, transparent 1.25px);
+      background-size: 24px 24px;
     }
-    html, body {
-      width: 100%;
-      height: 100%;
-      background: var(--bg-dark);
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      user-select: none;
+    /* Soft Jiggle Physics Animation */
+    @keyframes mochiFloat {
+      0%, 100% {
+        transform: translateY(0px) scale(1, 1);
+      }
+      50% {
+        transform: translateY(-12px) scale(1.02, 0.98);
+      }
     }
-    /* Top Native Switcher Bar */
-    .top-bar {
-      height: 54px;
-      background: var(--bg-bar);
-      border-bottom: 1px solid var(--border-subtle);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 18px;
-      z-index: 100;
-      backdrop-filter: blur(16px);
+    @keyframes mochiShadow {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 0.35;
+      }
+      50% {
+        transform: scale(0.85);
+        opacity: 0.2;
+      }
     }
-    .brand-section {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+    @keyframes speechPulse {
+      0%, 100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-4px);
+      }
     }
-    .brand-logo {
-      font-size: 20px;
-      line-height: 1;
+    .animate-mochi {
+      animation: mochiFloat 4.2s ease-in-out infinite;
     }
-    .brand-title {
-      font-size: 14px;
-      font-weight: 700;
-      color: #fff;
-      letter-spacing: -0.02em;
+    .animate-mochi-shadow {
+      animation: mochiShadow 4.2s ease-in-out infinite;
     }
-    .brand-badge {
-      font-size: 10px;
-      font-weight: 700;
-      text-transform: uppercase;
-      padding: 2px 7px;
+    .animate-speech {
+      animation: speechPulse 3.8s ease-in-out infinite;
+    }
+    /* Waveform audio bars */
+    @keyframes waveBar {
+      0%, 100% { height: 4px; }
+      50% { height: 16px; }
+    }
+    .wave-bar-1 { animation: waveBar 0.9s ease-in-out infinite 0.1s; }
+    .wave-bar-2 { animation: waveBar 0.9s ease-in-out infinite 0.3s; }
+    .wave-bar-3 { animation: waveBar 0.9s ease-in-out infinite 0.5s; }
+    .wave-bar-4 { animation: waveBar 0.9s ease-in-out infinite 0.2s; }
+
+    /* Custom tactical sliders */
+    input[type=range]::-webkit-slider-thumb {
+      appearance: none;
+      height: 20px;
+      width: 20px;
       border-radius: 9999px;
-      background: rgba(56, 189, 248, 0.15);
-      border: 1px solid rgba(56, 189, 248, 0.35);
-      color: var(--accent);
-      font-family: 'JetBrains Mono', monospace;
-    }
-    /* Switcher Pills */
-    .theme-pills {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(0, 0, 0, 0.3);
-      padding: 4px;
-      border-radius: 12px;
-      border: 1px solid var(--border-subtle);
-    }
-    .pill-btn {
-      padding: 6px 14px;
-      border-radius: 8px;
-      border: 0;
-      background: transparent;
-      color: #94a3b8;
-      font-size: 12px;
-      font-weight: 600;
+      background: #6355d8;
+      border: 3px solid #ffffff;
+      box-shadow: 0 2px 6px rgba(99, 85, 216, 0.4);
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: transform 0.15s ease;
     }
-    .pill-btn:hover {
-      color: #fff;
-      background: rgba(255, 255, 255, 0.06);
+    input[type=range]::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
     }
-    .pill-btn.active {
-      color: #030712;
-      background: #fff;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+    /* Scrollbar refinements */
+    ::-webkit-scrollbar {
+      width: 6px;
     }
-    .actions-section {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .btn-apply {
-      padding: 7px 16px;
-      border-radius: 10px;
-      border: 0;
-      background: linear-gradient(135deg, #38bdf8, #818cf8);
-      color: #030712;
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      box-shadow: 0 2px 12px rgba(56, 189, 248, 0.3);
-      transition: all 0.2s;
-    }
-    .btn-apply:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 16px rgba(56, 189, 248, 0.45);
-    }
-    /* Frame Viewport */
-    .viewport-frame {
-      flex: 1;
-      width: 100%;
-      height: calc(100% - 54px);
-      border: 0;
+    ::-webkit-scrollbar-track {
       background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(120, 117, 133, 0.25);
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(99, 85, 216, 0.4);
     }
   </style>
 </head>
-<body>
-
-  <!-- Native Top Control Bar -->
-  <header class="top-bar">
-    <div class="brand-section">
-      <span class="brand-logo">☁️</span>
-      <span class="brand-title">Kumo Studio</span>
-      <span class="brand-badge">Native Lab</span>
-    </div>
-
-    <!-- Aesthetic Switcher Tabs -->
-    <div class="theme-pills">
-      <button class="pill-btn active" id="btn-glass" onclick="switchTheme('glass')">
-        <span>💎</span> Glassmorphic
+<body class="bg-[#fbf8fc] bg-dot-matrix text-on-surface antialiased min-h-screen selection:bg-primary-fixed selection:text-on-primary-fixed font-body-md overflow-x-hidden relative flex flex-col justify-between">
+<!-- Ambient Background Lighting / Diffused Pastel Orbs -->
+<div class="pointer-events-none fixed inset-0 overflow-hidden z-0">
+<div class="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-primary-fixed/40 blur-[90px]"></div>
+<div class="absolute top-1/4 -right-24 w-[32rem] h-[32rem] rounded-full bg-secondary-fixed/50 blur-[110px]"></div>
+<div class="absolute bottom-10 left-1/3 w-80 h-80 rounded-full bg-[#eadfff]/40 blur-[80px]"></div>
+</div>
+<!-- Shared TopNavBar Component (Anchor JSON aligned) -->
+<header class="fixed top-4 left-1/2 -translate-x-1/2 w-[calc(100%-3rem)] max-w-7xl z-50 flex items-center justify-between px-4 py-2.5 rounded-full bg-surface-container-lowest/80 dark:bg-inverse-surface/80 backdrop-blur-md shadow-xl ring-1 ring-white/70 shadow-on-surface/5">
+<!-- Left: Brand / Studio Indicator -->
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-gradient-to-tr from-primary to-primary-container flex items-center justify-center text-on-primary shadow-md shadow-primary/20">
+<span class="material-symbols-outlined text-[20px]">cloud</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-headline-sm font-headline-sm font-bold text-on-surface tracking-tight">Kumo</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm">Studio</span>
+</div>
+<div class="h-4 w-px bg-outline-variant/60 hidden sm:block"></div>
+<span class="hidden md:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed font-label-md text-label-md">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+        Setup &amp; Persona Customizer v1.2
+      </span>
+</div>
+<!-- Center Navigation Links (from JSON) -->
+<nav class="hidden lg:flex items-center gap-1">
+<a class="text-secondary hover:text-on-surface rounded-full px-3 py-1.5 font-label-md text-label-md transition-all hover:bg-surface-container-high/60" href="#">All Tools</a>
+<a class="text-primary bg-primary-fixed font-semibold rounded-full px-3 py-1.5 font-label-md text-label-md transition-all" href="#">System</a>
+<a class="text-secondary hover:text-on-surface rounded-full px-3 py-1.5 font-label-md text-label-md transition-all hover:bg-surface-container-high/60" href="#">Writing</a>
+<a class="text-secondary hover:text-on-surface rounded-full px-3 py-1.5 font-label-md text-label-md transition-all hover:bg-surface-container-high/60" href="#">Code</a>
+<a class="text-secondary hover:text-on-surface rounded-full px-3 py-1.5 font-label-md text-label-md transition-all hover:bg-surface-container-high/60" href="#">Design</a>
+<a class="text-secondary hover:text-on-surface rounded-full px-3 py-1.5 font-label-md text-label-md transition-all hover:bg-surface-container-high/60" href="#">Notes</a>
+</nav>
+<!-- Right: Context Actions & Status -->
+<div class="flex items-center gap-2.5">
+<!-- Step Indicator Badge -->
+<div class="flex items-center gap-1.5 bg-surface-container-low px-3 py-1 rounded-full border border-outline-variant/40">
+<span class="material-symbols-outlined text-primary text-[16px]">progress_activity</span>
+<span class="font-label-md text-label-md text-secondary font-medium">Step 2 of 4 Active</span>
+</div>
+<button class="w-8 h-8 rounded-full flex items-center justify-center text-secondary hover:text-on-surface hover:bg-surface-container-high/60 transition-colors" title="Notifications">
+<span class="material-symbols-outlined text-[19px]">notifications</span>
+</button>
+<button class="w-8 h-8 rounded-full flex items-center justify-center text-secondary hover:text-on-surface hover:bg-surface-container-high/60 transition-colors" title="Settings">
+<span class="material-symbols-outlined text-[19px]">settings</span>
+</button>
+<!-- Profile Avatar -->
+<div class="w-8 h-8 rounded-full ring-2 ring-primary/20 overflow-hidden bg-surface-container-high flex items-center justify-center text-primary font-label-md font-bold">
+<span>KM</span>
+</div>
+<!-- Quick close window action -->
+<button class="w-7 h-7 ml-1 rounded-full text-secondary hover:text-on-surface hover:bg-surface-container-high flex items-center justify-center transition-all cursor-pointer" id="btn-close-studio" title="Close">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+</header>
+<!-- Main Canvas Container -->
+<main class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 pt-24 pb-28 flex-1 flex flex-col justify-center">
+<!-- Subheader Micro-Bar -->
+<div class="flex flex-wrap items-center justify-between gap-3 mb-6 px-2">
+<div class="flex items-center gap-2">
+<a class="inline-flex items-center gap-1 text-secondary hover:text-primary font-label-md text-label-md transition-colors" href="#">
+<span class="material-symbols-outlined text-[16px]">arrow_back</span>
+<span>Studio Hub</span>
+</a>
+<span class="text-outline-variant">•</span>
+<span class="font-label-md text-label-md text-on-surface-variant font-medium">Workspace: Local Desktop Native</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container-lowest border border-outline-variant/40 shadow-xs text-secondary font-label-sm text-label-sm">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          Daemon: Running (Port 4429)
+        </span>
+<button class="text-secondary hover:text-on-surface font-label-md text-label-md flex items-center gap-1 hover:underline">
+<span class="material-symbols-outlined text-[15px]">help</span>
+          Documentation
+        </button>
+</div>
+</div>
+<!-- 2-Column Studio Split Layout (Left: 52%, Right: 48%) -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+<!-- ================= LEFT COLUMN: 4-STEP INTERACTIVE ONBOARDING WIZARD (52% -> 7 Cols) ================= -->
+<div class="lg:col-span-7 bg-surface-container-lowest rounded-3xl border border-[#2e3b52]/10 shadow-[0px_8px_32px_-6px_rgba(46,59,82,0.08),0px_1px_3px_rgba(46,59,82,0.04)] p-6 sm:p-7 flex flex-col gap-6">
+<!-- Card Header -->
+<div class="flex items-start justify-between border-b border-surface-container pb-5">
+<div class="flex items-start gap-3.5">
+<div class="w-12 h-12 rounded-2xl bg-[#eadfff] text-primary flex items-center justify-center shadow-xs">
+<span class="material-symbols-outlined text-[26px]">auto_awesome</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<h1 class="text-headline-md font-headline-md font-bold text-on-surface tracking-tight">Initialize Kumo Companion</h1>
+<!-- Playful Tilted Badge -->
+<span class="inline-block transform -rotate-[2.5deg] px-2 py-0.5 rounded bg-[#ffe9d6] text-[#b84a14] font-label-sm text-label-sm tracking-wide font-bold">
+                  LOCAL AI
+                </span>
+</div>
+<p class="text-body-md font-body-md text-secondary mt-0.5">Configure your local thinking buddy in 4 quick steps.</p>
+</div>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-surface-container font-label-sm text-label-sm text-on-surface-variant font-medium">
+            WIZARD
+          </span>
+</div>
+<!-- Stepper Pill Bar -->
+<div class="grid grid-cols-4 gap-2 bg-surface-container-low p-1.5 rounded-2xl border border-outline-variant/30">
+<!-- Step 1: Connect (Done) -->
+<div class="flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-xl bg-surface-container-lowest shadow-xs text-on-surface font-label-md text-label-md">
+<span class="material-symbols-outlined text-emerald-600 text-[15px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="truncate font-semibold">1. Connect</span>
+</div>
+<!-- Step 2: Engine (Active) -->
+<div class="flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-xl bg-primary-container text-on-primary font-label-md text-label-md shadow-sm">
+<span class="material-symbols-outlined text-[15px]">smart_toy</span>
+<span class="truncate font-bold">2. Engine</span>
+</div>
+<!-- Step 3: Persona -->
+<div class="flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-xl text-secondary hover:text-on-surface font-label-md text-label-md">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
+<span class="truncate">3. Persona</span>
+</div>
+<!-- Step 4: Hotkeys -->
+<div class="flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-xl text-secondary hover:text-on-surface font-label-md text-label-md">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
+<span class="truncate">4. Hotkeys</span>
+</div>
+</div>
+<!-- Step 1 Accordion Block: Connect AI Brain -->
+<div class="bg-surface-container-low/60 rounded-2xl p-4 border border-outline-variant/30 flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]">key</span>
+<span class="text-headline-sm font-headline-sm text-on-surface text-[15px]">1. Connect AI Brain</span>
+</div>
+<div class="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[13px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+              Verified &amp; Connected
+            </div>
+</div>
+<div class="flex flex-col sm:flex-row gap-2.5">
+<div class="relative flex-1">
+<input id="api-key-input" class="w-full bg-surface-container-lowest border border-outline-variant/70 rounded-xl px-3.5 py-2 font-label-sm text-label-sm text-on-surface tracking-wider focus:outline-none focus:ring-2 focus:ring-primary/30" placeholder="sk-or-v1-..." type="password"/>
+<button id="btn-toggle-key" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-secondary hover:text-on-surface p-1 cursor-pointer" title="Show Key">
+<span class="material-symbols-outlined text-[17px]">visibility</span>
+</button>
+</div>
+<button id="btn-retest-key" class="px-3.5 py-2 rounded-xl bg-surface-container-lowest border border-outline-variant/70 text-secondary hover:text-on-surface font-label-md text-label-md flex items-center justify-center gap-1.5 transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-[16px]">sync</span>
+              Re-test
+            </button>
+</div>
+<p class="text-body-sm font-body-sm text-secondary flex items-center justify-between">
+<span>Powered by OpenRouter or Local Ollama instance.</span>
+<a class="text-primary hover:underline font-label-sm text-label-sm inline-flex items-center gap-0.5" href="https://openrouter.ai" target="_blank">
+              Get free OpenRouter key <span class="material-symbols-outlined text-[12px]">north_east</span>
+</a>
+</p>
+</div>
+<!-- Step 2: Choose Companion Engine (Expanded Focus) -->
+<div class="flex flex-col gap-3.5">
+<div class="flex items-center justify-between">
+<label class="text-headline-sm font-headline-sm text-on-surface text-[15px] flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">smart_toy</span>
+<span>2. Choose Companion Engine</span>
+</label>
+<span class="font-label-sm text-label-sm text-primary font-semibold bg-primary-fixed px-2.5 py-0.5 rounded-full">
+              Reactive Shaders Active
+            </span>
+</div>
+<!-- Radio Selection Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+<!-- Option 1: 2D Pixel Cloud -->
+<label data-engine-card="2d" class="cursor-pointer relative p-4 rounded-2xl border border-outline-variant/50 bg-surface-container-lowest hover:border-primary/40 transition-all flex flex-col justify-between group">
+<input class="sr-only" name="companion_engine" type="radio"/>
+<div class="flex items-start justify-between mb-3">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-secondary group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[22px]">grid_view</span>
+</div>
+<div class="w-5 h-5 rounded-full border-2 border-outline-variant flex items-center justify-center">
+<!-- Empty unselected indicator -->
+</div>
+</div>
+<div>
+<h2 class="text-headline-sm font-headline-sm text-[15px] font-semibold text-on-surface">2D Pixel Cloud (Puff)</h2>
+<p class="text-body-sm font-body-sm text-secondary mt-1">Retro dithering pixel aesthetic, lightweight footprint, sub-1% CPU consumption.</p>
+</div>
+<div class="mt-3 pt-2.5 border-t border-surface-container flex items-center gap-2">
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-surface-container text-secondary">Canvas 2D</span>
+<span class="font-label-sm text-label-sm text-secondary">30 FPS fixed</span>
+</div>
+</label>
+<!-- Option 2: 3D Mochi Gel Bot (SELECTED) -->
+<label data-engine-card="3d" class="cursor-pointer relative p-4 rounded-2xl border-2 border-primary bg-primary-fixed/20 shadow-sm transition-all flex flex-col justify-between">
+<input checked="" class="sr-only" name="companion_engine" type="radio"/>
+<!-- Top indicator & tag -->
+<div class="flex items-start justify-between mb-3">
+<div class="w-10 h-10 rounded-xl bg-primary text-on-primary flex items-center justify-center shadow-md shadow-primary/25">
+<span class="material-symbols-outlined text-[22px]">auto_awesome</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-primary text-on-primary font-bold">ACTIVE</span>
+<div class="w-5 h-5 rounded-full bg-primary text-on-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px]">check</span>
+</div>
+</div>
+</div>
+<div>
+<div class="flex items-center gap-1.5">
+<h2 class="text-headline-sm font-headline-sm text-[15px] font-bold text-on-surface">3D Mochi Gel Bot (Kumo)</h2>
+</div>
+<p class="text-body-sm font-body-sm text-secondary mt-1">Soft squishy organic gelatin geometry, dynamic reactive lighting, real-time expression physics.</p>
+</div>
+<div class="mt-3 pt-2.5 border-t border-primary/20 flex items-center justify-between">
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-[#eadfff] text-primary font-semibold">WebGL 2.0 / PBR</span>
+<span class="font-label-sm text-label-sm text-primary font-semibold">Spring 60fps</span>
+</div>
+</label>
+</div>
+<!-- Spring Physics Toggle Switch -->
+<div class="flex items-center justify-between p-3 rounded-xl bg-surface-container-low border border-outline-variant/30">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-primary text-[19px]">waves</span>
+<div>
+<p class="font-body-md text-body-md font-semibold text-on-surface">Enable Fluid Jiggle Physics</p>
+<p class="font-body-sm text-body-sm text-secondary">Calculates velocity dampening on window drag and mouse poke gestures.</p>
+</div>
+</div>
+<!-- Interactive Switch -->
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+</div>
+<!-- Step 3: Color Palette & Blush Intensity -->
+<div class="flex flex-col gap-3.5">
+<div class="flex items-center justify-between">
+<label class="text-headline-sm font-headline-sm text-on-surface text-[15px] flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">palette</span>
+<span>3. Color Palette &amp; Blush Intensity</span>
+</label>
+<span class="font-label-sm text-label-sm text-secondary">5 Curated Pastels</span>
+</div>
+<!-- Color Swatch Row -->
+<div class="grid grid-cols-5 gap-2.5">
+<!-- Soft Lilac (Selected) -->
+<button data-swatch="lilac" class="group relative flex flex-col items-center gap-1.5 p-2 rounded-xl bg-surface-container-lowest border-2 border-primary shadow-xs transition-all cursor-pointer" type="button">
+<div class="w-8 h-8 rounded-full bg-[#eadfff] shadow-inner ring-2 ring-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-[14px]">check</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface font-semibold">Lilac</span>
+</button>
+<!-- Sky Mist -->
+<button data-swatch="sky" class="group relative flex flex-col items-center gap-1.5 p-2 rounded-xl bg-surface-container-lowest border border-outline-variant/40 hover:border-primary/50 transition-all cursor-pointer" type="button">
+<div class="w-8 h-8 rounded-full bg-[#dcedff] shadow-inner"></div>
+<span class="font-label-sm text-label-sm text-secondary">Sky</span>
+</button>
+<!-- Matcha Mint -->
+<button data-swatch="matcha" class="group relative flex flex-col items-center gap-1.5 p-2 rounded-xl bg-surface-container-lowest border border-outline-variant/40 hover:border-primary/50 transition-all cursor-pointer" type="button">
+<div class="w-8 h-8 rounded-full bg-[#dcf5e7] shadow-inner"></div>
+<span class="font-label-sm text-label-sm text-secondary">Matcha</span>
+</button>
+<!-- Peach Cream -->
+<button data-swatch="peach" class="group relative flex flex-col items-center gap-1.5 p-2 rounded-xl bg-surface-container-lowest border border-outline-variant/40 hover:border-primary/50 transition-all cursor-pointer" type="button">
+<div class="w-8 h-8 rounded-full bg-[#ffe9d6] shadow-inner"></div>
+<span class="font-label-sm text-label-sm text-secondary">Peach</span>
+</button>
+<!-- Solar Butter -->
+<button data-swatch="solar" class="group relative flex flex-col items-center gap-1.5 p-2 rounded-xl bg-surface-container-lowest border border-outline-variant/40 hover:border-primary/50 transition-all cursor-pointer" type="button">
+<div class="w-8 h-8 rounded-full bg-[#fff5c8] shadow-inner"></div>
+<span class="font-label-sm text-label-sm text-secondary">Solar</span>
+</button>
+</div>
+<!-- Slider: Blush & Glow Intensity -->
+<div class="bg-surface-container-low p-3.5 rounded-2xl border border-outline-variant/30 flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<span class="font-body-md text-body-md font-medium text-on-surface">Cheek Blush &amp; Glow Intensity</span>
+<span id="blush-value-display" class="font-label-md text-label-md text-primary font-bold bg-primary-fixed px-2 py-0.5 rounded-md">75%</span>
+</div>
+<input id="slider-blush" class="w-full h-2 bg-outline-variant/40 rounded-lg appearance-none cursor-pointer" max="100" min="0" type="range" value="75"/>
+<div class="flex justify-between items-center text-outline font-label-sm text-label-sm px-0.5">
+<span>Subtle Mist (10%)</span>
+<span>Organic Warmth (50%)</span>
+<span class="text-primary font-semibold">Vibrant Rosy (75%)</span>
+<span>Ultra Glow (100%)</span>
+</div>
+</div>
+</div>
+<!-- Step 4: Summon & Keyboard Shortcuts -->
+<div class="flex flex-col gap-3">
+<label class="text-headline-sm font-headline-sm text-on-surface text-[15px] flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">keyboard</span>
+<span>4. Summon &amp; Keyboard Shortcuts</span>
+</label>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+<div class="p-3 bg-surface-container-low rounded-xl border border-outline-variant/30 flex items-center justify-between">
+<span class="text-body-sm font-body-sm text-on-surface">Summon Companion Overlay</span>
+<div class="flex items-center gap-1 font-label-sm text-label-sm font-semibold">
+<kbd class="px-2 py-1 rounded bg-surface-container-lowest border border-outline-variant shadow-xs text-on-surface">Alt</kbd>
+<span class="text-outline">+</span>
+<kbd class="px-2 py-1 rounded bg-surface-container-lowest border border-outline-variant shadow-xs text-on-surface">Space</kbd>
+</div>
+</div>
+<div class="p-3 bg-surface-container-low rounded-xl border border-outline-variant/30 flex items-center justify-between">
+<span class="text-body-sm font-body-sm text-on-surface">Quick Command Palette</span>
+<div class="flex items-center gap-1 font-label-sm text-label-sm font-semibold">
+<kbd class="px-2 py-1 rounded bg-surface-container-lowest border border-outline-variant shadow-xs text-on-surface">Ctrl</kbd>
+<span class="text-outline">+</span>
+<kbd class="px-2 py-1 rounded bg-surface-container-lowest border border-outline-variant shadow-xs text-on-surface">K</kbd>
+</div>
+</div>
+</div>
+</div>
+<!-- Action CTAs -->
+<div class="pt-2 flex flex-col sm:flex-row items-center gap-3">
+<button id="btn-launch-companion" class="w-full sm:flex-1 py-3.5 px-6 rounded-2xl bg-primary hover:bg-primary-container text-on-primary font-headline-sm text-[15px] font-bold shadow-lg shadow-primary/25 hover:shadow-primary/35 transition-all duration-150 flex items-center justify-center gap-2 active:scale-95 cursor-pointer">
+<span class="material-symbols-outlined text-[20px]">rocket_launch</span>
+<span>Launch Kumo &amp; Enter Canvas</span>
+</button>
+<button id="btn-test-speech" class="w-full sm:w-auto py-3.5 px-5 rounded-2xl bg-surface-container-low hover:bg-surface-container text-secondary hover:text-on-surface border border-outline-variant/50 font-body-md text-body-md font-semibold transition-all flex items-center justify-center gap-2 active:scale-95 cursor-pointer">
+<span class="material-symbols-outlined text-[19px]">volume_up</span>
+<span>Test Speech Bubble</span>
+</button>
+</div>
+</div>
+<!-- ================= RIGHT COLUMN: DEDICATED LIVE PREVIEW COMPANION STAGE (48% -> 5 Cols) ================= -->
+<div class="lg:col-span-5 flex flex-col gap-4">
+<!-- Main Companion Stage Viewport -->
+<div class="relative w-full min-h-[580px] bg-gradient-to-b from-surface-container-lowest via-surface-container-low to-[#ececff] rounded-3xl border border-white/80 ring-1 ring-[#2e3b52]/10 shadow-[0px_16px_36px_-8px_rgba(46,59,82,0.12),0px_4px_12px_-2px_rgba(46,59,82,0.06)] overflow-hidden flex flex-col justify-between p-6">
+<!-- Stage Background Grid Overlay -->
+<div class="absolute inset-0 bg-dot-matrix opacity-40 pointer-events-none"></div>
+<!-- Top Stage HUD Toolbar -->
+<div class="relative z-10 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-wider font-bold">Interactive Stage</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="px-2.5 py-1 rounded-full bg-surface-container-lowest/90 backdrop-blur-md border border-white/80 shadow-xs font-label-sm text-label-sm text-secondary">
+                FPS: 60
+              </span>
+<button class="w-7 h-7 rounded-full bg-surface-container-lowest/90 backdrop-blur-md border border-white/80 flex items-center justify-center text-secondary hover:text-on-surface shadow-xs transition-colors" title="Reset View">
+<span class="material-symbols-outlined text-[15px]">crop_free</span>
+</button>
+</div>
+</div>
+<!-- Stage Center: Interactive Speech Bubble & 3D Mochi Cloud Companion -->
+<div class="relative z-10 flex flex-col items-center justify-center my-auto py-8">
+<!-- Interactive Floating Speech Bubble -->
+<div class="relative mb-6 max-w-[320px] bg-surface-container-lowest/95 backdrop-blur-md p-4 rounded-2xl border border-white/90 shadow-[0px_8px_24px_-4px_rgba(46,59,82,0.1)] animate-speech">
+<div class="flex items-start gap-2.5">
+<div class="w-7 h-7 rounded-lg bg-[#eadfff] text-primary flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[17px]">graphic_eq</span>
+</div>
+<div class="flex-1">
+<p id="speech-bubble-text" class="text-body-sm font-body-sm text-on-surface font-medium leading-relaxed">
+                    “Hi! I am <span class="font-bold text-primary">Kumo</span>, your desktop thinking buddy. Ready to pair-program and ideate together!”
+                  </p>
+<!-- Audio Waveform Visualizer -->
+<div class="mt-2.5 flex items-center gap-1 h-4">
+<span class="w-1 bg-primary rounded-full wave-bar-1"></span>
+<span class="w-1 bg-primary rounded-full wave-bar-2"></span>
+<span class="w-1 bg-primary rounded-full wave-bar-3"></span>
+<span class="w-1 bg-primary rounded-full wave-bar-4"></span>
+<span class="w-1 bg-primary/40 rounded-full h-1"></span>
+<span class="font-label-sm text-label-sm text-secondary ml-2">Audio Synthesis Ready</span>
+</div>
+</div>
+</div>
+<!-- Tail of speech bubble -->
+<div class="absolute -bottom-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-surface-container-lowest border-r border-b border-[#2e3b52]/10 transform rotate-45"></div>
+</div>
+<!-- The 3D Mochi Cloud Creature Artwork (Custom Tactile Geometric SVG) -->
+<div id="companion-poke-container" class="relative flex flex-col items-center cursor-pointer group select-none">
+<!-- Floating Poke Hint Pill -->
+<div class="absolute -top-7 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none bg-inverse-surface text-inverse-on-surface px-2.5 py-0.5 rounded-full font-label-sm text-label-sm flex items-center gap-1 shadow-md">
+<span class="material-symbols-outlined text-[13px]">touch_app</span>
+                Click companion to poke
+              </div>
+<!-- Mochi Vector Geometry with Soft Gradient & Blushing Cheeks -->
+<div class="w-64 h-52 relative animate-mochi transition-transform active:scale-95 duration-150">
+<svg class="w-full h-full drop-shadow-[0_16px_24px_rgba(99,85,216,0.18)]" fill="none" viewbox="0 0 240 200" xmlns="http://www.w3.org/2000/svg">
+<!-- Gradient Definitions -->
+<defs>
+<lineargradient gradientunits="userSpaceOnUse" id="cloudBodyGrad" x1="20" x2="220" y1="20" y2="180">
+<stop offset="0%" stop-color="#ffffff"></stop>
+<stop offset="40%" stop-color="#eadfff"></stop>
+<stop offset="100%" stop-color="#dcedff"></stop>
+</lineargradient>
+<radialgradient cx="0" cy="0" gradienttransform="translate(70 125) scale(20 12)" gradientunits="userSpaceOnUse" id="blushLeft" r="1">
+<stop offset="0%" stop-color="#ff7e67" stop-opacity="0.75"></stop>
+<stop offset="100%" stop-color="#ff7e67" stop-opacity="0"></stop>
+</radialgradient>
+<radialgradient cx="0" cy="0" gradienttransform="translate(170 125) scale(20 12)" gradientunits="userSpaceOnUse" id="blushRight" r="1">
+<stop offset="0%" stop-color="#ff7e67" stop-opacity="0.75"></stop>
+<stop offset="100%" stop-color="#ff7e67" stop-opacity="0"></stop>
+</radialgradient>
+<lineargradient id="eyeGleam" x1="0" x2="1" y1="0" y2="1">
+<stop offset="0%" stop-color="#ffffff"></stop>
+<stop offset="100%" stop-color="#dfe1f8"></stop>
+</lineargradient>
+</defs>
+<!-- Main Squishy Cloud Body Curves -->
+<path d="M70 170 C40 170 20 145 20 115 C20 85 45 68 70 68 C76 40 105 20 135 22 C165 24 185 45 192 68 C215 70 230 90 230 115 C230 145 210 170 175 170 Z" fill="url(#cloudBodyGrad)" stroke="#ffffff" stroke-width="3"></path>
+<!-- Specular highlight rim on top -->
+<path d="M80 62 C105 32 145 32 170 58" opacity="0.8" stroke="#ffffff" stroke-linecap="round" stroke-width="4"></path>
+<!-- Left Cute Blushing Cheek -->
+<ellipse cx="72" cy="122" fill="url(#blushLeft)" rx="18" ry="11"></ellipse>
+<!-- Right Cute Blushing Cheek -->
+<ellipse cx="168" cy="122" fill="url(#blushRight)" rx="18" ry="11"></ellipse>
+<!-- Left Expressive Eye (Happy curved arc) -->
+<path d="M85 106 C85 96 99 96 99 106" stroke="#171b2b" stroke-linecap="round" stroke-width="4.5"></path>
+<circle cx="89" cy="100" fill="#ffffff" r="1.5"></circle>
+<!-- Right Expressive Eye (Happy curved arc) -->
+<path d="M141 106 C141 96 155 96 155 106" stroke="#171b2b" stroke-linecap="round" stroke-width="4.5"></path>
+<circle cx="145" cy="100" fill="#ffffff" r="1.5"></circle>
+<!-- Cute Smiling Mouth -->
+<path d="M114 116 Q120 126 126 116" stroke="#171b2b" stroke-linecap="round" stroke-width="3.5"></path>
+<!-- Little Thought Sparkle Float -->
+<path d="M198 42 L202 30 L206 42 L218 46 L206 50 L202 62 L198 50 L186 46 Z" fill="#6355d8" opacity="0.85"></path>
+<circle cx="218" cy="28" fill="#ffb4a6" r="2.5"></circle>
+</svg>
+</div>
+<!-- Organic Soft Floor Shadow -->
+<div class="w-44 h-5 rounded-full bg-primary/20 blur-md animate-mochi-shadow -mt-3"></div>
+</div>
+</div>
+<!-- Bottom Stage Controls Container -->
+<div class="relative z-10 flex flex-col gap-3 bg-surface-container-lowest/80 backdrop-blur-md p-3.5 rounded-2xl border border-white/70 shadow-sm">
+<!-- Mood Switcher Pills Row -->
+<div class="flex items-center justify-between gap-1.5 pb-2 border-b border-outline-variant/30">
+<span class="font-label-sm text-label-sm text-secondary font-semibold">Mood State:</span>
+<div class="flex items-center gap-1">
+<!-- Idle (Active) -->
+<button data-mood="idle" class="px-2.5 py-1 rounded-lg bg-primary-fixed text-primary font-label-sm text-label-sm font-bold shadow-xs cursor-pointer">
+                  Idle
+                </button>
+<!-- Thinking -->
+<button data-mood="thinking" class="px-2.5 py-1 rounded-lg hover:bg-surface-container text-secondary hover:text-on-surface font-label-sm text-label-sm flex items-center gap-1 transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-[13px]">auto_awesome</span>
+                  Thinking
+                </button>
+<!-- Speaking -->
+<button data-mood="speaking" class="px-2.5 py-1 rounded-lg hover:bg-surface-container text-secondary hover:text-on-surface font-label-sm text-label-sm flex items-center gap-1 transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-[13px]">volume_up</span>
+                  Speaking
+                </button>
+<!-- Happy -->
+<button data-mood="happy" class="px-2.5 py-1 rounded-lg hover:bg-surface-container text-secondary hover:text-on-surface font-label-sm text-label-sm flex items-center gap-1 transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-[13px]">favorite</span>
+                  Happy
+                </button>
+</div>
+</div>
+<!-- Toggles and Parameters -->
+<div class="flex items-center justify-between text-secondary">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-primary">sentiment_satisfied</span>
+<span class="font-label-md text-label-md text-on-surface">Resting Smile</span>
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-1 text-secondary">
+<span class="font-label-sm text-label-sm">Damping:</span>
+<span class="font-label-sm text-label-sm font-semibold px-1.5 py-0.5 rounded bg-surface-container text-on-surface">Med</span>
+</div>
+<button class="p-1 rounded-lg hover:bg-surface-container text-secondary hover:text-on-surface transition-colors flex items-center" title="Reset Camera Orbit">
+<span class="material-symbols-outlined text-[17px]">restart_alt</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Stage Micro-Card: Physics Diagnostics Card -->
+<div class="bg-surface-container-lowest rounded-2xl border border-[#2e3b52]/10 p-4 shadow-sm flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-xl bg-surface-container text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">monitor_heart</span>
+</div>
+<div>
+<p class="font-headline-sm text-headline-sm text-[13px] font-bold text-on-surface">Spring Tensor Diagnostics</p>
+<p class="font-label-sm text-label-sm text-secondary">Mass: 0.8kg • Stiffness: 120 • Velocity: 0.00 m/s</p>
+</div>
+</div>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-semibold">
+            Optimal
+          </span>
+</div>
+</div>
+</div>
+</main>
+<!-- Shared Footer HUD Component (from Shared Components JSON) -->
+<footer class="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 flex items-center gap-4 px-5 py-2 rounded-full bg-surface-container-lowest/80 dark:bg-inverse-surface/80 backdrop-blur-md shadow-lg shadow-on-surface/5 ring-1 ring-white/60 w-auto">
+<!-- Spatial Canvas Navigation Hint (from JSON copyright_text) -->
+<div class="flex items-center gap-2 text-secondary font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-primary text-[15px]">pan_tool</span>
+<span>Space to pan • Ctrl+Scroll to zoom • Ctrl+K quick command</span>
+</div>
+<div class="h-4 w-px bg-outline-variant/60"></div>
+<!-- Zoom and Canvas Navigation Links (from JSON links) -->
+<div class="flex items-center gap-1.5">
+<button class="px-2 py-1 rounded-lg text-primary font-label-sm text-label-sm font-semibold hover:bg-surface-container-high/50 transition-colors">
+        100%
       </button>
-      <button class="pill-btn" id="btn-clay" onclick="switchTheme('clay')">
-        <span>🌸</span> Claymorphic
-      </button>
-      <button class="pill-btn" id="btn-y2k" onclick="switchTheme('y2k')">
-        <span>⚡</span> Y2K Cyber
-      </button>
-      <button class="pill-btn" id="btn-bot" onclick="switchTheme('bot')">
-        <span>🧊</span> 3D/2D Rig
-      </button>
-    </div>
-
-    <div class="actions-section">
-      <button class="btn-apply" onclick="adoptAndLaunch()">
-        <span>✓</span> Adopt This Avatar
-      </button>
-    </div>
-  </header>
-
-  <!-- Embedded Live Studio Frame -->
-  <iframe id="studio-frame" class="viewport-frame" src="../../assets/Lab/kumo-studio-glassmorphic.html"></iframe>
-
-  <script>
-    const THEME_URLS = {
-      glass: '../../assets/Lab/kumo-studio-glassmorphic.html',
-      clay:  '../../assets/Lab/kumo-studio-clay.html',
-      y2k:   '../../assets/Lab/kumo-studio-y2k.html',
-      bot:   '../../assets/Lab/3d_2d_ai_bot_asset_studio.html'
-    };
-
-    let currentTheme = 'glass';
-
-    function switchTheme(themeKey) {
-      if (!THEME_URLS[themeKey]) return;
-      currentTheme = themeKey;
-
-      document.querySelectorAll('.pill-btn').forEach(btn => btn.classList.remove('active'));
-      const activeBtn = document.getElementById('btn-' + themeKey);
-      if (activeBtn) activeBtn.classList.add('active');
-
-      const frame = document.getElementById('studio-frame');
-      frame.src = THEME_URLS[themeKey];
-    }
-
-    async function adoptAndLaunch() {
-      // Save chosen theme in settings via Electron IPC
-      try {
-        await window.goo?.saveSettings?.({ studioTheme: currentTheme, firstRun: false });
-      } catch (e) {
-        console.warn('Settings save warning:', e);
-      }
-      alert(`✨ Adopted ${currentTheme.toUpperCase()} style! Opening Kumo desktop companion…`);
-      window.goo?.closeStudio?.();
-    }
-
-    // Auto-detect theme from URL parameters if passed
-    const urlParams = new URLSearchParams(window.location.search);
-    const initial = urlParams.get('theme');
-    if (initial && THEME_URLS[initial]) {
-      switchTheme(initial);
-    }
-  </script>
-</body>
-</html>
+<button class="p-1 rounded-lg text-secondary hover:text-on-surface hover:bg-surface-container-high/50 transition-colors flex items-center justify-center active:scale-95" title="Fit screen">
+<span class="material-symbols-outlined text-[17px]">fit_screen</span>
+</button>
+<button class="p-1 rounded-lg text-secondary hover:text-on-surface hover:bg-surface-container-high/50 transition-colors flex items-center justify-center active:scale-95" title="Zoom in">
+<span class="material-symbols-outlined text-[17px]">zoom_in</span>
+</button>
+<button class="p-1 rounded-lg text-secondary hover:text-on-surface hover:bg-surface-container-high/50 transition-colors flex items-center justify-center active:scale-95" title="Zoom out">
+<span class="material-symbols-outlined text-[17px]">zoom_out</span>
+</button>
+</div>
+</footer>
+<script src="studio-controller.js"></script>
+</body></html>

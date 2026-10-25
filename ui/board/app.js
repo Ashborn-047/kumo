@@ -214,33 +214,21 @@ function initFloatingActions() {
     };
   }
 
-  // Zoom HUD
-  $('#btn-zoom-in')?.addEventListener('click', () => {
-    state.scale = Math.min(2.0, state.scale + 0.1);
-    updateTransform();
-    $('#zoom-display').textContent = `${Math.round(state.scale * 100)}%`;
+  // Open Studio & Customizer
+  $('#btn-settings')?.addEventListener('click', () => {
+    window.goo?.openStudio?.('studio');
   });
+}
 
-  $('#btn-zoom-out')?.addEventListener('click', () => {
-    state.scale = Math.max(0.4, state.scale - 0.1);
-    updateTransform();
-    $('#zoom-display').textContent = `${Math.round(state.scale * 100)}%`;
-  });
-
-  $('#btn-zoom-fit')?.addEventListener('click', () => {
-    state.scale = 1.0;
-    state.panX = 0;
-    state.panY = 0;
-    updateTransform();
-    $('#zoom-display').textContent = '100%';
-    toast('Canvas reset to 100%');
-  });
+function updateZoomDisplay() {
+  const display = $('#zoom-display');
+  if (display) display.textContent = `${Math.round(state.scale * 100)}%`;
 }
 
 // ── Boot ──
 (async () => {
   loadState();
-  initCanvasControls();
+  initCanvasControls(updateZoomDisplay);
   initFilters();
   initFloatingActions();
   initCommandPalette(addNewTool, toast);

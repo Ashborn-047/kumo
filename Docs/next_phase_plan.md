@@ -3,9 +3,10 @@
 This document outlines the architecture, data flow, and step-by-step engineering plan for the four major features queued for Kumo:
 
 1. **Interactive Studio & Onboarding Window**
-2. **Standalone Windows Executable (`.exe`) & Portable Distribution**
-3. **Voice Support (Speech-to-Text & Text-to-Speech)**
-4. **Quirky Mascot Audio, Reactions & Personality System**
+2. **Comprehensive Electron E2E Testing Suite (Playwright for Electron)**
+3. **Standalone Windows Executable (`.exe`) & Portable Distribution**
+4. **Voice Support (Speech-to-Text & Text-to-Speech)**
+5. **Quirky Mascot Audio, Reactions & Personality System**
 
 ---
 
@@ -140,6 +141,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Run Automated E2E Test Suite
+        run: npm test
+
       - name: Build Windows Executables (NSIS + Portable)
         run: npm run dist
         env:
@@ -201,28 +205,58 @@ By using the Web Audio API, we don't need heavy `.mp3` or `.wav` files — every
 ### B. Personality Quips & Context Awareness
 - **Time of Day Awareness**:
   - Late Night (12 AM - 5 AM): *"Still up coding? Don't forget to hydrate, friend ☕"*
-  - Morning (6 AM - 11 AM): *"Good morning! What are we building on the canvas today?"*
 - **Click Easter Eggs**:
   - Triple-click: Kumo does a high-spin 360-degree backflip with confetti particles.
   - Dragging too fast: Kumo's eyes widen into dizzy spirals until released!
 
 ---
 
+## 5. 🧪 Automated End-to-End (E2E) Test Suite (Playwright for Electron)
+
+### Objectives:
+- Provide an automated quality gate verifying Kumo's multi-window desktop lifecycle without manual intervention.
+- Exercise all 3 concurrent BrowserWindow contexts:
+  1. **Floating Desktop Overlay** (`ui/overlay/index.html`)
+  2. **Studio & Onboarding Window** (`ui/studio/index.html`)
+  3. **Kumoboard Spatial Workbench** (`ui/board/index.html`)
+- Assert IPC contracts across `preload.js` (`settings:*`, `board:*`, `studio:*`, `ai:*`).
+- Gate all GitHub Releases so broken builds are never compiled or published.
+
+### Test Structure (`tests/e2e/`):
+```
+tests/e2e/
+├── app-launch.spec.js   # Verifies process boot, window instantiation, clean temp user-data-dir
+├── studio.spec.js       # Verifies onboarding flow, 4 aesthetic switchers, and avatar adoption
+└── board.spec.js        # Verifies Kumoboard canvas, card rendering, tool categories, zoom HUD, and settings trigger
+```
+
+### Running Tests:
+```bash
+# Run all E2E specs headlessly
+npm test
+
+# Run tests with UI inspector / trace
+npx playwright test --ui
+```
+
+---
+
 ## 🗓️ Implementation Sequence
 
 ```
-Phase A: Studio & Onboarding Window
-  ├── Create src/studio-manager.js & IPC hooks
-  ├── Drop in Claude's unified studio HTML into ui/studio/index.html
-  └── Add first-run conditional routing in src/main.js
+Phase A: Studio & Onboarding Window + E2E Suite (COMPLETED)
+  ├── Resolve IPC contracts in src/main.js and src/studio-manager.js
+  ├── Wire ui/studio/index.html avatar adoption to launch companion & board
+  ├── Implement Playwright for Electron automated E2E test suite (3 specs passing)
+  └── Synchronize Graphify AST knowledge graph
 
-Phase B: Audio & Voice Engine
+Phase B: Standalone Windows Executable (.exe) & GitHub Releases
+  ├── Validate app icons (assets/icon.ico, assets/tray.png)
+  ├── Run electron-builder for NSIS Installer (.exe) & Portable (.exe)
+  └── Configure .github/workflows/release.yml with automated npm test gate
+
+Phase C: Audio & Voice Engine
   ├── Implement Web Audio procedural sound effects (squish, chime, chatter)
   ├── Hook up SpeechRecognition for microphone voice input
   └── Add SpeechSynthesis / cute retro formant TTS
-
-Phase C: Packaging & Distribution
-  ├── Validate all assets & icons
-  ├── Run electron-builder for NSIS Installer (.exe) & Portable (.exe)
-  └── Test installation flow and desktop shortcut creation
 ```

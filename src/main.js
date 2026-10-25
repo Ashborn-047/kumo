@@ -82,9 +82,6 @@ app.whenReady().then(async () => {
     boardManager.openBoardWindow(PRELOAD);
   }
 
-  // Open the native Kumo Studio & Customizer window
-  studioManager.openStudioWindow(PRELOAD);
-
   // Create system tray
   trayManager.create({
     onShowOverlay: () => {
@@ -93,14 +90,8 @@ app.whenReady().then(async () => {
     },
     onHideOverlay: () => overlayManager.hide(),
     onOpenBoard:   () => boardManager.openBoardWindow(PRELOAD),
-<<<<<<< Updated upstream
-    onOpenStudio:  () => studioManager.openStudioWindow(PRELOAD),
-    onOpenSettings: () => {
-      studioManager.openStudioWindow(PRELOAD);
-    },
-=======
+    onOpenStudio:  () => studioManager.open(PRELOAD, { mode: 'studio' }),
     onOpenSettings: () => studioManager.open(PRELOAD, { mode: 'studio' }),
->>>>>>> Stashed changes
     onQuit:        () => app.quit(),
   });
 
@@ -189,8 +180,11 @@ ipcMain.handle('shell:open-external', (_, url) => {
   return false;
 });
 
-ipcMain.on('studio:open', (_, mode) => {
-  studioManager.open(PRELOAD, { mode: mode === 'wizard' ? 'wizard' : 'studio' });
+ipcMain.on('studio:open', (_, optionsOrTheme) => {
+  const opts = typeof optionsOrTheme === 'string'
+    ? (optionsOrTheme === 'wizard' ? { mode: 'wizard' } : { theme: optionsOrTheme })
+    : (optionsOrTheme || { mode: 'studio' });
+  studioManager.open(PRELOAD, opts);
 });
 ipcMain.on('studio:close', () => studioManager.close());
 ipcMain.on('studio:window', (_, action) => studioManager.control(action));
@@ -310,6 +304,3 @@ ipcMain.on('overlay:move', (event, { deltaX, deltaY }) => {
   win.setPosition(Math.round(currentX + deltaX), Math.round(currentY + deltaY));
 });
 
-// Studio & Customizer Window Control
-ipcMain.on('studio:open',  (_, theme) => studioManager.openStudioWindow(PRELOAD, theme));
-ipcMain.on('studio:close', () => studioManager.closeStudio());

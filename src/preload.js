@@ -34,11 +34,11 @@ contextBridge.exposeInMainWorld('goo', {
   onSettingsUpdated: (cb)  => ipcRenderer.on('settings:updated', (_e, data) => cb(data)),
 
   // Studio / onboarding
-  openStudio:      (mode)     => ipcRenderer.send('studio:open', mode || 'studio'),
-  closeStudio:     ()         => ipcRenderer.send('studio:close'),
-  launchCompanion: (data)     => ipcRenderer.invoke('studio:launch', data),
-  studioWindow:    (action)   => ipcRenderer.send('studio:window', action),
-  openExternal:    (url)      => ipcRenderer.invoke('shell:open-external', url),
+  openStudio:      (optionsOrTheme) => ipcRenderer.send('studio:open', optionsOrTheme || 'studio'),
+  closeStudio:     ()               => ipcRenderer.send('studio:close'),
+  launchCompanion: (data)           => ipcRenderer.invoke('studio:launch', data),
+  studioWindow:    (action)         => ipcRenderer.send('studio:window', action),
+  openExternal:    (url)            => ipcRenderer.invoke('shell:open-external', url),
 
   // Window controls
   openBoard:       ()         => ipcRenderer.send('window:open-board'),
@@ -52,8 +52,4 @@ contextBridge.exposeInMainWorld('goo', {
   // Overlay mouse passthrough & reposition
   setMouseIgnore: (ignore) => ipcRenderer.send('overlay:set-mouse', ignore),
   moveOverlay:    (deltaX, deltaY) => ipcRenderer.send('overlay:move', { deltaX, deltaY }),
-
-  // Studio & Customizer controls
-  openStudio:     (theme)  => ipcRenderer.send('studio:open', theme),
-  closeStudio:    ()       => ipcRenderer.send('studio:close'),
 });
