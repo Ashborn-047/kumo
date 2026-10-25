@@ -103,9 +103,15 @@ export function renderCards() {
 
     const el = document.createElement('div');
     if (card.type === 'notes') {
-      el.className = 'kumo-canvas-card bg-[#fff5c8] rounded-xl border border-amber-200/70 shadow-lg transform -rotate-1 hover:rotate-0 transition-transform duration-200 relative flex flex-col justify-between select-text';
+      const tint = card.data.bgColor || '#fff5c8';
+      el.className = 'kumo-canvas-card card-shadow rounded-2xl border border-amber-200/80 shadow-lg transform -rotate-1 hover:rotate-0 transition-transform duration-200 relative flex flex-col justify-between select-text';
+      el.style.backgroundColor = tint;
+    } else if (card.type === 'code') {
+      el.className = 'kumo-canvas-card card-shadow rounded-2xl border border-white/10 glow-border-terminal transition-transform hover:-translate-y-0.5 duration-200 flex flex-col overflow-hidden select-text bg-[#171b24]';
+    } else if (card.type === 'writer') {
+      el.className = 'kumo-canvas-card card-shadow rounded-2xl border border-slate-200/70 glow-border-iris transition-transform hover:-translate-y-0.5 duration-200 flex flex-col overflow-hidden select-text bg-surface-container-lowest';
     } else {
-      el.className = 'kumo-canvas-card bg-surface-container-lowest rounded-2xl border border-slate-200/70 card-shadow transition-transform hover:-translate-y-0.5 duration-200 flex flex-col overflow-hidden select-text';
+      el.className = 'kumo-canvas-card card-shadow rounded-2xl border border-slate-200/70 transition-transform hover:-translate-y-0.5 duration-200 flex flex-col overflow-hidden select-text bg-surface-container-lowest';
     }
 
     el.id = card.id;
@@ -130,6 +136,34 @@ export function renderCards() {
 
     // Attach dragging
     makeCardDraggable(el, card, saveState);
+
+    // Double-click to rename title dynamically
+    el.querySelector('.card-title-text')?.addEventListener('dblclick', (e) => {
+      e.stopPropagation();
+      const currentTitle = card.title;
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.value = currentTitle;
+      input.className = 'bg-white px-2 py-0.5 rounded border border-primary text-headline-sm font-headline-sm text-on-surface font-semibold focus:outline-none';
+      const titleEl = e.currentTarget;
+      titleEl.replaceWith(input);
+      input.focus();
+      input.select();
+
+      const finishRename = () => {
+        const newTitle = input.value.trim() || currentTitle;
+        card.title = newTitle;
+        saveState();
+        renderCards();
+        toast(`Renamed to "${newTitle}"`);
+      };
+
+      input.addEventListener('blur', finishRename);
+      input.addEventListener('keydown', (ke) => {
+        if (ke.key === 'Enter') finishRename();
+        if (ke.key === 'Escape') renderCards();
+      });
+    });
 
     // Minimize & Delete
     el.querySelector('[data-act="min"]')?.addEventListener('click', (e) => {
@@ -158,28 +192,116 @@ export function renderCards() {
   updateMiniMap();
 }
 
-// ── Tool Creation Factory ──
+// ── Dynamic Tool Creation Factory ──
 export function addNewTool(type, extra = {}) {
   const id = `card-${type}-${Date.now()}`;
-  const centerX = Math.round((-state.panX + 160) / state.scale);
-  const centerY = Math.round((-state.panY + 120) / state.scale);
+  const centerX = Math.max(40, Math.round((-state.panX + 160) / state.scale));
+  const centerY = Math.max(40, Math.round((-state.panY + 120) / state.scale));
 
   let newCard = null;
   switch (type) {
     case 'launcher':
-      newCard = { id, type, title: 'System & App Launcher', x: centerX, y: centerY, width: 540, data: { activeTab: 'apps', searchQuery: '', searchResults: [], clipboardText: '' }, zIndex: ++state.nextZIndex };
+      newCard = {
+        id,
+        type,
+        title: extra.title || 'App Launcher & Hub',
+        x: centerX,
+        y: centerY,
+        width: 560,
+        data: {
+          activeTab: 'apps',
+          searchQuery: '',
+          clipboardText: 'git commit -m "feat(spatial): tactile glassmorphic nodes"',
+          apps: [
+            { id: 'spotify', name: 'Spotify', icon: 'graphic_eq', bg: 'bg-emerald-100', text: 'text-emerald-700', status: 'RUNNING', statusColor: 'text-emerald-600 bg-emerald-50' },
+            { id: 'code', name: 'VS Code', icon: 'terminal', bg: 'bg-blue-100', text: 'text-blue-700', status: 'IDLE', statusColor: 'text-secondary bg-surface-container-highest' },
+            { id: 'chrome', name: 'Chrome', icon: 'public', bg: 'bg-amber-100', text: 'text-amber-700', status: 'ACTIVE', statusColor: 'text-emerald-600 bg-emerald-50' },
+            { id: 'terminal', name: 'Terminal', icon: 'code', bg: 'bg-indigo-100', text: 'text-indigo-700', status: 'PID 89', statusColor: 'text-emerald-600 bg-emerald-50' },
+            { id: 'notepad', name: 'Notepad', icon: 'description', bg: 'bg-purple-100', text: 'text-purple-700', status: 'READY', statusColor: 'text-secondary bg-surface-container-highest' },
+            { id: 'explorer', name: 'Files', icon: 'folder_open', bg: 'bg-amber-100', text: 'text-amber-700', status: 'MOUNT', statusColor: 'text-secondary bg-surface-container-highest' },
+          ],
+          customApps: [],
+        },
+        zIndex: ++state.nextZIndex,
+      };
       break;
+
     case 'writer':
-      newCard = { id, type, title: extra.title || 'Writing & AI Drafting Suite', x: centerX, y: centerY, width: 540, data: { activeTab: 'editor', text: extra.text || '', summary: '', wordCount: 0 }, zIndex: ++state.nextZIndex };
+      newCard = {
+        id,
+        type,
+        title: extra.title || 'AI Assistant Studio',
+        x: centerX,
+        y: centerY,
+        width: 580,
+        data: {
+          activeTab: 'prompt',
+          model: 'GPT-4o (Active)',
+          tone: 'Professional',
+          prompt: extra.prompt || '',
+          response: extra.response || '',
+          tokenCount: 0,
+          maxTokens: 4096,
+        },
+        zIndex: ++state.nextZIndex,
+      };
       break;
+
     case 'code':
-      newCard = { id, type, title: extra.title || 'PowerShell & Scripts Sandbox', x: centerX, y: centerY, width: 560, data: { activeTab: 'editor', language: 'powershell', code: extra.code || '', output: '' }, zIndex: ++state.nextZIndex };
+      newCard = {
+        id,
+        type,
+        title: extra.title || 'PowerShell & DevOps Console',
+        x: centerX,
+        y: centerY,
+        width: 560,
+        data: {
+          preset: 'sync-workspace.ps1',
+          code: extra.code || 'Get-ChildItem -Path ./src -Recurse -Depth 2 | Select-Object -First 8 Name, Length',
+          output: 'PS C:\\Kumo\\spatial-engine> Ready for script execution.',
+          pid: '9204',
+          cpu: '1.2%',
+        },
+        zIndex: ++state.nextZIndex,
+      };
       break;
+
     case 'design':
-      newCard = { id, type, title: 'Design Studio', x: centerX, y: centerY, width: 540, data: { activeTab: 'tokens', paletteIndex: 0, svgCode: '' }, zIndex: ++state.nextZIndex };
+      newCard = {
+        id,
+        type,
+        title: 'Mochi Companion & Theme Lab',
+        x: centerX,
+        y: centerY,
+        width: 1170,
+        data: {
+          activeMood: 'Idle',
+          activePaletteIndex: 0,
+          glowIntensity: 72,
+          soundEnabled: true,
+        },
+        zIndex: ++state.nextZIndex,
+      };
       break;
+
     case 'notes':
-      newCard = { id, type, title: extra.title || 'Workspace Sticky Note', x: centerX, y: centerY, width: 500, data: { activeTab: 'checklist', items: extra.text ? [{ text: extra.text, done: false }] : [], scratchText: '' }, zIndex: ++state.nextZIndex };
+      newCard = {
+        id,
+        type,
+        title: extra.title || 'Sprint Scratchpad',
+        x: centerX,
+        y: centerY,
+        width: 580,
+        data: {
+          bgColor: '#fff5c8',
+          colorName: 'Solar Yellow',
+          items: extra.items || [
+            { id: `t-${Date.now()}-1`, text: 'Review spatial workbench', done: false, tag: 'URGENT' },
+          ],
+          scratchText: extra.text || '',
+        },
+        zIndex: ++state.nextZIndex,
+      };
       break;
   }
 
@@ -187,7 +309,7 @@ export function addNewTool(type, extra = {}) {
     state.cards.unshift(newCard);
     renderCards();
     saveState();
-    toast(`Added ${newCard.title}`);
+    toast(`Spawned ${newCard.title}`);
   }
 }
 
@@ -196,9 +318,9 @@ function initFilters() {
   $$('.nav-filter-btn').forEach((btn) => {
     btn.onclick = () => {
       $$('.nav-filter-btn').forEach((b) => {
-        b.className = 'nav-filter-btn text-secondary dark:text-secondary-fixed hover:text-on-surface dark:hover:text-inverse-on-surface rounded-full px-3 py-1.5 transition-all text-label-md font-label-md flex items-center gap-1.5 hover:bg-surface-container-high/60 active:scale-95';
+        b.className = 'nav-filter-btn text-secondary dark:text-secondary-fixed hover:text-on-surface dark:hover:text-inverse-on-surface rounded-lg px-2.5 py-1 transition-all text-label-md font-label-md flex items-center gap-1.5 hover:bg-surface-container-high/60 active:scale-95 cursor-pointer';
       });
-      btn.className = 'nav-filter-btn text-primary dark:text-inverse-primary bg-primary-fixed dark:bg-primary-container font-semibold rounded-full px-3 py-1.5 transition-all text-label-md font-label-md flex items-center gap-1.5 active:scale-95';
+      btn.className = 'nav-filter-btn text-primary dark:text-inverse-primary bg-primary-fixed dark:bg-primary-container font-semibold rounded-lg px-2.5 py-1 transition-all text-label-md font-label-md flex items-center gap-1.5 active:scale-95 cursor-pointer';
       state.activeFilter = btn.dataset.filter;
       renderCards();
     };
@@ -208,10 +330,29 @@ function initFilters() {
 // ── Floating Actions & HUD Initializers ──
 function initFloatingActions() {
   const addBtn = $('#btn-add-tool');
-  if (addBtn) {
-    addBtn.onclick = () => {
-      addNewTool('launcher');
+  const popover = $('#popover-add-tool');
+
+  if (addBtn && popover) {
+    addBtn.onclick = (e) => {
+      e.stopPropagation();
+      popover.classList.toggle('hidden');
     };
+
+    // Close on outside click
+    document.addEventListener('click', (e) => {
+      if (!popover.contains(e.target) && !addBtn.contains(e.target)) {
+        popover.classList.add('hidden');
+      }
+    });
+
+    // Wire popover tool options
+    popover.querySelectorAll('.add-tool-option').forEach((opt) => {
+      opt.addEventListener('click', () => {
+        const type = opt.dataset.type;
+        addNewTool(type);
+        popover.classList.add('hidden');
+      });
+    });
   }
 
   // Open Studio & Customizer

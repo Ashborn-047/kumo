@@ -210,10 +210,65 @@
         </div>
 
         <!-- Primary Action: + New Tool -->
-        <button class="flex items-center gap-1.5 bg-primary hover:bg-primary-container text-on-primary font-semibold text-label-md font-label-md px-3.5 py-2 rounded-xl shadow-md shadow-primary/25 hover:shadow-lg transition-all active:scale-95 ml-1 cursor-pointer" id="btn-add-tool">
-          <span class="material-symbols-outlined text-[18px]">add</span>
-          <span>+ New Tool</span>
-        </button>
+        <div class="relative">
+          <button class="flex items-center gap-1.5 bg-primary hover:bg-primary-container text-on-primary font-semibold text-label-md font-label-md px-3.5 py-2 rounded-xl shadow-md shadow-primary/25 hover:shadow-lg transition-all active:scale-95 ml-1 cursor-pointer" id="btn-add-tool">
+            <span class="material-symbols-outlined text-[18px]">add</span>
+            <span>+ New Tool</span>
+          </button>
+
+          <!-- Dynamic Tool Creation Popover -->
+          <div class="hidden absolute right-0 top-12 w-72 bg-surface-container-lowest/95 backdrop-blur-md rounded-2xl shadow-2xl border border-outline-variant/30 p-2 z-50 flex flex-col gap-1 ring-1 ring-black/5" id="popover-add-tool">
+            <div class="px-3 py-1.5 text-[11px] font-mono text-secondary uppercase font-semibold border-b border-outline-variant/20 mb-1 flex items-center justify-between">
+              <span>Add Spatial Tool</span>
+              <span class="material-symbols-outlined text-[14px]">auto_awesome</span>
+            </div>
+            <button class="add-tool-option flex items-center gap-2.5 p-2 rounded-xl hover:bg-primary-fixed/30 text-left transition-all active:scale-95 cursor-pointer" data-type="launcher">
+              <div class="w-8 h-8 rounded-lg bg-sky-100 text-sky-800 flex items-center justify-center shrink-0">
+                <span class="material-symbols-outlined text-[18px]">apps</span>
+              </div>
+              <div>
+                <p class="font-label-md text-label-md font-bold text-on-surface">App Launcher & Hub</p>
+                <p class="text-[11px] text-secondary">System shortcuts & live clipboard</p>
+              </div>
+            </button>
+            <button class="add-tool-option flex items-center gap-2.5 p-2 rounded-xl hover:bg-primary-fixed/30 text-left transition-all active:scale-95 cursor-pointer" data-type="writer">
+              <div class="w-8 h-8 rounded-lg bg-purple-100 text-purple-800 flex items-center justify-center shrink-0">
+                <span class="material-symbols-outlined text-[18px]">psychology</span>
+              </div>
+              <div>
+                <p class="font-label-md text-label-md font-bold text-on-surface">AI Assistant Studio</p>
+                <p class="text-[11px] text-secondary">Multi-model prompt orchestrator</p>
+              </div>
+            </button>
+            <button class="add-tool-option flex items-center gap-2.5 p-2 rounded-xl hover:bg-primary-fixed/30 text-left transition-all active:scale-95 cursor-pointer" data-type="code">
+              <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0">
+                <span class="material-symbols-outlined text-[18px]">terminal</span>
+              </div>
+              <div>
+                <p class="font-label-md text-label-md font-bold text-on-surface">PowerShell & DevOps</p>
+                <p class="text-[11px] text-secondary">Native terminal script sandbox</p>
+              </div>
+            </button>
+            <button class="add-tool-option flex items-center gap-2.5 p-2 rounded-xl hover:bg-primary-fixed/30 text-left transition-all active:scale-95 cursor-pointer" data-type="notes">
+              <div class="w-8 h-8 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center shrink-0">
+                <span class="material-symbols-outlined text-[18px]">push_pin</span>
+              </div>
+              <div>
+                <p class="font-label-md text-label-md font-bold text-on-surface">Sprint Scratchpad</p>
+                <p class="text-[11px] text-secondary">Dynamic checklist & progress memo</p>
+              </div>
+            </button>
+            <button class="add-tool-option flex items-center gap-2.5 p-2 rounded-xl hover:bg-primary-fixed/30 text-left transition-all active:scale-95 cursor-pointer" data-type="design">
+              <div class="w-8 h-8 rounded-lg bg-orange-100 text-orange-800 flex items-center justify-center shrink-0">
+                <span class="material-symbols-outlined text-[18px]">palette</span>
+              </div>
+              <div>
+                <p class="font-label-md text-label-md font-bold text-on-surface">Companion & Theme Lab</p>
+                <p class="text-[11px] text-secondary">Mascot moods & spatial token sync</p>
+              </div>
+            </button>
+          </div>
+        </div>
       </div>
     </nav>
 
