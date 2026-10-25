@@ -13,6 +13,10 @@ const settingsStore = require('./settings');
 
 // Free models in priority order (best first)
 const FREE_MODELS = [
+  'openrouter/free',
+  'google/gemma-4-31b-it:free',
+  'nvidia/nemotron-3-super-120b-a12b:free',
+  'nvidia/nemotron-3.5-lightning:free',
   'meta-llama/llama-3.3-70b-instruct:free',
   'google/gemini-flash-1.5:free',
   'deepseek/deepseek-r1:free',
@@ -82,14 +86,17 @@ Never delete files or run destructive commands.`;
 async function sendMessage(userMessage, history = [], onChunk) {
   if (!client) throw new Error('AI not initialized — API key missing');
 
+  const cfg = settingsStore.get();
+  const targetModel = cfg.model || activeModel;
+
   const messages = [
-    { role: 'system', content: buildSystemPrompt(settingsStore.get()) },
+    { role: 'system', content: buildSystemPrompt(cfg) },
     ...history,
     { role: 'user', content: userMessage },
   ];
 
   const stream = await client.chat.completions.create({
-    model: activeModel,
+    model: targetModel,
     messages,
     stream: true,
     max_tokens: 1024,
@@ -111,6 +118,9 @@ async function sendMessage(userMessage, history = [], onChunk) {
  */
 async function askBoard(userPrompt, snapshot = {}) {
   if (!client) throw new Error('AI not initialized — API key missing');
+
+  const cfg = settingsStore.get();
+  const targetModel = cfg.model || activeModel;
 
   const boardSystem = `You are Mochi, the AI visual planner inside Mochiboard.
 You help organize ideas into sticky notes, to-dos, and section titles on an infinite canvas.
@@ -139,7 +149,7 @@ Respond strictly in valid JSON format:
 Only output the JSON object, nothing else.`;
 
   const res = await client.chat.completions.create({
-    model: activeModel,
+    model: targetModel,
     messages: [
       { role: 'system', content: boardSystem },
       { role: 'user', content: userPrompt },
