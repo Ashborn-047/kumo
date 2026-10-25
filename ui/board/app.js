@@ -355,6 +355,37 @@ function initFloatingActions() {
     });
   }
 
+  // Toggle Floating Mascot Overlay from Kumoboard
+  const btnToggleMascot = $('#btn-toggle-mascot');
+  const iconMascot = $('#icon-mascot-status');
+  const labelMascot = $('#label-mascot-status');
+
+  function updateMascotUI(visible) {
+    if (visible) {
+      if (iconMascot) iconMascot.textContent = 'cloud';
+      if (labelMascot) labelMascot.textContent = 'Mascot ON';
+      btnToggleMascot?.classList.add('bg-purple-50', 'text-purple-800');
+      btnToggleMascot?.classList.remove('bg-surface-container-high', 'text-secondary');
+    } else {
+      if (iconMascot) iconMascot.textContent = 'cloud_off';
+      if (labelMascot) labelMascot.textContent = 'Mascot OFF';
+      btnToggleMascot?.classList.remove('bg-purple-50', 'text-purple-800');
+      btnToggleMascot?.classList.add('bg-surface-container-high', 'text-secondary');
+    }
+  }
+
+  if (window.goo?.isOverlayVisible) {
+    window.goo.isOverlayVisible().then(updateMascotUI).catch(() => {});
+  }
+
+  btnToggleMascot?.addEventListener('click', async () => {
+    if (window.goo?.toggleOverlay) {
+      const isVisible = await window.goo.toggleOverlay();
+      updateMascotUI(isVisible);
+      toast(isVisible ? '☁️ Kumo Mascot summoned' : '💤 Kumo Mascot sent to sleep');
+    }
+  });
+
   // Open Studio & Customizer
   $('#btn-settings')?.addEventListener('click', () => {
     window.goo?.openStudio?.('studio');

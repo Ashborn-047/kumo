@@ -286,6 +286,24 @@ ipcMain.handle('action:run', async (event, { type, args }) => {
 ipcMain.on('window:open-board',   () => boardManager.openBoardWindow(PRELOAD));
 ipcMain.on('window:hide-overlay', () => overlayManager.hide());
 ipcMain.on('window:show-overlay', () => overlayManager.show());
+ipcMain.handle('window:toggle-overlay', () => {
+  const win = overlayManager.get();
+  if (!win) {
+    overlayManager.create(PRELOAD);
+    return true;
+  }
+  if (win.isVisible()) {
+    overlayManager.hide();
+    return false;
+  } else {
+    overlayManager.show();
+    return true;
+  }
+});
+ipcMain.handle('window:is-overlay-visible', () => {
+  const win = overlayManager.get();
+  return win ? win.isVisible() : false;
+});
 
 // Overlay mouse passthrough toggle (so clicks reach mascot body and input)
 ipcMain.on('overlay:set-mouse', (event, ignore) => {

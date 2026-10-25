@@ -16,6 +16,7 @@ const mascotWrap     = document.getElementById('mascot-wrap');
 const btnQuickBoard  = document.getElementById('btn-quick-board');
 const btnQuickHistory = document.getElementById('btn-quick-history');
 const btnQuickSettings = document.getElementById('btn-quick-settings');
+const btnQuickSleep = document.getElementById('btn-quick-sleep');
 
 const settingsModal  = document.getElementById('settings-modal');
 const settingsClose  = document.getElementById('settings-close');
@@ -628,6 +629,10 @@ btnClearHistory.addEventListener('click', clearHistory);
 
 btnQuickBoard.addEventListener('click', () => {
   window.goo?.openBoard();
+});
+btnQuickSleep?.addEventListener('click', (e) => {
+  e.stopPropagation();
+  window.goo?.hideOverlay?.();
 });
 
 colorSwatches.forEach(swatch => {

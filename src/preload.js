@@ -44,9 +44,11 @@ contextBridge.exposeInMainWorld('goo', {
   openExternal:    (url)            => ipcRenderer.invoke('shell:open-external', url),
 
   // Window controls
-  openBoard:       ()         => ipcRenderer.send('window:open-board'),
-  hideOverlay:     ()         => ipcRenderer.send('window:hide-overlay'),
-  showOverlay:     ()         => ipcRenderer.send('window:show-overlay'),
+  openBoard:        ()         => ipcRenderer.send('window:open-board'),
+  hideOverlay:      ()         => ipcRenderer.send('window:hide-overlay'),
+  showOverlay:      ()         => ipcRenderer.send('window:show-overlay'),
+  toggleOverlay:    ()         => ipcRenderer.invoke('window:toggle-overlay'),
+  isOverlayVisible: ()         => ipcRenderer.invoke('window:is-overlay-visible'),
 
   // Board ↔ native bridge (used by ui/board/bridge.js)
   boardCall:    (msg)      => ipcRenderer.send('board:call', msg),
