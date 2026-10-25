@@ -41,8 +41,8 @@ const INTENT_PATTERNS = [
   { pattern: /(?:flush|reset|clear)\s+(?:my\s+)?dns/i, action: 'powershell.read', extract: () => ({ command: 'ipconfig /flushdns' }) },
   { pattern: /ping\s+(.+)/i, action: 'powershell.read', extract: (m) => ({ command: `ping -n 4 ${m[1].trim().replace(/[;&|`$]/g, '')}` }) },
 
-  // Process management
-  { pattern: /(?:kill|terminate|stop)\s+(?:process|task|app)?\s*([a-zA-Z0-9_\-\.]+)/i, action: 'process.kill', extract: (m) => ({ name: m[1].trim() }) },
+  // Process management / Closing applications
+  { pattern: /(?:close|quit|exit|kill|terminate|stop|shut\s+down)\s+(?:the\s+)?(?:process|task|app|window)?\s*([a-zA-Z0-9_\-\.]+)/i, action: 'process.kill', extract: (m) => ({ name: m[1].trim() }) },
 
   // Media controls (Spotify / System audio playback)
   { pattern: /(?:pause|resume|play|toggle)\s+(?:the\s+)?(?:music|song|track|playback|spotify)/i, action: 'media.playPause', extract: () => ({}) },
@@ -237,6 +237,8 @@ function formatOfflineSuccess(action, args, result) {
       return `⏭️ Skipped to next track!`;
     case 'media.previous':
       return `⏮️ Rewound to previous track!`;
+    case 'process.kill':
+      return `🛑 Closed ${args.name}!`;
     default:
       return `✅ Done!`;
   }

@@ -335,10 +335,43 @@ function killProcess({ name }) {
     if (!name || typeof name !== 'string') {
       return resolve({ killed: false, error: 'Invalid process name' });
     }
-    const cleanName = name.replace(/[;&|`$]/g, '').trim();
-    execFile('powershell.exe', ['-NoProfile', '-Command', `Stop-Process -Name "${cleanName}" -Force`], (err) => {
-      if (err) resolve({ killed: false, name: cleanName, error: err.message });
-      else resolve({ killed: true, name: cleanName });
+
+    const cleanName = name.replace(/[;&|`$]/g, '').toLowerCase().trim();
+    const aliasMap = {
+      calculator: 'calc',
+      calc: 'calc',
+      notepad: 'notepad',
+      word: 'winword',
+      excel: 'excel',
+      powerpoint: 'powerpnt',
+      terminal: 'windowsterminal',
+      vscode: 'code',
+      code: 'code',
+      chrome: 'chrome',
+      edge: 'msedge',
+      spotify: 'spotify',
+      discord: 'discord',
+      telegram: 'telegram',
+    };
+
+    const targetProc = aliasMap[cleanName] || cleanName;
+    const ps = `
+      $procs = Get-Process -Name "*${targetProc}*" -ErrorAction SilentlyContinue
+      if ($procs) {
+        $procs | Stop-Process -Force -ErrorAction SilentlyContinue
+        Write-Output "OK"
+      } else {
+        Write-Output "NOT_FOUND"
+      }
+    `;
+
+    execFile('powershell.exe', ['-NoProfile', '-Command', ps], (err, stdout) => {
+      const out = (stdout || '').trim();
+      if (!err && out.includes('OK')) {
+        resolve({ killed: true, name: cleanName });
+      } else {
+        resolve({ killed: false, name: cleanName, error: `No active process found for "${name}"` });
+      }
     });
   });
 }
