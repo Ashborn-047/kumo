@@ -73,6 +73,12 @@ test.describe('Kumo Studio & Onboarding Window', () => {
     await expect(studioPage.locator('text=2. Choose Companion Engine')).toBeVisible();
     await expect(studioPage.locator('#stageRightColumn')).toBeVisible();
 
+    // Verify mascot cards exist and can be selected
+    const cottonCard = studioPage.locator('#card-mascot-cotton');
+    await expect(cottonCard).toBeVisible();
+    await cottonCard.click();
+    await expect(cottonCard).toHaveClass(/border-primary/);
+
     // Step to Step 3 (Persona & Swatches)
     await studioPage.locator('#tab-btn-3').click();
     await expect(studioPage.locator('text=3. Color Palette & Blush Intensity')).toBeVisible();

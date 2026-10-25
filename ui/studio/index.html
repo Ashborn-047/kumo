@@ -421,16 +421,15 @@
               Reactive Shaders Active
             </span>
 </div>
-<!-- 4 Engine Selection Grid -->
-<div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-<!-- Option 1: 3D Mochi Gel Bot (Kumo) - SELECTED -->
-<label class="cursor-pointer relative p-4 rounded-2xl border-2 border-primary bg-primary-fixed/20 shadow-sm transition-all flex flex-col justify-between group">
-<input checked="" class="sr-only" name="companion_engine_choice" type="radio" value="mochi"/>
+<!-- 5 Real Mascot Selection Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="engineSelectionGrid">
+<!-- Mascot 1: 3D Mochi Gel Cloud (ACTIVE by default) -->
+<div class="cursor-pointer relative p-3.5 rounded-2xl border-2 border-primary bg-primary-fixed/20 shadow-sm transition-all flex flex-col justify-between mascot-engine-card" id="card-mascot-mochi" data-mascot="mochi" onclick="selectMascot('mochi')">
 <div class="flex items-start justify-between mb-2">
 <div class="w-10 h-10 rounded-xl bg-primary text-on-primary flex items-center justify-center shadow-md shadow-primary/25">
 <span class="material-symbols-outlined text-[22px]">auto_awesome</span>
 </div>
-<div class="flex items-center gap-1.5">
+<div class="flex items-center gap-1.5 mascot-status-pill" id="pill-mascot-mochi">
 <span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-primary text-on-primary font-bold">ACTIVE</span>
 <div class="w-5 h-5 rounded-full bg-primary text-on-primary flex items-center justify-center">
 <span class="material-symbols-outlined text-[14px]">check</span>
@@ -438,68 +437,90 @@
 </div>
 </div>
 <div>
-<h3 class="text-headline-sm font-headline-sm text-[15px] font-bold text-on-surface">3D Mochi Gel Bot (Kumo)</h3>
-<p class="text-body-sm font-body-sm text-secondary mt-1">Soft squishy organic gelatin geometry, reactive lighting, expression physics.</p>
+<h3 class="text-headline-sm font-headline-sm text-[15px] font-bold text-on-surface">3D Mochi Gel Cloud</h3>
+<p class="text-body-sm font-body-sm text-secondary mt-0.5">Squishy procedural gelatin companion, reactive blush, organic jiggle physics.</p>
 </div>
-<div class="mt-3 pt-2.5 border-t border-primary/20 flex items-center justify-between">
-<span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-[#eadfff] text-primary font-semibold">WebGL 2.0 / PBR</span>
+<div class="mt-2.5 pt-2 border-t border-primary/20 flex items-center justify-between text-secondary">
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-[#eadfff] text-primary font-semibold">Live Procedural</span>
 <span class="font-label-sm text-label-sm text-primary font-semibold">Spring 60fps</span>
 </div>
-</label>
-<!-- Option 2: Cotton Cloud (Puff) -->
-<label class="cursor-pointer relative p-4 rounded-2xl border border-outline-variant/50 bg-surface-container-lowest hover:border-primary/40 transition-all flex flex-col justify-between group">
-<input class="sr-only" name="companion_engine_choice" type="radio" value="puff"/>
+</div>
+<!-- Mascot 2: Cotton Cloud (Puff) -->
+<div class="cursor-pointer relative p-3.5 rounded-2xl border border-outline-variant/50 bg-surface-container-lowest hover:border-primary/40 transition-all flex flex-col justify-between mascot-engine-card" id="card-mascot-cotton" data-mascot="cotton" onclick="selectMascot('cotton')">
 <div class="flex items-start justify-between mb-2">
 <div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-secondary group-hover:text-primary transition-colors">
 <span class="material-symbols-outlined text-[22px]">filter_drama</span>
 </div>
+<div class="flex items-center gap-1.5 mascot-status-pill" id="pill-mascot-cotton">
 <div class="w-5 h-5 rounded-full border-2 border-outline-variant flex items-center justify-center"></div>
+</div>
 </div>
 <div>
 <h3 class="text-headline-sm font-headline-sm text-[15px] font-semibold text-on-surface">Cotton Cloud (Puff)</h3>
-<p class="text-body-sm font-body-sm text-secondary mt-1">Vector SVG bezier dynamics, calm organic dampening, silky floating breeze.</p>
+<p class="text-body-sm font-body-sm text-secondary mt-0.5">Pure vector SVG bezier curves, calm floating aura, breezy companion.</p>
 </div>
-<div class="mt-3 pt-2.5 border-t border-surface-container flex items-center justify-between">
+<div class="mt-2.5 pt-2 border-t border-surface-container flex items-center justify-between text-secondary">
 <span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-surface-container text-secondary">Vector SVG</span>
 <span class="font-label-sm text-label-sm text-secondary">Zero Shaders</span>
 </div>
-</label>
-<!-- Option 3: Kubo Bot (Voxel) -->
-<label class="cursor-pointer relative p-4 rounded-2xl border border-outline-variant/50 bg-surface-container-lowest hover:border-primary/40 transition-all flex flex-col justify-between group">
-<input class="sr-only" name="companion_engine_choice" type="radio" value="voxel"/>
+</div>
+<!-- Mascot 3: Kubo Bot (Voxel) -->
+<div class="cursor-pointer relative p-3.5 rounded-2xl border border-outline-variant/50 bg-surface-container-lowest hover:border-primary/40 transition-all flex flex-col justify-between mascot-engine-card" id="card-mascot-kubo" data-mascot="kubo" onclick="selectMascot('kubo')">
 <div class="flex items-start justify-between mb-2">
 <div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-secondary group-hover:text-primary transition-colors">
 <span class="material-symbols-outlined text-[22px]">grid_view</span>
 </div>
+<div class="flex items-center gap-1.5 mascot-status-pill" id="pill-mascot-kubo">
 <div class="w-5 h-5 rounded-full border-2 border-outline-variant flex items-center justify-center"></div>
+</div>
 </div>
 <div>
 <h3 class="text-headline-sm font-headline-sm text-[15px] font-semibold text-on-surface">Kubo Bot (Voxel)</h3>
-<p class="text-body-sm font-body-sm text-secondary mt-1">16-bit retro buffer aesthetic, chunky isometric pixels, minimal CPU consumption.</p>
+<p class="text-body-sm font-body-sm text-secondary mt-0.5">16-bit retro CRT screen robot, blinking antenna beacon, pixel face.</p>
 </div>
-<div class="mt-3 pt-2.5 border-t border-surface-container flex items-center justify-between">
-<span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-surface-container text-secondary">Canvas 2D</span>
+<div class="mt-2.5 pt-2 border-t border-surface-container flex items-center justify-between text-secondary">
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-surface-container text-secondary">Retro CRT</span>
 <span class="font-label-sm text-label-sm text-secondary">&lt; 1% CPU</span>
 </div>
-</label>
-<!-- Option 4: Starlet Astro (Particle) -->
-<label class="cursor-pointer relative p-4 rounded-2xl border border-outline-variant/50 bg-surface-container-lowest hover:border-primary/40 transition-all flex flex-col justify-between group">
-<input class="sr-only" name="companion_engine_choice" type="radio" value="particle"/>
+</div>
+<!-- Mascot 4: Mochi Droplet -->
+<div class="cursor-pointer relative p-3.5 rounded-2xl border border-outline-variant/50 bg-surface-container-lowest hover:border-primary/40 transition-all flex flex-col justify-between mascot-engine-card" id="card-mascot-droplet" data-mascot="droplet" onclick="selectMascot('droplet')">
 <div class="flex items-start justify-between mb-2">
 <div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-secondary group-hover:text-primary transition-colors">
-<span class="material-symbols-outlined text-[22px]">blur_on</span>
+<span class="material-symbols-outlined text-[22px]">water_drop</span>
 </div>
+<div class="flex items-center gap-1.5 mascot-status-pill" id="pill-mascot-droplet">
 <div class="w-5 h-5 rounded-full border-2 border-outline-variant flex items-center justify-center"></div>
 </div>
+</div>
 <div>
-<h3 class="text-headline-sm font-headline-sm text-[15px] font-semibold text-on-surface">Starlet Astro (Particle)</h3>
-<p class="text-body-sm font-body-sm text-secondary mt-1">2D luminescent sprite swarm with gentle gravitational particle clustering.</p>
+<h3 class="text-headline-sm font-headline-sm text-[15px] font-semibold text-on-surface">Mochi Droplet</h3>
+<p class="text-body-sm font-body-sm text-secondary mt-0.5">Squishy aquatic water droplet, mint gloss rim, refreshing ideation buddy.</p>
 </div>
-<div class="mt-3 pt-2.5 border-t border-surface-container flex items-center justify-between">
-<span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-surface-container text-secondary">Particle Sprite</span>
-<span class="font-label-sm text-label-sm text-secondary">Glow Mesh</span>
+<div class="mt-2.5 pt-2 border-t border-surface-container flex items-center justify-between text-secondary">
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-surface-container text-secondary">Aqua Droplet</span>
+<span class="font-label-sm text-label-sm text-secondary">Gloss Shaders</span>
 </div>
-</label>
+</div>
+<!-- Mascot 5: Starlet Astro (Span 2) -->
+<div class="cursor-pointer relative p-3.5 rounded-2xl border border-outline-variant/50 bg-surface-container-lowest hover:border-primary/40 transition-all flex flex-col justify-between mascot-engine-card sm:col-span-2" id="card-mascot-starlet" data-mascot="starlet" onclick="selectMascot('starlet')">
+<div class="flex items-start justify-between mb-2">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-secondary group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[22px]">star</span>
+</div>
+<div class="flex items-center gap-1.5 mascot-status-pill" id="pill-mascot-starlet">
+<div class="w-5 h-5 rounded-full border-2 border-outline-variant flex items-center justify-center"></div>
+</div>
+</div>
+<div>
+<h3 class="text-headline-sm font-headline-sm text-[15px] font-semibold text-on-surface">Starlet Astro (Cosmic)</h3>
+<p class="text-body-sm font-body-sm text-secondary mt-0.5">Planetary orbital star companion, gold luminescent glow, guiding your code.</p>
+</div>
+<div class="mt-2.5 pt-2 border-t border-surface-container flex items-center justify-between text-secondary">
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-surface-container text-secondary">Cosmic Star</span>
+<span class="font-label-sm text-label-sm text-secondary">Orbital Ring</span>
+</div>
+</div>
 </div>
 <!-- Fluid Jiggle Physics Toggle -->
 <div class="flex items-center justify-between p-3.5 rounded-2xl bg-surface-container-low border border-outline-variant/30">
@@ -873,9 +894,177 @@
   let currentStep = 1;
   let selectedPaletteHex = '#eadfff';
   let selectedPaletteName = 'Lilac';
-  let selectedEngineName = '3D Mochi Gel Bot';
+  let selectedEngineName = '3D Mochi Gel Cloud';
   let selectedEngineKey = 'mochi';
   let currentBlushVal = 75;
+
+  const MASCOT_PREVIEWS = {
+    mochi: {
+      name: '3D Mochi Gel Cloud',
+      type: '3d',
+      speech: '“Hi! I am <span class=\"font-bold text-primary\">Kumo</span>, your desktop thinking buddy. Ready to pair-program and ideate together!”',
+      svg: `<svg class="w-full h-full drop-shadow-[0_16px_24px_rgba(99,85,216,0.18)]" fill="none" viewbox="0 0 240 200" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<lineargradient gradientunits="userSpaceOnUse" id="cloudBodyGrad" x1="20" x2="220" y1="20" y2="180">
+<stop offset="0%" stop-color="#ffffff"></stop>
+<stop id="cloudGradMid" offset="40%" stop-color="#eadfff"></stop>
+<stop offset="100%" stop-color="#dcedff"></stop>
+</lineargradient>
+<radialgradient cx="0" cy="0" gradienttransform="translate(70 125) scale(20 12)" gradientunits="userSpaceOnUse" id="blushLeft" r="1">
+<stop offset="0%" stop-color="#ff7e67" stop-opacity="0.75"></stop>
+<stop offset="100%" stop-color="#ff7e67" stop-opacity="0"></stop>
+</radialgradient>
+<radialgradient cx="0" cy="0" gradienttransform="translate(170 125) scale(20 12)" gradientunits="userSpaceOnUse" id="blushRight" r="1">
+<stop offset="0%" stop-color="#ff7e67" stop-opacity="0.75"></stop>
+<stop offset="100%" stop-color="#ff7e67" stop-opacity="0"></stop>
+</radialgradient>
+</defs>
+<path d="M70 170 C40 170 20 145 20 115 C20 85 45 68 70 68 C76 40 105 20 135 22 C165 24 185 45 192 68 C215 70 230 90 230 115 C230 145 210 170 175 170 Z" fill="url(#cloudBodyGrad)" stroke="#ffffff" stroke-width="3"></path>
+<path d="M80 62 C105 32 145 32 170 58" opacity="0.8" stroke="#ffffff" stroke-linecap="round" stroke-width="4"></path>
+<ellipse cx="72" cy="122" fill="url(#blushLeft)" id="blushCircleL" rx="18" ry="11"></ellipse>
+<ellipse cx="168" cy="122" fill="url(#blushRight)" id="blushCircleR" rx="18" ry="11"></ellipse>
+<path d="M85 106 C85 96 99 96 99 106" stroke="#171b2b" stroke-linecap="round" stroke-width="4.5"></path>
+<circle cx="89" cy="100" fill="#ffffff" r="1.5"></circle>
+<path d="M141 106 C141 96 155 96 155 106" stroke="#171b2b" stroke-linecap="round" stroke-width="4.5"></path>
+<circle cx="145" cy="100" fill="#ffffff" r="1.5"></circle>
+<path d="M114 116 Q120 126 126 116" stroke="#171b2b" stroke-linecap="round" stroke-width="3.5"></path>
+<path d="M198 42 L202 30 L206 42 L218 46 L206 50 L202 62 L198 50 L186 46 Z" fill="#6355d8" opacity="0.85"></path>
+<circle cx="218" cy="28" fill="#ffb4a6" r="2.5"></circle>
+</svg>`
+    },
+    cotton: {
+      name: 'Cotton Cloud (Puff)',
+      type: '2d',
+      speech: '“Puff here! Soft and tranquil, floating quietly along with your workflow.”',
+      svg: `<svg class="w-full h-full drop-shadow-[0_16px_24px_rgba(99,85,216,0.18)]" viewBox="0 0 150 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="cotton_grad" x1="10" y1="4" x2="142" y2="97" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF" />
+      <stop id="cottonGradMid" offset="0.75" stop-color="#eadfff" />
+      <stop offset="1" stop-color="#dcedff" />
+    </linearGradient>
+  </defs>
+  <path d="M120 72C133.255 72 144 61.2548 144 48C144 35.8456 134.975 25.7981 123.279 24.2386C120.485 10.3707 108.204 0 93.5 0C82.1066 0 72.1388 6.27315 66.8601 15.5492C62.4638 13.2922 57.481 12 52.2 12C36.736 12 24.2 24.536 24.2 40C24.2 41.229 24.2793 42.4395 24.433 43.627C10.6698 46.126 0 58.1256 0 72.6C0 88.6163 12.9837 101.6 29 101.6H120C133.255 101.6 144 90.8548 144 77.6" fill="#FFFFFF" />
+  <path d="M120 70C132.15 70 142 60.1503 142 48C142 36.8778 133.743 27.6833 123.042 26.252C120.486 13.5658 109.248 4 95.8 4C85.3748 4 76.2625 9.74088 71.4326 18.228C67.41 16.1627 62.8504 15 58 15C43.6406 15 32 26.6406 32 41C32 42.1246 32.0712 43.2329 32.2098 44.3197C19.6152 46.6063 10 57.5855 10 70.8C10 85.4355 21.8645 97.3 36.5 97.3H120C132.15 97.3 142 87.4503 142 75.3" fill="url(#cotton_grad)" />
+  <circle cx="68" cy="54" r="4.5" fill="#2E3B52" />
+  <circle cx="102" cy="54" r="4.5" fill="#2E3B52" />
+  <circle cx="69.5" cy="52.5" r="1.5" fill="#FFFFFF" />
+  <circle cx="103.5" cy="52.5" r="1.5" fill="#FFFFFF" />
+  <ellipse cx="59" cy="61" rx="6" ry="3.5" fill="#FFB4A6" opacity="0.8" />
+  <ellipse cx="111" cy="61" rx="6" ry="3.5" fill="#FFB4A6" opacity="0.8" />
+  <path d="M80 61C82.5 64.5 87.5 64.5 90 61" stroke="#2E3B52" stroke-width="2.5" stroke-linecap="round" />
+</svg>`
+    },
+    kubo: {
+      name: 'Kubo Bot (Voxel)',
+      type: '3d',
+      speech: '“KUBO-04 online. Beep boop! All systems operational, ready to write code.”',
+      svg: `<svg class="w-full h-full drop-shadow-[0_16px_24px_rgba(46,59,82,0.22)]" viewBox="0 0 130 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="62" y="14" width="6" height="24" rx="3" fill="#525F77" />
+  <circle cx="65" cy="12" r="9" fill="#34D399" opacity="0.4" />
+  <circle cx="65" cy="12" r="6" fill="#34D399" stroke="#FFFFFF" stroke-width="2" />
+  <rect x="15" y="36" width="100" height="88" rx="20" fill="#2E3B52" stroke="#474554" stroke-width="3" />
+  <rect x="25" y="46" width="80" height="52" rx="14" fill="#171B2B" stroke="#3A475F" stroke-width="2" />
+  <rect x="38" y="62" width="16" height="16" rx="4" fill="#DCF5E7" />
+  <path d="M42 72L46 66L50 72" stroke="#171B2B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+  <rect x="76" y="62" width="16" height="16" rx="4" fill="#DCF5E7" />
+  <path d="M80 72L84 66L88 72" stroke="#171B2B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+  <rect x="58" y="76" width="14" height="4" rx="2" fill="#34D399" />
+  <circle cx="35" cy="110" r="4" fill="#818CF8" />
+  <circle cx="47" cy="110" r="4" fill="#FB7185" />
+  <text x="68" y="113" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="600" fill="#8A92A6">KUBO-04</text>
+</svg>`
+    },
+    droplet: {
+      name: 'Mochi Droplet',
+      type: '2d',
+      speech: '“Splash! Fresh thinking ahead. Let us build something clear and fluid today.”',
+      svg: `<svg class="w-full h-full drop-shadow-[0_16px_24px_rgba(20,184,166,0.22)]" viewBox="0 0 128 116" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="mochi_gel_drop" x1="64" y1="6" x2="64" y2="108" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#C2F9E0" />
+      <stop offset="0.6" stop-color="#A2EEDB" />
+      <stop offset="1" stop-color="#7BE2E2" />
+    </linearGradient>
+  </defs>
+  <path d="M64 6C46 32 16 54 16 80C16 96.5685 37.4853 108 64 108C90.5147 108 112 96.5685 112 80C112 54 82 32 64 6Z" fill="url(#mochi_gel_drop)" />
+  <path d="M64 14C52 36 28 56 28 78C28 89.5 44 98 64 98C84 98 100 89.5 100 78C100 56 76 36 64 14Z" fill="#FFFFFF" opacity="0.6" />
+  <ellipse cx="46" cy="46" rx="14" ry="7" fill="#FFFFFF" opacity="0.75" transform="rotate(-30 46 46)" />
+  <ellipse cx="50" cy="74" rx="4" ry="6" fill="#1C3833" />
+  <ellipse cx="78" cy="74" rx="4" ry="6" fill="#1C3833" />
+  <circle cx="51.5" cy="72" r="1.5" fill="#FFFFFF" />
+  <circle cx="79.5" cy="72" r="1.5" fill="#FFFFFF" />
+  <path d="M60 80C62 83 66 83 68 80" stroke="#1C3833" stroke-width="2.5" stroke-linecap="round" />
+  <ellipse cx="40" cy="80" rx="5" ry="3" fill="#A8F5D0" opacity="0.8" />
+  <ellipse cx="88" cy="80" rx="5" ry="3" fill="#A8F5D0" opacity="0.8" />
+</svg>`
+    },
+    starlet: {
+      name: 'Starlet Astro',
+      type: '2d',
+      speech: '“Greetings from the cosmos! Ready to illuminate your spatial workbench with ideas.”',
+      svg: `<svg class="w-full h-full drop-shadow-[0_16px_24px_rgba(245,158,11,0.25)]" viewBox="0 0 120 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="star_gold_stage" x1="60" y1="5" x2="60" y2="95" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF8D6" />
+      <stop offset="0.6" stop-color="#FFE37E" />
+      <stop offset="1" stop-color="#FFC83B" />
+    </linearGradient>
+  </defs>
+  <ellipse cx="60" cy="55" rx="55" ry="18" stroke="#FBBF24" stroke-width="2.5" opacity="0.85" transform="rotate(-14 60 55)" />
+  <path d="M60 8L72 38H104L78 58L88 88L60 69L32 88L42 58L16 38H48L60 8Z" fill="url(#star_gold_stage)" />
+  <circle cx="51" cy="50" r="3.5" fill="#3D2900" />
+  <circle cx="69" cy="50" r="3.5" fill="#3D2900" />
+  <circle cx="52.2" cy="48.8" r="1.2" fill="#FFFFFF" />
+  <circle cx="70.2" cy="48.8" r="1.2" fill="#FFFFFF" />
+  <path d="M57 56C59 59 61 59 63 56" stroke="#3D2900" stroke-width="2" stroke-linecap="round" />
+  <circle cx="44" cy="54" r="2.5" fill="#FF8D54" opacity="0.8" />
+  <circle cx="76" cy="54" r="2.5" fill="#FF8D54" opacity="0.8" />
+</svg>`
+    }
+  };
+
+  function selectMascot(key) {
+    if (!MASCOT_PREVIEWS[key]) return;
+    selectedEngineKey = key;
+    selectedEngineName = MASCOT_PREVIEWS[key].name;
+
+    // 1. Update Card Styles in Step 2
+    document.querySelectorAll('.mascot-engine-card').forEach(card => {
+      const isSelected = card.dataset.mascot === key;
+      const pill = card.querySelector('.mascot-status-pill');
+      if (isSelected) {
+        card.className = 'cursor-pointer relative p-3.5 rounded-2xl border-2 border-primary bg-primary-fixed/20 shadow-sm transition-all flex flex-col justify-between mascot-engine-card';
+        if (pill) {
+          pill.innerHTML = '<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-primary text-on-primary font-bold">ACTIVE</span><div class="w-5 h-5 rounded-full bg-primary text-on-primary flex items-center justify-center"><span class="material-symbols-outlined text-[14px]">check</span></div>';
+        }
+      } else {
+        card.className = 'cursor-pointer relative p-3.5 rounded-2xl border border-outline-variant/50 bg-surface-container-lowest hover:border-primary/40 transition-all flex flex-col justify-between mascot-engine-card';
+        if (pill) {
+          pill.innerHTML = '<div class="w-5 h-5 rounded-full border-2 border-outline-variant flex items-center justify-center"></div>';
+        }
+      }
+    });
+
+    // 2. Update Interactive Stage on the Right
+    const figure = document.getElementById('mochiFigure');
+    if (figure && MASCOT_PREVIEWS[key].svg) {
+      figure.innerHTML = MASCOT_PREVIEWS[key].svg;
+      pokeCompanion();
+    }
+
+    // 3. Update Speech Bubble Greeting
+    const speech = document.getElementById('companionSpeechText');
+    if (speech && MASCOT_PREVIEWS[key].speech) {
+      speech.innerHTML = MASCOT_PREVIEWS[key].speech;
+    }
+
+    // 4. Update Summary Review
+    const sumEngine = document.getElementById('summaryReviewEngine');
+    if (sumEngine) {
+      sumEngine.textContent = selectedEngineName;
+    }
+  }
 
   const stepMeta = {
     1: { title: "Step 1 of 4 • Connect Brain", short: "1. Connect" },
