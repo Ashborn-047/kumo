@@ -42,11 +42,13 @@ const ACTIONS = {
   'app.open':         { tier: TIER.YELLOW, fn: openApp },
   'folder.open':      { tier: TIER.YELLOW, fn: openFolder },
   'powershell.read':  { tier: TIER.YELLOW, fn: runPowerShellReadOnly },
+  'process.kill':     { tier: TIER.YELLOW, fn: killProcess },
   'file.move':        { tier: TIER.YELLOW, fn: moveFile },
 
   // RED — always refused, never executed
   'file.delete':      { tier: TIER.RED },
   'file.write':       { tier: TIER.RED },
+  'powershell.write': { tier: TIER.RED },
   'registry.write':   { tier: TIER.RED },
   'software.install': { tier: TIER.RED },
   'exe.run':          { tier: TIER.RED },
@@ -333,12 +335,26 @@ function moveFile({ from, to }) {
   });
 }
 
+function killProcess({ name }) {
+  return new Promise((resolve) => {
+    if (!name || typeof name !== 'string') {
+      return resolve({ killed: false, error: 'Invalid process name' });
+    }
+    const cleanName = name.replace(/[;&|`$]/g, '').trim();
+    execFile('powershell.exe', ['-NoProfile', '-Command', `Stop-Process -Name "${cleanName}" -Force`], (err) => {
+      if (err) resolve({ killed: false, name: cleanName, error: err.message });
+      else resolve({ killed: true, name: cleanName });
+    });
+  });
+}
+
 // ── Helper: human-readable preview for YELLOW actions ─────────
 function getPreview(type, args) {
   const previews = {
     'app.open':        `Open application: ${args.name}`,
     'folder.open':     `Open folder: ${args.folderPath}`,
     'powershell.read': `Run PowerShell: ${args.command}`,
+    'process.kill':    `Terminate process: ${args.name}`,
     'file.move':       `Move file from ${args.from} to ${args.to}`,
   };
   return previews[type] || `Run action: ${type}`;
@@ -355,4 +371,5 @@ function getManualInstructions(type, args) {
   return instructions[type] || `Please do this step manually for safety.`;
 }
 
-module.exports = { run, TIER, ACTIONS };
+module.exports = { run, TIER, ACTIONS, getPreview, getManualInstructions };
+

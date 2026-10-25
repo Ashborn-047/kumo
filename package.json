@@ -8,7 +8,8 @@
     "dev": "node dev-server.js",
     "web": "node dev-server.js",
     "test": "playwright test",
-    "test:e2e": "playwright test",
+    "test:unit": "playwright test tests/unit",
+    "test:e2e": "playwright test tests/e2e",
     "build": "electron-builder --win",
     "dist": "electron-builder --win --publish=never"
   },

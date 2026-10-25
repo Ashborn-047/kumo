@@ -67,6 +67,14 @@ const APP_TAXONOMY = [
   },
 ];
 
+function categorizeApp(name) {
+  if (!name || typeof name !== 'string') return 'other';
+  for (const tax of APP_TAXONOMY) {
+    if (tax.match.test(name)) return tax.category;
+  }
+  return 'other';
+}
+
 const DEV_BINARIES = ['node', 'npm', 'npx', 'git', 'python', 'docker', 'code', 'cursor', 'wsl', 'wt', 'ssh'];
 
 /**
@@ -258,5 +266,6 @@ module.exports = {
   getCapabilities,
   updateAppPermission,
   getCapabilitiesSync,
+  categorizeApp,
   APP_TAXONOMY,
 };

@@ -43,6 +43,9 @@ const INTENT_PATTERNS = [
   { pattern: /(?:what(?:'s|\s+is)\s+my\s+)?ip\s*(?:address)?/i, action: 'powershell.read', extract: () => ({ command: 'ipconfig | Select-String "IPv4|Subnet|Default Gateway"' }) },
   { pattern: /(?:flush|reset|clear)\s+(?:my\s+)?dns/i, action: 'powershell.read', extract: () => ({ command: 'ipconfig /flushdns' }) },
   { pattern: /ping\s+(.+)/i, action: 'powershell.read', extract: (m) => ({ command: `ping -n 4 ${m[1].trim().replace(/[;&|`$]/g, '')}` }) },
+
+  // Process management
+  { pattern: /(?:kill|terminate|stop)\s+(?:process|task|app)?\s*([a-zA-Z0-9_\-\.]+)/i, action: 'process.kill', extract: (m) => ({ name: m[1].trim() }) },
 ];
 
 // ── Known app name aliases ──────────────────────────────────
