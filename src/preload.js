@@ -11,7 +11,12 @@ const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('goo', {
   // AI chat
-  sendMessage: (message) => ipcRenderer.invoke('ai:send', message),
+  sendMessage: (message, history = []) => {
+    if (typeof message === 'object' && message !== null) {
+      return ipcRenderer.invoke('ai:send', message);
+    }
+    return ipcRenderer.invoke('ai:send', { text: message, history });
+  },
   onReply:     (cb)      => ipcRenderer.on('ai:reply', (_e, data) => cb(data)),
   onStream:    (cb)      => ipcRenderer.on('ai:stream', (_e, chunk) => cb(chunk)),
 

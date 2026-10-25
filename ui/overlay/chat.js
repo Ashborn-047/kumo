@@ -465,10 +465,16 @@ async function sendMessage() {
   showBubble('Thinking…');
   streamedText = '';
 
+  // Extract prior conversation turns for conversational memory context (last 12 items)
+  const priorHistory = (chatHistory || []).slice(-12).map(item => ({
+    role: (item.role === 'assistant' || item.role === 'goo') ? 'assistant' : 'user',
+    content: item.content || item.text || ''
+  }));
+
   recordHistory('user', text);
 
   try {
-    const res = await window.goo.sendMessage(text);
+    const res = await window.goo.sendMessage(text, priorHistory);
     if (res.error) {
       window.gooState?.setStateTemp('idle');
       showBubble(`⚠️ ${res.error}`);

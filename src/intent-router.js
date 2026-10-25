@@ -392,10 +392,24 @@ function formatOfflineSuccess(action, args, result) {
  * This is the entry point from main.js IPC handler.
  * 
  * @param {string} text - User's message
- * @param {Function} onChunk - Streaming callback for online brain
+ * @param {Array|Function} [historyOrOnChunk] - Prior message history [{role, content}] or streaming callback
+ * @param {Function} [maybeOnChunk] - Streaming callback if history was provided
  * @returns {{ ok: boolean, reply: string, source: 'online'|'offline' }}
  */
-async function route(text, onChunk = null) {
+async function route(text, historyOrOnChunk = [], maybeOnChunk = null) {
+  let history = [];
+  let onChunk = null;
+
+  if (typeof historyOrOnChunk === 'function') {
+    onChunk = historyOrOnChunk;
+    history = [];
+  } else if (Array.isArray(historyOrOnChunk)) {
+    history = historyOrOnChunk;
+    onChunk = maybeOnChunk;
+  } else {
+    onChunk = maybeOnChunk;
+  }
+
   const cfg = settings.get();
 
   // If no API key, always go offline
@@ -415,7 +429,7 @@ async function route(text, onChunk = null) {
   // Online path — use LLM
   try {
     let fullText = '';
-    const rawReply = await ai.sendMessage(text, [], (token) => {
+    const rawReply = await ai.sendMessage(text, history, (token) => {
       fullText += token;
       if (onChunk) onChunk(token);
     });

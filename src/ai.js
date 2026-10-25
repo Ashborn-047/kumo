@@ -107,9 +107,16 @@ async function sendMessage(userMessage, history = [], onChunk) {
   const cfg = settingsStore.get();
   const targetModel = cfg.model || activeModel;
 
+  const formattedHistory = Array.isArray(history)
+    ? history.slice(-20).map(item => ({
+        role: (item.role === 'assistant' || item.role === 'goo' || item.role === 'model') ? 'assistant' : 'user',
+        content: String(item.content || item.text || '')
+      })).filter(item => item.content.trim().length > 0)
+    : [];
+
   const messages = [
     { role: 'system', content: buildSystemPrompt(cfg) },
-    ...history,
+    ...formattedHistory,
     { role: 'user', content: userMessage },
   ];
 

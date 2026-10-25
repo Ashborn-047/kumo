@@ -113,9 +113,21 @@ app.on('window-all-closed', () => {
 // ── IPC Handlers ─────────────────────────────────────────────
 
 // AI: send message via intent router (handles online/offline + actions)
-ipcMain.handle('ai:send', async (event, message) => {
+ipcMain.handle('ai:send', async (event, payload) => {
   try {
-    const result = await intentRouter.route(message, (token) => {
+    let message = '';
+    let history = [];
+
+    if (typeof payload === 'string') {
+      message = payload;
+    } else if (payload && typeof payload === 'object') {
+      message = payload.text || payload.message || '';
+      if (Array.isArray(payload.history)) {
+        history = payload.history;
+      }
+    }
+
+    const result = await intentRouter.route(message, history, (token) => {
       event.sender.send('ai:stream', token);
     });
 

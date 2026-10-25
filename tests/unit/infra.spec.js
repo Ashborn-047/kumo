@@ -197,5 +197,29 @@ test.describe('Infrastructure: Execution & Security Gating', () => {
     expect(resSheets.actionResults[0].type).toBe('app.open');
     expect(resSheets.actionResults[0].args.name).toBe('excel');
   });
+
+  test('forwards conversation history seamlessly through intent router', async () => {
+    const ai = require('../../src/ai');
+    let capturedHistory = null;
+    let capturedMsg = null;
+    const origSend = ai.sendMessage;
+    ai.sendMessage = async (msg, hist) => {
+      capturedMsg = msg;
+      capturedHistory = hist;
+      return 'Test reply';
+    };
+
+    try {
+      const mockHistory = [
+        { role: 'user', content: 'My name is Alice' },
+        { role: 'goo', content: 'Nice to meet you Alice!' }
+      ];
+      await intentRouter.route('What is my name?', mockHistory);
+      expect(capturedMsg).toBe('What is my name?');
+      expect(capturedHistory).toEqual(mockHistory);
+    } finally {
+      ai.sendMessage = origSend;
+    }
+  });
 });
 
