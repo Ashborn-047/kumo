@@ -62,6 +62,15 @@ Format multiple actions:
 
 Available actions:
 - app.open: open any installed app (e.g. "spotify", "claude", "chatgpt", "telegram", "whatsapp", "steam", "blender", "word", "excel", "powerpoint", "code", "terminal", "notepad", "calculator", "paint", "settings", "photos", "weather", "camera"). args: {"name": "..."}
+- process.kill: close, quit, or terminate an app or process. args: {"name": "..."}
+- media.playPause: toggle play/pause for music or Spotify. args: {}
+- media.next: skip to next song/track. args: {}
+- media.previous: go to previous song/track. args: {}
+- media.mute: toggle audio mute. args: {}
+- media.volUp: raise volume. args: {}
+- media.volDown: lower volume. args: {}
+- file.write: create/save a note or text file on Desktop. args: {"fileName": "QuickNote", "content": "..."}
+- app.interact: send text or prompt into an open app. args: {"targetApp": "claude", "text": "...", "pressEnter": true}
 - powershell.read: run safe read-only diagnostics or scripts (e.g. test connection, ping, ipconfig, system stats). args: {"command": "..."}
 - clipboard.read: read clipboard text. args: {}
 - clipboard.write: write text to clipboard. args: {"text": "..."}

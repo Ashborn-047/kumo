@@ -433,8 +433,8 @@ async function route(text, onChunk = null) {
       }
     }
 
-    // Single action: [ACTION:{...}]
-    const singleMatch = rawReply.match(/\[ACTION:\s*(\{.*?\})\s*\]/);
+    // Single action: [ACTION:{...}] (support nested objects and multiline JSON)
+    const singleMatch = rawReply.match(/\[ACTION:\s*(\{[\s\S]*?\})\s*\]/s) || rawReply.match(/\[ACTION:\s*(\{[\s\S]*\})\s*\]/s);
     if (singleMatch) {
       try {
         const actionData = JSON.parse(singleMatch[1]);
@@ -446,7 +446,7 @@ async function route(text, onChunk = null) {
 
         return { ok: true, reply: cleanReply + extra, source: 'online', actionResults };
       } catch (e) {
-        console.warn('[intent-router] Single-action parse failed:', e);
+        console.warn('[intent-router] Single-action parse failed:', e.message);
       }
     }
 
@@ -457,7 +457,7 @@ async function route(text, onChunk = null) {
     // LLM failed (rate limit, network blip, etc.) — fall back to offline
     console.warn('[intent-router] Online brain failed, falling back to offline:', err.message);
     const result = await processOffline(text);
-    return { ok: true, reply: result.reply, source: 'offline' };
+    return { ok: true, reply: result.reply, source: 'offline', actionResults: result.actionResults };
   }
 }
 
@@ -490,6 +490,24 @@ function formatActionResult(type, args, result) {
       return `\n📂 Opened: ${result.result?.opened}`;
     case 'url.open':
       return `\n🌐 Opened: ${result.result?.opened || args?.url}`;
+    case 'process.kill':
+      return `\n🛑 Closed: ${args?.name || 'Application'}`;
+    case 'media.playPause':
+      return `\n🎵 Playback toggled`;
+    case 'media.next':
+      return `\n⏭️ Skipped track`;
+    case 'media.previous':
+      return `\n⏮️ Previous track`;
+    case 'media.mute':
+      return `\n🔇 Audio mute toggled`;
+    case 'media.volUp':
+      return `\n🔊 Volume up`;
+    case 'media.volDown':
+      return `\n🔉 Volume down`;
+    case 'file.write':
+      return `\n📝 Saved note: ${result.result?.path || 'Desktop\\Kumo_Notes'}`;
+    case 'app.interact':
+      return `\n✍️ Sent input to ${args?.targetApp}`;
     case 'powershell.read':
       return `\n💻 ${result.result?.output || '(no output)'}`;
     default:
