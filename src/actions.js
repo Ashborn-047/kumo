@@ -248,26 +248,29 @@ function openApp({ name }) {
     const safeTarget = target.replace(/['"`;$()]/g, '');
 
     // Non-blocking Windows kernel process dispatcher via Start-Process
-    execFile('powershell.exe', ['-NoProfile', '-Command', `Start-Process '${safeTarget}'`], { timeout: 3500 }, (err) => {
-      if (!err) {
+    const psCmd = `try { Start-Process '${safeTarget}' -ErrorAction Stop; Write-Output 'OK' } catch { Write-Error $_.Exception.Message }`;
+    execFile('powershell.exe', ['-NoProfile', '-Command', psCmd], { timeout: 3500 }, (err, stdout) => {
+      if (!err && stdout && stdout.includes('OK')) {
         return resolve({ opened: target });
       }
 
       // Dynamic fallback: Search installed StartApps in PowerShell
       const cleanSearch = cleanName.replace(/['"`;$()]/g, '');
       const psSearch = `Get-StartApps | Where-Object { $_.Name -like '*${cleanSearch}*' } | Select-Object -First 1 -ExpandProperty AppID`;
-      execFile('powershell.exe', ['-NoProfile', '-Command', psSearch], { timeout: 4000 }, (psErr, stdout) => {
-        const appId = stdout?.trim();
+      execFile('powershell.exe', ['-NoProfile', '-Command', psSearch], { timeout: 4000 }, (psErr, psOut) => {
+        const appId = psOut?.trim();
         if (appId) {
           execFile('powershell.exe', ['-NoProfile', '-Command', `Start-Process 'shell:AppsFolder\\${appId}'`], (appErr) => {
             if (appErr) reject(new Error(`Could not open app: ${name}`));
             else resolve({ opened: appId });
           });
-        } else {
+        } else if (fs.existsSync(target)) {
           shell.openPath(target).then((res) => {
             if (res) reject(new Error(`Could not open app: ${name}`));
             else resolve({ opened: target });
           });
+        } else {
+          reject(new Error(`Application "${name}" was not found on your system.`));
         }
       });
     });
