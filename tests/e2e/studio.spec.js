@@ -65,9 +65,13 @@ test.describe('Kumo Studio & Onboarding Window', () => {
     const defaultVal = await apiKeyInput.inputValue();
     expect(defaultVal).toBe('');
 
-    // Step to Step 2 (Engine)
+    // In Step 1: Interactive Stage is hidden
+    await expect(studioPage.locator('#stageRightColumn')).toBeHidden();
+
+    // Step to Step 2 (Engine): Interactive Stage becomes visible
     await studioPage.locator('#tab-btn-2').click();
     await expect(studioPage.locator('text=2. Choose Companion Engine')).toBeVisible();
+    await expect(studioPage.locator('#stageRightColumn')).toBeVisible();
 
     // Step to Step 3 (Persona & Swatches)
     await studioPage.locator('#tab-btn-3').click();

@@ -277,9 +277,9 @@
 </div>
 </div>
 <!-- 2-Column Studio Split Layout (Left: 55%, Right: 45%) -->
-<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start" id="studioGridLayout">
 <!-- ================= LEFT COLUMN: MODULAR INTERACTIVE WIZARD (PAGINATED) ================= -->
-<div class="lg:col-span-7 bg-surface-container-lowest rounded-3xl border border-[#2e3b52]/10 shadow-[0px_8px_32px_-6px_rgba(46,59,82,0.08),0px_1px_3px_rgba(46,59,82,0.04)] p-6 sm:p-7 flex flex-col gap-6">
+<div class="lg:col-span-8 lg:col-start-3 bg-surface-container-lowest rounded-3xl border border-[#2e3b52]/10 shadow-[0px_8px_32px_-6px_rgba(46,59,82,0.08),0px_1px_3px_rgba(46,59,82,0.04)] p-6 sm:p-7 flex flex-col gap-6 transition-all" id="wizardLeftColumn">
 <!-- Card Header -->
 <div class="flex items-start justify-between border-b border-surface-container pb-5">
 <div class="flex items-start gap-3.5">
@@ -681,7 +681,7 @@
 </div>
 </div>
 <!-- ================= RIGHT COLUMN: DEDICATED LIVE PREVIEW COMPANION STAGE ================= -->
-<div class="lg:col-span-5 flex flex-col gap-4">
+<div class="hidden lg:col-span-5 flex-col gap-4 transition-all" id="stageRightColumn">
 <!-- Main Companion Stage Viewport -->
 <div class="relative w-full min-h-[580px] bg-gradient-to-b from-surface-container-lowest via-surface-container-low to-[#ececff] rounded-3xl border border-white/80 ring-1 ring-[#2e3b52]/10 shadow-[0px_16px_36px_-8px_rgba(46,59,82,0.12),0px_4px_12px_-2px_rgba(46,59,82,0.06)] overflow-hidden flex flex-col justify-between p-6">
 <!-- Stage Background Grid Overlay -->
@@ -916,6 +916,21 @@
           panel.classList.add('hidden');
           panel.classList.remove('flex');
         }
+      }
+    }
+
+    // Stage Column visibility: Hidden ONLY in Step 1, visible from Step 2 onwards
+    const stageCol = document.getElementById('stageRightColumn');
+    const wizardCol = document.getElementById('wizardLeftColumn');
+    if (stageCol && wizardCol) {
+      if (stepNumber === 1) {
+        stageCol.classList.add('hidden');
+        stageCol.classList.remove('flex');
+        wizardCol.className = "lg:col-span-8 lg:col-start-3 bg-surface-container-lowest rounded-3xl border border-[#2e3b52]/10 shadow-[0px_8px_32px_-6px_rgba(46,59,82,0.08),0px_1px_3px_rgba(46,59,82,0.04)] p-6 sm:p-7 flex flex-col gap-6 transition-all";
+      } else {
+        stageCol.classList.remove('hidden');
+        stageCol.classList.add('flex');
+        wizardCol.className = "lg:col-span-7 bg-surface-container-lowest rounded-3xl border border-[#2e3b52]/10 shadow-[0px_8px_32px_-6px_rgba(46,59,82,0.08),0px_1px_3px_rgba(46,59,82,0.04)] p-6 sm:p-7 flex flex-col gap-6 transition-all";
       }
     }
 
