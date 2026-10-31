@@ -275,21 +275,47 @@ ipcMain.handle('action:run', async (event, { type, args }) => {
   const cfg = settings.get();
   const perms = cfg.permissions || {};
 
-  // If auto-confirm is enabled, skip the confirmation dialog
-  if (perms.autoConfirmYellow) {
+  // If auto-confirm is enabled, or if this action is explicitly allowed by permissions:
+  const isDirectlyPermitted = (
+    (type === 'app.open' && perms.appLaunch !== false) ||
+    (type === 'app.interact' && perms.appLaunch !== false) ||
+    (type === 'folder.open' && perms.fileSearch !== false) ||
+    (type === 'powershell.read' && perms.shellSandbox !== false) ||
+    (type === 'system.info' && perms.systemInfo !== false) ||
+    (type === 'system.time' && perms.systemInfo !== false) ||
+    (type === 'system.tasks' && perms.systemInfo !== false) ||
+    (type === 'url.open' && perms.browserOpen !== false) ||
+    (type === 'clipboard.read' && perms.clipboardAccess !== false) ||
+    (type === 'clipboard.write' && perms.clipboardAccess !== false)
+  );
+
+  if (perms.autoConfirmYellow || isDirectlyPermitted) {
     return await actions.run(type, args);
   }
 
   return await actions.run(type, args, async (preview) => {
-    // Ask renderer to confirm YELLOW actions via injected confirm dialog
     try {
-      const result = await event.sender.executeJavaScript(
-        `(typeof window.__confirmAction === 'function') ? window.__confirmAction(${JSON.stringify(preview)}) : confirm('Kumo wants to: ' + ${JSON.stringify(preview)} + '\\n\\nAllow this action?')`
-      );
-      return result === true;
-    } catch {
-      // If executeJavaScript fails, fall back to native confirm
-      return true;
+      const hasCustom = await event.sender.executeJavaScript("typeof window.__confirmAction === 'function'");
+      if (hasCustom) {
+        return await event.sender.executeJavaScript(`window.__confirmAction(${JSON.stringify(preview)})`);
+      }
+    } catch (_) {}
+
+    try {
+      const { dialog, BrowserWindow } = require('electron');
+      const win = BrowserWindow.fromWebContents(event.sender);
+      const { response } = await dialog.showMessageBox(win || undefined, {
+        type: 'question',
+        buttons: ['Allow', 'Cancel'],
+        defaultId: 0,
+        cancelId: 1,
+        title: 'Kumo Safety Gate',
+        message: 'Security Confirmation',
+        detail: `Kumo wants to: ${preview}\n\nDo you want to allow this action?`,
+      });
+      return response === 0;
+    } catch (_) {
+      return false;
     }
   });
 });

@@ -1,3 +1,5 @@
+import { runSystemAction } from '../actions.js';
+
 export function renderLauncherHTML(card) {
   const query = (card.data.searchQuery || '').toLowerCase();
   const activeCategory = card.data.activeCategory || 'all';

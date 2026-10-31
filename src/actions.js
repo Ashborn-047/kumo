@@ -251,6 +251,16 @@ function openApp({ name, appId, app }) {
     powershell: 'powershell.exe',
     pwsh: 'powershell.exe',
     cmd: 'cmd.exe',
+    terminal: 'powershell.exe',
+    wt: 'powershell.exe',
+    vlc: '{6D809377-6AF0-444B-8957-A3773F02200E}\\VideoLAN\\VLC\\vlc.exe',
+    'vlc media player': '{6D809377-6AF0-444B-8957-A3773F02200E}\\VideoLAN\\VLC\\vlc.exe',
+    netflix: '4DF9E0F8.Netflix_mcm4njqhnhss8!Netflix.App',
+    'prime video': 'AmazonVideo.PrimeVideo_pwbj9vvecjh7j!PWA',
+    prime: 'AmazonVideo.PrimeVideo_pwbj9vvecjh7j!PWA',
+    crunchyroll: '15EF7777.Crunchyroll_mgdgtskya6f22!App',
+    'media player': 'Microsoft.ZuneMusic_8wekyb3d8bbwe!Microsoft.ZuneMusic',
+    cursor: 'Anysphere.Cursor',
   };
 
   let target = known[cleanName];
@@ -323,7 +333,7 @@ function openApp({ name, appId, app }) {
       psCmd = `Start-Process '${safeTarget}' -ErrorAction Stop`;
     }
 
-    execFile('powershell.exe', ['-NoProfile', '-Command', `try { ${psCmd}; Write-Output 'OK' } catch { Write-Error $_.Exception.Message }`], { timeout: 4000 }, (err, stdout) => {
+    execFile('powershell.exe', ['-NoProfile', '-Command', `try { ${psCmd}; Write-Output 'OK' } catch { Write-Error 'Launch failed' }`], { timeout: 4000 }, (err, stdout) => {
       if (!err && stdout && stdout.includes('OK')) {
         return resolve({ opened: target });
       }
@@ -333,14 +343,14 @@ function openApp({ name, appId, app }) {
         ? `Start-Process '${safeTarget}' -ErrorAction Stop`
         : `Start-Process 'shell:AppsFolder\\${safeTarget}' -ErrorAction Stop`;
 
-      execFile('powershell.exe', ['-NoProfile', '-Command', `try { ${altCmd}; Write-Output 'OK' } catch { Write-Error $_.Exception.Message }`], { timeout: 4000 }, (err2, stdout2) => {
+      execFile('powershell.exe', ['-NoProfile', '-Command', `try { ${altCmd}; Write-Output 'OK' } catch { Write-Error 'Launch failed' }`], { timeout: 4000 }, (err2, stdout2) => {
         if (!err2 && stdout2 && stdout2.includes('OK')) {
           return resolve({ opened: target });
         }
 
         // Dynamic search in StartApps
         const cleanSearch = cleanName.replace(/['"`;$()]/g, '');
-        const psSearch = `Get-StartApps | Where-Object { $_.Name -like '*${cleanSearch}*' -or $_.AppID -like '*${cleanSearch}*' } | Select-Object -First 1 -ExpandProperty AppID`;
+        const psSearch = `Get-StartApps | Where-Object { \${'$_'}.Name -like '*${cleanSearch}*' -or \${'$_'}.AppID -like '*${cleanSearch}*' } | Select-Object -First 1 -ExpandProperty AppID`;
         execFile('powershell.exe', ['-NoProfile', '-Command', psSearch], { timeout: 4000 }, (psErr, psOut) => {
           const foundAppId = psOut?.trim();
           if (foundAppId) {
@@ -664,7 +674,7 @@ function lockWorkstation() {
 
 function getRunningTasks() {
   return new Promise((resolve) => {
-    const ps = `Get-Process | Where-Object { $_.MainWindowTitle -ne '' } | Sort-Object WorkingSet -Descending | Select-Object -First 8 Name, MainWindowTitle, @{Name='MemoryMB';Expression={[math]::Round($_.WorkingSet / 1MB, 1)}} | ConvertTo-Json -Compress`;
+    const ps = `Get-Process | Where-Object { \${'$_'}.MainWindowTitle -ne '' } | Sort-Object WorkingSet -Descending | Select-Object -First 8 Name, MainWindowTitle, @{Name='MemoryMB';Expression={[math]::Round(\${'$_'}.WorkingSet / 1MB, 1)}} | ConvertTo-Json -Compress`;
     execFile('powershell.exe', ['-NoProfile', '-Command', ps], { timeout: 4500 }, (err, stdout) => {
       if (err || !stdout) return resolve({ tasks: [] });
       try {

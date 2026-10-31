@@ -16,6 +16,7 @@ import { renderTelemetryHTML, attachTelemetryEvents } from './js/tools/telemetry
 import { renderNetworkHTML, attachNetworkEvents } from './js/tools/network-tool.js';
 import { renderMediaHTML, attachMediaEvents } from './js/tools/media-tool.js';
 import { renderWorkspaceHTML, attachWorkspaceEvents } from './js/tools/workspace-tool.js';
+import { runSystemAction } from './js/actions.js';
 
 const $ = (s) => document.querySelector(s);
 const $$ = (s) => [...document.querySelectorAll(s)];
