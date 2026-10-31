@@ -21,6 +21,37 @@ const INTENT_PATTERNS = [
   // URL open
   { pattern: /(?:open|go\s+to|browse|visit)\s+(https?:\/\/\S+)/i, action: 'url.open', extract: (m) => ({ url: m[1] }) },
 
+  // Deep Spotify search / playback: "play lofi on spotify", "search spotify for chillhop"
+  {
+    pattern: /(?:play|listen\s+to|search\s+for)\s+(.+?)\s+on\s+spotify/i,
+    action: 'app.deepLink',
+    extract: (m) => ({ uri: `spotify:search:${encodeURIComponent(m[1].trim())}` })
+  },
+  {
+    pattern: /(?:search\s+spotify\s+for|search\s+spotify)\s+(.+)/i,
+    action: 'app.deepLink',
+    extract: (m) => ({ uri: `spotify:search:${encodeURIComponent(m[1].trim())}` })
+  },
+
+  // Deep YouTube search / play: "play lofi on youtube", "search youtube for tutorial"
+  {
+    pattern: /(?:play|watch)\s+(.+?)\s+on\s+youtube/i,
+    action: 'url.open',
+    extract: (m) => ({ url: `https://www.youtube.com/results?search_query=${encodeURIComponent(m[1].trim())}` })
+  },
+  {
+    pattern: /(?:search\s+youtube\s+for|search\s+youtube)\s+(.+)/i,
+    action: 'url.open',
+    extract: (m) => ({ url: `https://www.youtube.com/results?search_query=${encodeURIComponent(m[1].trim())}` })
+  },
+
+  // Deep GitHub search: "search github for kumo", "github search rust"
+  {
+    pattern: /(?:search\s+github\s+for|search\s+github|find\s+repo\s+for)\s+(.+)/i,
+    action: 'url.open',
+    extract: (m) => ({ url: `https://github.com/search?q=${encodeURIComponent(m[1].trim())}` })
+  },
+
   // Web search
   { pattern: /(?:search|google|look\s+up)\s+(?:for\s+|the\s+web\s+for\s+)?(.+)/i, action: 'url.open', extract: (m) => ({ url: `https://www.google.com/search?q=${encodeURIComponent(m[1].trim())}` }) },
 
@@ -59,6 +90,30 @@ const INTENT_PATTERNS = [
   { pattern: /(?:next|skip)\s+(?:song|track|music|spotify)/i, action: 'media.next', extract: () => ({}) },
   { pattern: /(?:previous|prev|replay|last)\s+(?:song|track|music|spotify)/i, action: 'media.previous', extract: () => ({}) },
   { pattern: /^(?:play|pause|resume|toggle\s+music)$/i, action: 'media.playPause', extract: () => ({}) },
+
+  // Deep Messaging: Telegram & WhatsApp
+  {
+    pattern: /(?:send|draft|write)\s+(?:a\s+)?telegram\s+(?:message\s+)?(?:to\s+[a-zA-Z0-9_]+\s+)?(?:saying|with|:)?\s*(.+)/i,
+    action: 'app.deepLink',
+    extract: (m) => ({ uri: `tg://msg?text=${encodeURIComponent(m[1].trim())}` })
+  },
+  {
+    pattern: /(?:send|draft|write)\s+(?:a\s+)?whatsapp\s+(?:message\s+)?(?:to\s+[a-zA-Z0-9_\+]+\s+)?(?:saying|with|:)?\s*(.+)/i,
+    action: 'app.deepLink',
+    extract: (m) => ({ uri: `whatsapp://send?text=${encodeURIComponent(m[1].trim())}` })
+  },
+
+  // Office Document & Spreadsheet generation: "create spreadsheet for budget", "create a word doc for meeting notes"
+  {
+    pattern: /(?:create|make|new|draft|start)\s+(?:a\s+)?(?:new\s+)?(?:spreadsheet|sheet|excel(?:\s+sheet|\s+file)?|workbook)\s*(?:named|called|for|about)?\s*(.*)/i,
+    action: 'office.create',
+    extract: (m) => ({ type: 'excel', title: m[1] ? m[1].trim() : 'Spreadsheet' })
+  },
+  {
+    pattern: /(?:create|make|new|draft|start)\s+(?:a\s+)?(?:new\s+)?(?:word(?:\s+doc|\s+document|\s+file)?|document)\s*(?:named|called|for|about)?\s*(.*)/i,
+    action: 'office.create',
+    extract: (m) => ({ type: 'word', title: m[1] ? m[1].trim() : 'Document' })
+  },
 
   // Process management / Closing applications
   { pattern: /(?:close|quit|exit|kill|terminate|stop|shut\s+down|get\s+rid\s+of|turn\s+off)\s+(?:the\s+)?(?:process|task|app|window|software)?\s*([a-zA-Z0-9_\-\.\s]+)/i, action: 'process.kill', extract: (m) => ({ name: m[1].trim() }) },
@@ -407,6 +462,14 @@ function formatOfflineSuccess(action, args, result) {
       return args?.text
         ? `✍️ Sent prompt to ${args.targetApp}: "${args.text.slice(0, 45)}..."`
         : `📋 Pasted clipboard into ${args.targetApp}!`;
+    case 'app.deepLink':
+      return result.result?.opened
+        ? `🔗 Dispatched deep link: ${result.result.opened}`
+        : `🔗 Dispatched deep link protocol!`;
+    case 'office.create':
+      return `📄 Created new ${args.type || 'Office'} document: "${args.title || 'Document'}" at:\n${result.result?.path || 'Documents\\Kumo_Docs'}`;
+    case 'compound.sequence':
+      return `⚡ Executed compound sequence (${result.result?.stepResults?.length || 0} steps)!`;
     default:
       return `✅ Done!`;
   }

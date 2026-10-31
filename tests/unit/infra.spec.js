@@ -232,5 +232,26 @@ test.describe('Infrastructure: Execution & Security Gating', () => {
       intentRouter.isOnline = origIsOnline;
     }
   });
+
+  test('executes deep app automation for Spotify, YouTube, and Office generation', async () => {
+    // 1. Spotify deep search & play
+    const resSpotify = await intentRouter.processOffline('play lo-fi beats on spotify');
+    expect(resSpotify.actionResults.length).toBeGreaterThan(0);
+    expect(resSpotify.actionResults[0].type).toBe('app.deepLink');
+    expect(resSpotify.actionResults[0].args.uri).toContain('spotify:search:');
+
+    // 2. YouTube deep video search
+    const resYouTube = await intentRouter.processOffline('search youtube for ambient synthwave');
+    expect(resYouTube.actionResults.length).toBeGreaterThan(0);
+    expect(resYouTube.actionResults[0].type).toBe('url.open');
+    expect(resYouTube.actionResults[0].args.url).toContain('youtube.com/results?search_query=');
+
+    // 3. Office document creation
+    const resExcel = await intentRouter.processOffline('create spreadsheet for project budget');
+    expect(resExcel.actionResults.length).toBeGreaterThan(0);
+    expect(resExcel.actionResults[0].type).toBe('office.create');
+    expect(resExcel.actionResults[0].args.type).toBe('excel');
+    expect(resExcel.reply).toContain('Created new');
+  });
 });
 

@@ -299,7 +299,10 @@ ipcMain.handle('action:run', async (event, { type, args }) => {
   // If auto-confirm is enabled, or if this action is explicitly allowed by permissions:
   const isDirectlyPermitted = (
     (type === 'app.open' && perms.appLaunch !== false) ||
+    (type === 'app.deepLink' && perms.appLaunch !== false) ||
     (type === 'app.interact' && perms.appLaunch !== false) ||
+    (type === 'office.create' && perms.fileSearch !== false) ||
+    (type === 'compound.sequence') ||
     (type === 'folder.open' && perms.fileSearch !== false) ||
     (type === 'powershell.read' && perms.shellSandbox !== false) ||
     (type === 'system.info' && perms.systemInfo !== false) ||
