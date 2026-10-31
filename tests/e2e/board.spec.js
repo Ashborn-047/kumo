@@ -9,6 +9,7 @@ test.describe('Kumoboard — Spatial Workbench', () => {
   let tempUserData;
 
   test.beforeEach(async () => {
+    delete process.env.ELECTRON_RUN_AS_NODE;
     tempUserData = fs.mkdtempSync(path.join(os.tmpdir(), 'kumo-test-board-'));
     // Pre-seed config.json with firstRun: false and startMinimized: false
     fs.writeFileSync(
@@ -21,6 +22,7 @@ test.describe('Kumoboard — Spatial Workbench', () => {
       env: {
         ...process.env,
         NODE_ENV: 'test',
+        ELECTRON_RUN_AS_NODE: undefined,
       },
     });
   });

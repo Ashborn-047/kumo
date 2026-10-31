@@ -202,8 +202,8 @@ function showCardPopout(type, payload = {}) {
     subtitle = 'Active Playback Hook';
     icon = 'graphic_eq';
     cardState = {
-      type: 'launcher',
-      title: 'Spotify Media Agent',
+      type: 'media',
+      title: 'Spotify & Media Orchestrator',
       width: 520,
       data: { activeTab: 'apps', pinnedDomain: 'spotify', status: 'PLAYING' }
     };
@@ -271,7 +271,7 @@ function showCardPopout(type, payload = {}) {
     subtitle = 'IPv4 / DNS Diagnostics';
     icon = 'wifi_tethering';
     cardState = {
-      type: 'code',
+      type: 'network',
       title: 'Network Sentinel Hub',
       width: 540,
       data: { command: 'Test-NetConnection 8.8.8.8', mode: 'network' }

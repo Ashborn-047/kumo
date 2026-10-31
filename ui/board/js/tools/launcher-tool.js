@@ -5,7 +5,7 @@ import { runSystemAction } from '../actions.js';
 export function renderLauncherHTML(card) {
   const query = (card.data.searchQuery || '').toLowerCase();
   const clip = card.data.clipboardText || 'git commit -m "feat(spatial): tactile glassmorphic nodes"';
-  const allApps = [...(card.data.apps || []), ...(card.data.customApps || [])];
+  const allApps = (card.data.scannedApps && card.data.scannedApps.length > 0) ? card.data.scannedApps : [...(card.data.apps || []), ...(card.data.customApps || [])];
   const filteredApps = query
     ? allApps.filter((a) => a.name.toLowerCase().includes(query) || a.id.toLowerCase().includes(query))
     : allApps;
@@ -252,4 +252,48 @@ export function attachLauncherEvents(el, card, onSave, onToast) {
       onToast?.('Ready in clipboard');
     }
   });
+}
+
+
+// Dynamically populate scanned host apps from system-scanner
+export async function syncScannedApps(card, onRerender) {
+  if (window.goo && window.goo.getCapabilities) {
+    try {
+      const caps = await window.goo.getCapabilities();
+      if (caps && caps.categories) {
+        const discovered = [];
+        const domainColors = {
+          media: { bg: 'bg-emerald-100', text: 'text-emerald-700', icon: 'music_note' },
+          development: { bg: 'bg-indigo-100', text: 'text-indigo-700', icon: 'terminal' },
+          communication: { bg: 'bg-blue-100', text: 'text-blue-700', icon: 'chat' },
+          productivity: { bg: 'bg-amber-100', text: 'text-amber-700', icon: 'edit_note' },
+          creative: { bg: 'bg-purple-100', text: 'text-purple-700', icon: 'palette' },
+          system: { bg: 'bg-slate-100', text: 'text-slate-700', icon: 'settings' },
+        };
+
+        Object.entries(caps.categories).forEach(([category, list]) => {
+          const style = domainColors[category] || { bg: 'bg-slate-100', text: 'text-slate-700', icon: 'apps' };
+          (list || []).forEach(item => {
+            discovered.push({
+              id: item.appId || item.id || item.name,
+              name: item.name,
+              category: item.categoryLabel || category,
+              icon: style.icon,
+              bg: style.bg,
+              text: style.text,
+              status: item.allowed ? 'READY' : 'BLOCKED',
+              statusColor: item.allowed ? 'text-emerald-600 bg-emerald-50' : 'text-rose-600 bg-rose-50'
+            });
+          });
+        });
+
+        if (discovered.length > 0) {
+          card.data.scannedApps = discovered;
+          if (onRerender) onRerender();
+        }
+      }
+    } catch (err) {
+      console.warn('Failed to sync scanned apps:', err);
+    }
+  }
 }

@@ -38,3 +38,6 @@ graphify-out/
 test-results/
 tests/report/
 scratch/
+
+# Documentation
+Docs/

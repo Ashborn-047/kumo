@@ -9,12 +9,14 @@ test.describe('Kumo Studio & Onboarding Window', () => {
   let tempUserData;
 
   test.beforeEach(async () => {
+    delete process.env.ELECTRON_RUN_AS_NODE;
     tempUserData = fs.mkdtempSync(path.join(os.tmpdir(), 'kumo-test-studio-'));
     electronApp = await electron.launch({
       args: ['.', `--user-data-dir=${tempUserData}`],
       env: {
         ...process.env,
         NODE_ENV: 'test',
+        ELECTRON_RUN_AS_NODE: undefined,
       },
     });
   });

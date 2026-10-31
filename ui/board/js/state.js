@@ -12,6 +12,60 @@ export const DESIGN_PALETTES = [
 
 export const DEFAULT_CARDS = [
   {
+    id: 'card-telemetry-1',
+    type: 'telemetry',
+    title: 'System Health & Telemetry Hub',
+    x: 60,
+    y: 1040,
+    width: 560,
+    data: {
+      ram: { total: 16, used: 8.5, free: 7.5, pct: 53 },
+      cpu: { count: 12, model: 'AMD / Host CPU', load: [1.2, 0.8, 0.5] }
+    },
+    zIndex: 5,
+  },
+  {
+    id: 'card-network-1',
+    type: 'network',
+    title: 'Network Sentinel Hub',
+    x: 650,
+    y: 1040,
+    width: 580,
+    data: {
+      ip: '192.168.0.9',
+      gateway: '192.168.0.1',
+      dns: 'Online (DNS 53 OK)'
+    },
+    zIndex: 6,
+  },
+  {
+    id: 'card-media-1',
+    type: 'media',
+    title: 'Spotify & Media Orchestrator',
+    x: 60,
+    y: 1400,
+    width: 560,
+    data: {
+      track: 'Midnight City',
+      artist: 'M83 • Spotify Session'
+    },
+    zIndex: 7,
+  },
+  {
+    id: 'card-workspace-1',
+    type: 'workspace',
+    title: 'Developer Workspace Hub',
+    x: 650,
+    y: 1400,
+    width: 580,
+    data: {
+      repo: 'Ashborn-047/kumo',
+      branch: 'main (clean)'
+    },
+    zIndex: 8,
+  },
+
+  {
     id: 'card-launcher-1',
     type: 'launcher',
     title: 'App Launcher & Hub',

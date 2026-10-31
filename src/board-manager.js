@@ -7,12 +7,16 @@
 // TODO Phase 2: board list / home screen
 // TODO Phase 2: autosave every 30 seconds
 
-const { BrowserWindow, app } = require('electron');
+const electron = require('electron');
+const { BrowserWindow } = electron;
+const app = electron?.app;
 const path = require('path');
 const fs   = require('fs');
+const os   = require('os');
 
-const DATA_DIR   = path.join(app.getPath('userData'), 'boards');
-const INDEX_FILE = path.join(app.getPath('userData'), 'boards-index.json');
+const userDataDir = app?.getPath ? app.getPath('userData') : path.join(process.env.APPDATA || os.homedir(), 'Kumo');
+const DATA_DIR   = path.join(userDataDir, 'boards');
+const INDEX_FILE = path.join(userDataDir, 'boards-index.json');
 
 let boardWindow = null;
 
@@ -83,7 +87,7 @@ function saveBoard(board) {
   return true;
 }
 
-const FOLDERS_FILE = path.join(app.getPath('userData'), 'folders.json');
+const FOLDERS_FILE = path.join(userDataDir, 'folders.json');
 
 function getFolders() {
   ensureDataDir();

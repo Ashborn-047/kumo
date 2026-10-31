@@ -38,6 +38,8 @@ contextBridge.exposeInMainWorld('goo', {
   saveSettings:       (data)           => ipcRenderer.invoke('settings:save', data),
   onSettingsUpdated:  (cb)             => ipcRenderer.on('settings:updated', (_e, data) => cb(data)),
   getCapabilities:    ()               => ipcRenderer.invoke('system:get-capabilities'),
+  getTelemetry:       ()               => ipcRenderer.invoke('system:get-telemetry'),
+  onTelemetry:        (cb)             => ipcRenderer.on('board:telemetry-update', (_e, data) => cb(data)),
   rescanSystem:       ()               => ipcRenderer.invoke('system:rescan'),
   updateAppPermission: (appId, allowed) => ipcRenderer.invoke('system:update-permission', { appId, allowed }),
 

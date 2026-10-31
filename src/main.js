@@ -336,3 +336,41 @@ ipcMain.on('overlay:move', (event, { deltaX, deltaY }) => {
   win.setPosition(Math.round(currentX + deltaX), Math.round(currentY + deltaY));
 });
 
+
+// ── Live Telemetry Heartbeat for Kumoboard ────────────────────
+let telemetryInterval = null;
+
+function getSystemTelemetry() {
+  const os = require('os');
+  const totalMem = Math.round(os.totalmem() / 1024 / 1024 / 1024);
+  const freeMem = parseFloat((os.freemem() / 1024 / 1024 / 1024).toFixed(1));
+  const usedMem = parseFloat((totalMem - freeMem).toFixed(1));
+  const memPct = Math.round((usedMem / totalMem) * 100);
+  const cpus = os.cpus();
+  const cpuCount = cpus.length;
+  const loadAvg = os.loadavg();
+
+  return {
+    ram: { total: totalMem, free: freeMem, used: usedMem, pct: memPct },
+    cpu: { count: cpuCount, model: cpus[0] ? cpus[0].model : 'Host CPU', load: loadAvg },
+    uptime: Math.round(os.uptime()),
+    timestamp: Date.now()
+  };
+}
+
+ipcMain.handle('system:get-telemetry', () => getSystemTelemetry());
+
+function startTelemetryBroadcast() {
+  if (telemetryInterval) return;
+  telemetryInterval = setInterval(() => {
+    const boardWin = boardManager.get();
+    if (boardWin && !boardWin.isDestroyed() && boardWin.isVisible()) {
+      const data = getSystemTelemetry();
+      boardWin.webContents.send('board:telemetry-update', data);
+    }
+  }, 2500);
+}
+
+app.whenReady().then(() => {
+  startTelemetryBroadcast();
+});

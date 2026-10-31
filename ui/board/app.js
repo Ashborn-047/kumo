@@ -7,11 +7,15 @@ import { state, BOARD_STORAGE_KEY, DEFAULT_CARDS } from './js/state.js';
 import { initCanvasControls, updateTransform } from './js/canvas.js';
 import { makeCardDraggable } from './js/drag.js';
 import { initCommandPalette } from './js/command.js';
-import { renderLauncherHTML, attachLauncherEvents } from './js/tools/launcher-tool.js';
+import { renderLauncherHTML, attachLauncherEvents, syncScannedApps } from './js/tools/launcher-tool.js';
 import { renderWriterHTML, attachWriterEvents } from './js/tools/writer-tool.js';
 import { renderCodeHTML, attachCodeEvents } from './js/tools/code-tool.js';
 import { renderDesignHTML, attachDesignEvents } from './js/tools/design-tool.js';
 import { renderNotesHTML, attachNotesEvents } from './js/tools/notes-tool.js';
+import { renderTelemetryHTML, attachTelemetryEvents } from './js/tools/telemetry-tool.js';
+import { renderNetworkHTML, attachNetworkEvents } from './js/tools/network-tool.js';
+import { renderMediaHTML, attachMediaEvents } from './js/tools/media-tool.js';
+import { renderWorkspaceHTML, attachWorkspaceEvents } from './js/tools/workspace-tool.js';
 
 const $ = (s) => document.querySelector(s);
 const $$ = (s) => [...document.querySelectorAll(s)];
@@ -123,11 +127,15 @@ export function renderCards() {
 
     let bodyHTML = '';
     switch (card.type) {
-      case 'launcher': bodyHTML = renderLauncherHTML(card); break;
+      case 'launcher': bodyHTML = renderLauncherHTML(card); syncScannedApps(card, () => { if (!card.data._synced) { card.data._synced = true; renderCards(); } }); break;
       case 'writer':   bodyHTML = renderWriterHTML(card); break;
       case 'code':     bodyHTML = renderCodeHTML(card); break;
       case 'design':   bodyHTML = renderDesignHTML(card); break;
       case 'notes':    bodyHTML = renderNotesHTML(card); break;
+      case 'telemetry': bodyHTML = renderTelemetryHTML(card); break;
+      case 'network':   bodyHTML = renderNetworkHTML(card); break;
+      case 'media':     bodyHTML = renderMediaHTML(card); break;
+      case 'workspace': bodyHTML = renderWorkspaceHTML(card); break;
       default:         bodyHTML = `<div class="p-4">${card.data?.text || 'Tool Card'}</div>`;
     }
 
@@ -155,6 +163,20 @@ export function renderCards() {
         card.title = newTitle;
         saveState();
         renderCards();
+  // Live Telemetry Heartbeat listener from main process
+  if (window.goo && window.goo.onTelemetry) {
+    window.goo.onTelemetry((metrics) => {
+      const telemetryCard = state.cards.find((c) => c.type === 'telemetry');
+      if (telemetryCard) {
+        telemetryCard.data.ram = metrics.ram;
+        telemetryCard.data.cpu = metrics.cpu;
+        const ramVal = document.querySelector('#' + telemetryCard.id + ' .font-mono.font-bold');
+        if (ramVal && metrics.ram) {
+          ramVal.textContent = metrics.ram.used + ' / ' + metrics.ram.total + ' GB';
+        }
+      }
+    });
+  }
         toast(`Renamed to "${newTitle}"`);
       };
 

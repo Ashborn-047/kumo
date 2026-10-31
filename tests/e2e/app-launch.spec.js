@@ -9,12 +9,14 @@ test.describe('Kumo Application Boot & Windows', () => {
   let tempUserData;
 
   test.beforeEach(async () => {
+    delete process.env.ELECTRON_RUN_AS_NODE;
     tempUserData = fs.mkdtempSync(path.join(os.tmpdir(), 'kumo-test-boot-'));
     electronApp = await electron.launch({
       args: ['.', `--user-data-dir=${tempUserData}`],
       env: {
         ...process.env,
         NODE_ENV: 'test',
+        ELECTRON_RUN_AS_NODE: undefined,
       },
     });
   });
