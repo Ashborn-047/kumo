@@ -19,8 +19,8 @@ export const DEFAULT_CARDS = [
     y: 1040,
     width: 560,
     data: {
-      ram: { total: 16, used: 8.5, free: 7.5, pct: 53 },
-      cpu: { count: 12, model: 'AMD / Host CPU', load: [1.2, 0.8, 0.5] }
+      ram: null,
+      cpu: null
     },
     zIndex: 5,
   },
@@ -32,9 +32,9 @@ export const DEFAULT_CARDS = [
     y: 1040,
     width: 580,
     data: {
-      ip: '192.168.0.9',
-      gateway: '192.168.0.1',
-      dns: 'Online (DNS 53 OK)'
+      ip: null,
+      gateway: null,
+      dns: null
     },
     zIndex: 6,
   },
@@ -46,8 +46,9 @@ export const DEFAULT_CARDS = [
     y: 1400,
     width: 560,
     data: {
-      track: 'Midnight City',
-      artist: 'M83 • Spotify Session'
+      track: null,
+      artist: null,
+      isPlaying: false
     },
     zIndex: 7,
   },
@@ -59,8 +60,10 @@ export const DEFAULT_CARDS = [
     y: 1400,
     width: 580,
     data: {
-      repo: 'Ashborn-047/kumo',
-      branch: 'main (clean)'
+      repo: null,
+      branch: null,
+      nodeVersion: null,
+      wsl: null
     },
     zIndex: 8,
   },
@@ -73,17 +76,11 @@ export const DEFAULT_CARDS = [
     y: 80,
     width: 560,
     data: {
-      activeTab: 'apps',
+      activeCategory: 'all',
       searchQuery: '',
-      clipboardText: 'git commit -m "feat(spatial): tactile glassmorphic nodes"',
-      apps: [
-        { id: 'spotify', name: 'Spotify', icon: 'graphic_eq', bg: 'bg-emerald-100', text: 'text-emerald-700', status: 'RUNNING', statusColor: 'text-emerald-600 bg-emerald-50' },
-        { id: 'code', name: 'VS Code', icon: 'terminal', bg: 'bg-blue-100', text: 'text-blue-700', status: 'IDLE', statusColor: 'text-secondary bg-surface-container-highest' },
-        { id: 'chrome', name: 'Chrome', icon: 'public', bg: 'bg-amber-100', text: 'text-amber-700', status: 'ACTIVE', statusColor: 'text-emerald-600 bg-emerald-50' },
-        { id: 'terminal', name: 'Terminal', icon: 'code', bg: 'bg-indigo-100', text: 'text-indigo-700', status: 'PID 89', statusColor: 'text-emerald-600 bg-emerald-50' },
-        { id: 'notepad', name: 'Notepad', icon: 'description', bg: 'bg-purple-100', text: 'text-purple-700', status: 'READY', statusColor: 'text-secondary bg-surface-container-highest' },
-        { id: 'explorer', name: 'Files', icon: 'folder_open', bg: 'bg-amber-100', text: 'text-amber-700', status: 'MOUNT', statusColor: 'text-secondary bg-surface-container-highest' },
-      ],
+      clipboardText: '',
+      apps: [],
+      scannedApps: [],
       customApps: [],
     },
     zIndex: 1,
@@ -97,11 +94,11 @@ export const DEFAULT_CARDS = [
     width: 580,
     data: {
       activeTab: 'prompt',
-      model: 'GPT-4o (Active)',
+      model: 'Kumo Neural Engine',
       tone: 'Professional',
-      prompt: 'Architect an asynchronous Rust microservice that listens to local WebSocket events and synchronizes the infinite canvas node coordinates in 60fps.',
-      response: '// WebSocket listener daemon initialized on ws://127.0.0.1:4020\npub async fn stream_canvas_delta(rx: Receiver<SpatialEvent>) -> Result<()> {\n    let mut interval = tokio::time::interval(Duration::from_millis(16));\n    // Bound coordinates seamlessly to 24px spatial steps\n}',
-      tokenCount: 184,
+      prompt: '',
+      response: '',
+      tokenCount: 0,
       maxTokens: 4096,
     },
     zIndex: 2,
@@ -114,11 +111,11 @@ export const DEFAULT_CARDS = [
     y: 530,
     width: 560,
     data: {
-      preset: 'sync-workspace.ps1',
-      code: 'Get-ChildItem -Path ./src -Recurse -Depth 2 | Select-Object -First 8 Name, Length',
-      output: 'PS C:\\Kumo\\spatial-engine> .\\scripts\\sync-workspace.ps1 -Channel "canary"\n[INFO] Scanning active workbench nodes across 24px coordinate grid...\n[SOCKET] Discovered client connection on 127.0.0.1:4020 (IPC Shared Memory)\n[OK] Memory bounds allocated: 48.2 MB / 512 MB. Spring dynamics steady.',
-      pid: '9204',
-      cpu: '1.2%',
+      preset: 'system-info.ps1',
+      code: 'Get-CimInstance Win32_OperatingSystem | Select-Object Caption, Version, TotalVisibleMemorySize, FreePhysicalMemory',
+      output: '',
+      pid: null,
+      cpu: null,
     },
     zIndex: 3,
   },
@@ -133,20 +130,16 @@ export const DEFAULT_CARDS = [
       bgColor: '#fff5c8',
       colorName: 'Solar Yellow',
       items: [
-        { id: 't1', text: 'Configure IPC socket listeners', done: true, tag: 'BACKLOG' },
-        { id: 't2', text: 'Implement pastel tint header blocks', done: true, tag: 'SYSTEM' },
-        { id: 't3', text: 'Calibrate tactile 2.5deg tilt badges', done: true, tag: 'DESIGN' },
-        { id: 't4', text: 'Verify 24px dot-matrix coordinate snap', done: false, tag: 'URGENT' },
-        { id: 't5', text: 'Test mascot spring haptic responsiveness', done: false, tag: 'TESTING' },
+        { id: 't1', text: 'Welcome to Kumoboard — Double-click to edit or check tasks', done: false, tag: 'TODO' },
       ],
-      scratchText: 'Remember to run cargo build --release before generating standalone spatial electron wrappers.',
+      scratchText: '',
     },
     zIndex: 4,
   },
   {
     id: 'card-design-1',
     type: 'design',
-    title: 'Mochi Companion & Theme Lab',
+    title: 'Kumo Companion & Theme Lab',
     x: 60,
     y: 1040,
     width: 1170,

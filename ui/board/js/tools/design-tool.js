@@ -35,8 +35,8 @@ export function renderDesignHTML(card) {
         <div class="w-7 h-7 rounded-lg bg-tertiary-container text-on-tertiary flex items-center justify-center shadow-xs ml-1">
           <span class="material-symbols-outlined text-[18px]">palette</span>
         </div>
-        <h2 class="text-headline-sm font-headline-sm text-on-surface font-semibold card-title-text" title="Click to rename">${card.title || 'Mochi Companion & Theme Lab'}</h2>
-        <span class="px-2 py-0.5 rounded-full text-label-sm font-label-sm bg-tertiary-fixed text-on-tertiary-fixed-variant font-mono">Cotton Cloud v2.4</span>
+        <h2 class="text-headline-sm font-headline-sm text-on-surface font-semibold card-title-text" title="Click to rename">${card.title || 'Kumo Companion & Theme Lab'}</h2>
+        <span class="px-2 py-0.5 rounded-full text-label-sm font-label-sm bg-tertiary-fixed text-on-tertiary-fixed-variant font-mono">Tactile Canvas v2.4</span>
       </div>
       <div class="flex items-center gap-3">
         <button class="design-sound-btn p-1 rounded-full text-secondary hover:text-on-surface hover:bg-surface-container transition-colors" title="Toggle Companion Sounds">
@@ -67,7 +67,7 @@ export function renderDesignHTML(card) {
             ${mouthHTML}
           </svg>
           <div class="mt-2 text-center">
-            <span class="text-label-sm font-label-sm font-semibold text-primary">Mochi The Coordinator</span>
+            <span class="text-label-sm font-label-sm font-semibold text-primary">${card.data.companionName || 'Kumo The Coordinator'}</span>
             <p class="text-body-sm font-body-sm text-secondary">State: <span class="font-semibold text-primary">${mood}</span> • Click to tickle</p>
           </div>
         </div>
@@ -87,7 +87,7 @@ export function renderDesignHTML(card) {
         <div>
           <div class="flex items-center justify-between mb-3">
             <h3 class="text-headline-sm font-headline-sm text-on-surface font-semibold">Curated Pastel Swatches</h3>
-            <span class="text-label-sm font-label-sm text-secondary font-mono">TOKENS LINKED: 12</span>
+            <span class="text-label-sm font-label-sm text-secondary font-mono">5 PALETTES LINKED</span>
           </div>
 
           <!-- 5 Curated Pastel Swatches -->

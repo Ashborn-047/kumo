@@ -45,6 +45,14 @@ let fullReply      = '';
 let chatHistory    = [];
 let isThinking     = false;
 let currentSettings = {};
+let currentTelemetry = null;
+
+if (window.goo?.getTelemetry) {
+  window.goo.getTelemetry().then(t => { currentTelemetry = t; }).catch(() => {});
+}
+if (window.goo?.onTelemetry) {
+  window.goo.onTelemetry(t => { currentTelemetry = t; });
+}
 
 // ── 1. Mouse Passthrough & Interactive Hit-Testing ──────────
 let isMouseIgnored = true;
@@ -236,7 +244,7 @@ function showCardPopout(type, payload = {}) {
     `;
   } else if (type === 'system-health' || query.includes('ram') || query.includes('cpu') || query.includes('specs')) {
     title = 'System Telemetry Hub';
-    subtitle = 'Windows 10 Pro • 12 Cores';
+    subtitle = (currentTelemetry?.cpu?.count ? currentTelemetry.cpu.count + ' Cores • ' : '') + (currentTelemetry?.cpu?.model || 'Hardware Probe');
     icon = 'memory';
     cardState = {
       type: 'code',
@@ -248,11 +256,11 @@ function showCardPopout(type, payload = {}) {
       <div class="metric-row">
         <div class="metric-pill">
           <span class="metric-label">Host RAM</span>
-          <span class="metric-val" style="color:#baa0ff;">16 GB (64% Active)</span>
+          <span class="metric-val" style="color:#baa0ff;">${currentTelemetry?.ram ? currentTelemetry.ram.used + " / " + currentTelemetry.ram.total + " GB (" + currentTelemetry.ram.pct + "%)" : "Host Memory"}</span>
         </div>
         <div class="metric-pill">
           <span class="metric-label">CPU Cores</span>
-          <span class="metric-val">12 Logical Threads</span>
+          <span class="metric-val">${currentTelemetry?.cpu ? currentTelemetry.cpu.count + " Logical Cores" : "Host CPU"}</span>
         </div>
       </div>
       <div class="popout-action-row">
@@ -280,7 +288,7 @@ function showCardPopout(type, payload = {}) {
       <div class="metric-row">
         <div class="metric-pill">
           <span class="metric-label">Gateway</span>
-          <span class="metric-val">192.168.0.1</span>
+          <span class="metric-val">${currentTelemetry?.network?.gateway || "Active Gateway"}</span>
         </div>
         <div class="metric-pill">
           <span class="metric-label">DNS Status</span>
@@ -341,7 +349,7 @@ function showCardPopout(type, payload = {}) {
       <div class="metric-row">
         <div class="metric-pill">
           <span class="metric-label">Scanned Apps</span>
-          <span class="metric-val">155 Discovered</span>
+          <span class="metric-val">System Discovered</span>
         </div>
         <div class="metric-pill">
           <span class="metric-label">Active Hooks</span>

@@ -2,9 +2,15 @@
 import { runSystemAction } from '../actions.js';
 
 export function renderTelemetryHTML(card) {
-  const ram = card.data.ram || { total: 16, used: 8.5, free: 7.5, pct: 53 };
-  const cpu = card.data.cpu || { count: 12, model: 'Host CPU', load: [1.2, 0.8, 0.5] };
-  const ramPct = ram.pct || Math.round((ram.used / ram.total) * 100) || 50;
+  const ram = card.data.ram;
+  const cpu = card.data.cpu;
+  
+  const ramUsed = ram ? `${ram.used} / ${ram.total} GB` : 'Querying host...';
+  const ramPct = ram ? (ram.pct || Math.round((ram.used / ram.total) * 100) || 50) : 0;
+  
+  const cpuCount = cpu ? `${cpu.count} Logical` : 'Probing...';
+  const cpuModel = cpu ? (cpu.model || 'Host CPU') : 'Hardware Introspection...';
+  const cpuLoadPct = cpu ? Math.min(100, Math.max(8, Math.round(((cpu.load?.[0] || 0.4) / (cpu.count || 1)) * 100))) : 15;
 
   return `<header class="h-12 bg-secondary-container/40 border-b border-secondary-container/50 px-4 flex items-center justify-between select-none cursor-grab" data-drag-handle="${card.id}">
       <div class="flex items-center gap-2.5">
@@ -19,7 +25,7 @@ export function renderTelemetryHTML(card) {
         </div>
       </div>
       <div class="flex items-center gap-2">
-        <span class="px-2 py-0.5 rounded-full text-label-sm font-label-sm bg-emerald-100 text-emerald-800 font-medium">Live 2.5s</span>
+        <span class="px-2 py-0.5 rounded-full text-label-sm font-label-sm bg-emerald-100 text-emerald-800 font-medium">Live Stream</span>
         <span class="material-symbols-outlined text-secondary text-[18px]">drag_indicator</span>
       </div>
     </header>
@@ -29,23 +35,23 @@ export function renderTelemetryHTML(card) {
         <div class="p-3.5 rounded-xl bg-surface-container-low border border-outline-variant/30 flex flex-col gap-1.5">
           <div class="flex justify-between items-center text-label-sm text-secondary">
             <span>RAM Allocation</span>
-            <span class="font-mono font-bold text-on-surface">${ram.used} / ${ram.total} GB</span>
+            <span class="font-mono font-bold text-on-surface telemetry-ram-text">${ramUsed}</span>
           </div>
           <div class="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden">
-            <div class="bg-primary h-full transition-all duration-500" style="width: ${ramPct}%"></div>
+            <div class="bg-primary h-full transition-all duration-500 telemetry-ram-bar" style="width: ${ramPct}%"></div>
           </div>
-          <span class="text-[10px] text-secondary font-mono">${ramPct}% in active use</span>
+          <span class="text-[10px] text-secondary font-mono telemetry-ram-sub">${ram ? `${ramPct}% in active use` : 'Sampling memory buffers'}</span>
         </div>
 
         <div class="p-3.5 rounded-xl bg-surface-container-low border border-outline-variant/30 flex flex-col gap-1.5">
           <div class="flex justify-between items-center text-label-sm text-secondary">
             <span>Processor Cores</span>
-            <span class="font-mono font-bold text-on-surface">${cpu.count} Logical</span>
+            <span class="font-mono font-bold text-on-surface telemetry-cpu-text">${cpuCount}</span>
           </div>
           <div class="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden">
-            <div class="bg-emerald-500 h-full" style="width: 35%"></div>
+            <div class="bg-emerald-500 h-full transition-all duration-500 telemetry-cpu-bar" style="width: ${cpuLoadPct}%"></div>
           </div>
-          <span class="text-[10px] text-secondary font-mono truncate">${cpu.model}</span>
+          <span class="text-[10px] text-secondary font-mono truncate telemetry-cpu-sub">${cpuModel}</span>
         </div>
       </div>
 
@@ -71,8 +77,8 @@ export function attachTelemetryEvents(el, card, onSave, onToast) {
   el.querySelector('.btn-clean-temp')?.addEventListener('click', async () => {
     onToast?.('Cleaning temporary files...');
     await runSystemAction('powershell.read', {
-      command: 'Remove-Item -Path "C:UsersPUSHANAppDataLocalTemp\\*" -Recurse -Force -ErrorAction SilentlyContinue; "Temporary files cleaned."'
+      command: 'Remove-Item -Path "$env:TEMP\\*" -Recurse -Force -ErrorAction SilentlyContinue; "Temporary cache cleaned."'
     }, onToast);
-    onToast?.('Temporary files cleaned!');
+    onToast?.('Temporary cache cleaned!');
   });
 }

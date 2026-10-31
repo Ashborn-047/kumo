@@ -127,7 +127,18 @@ export function renderCards() {
 
     let bodyHTML = '';
     switch (card.type) {
-      case 'launcher': bodyHTML = renderLauncherHTML(card); syncScannedApps(card, () => { if (!card.data._synced) { card.data._synced = true; renderCards(); } }); break;
+      case 'launcher': bodyHTML = renderLauncherHTML(card); syncScannedApps(card, () => { if (!card.data._synced) { card.data._synced = true; renderCards();
+  // Immediate dynamic telemetry acquisition & subscription
+  if (window.goo?.getTelemetry) {
+    window.goo.getTelemetry().then((metrics) => {
+      applyLiveTelemetry(metrics);
+    }).catch(() => {});
+  }
+  if (window.goo?.onTelemetry) {
+    window.goo.onTelemetry((metrics) => {
+      applyLiveTelemetry(metrics);
+    });
+  } } }); break;
       case 'writer':   bodyHTML = renderWriterHTML(card); break;
       case 'code':     bodyHTML = renderCodeHTML(card); break;
       case 'design':   bodyHTML = renderDesignHTML(card); break;
@@ -163,21 +174,7 @@ export function renderCards() {
         card.title = newTitle;
         saveState();
         renderCards();
-  // Live Telemetry Heartbeat listener from main process
-  if (window.goo && window.goo.onTelemetry) {
-    window.goo.onTelemetry((metrics) => {
-      const telemetryCard = state.cards.find((c) => c.type === 'telemetry');
-      if (telemetryCard) {
-        telemetryCard.data.ram = metrics.ram;
-        telemetryCard.data.cpu = metrics.cpu;
-        const ramVal = document.querySelector('#' + telemetryCard.id + ' .font-mono.font-bold');
-        if (ramVal && metrics.ram) {
-          ramVal.textContent = metrics.ram.used + ' / ' + metrics.ram.total + ' GB';
-        }
-      }
-    });
-  }
-        toast(`Renamed to "${newTitle}"`);
+  toast(`Renamed to "${newTitle}"`);
       };
 
       input.addEventListener('blur', finishRename);
@@ -222,6 +219,58 @@ export function addNewTool(type, extra = {}) {
 
   let newCard = null;
   switch (type) {
+    case 'telemetry':
+      newCard = {
+        id,
+        type,
+        title: extra.title || 'System Health & Telemetry Hub',
+        x: centerX,
+        y: centerY,
+        width: 560,
+        data: { ram: null, cpu: null },
+        zIndex: ++state.nextZIndex,
+      };
+      break;
+
+    case 'network':
+      newCard = {
+        id,
+        type,
+        title: extra.title || 'Network Sentinel Hub',
+        x: centerX,
+        y: centerY,
+        width: 580,
+        data: { ip: null, gateway: null, dns: null },
+        zIndex: ++state.nextZIndex,
+      };
+      break;
+
+    case 'media':
+      newCard = {
+        id,
+        type,
+        title: extra.title || 'Spotify & Media Orchestrator',
+        x: centerX,
+        y: centerY,
+        width: 560,
+        data: { track: null, artist: null, isPlaying: false },
+        zIndex: ++state.nextZIndex,
+      };
+      break;
+
+    case 'workspace':
+      newCard = {
+        id,
+        type,
+        title: extra.title || 'Developer Workspace Hub',
+        x: centerX,
+        y: centerY,
+        width: 580,
+        data: { repo: null, branch: null, nodeVersion: null, platform: null },
+        zIndex: ++state.nextZIndex,
+      };
+      break;
+
     case 'launcher':
       newCard = {
         id,
@@ -231,17 +280,11 @@ export function addNewTool(type, extra = {}) {
         y: centerY,
         width: 560,
         data: {
-          activeTab: 'apps',
+          activeCategory: 'all',
           searchQuery: '',
-          clipboardText: 'git commit -m "feat(spatial): tactile glassmorphic nodes"',
-          apps: [
-            { id: 'spotify', name: 'Spotify', icon: 'graphic_eq', bg: 'bg-emerald-100', text: 'text-emerald-700', status: 'RUNNING', statusColor: 'text-emerald-600 bg-emerald-50' },
-            { id: 'code', name: 'VS Code', icon: 'terminal', bg: 'bg-blue-100', text: 'text-blue-700', status: 'IDLE', statusColor: 'text-secondary bg-surface-container-highest' },
-            { id: 'chrome', name: 'Chrome', icon: 'public', bg: 'bg-amber-100', text: 'text-amber-700', status: 'ACTIVE', statusColor: 'text-emerald-600 bg-emerald-50' },
-            { id: 'terminal', name: 'Terminal', icon: 'code', bg: 'bg-indigo-100', text: 'text-indigo-700', status: 'PID 89', statusColor: 'text-emerald-600 bg-emerald-50' },
-            { id: 'notepad', name: 'Notepad', icon: 'description', bg: 'bg-purple-100', text: 'text-purple-700', status: 'READY', statusColor: 'text-secondary bg-surface-container-highest' },
-            { id: 'explorer', name: 'Files', icon: 'folder_open', bg: 'bg-amber-100', text: 'text-amber-700', status: 'MOUNT', statusColor: 'text-secondary bg-surface-container-highest' },
-          ],
+          clipboardText: '',
+          apps: [],
+          scannedApps: [],
           customApps: [],
         },
         zIndex: ++state.nextZIndex,
@@ -258,7 +301,7 @@ export function addNewTool(type, extra = {}) {
         width: 580,
         data: {
           activeTab: 'prompt',
-          model: 'GPT-4o (Active)',
+          model: 'Kumo Neural Engine',
           tone: 'Professional',
           prompt: extra.prompt || '',
           response: extra.response || '',
@@ -278,11 +321,11 @@ export function addNewTool(type, extra = {}) {
         y: centerY,
         width: 560,
         data: {
-          preset: 'sync-workspace.ps1',
-          code: extra.code || 'Get-ChildItem -Path ./src -Recurse -Depth 2 | Select-Object -First 8 Name, Length',
-          output: 'PS C:\\Kumo\\spatial-engine> Ready for script execution.',
-          pid: '9204',
-          cpu: '1.2%',
+          preset: 'system-info.ps1',
+          code: extra.code || 'Get-CimInstance Win32_OperatingSystem | Select-Object Caption, Version, TotalVisibleMemorySize, FreePhysicalMemory',
+          output: '',
+          pid: null,
+          cpu: null,
         },
         zIndex: ++state.nextZIndex,
       };
@@ -292,7 +335,7 @@ export function addNewTool(type, extra = {}) {
       newCard = {
         id,
         type,
-        title: 'Mochi Companion & Theme Lab',
+        title: 'Kumo Companion & Theme Lab',
         x: centerX,
         y: centerY,
         width: 1170,
@@ -318,7 +361,7 @@ export function addNewTool(type, extra = {}) {
           bgColor: '#fff5c8',
           colorName: 'Solar Yellow',
           items: extra.items || [
-            { id: `t-${Date.now()}-1`, text: 'Review spatial workbench', done: false, tag: 'URGENT' },
+            { id: `t-${Date.now()}-1`, text: 'Double-click to edit or check task', done: false, tag: 'TODO' },
           ],
           scratchText: extra.text || '',
         },
@@ -334,6 +377,7 @@ export function addNewTool(type, extra = {}) {
     toast(`Spawned ${newCard.title}`);
   }
 }
+
 
 // ── Filter Bar Initializers ──
 function initFilters() {
@@ -532,6 +576,77 @@ function initPermissionsModal() {
 function updateZoomDisplay() {
   const display = $('#zoom-display');
   if (display) display.textContent = `${Math.round(state.scale * 100)}%`;
+}
+
+
+// ── Real-Time Dynamic Telemetry Stream Dispatcher ──
+export function applyLiveTelemetry(metrics) {
+  if (!metrics) return;
+
+  // 1. Update Telemetry Card
+  const telemetryCard = state.cards.find((c) => c.type === 'telemetry');
+  if (telemetryCard) {
+    telemetryCard.data.ram = metrics.ram;
+    telemetryCard.data.cpu = metrics.cpu;
+    const ramText = document.querySelector(`#${telemetryCard.id} .telemetry-ram-text`);
+    const ramBar = document.querySelector(`#${telemetryCard.id} .telemetry-ram-bar`);
+    const ramSub = document.querySelector(`#${telemetryCard.id} .telemetry-ram-sub`);
+    const cpuText = document.querySelector(`#${telemetryCard.id} .telemetry-cpu-text`);
+    const cpuBar = document.querySelector(`#${telemetryCard.id} .telemetry-cpu-bar`);
+    const cpuSub = document.querySelector(`#${telemetryCard.id} .telemetry-cpu-sub`);
+
+    if (ramText && metrics.ram) ramText.textContent = `${metrics.ram.used} / ${metrics.ram.total} GB`;
+    if (ramBar && metrics.ram) ramBar.style.width = `${metrics.ram.pct}%`;
+    if (ramSub && metrics.ram) ramSub.textContent = `${metrics.ram.pct}% in active use`;
+    if (cpuText && metrics.cpu) cpuText.textContent = `${metrics.cpu.count} Logical`;
+    if (cpuSub && metrics.cpu) cpuSub.textContent = metrics.cpu.model;
+    if (cpuBar && metrics.cpu) {
+      const loadPct = Math.min(100, Math.max(8, Math.round(((metrics.cpu.load?.[0] || 0.4) / (metrics.cpu.count || 1)) * 100)));
+      cpuBar.style.width = `${loadPct}%`;
+    }
+  }
+
+  // 2. Update Network Card
+  const networkCard = state.cards.find((c) => c.type === 'network');
+  if (networkCard && metrics.network) {
+    networkCard.data.ip = metrics.network.ip;
+    networkCard.data.gateway = metrics.network.gateway;
+    networkCard.data.dns = metrics.network.dns;
+    const ipText = document.querySelector(`#${networkCard.id} .network-ip-text`);
+    const gwText = document.querySelector(`#${networkCard.id} .network-gateway-text`);
+    const dnsText = document.querySelector(`#${networkCard.id} .network-dns-text`);
+    const pill = document.querySelector(`#${networkCard.id} .network-status-pill`);
+
+    if (ipText) ipText.textContent = metrics.network.ip;
+    if (gwText) gwText.textContent = metrics.network.gateway;
+    if (dnsText) dnsText.textContent = metrics.network.dns;
+    if (pill) {
+      const ok = metrics.network.ip && metrics.network.ip !== '127.0.0.1';
+      pill.textContent = ok ? 'Connected' : 'Loopback';
+      pill.className = `px-2 py-0.5 rounded-full text-label-sm font-label-sm ${ok ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'} font-medium network-status-pill`;
+    }
+  }
+
+  // 3. Update Workspace Card
+  const workspaceCard = state.cards.find((c) => c.type === 'workspace');
+  if (workspaceCard && metrics.env) {
+    workspaceCard.data.repo = metrics.env.gitRepo || 'kumo';
+    workspaceCard.data.branch = metrics.env.gitBranch || 'main';
+    workspaceCard.data.nodeVersion = metrics.env.nodeVersion;
+    workspaceCard.data.platform = metrics.env.platform === 'win32' ? 'Windows Native' : metrics.env.platform;
+
+    const repoEl = document.querySelector(`#${workspaceCard.id} .workspace-repo-name`);
+    const branchPill = document.querySelector(`#${workspaceCard.id} .workspace-branch-pill`);
+    const branchDesc = document.querySelector(`#${workspaceCard.id} .workspace-branch-desc`);
+    const envText = document.querySelector(`#${workspaceCard.id} .workspace-env-text`);
+    const nodeText = document.querySelector(`#${workspaceCard.id} .workspace-node-text`);
+
+    if (repoEl) repoEl.textContent = workspaceCard.data.repo;
+    if (branchPill) branchPill.textContent = `Git ${workspaceCard.data.branch}`;
+    if (branchDesc) branchDesc.textContent = `Branch: ${workspaceCard.data.branch}`;
+    if (envText) envText.textContent = workspaceCard.data.platform;
+    if (nodeText) nodeText.textContent = `Node ${workspaceCard.data.nodeVersion}`;
+  }
 }
 
 // ── Boot ──

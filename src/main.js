@@ -342,17 +342,69 @@ let telemetryInterval = null;
 
 function getSystemTelemetry() {
   const os = require('os');
-  const totalMem = Math.round(os.totalmem() / 1024 / 1024 / 1024);
+  const totalMem = Math.max(1, Math.round(os.totalmem() / 1024 / 1024 / 1024));
   const freeMem = parseFloat((os.freemem() / 1024 / 1024 / 1024).toFixed(1));
   const usedMem = parseFloat((totalMem - freeMem).toFixed(1));
-  const memPct = Math.round((usedMem / totalMem) * 100);
-  const cpus = os.cpus();
-  const cpuCount = cpus.length;
-  const loadAvg = os.loadavg();
+  const memPct = Math.min(100, Math.max(1, Math.round((usedMem / totalMem) * 100)));
+  const cpus = os.cpus() || [];
+  const cpuCount = cpus.length || 1;
+  const loadAvg = os.loadavg() || [0, 0, 0];
+
+  // Dynamically resolve primary IPv4 network interface
+  let activeIp = '127.0.0.1';
+  let activeIface = 'Loopback';
+  let activeNetmask = '255.0.0.0';
+  let activeGateway = '127.0.0.1';
+  try {
+    const nets = os.networkInterfaces();
+    for (const name of Object.keys(nets)) {
+      for (const net of nets[name]) {
+        if (net.family === 'IPv4' && !net.internal) {
+          activeIp = net.address;
+          activeNetmask = net.netmask;
+          activeIface = name;
+          activeGateway = activeIp.replace(/\.\d+$/, '.1');
+          break;
+        }
+      }
+      if (activeIp !== '127.0.0.1') break;
+    }
+  } catch (_) {}
+
+  // Dynamically query git branch & repo status
+  let gitBranch = 'main';
+  let gitRepo = 'kumo';
+  try {
+    const { execSync } = require('child_process');
+    gitBranch = execSync('git rev-parse --abbrev-ref HEAD', { timeout: 800 }).toString().trim() || 'main';
+    const remoteUrl = execSync('git config --get remote.origin.url', { timeout: 800 }).toString().trim();
+    if (remoteUrl) {
+      gitRepo = remoteUrl.replace(/^.*[/:]([^/:]+\/[^/:]+?)(?:\.git)?$/, '$1');
+    }
+  } catch (_) {}
 
   return {
     ram: { total: totalMem, free: freeMem, used: usedMem, pct: memPct },
-    cpu: { count: cpuCount, model: cpus[0] ? cpus[0].model : 'Host CPU', load: loadAvg },
+    cpu: { count: cpuCount, model: cpus[0] ? cpus[0].model.trim() : 'Host CPU', load: loadAvg },
+    network: {
+      ip: activeIp,
+      iface: activeIface,
+      netmask: activeNetmask,
+      gateway: activeGateway,
+      dns: 'Online (Interface Active)',
+    },
+    env: {
+      pid: process.pid,
+      nodeVersion: process.version,
+      platform: os.platform(),
+      release: os.release(),
+      hostname: os.hostname(),
+      username: (os.userInfo() || {}).username || 'User',
+      cwd: process.cwd(),
+      tmpdir: os.tmpdir(),
+      gitBranch,
+      gitRepo,
+    },
     uptime: Math.round(os.uptime()),
     timestamp: Date.now()
   };

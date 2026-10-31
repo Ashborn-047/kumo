@@ -31,27 +31,24 @@ export async function runSystemAction(type, args = {}, onToast = null) {
   if (type === 'clipboard.read') {
     try {
       const text = await navigator.clipboard.readText();
-      return { ok: true, result: { text } };
+      return { ok: true, result: { text: text || '' } };
     } catch {
-      return { ok: true, result: { text: 'git commit -m "feat(spatial): tactile glassmorphic nodes"' } };
+      return { ok: true, result: { text: '' } };
     }
   }
   if (type === 'clipboard.write') {
     try {
-      await navigator.clipboard.writeText(payload.text);
+      await navigator.clipboard.writeText(payload.text || '');
       return { ok: true, result: { written: true } };
     } catch {
-      return { ok: true };
+      return { ok: true, result: { written: false } };
     }
   }
   if (type === 'file.search') {
     return {
       ok: true,
       result: {
-        results: [
-          `C:\\Users\\Desktop\\${payload.query || 'project'}-notes.md`,
-          `C:\\Users\\Downloads\\${payload.query || 'report'}-final.pdf`,
-        ],
+        results: [],
       },
     };
   }
@@ -59,7 +56,7 @@ export async function runSystemAction(type, args = {}, onToast = null) {
     return {
       ok: true,
       result: {
-        output: `[Output for: ${payload.command || 'PowerShell script'}]\n[OK] Command executed successfully.\n[READY] Infinite canvas coordinator ready.`,
+        output: `[Command]: ${payload.command || 'PowerShell script'}\n[Executed via native bridge]`,
       },
     };
   }

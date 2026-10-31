@@ -3,19 +3,20 @@
 import { runSystemAction } from '../actions.js';
 
 const PRESETS = {
-  'sync-workspace.ps1': 'Get-ChildItem -Path ./src -Recurse -Depth 2 | Select-Object -First 8 Name, Length',
   'system-info.ps1': 'Get-CimInstance Win32_OperatingSystem | Select-Object Caption, Version, TotalVisibleMemorySize, FreePhysicalMemory',
+  'sync-workspace.ps1': 'Get-ChildItem -Path ./ -Depth 1 | Select-Object Name, Length, LastWriteTime',
   'list-processes.ps1': 'Get-Process | Sort-Object CPU -Descending | Select-Object -First 6 ProcessName, Id, CPU',
   'network-ping.ps1': 'Test-Connection -TargetName 8.8.8.8 -Count 2',
   'clean-temp.ps1': 'Get-ChildItem $env:TEMP -Depth 1 | Measure-Object | Select-Object Count',
 };
 
 export function renderCodeHTML(card) {
-  const code = card.data.code || PRESETS['sync-workspace.ps1'];
-  const output = card.data.output || 'PS C:\\Kumo\\spatial-engine> Ready for script execution.';
-  const preset = card.data.preset || 'sync-workspace.ps1';
-  const pid = card.data.pid || '9204';
-  const cpu = card.data.cpu || '1.2%';
+  const code = card.data.code || PRESETS['system-info.ps1'];
+  const cwd = card.data.cwd || 'Workspace';
+  const output = card.data.output || `PS ${cwd}> Ready for script execution. Choose a preset or enter PowerShell script below.`;
+  const preset = card.data.preset || 'system-info.ps1';
+  const pid = card.data.pid || (typeof process !== 'undefined' ? process.pid : 'Active');
+  const cpu = card.data.cpu || 'Ready';
 
   return `
     <!-- Terminal Header (macOS / Stitch Obsidian Style) -->
@@ -28,18 +29,18 @@ export function renderCodeHTML(card) {
           <span class="w-3 h-3 rounded-full bg-[#27c93f] hover:opacity-80 transition-opacity cursor-pointer" title="Zoom"></span>
         </div>
         <div class="flex items-center gap-2 ml-2">
-          <span class="text-label-sm font-label-sm text-emerald-400 font-mono font-semibold">PWSH 7.4.2</span>
+          <span class="text-label-sm font-label-sm text-emerald-400 font-mono font-semibold">POWERSHELL</span>
           <span class="text-white/30 text-xs">•</span>
           <span class="text-label-sm font-label-sm text-white/60 font-mono">PID ${pid}</span>
           <span class="text-white/30 text-xs">•</span>
-          <span class="text-label-sm font-label-sm text-emerald-400 font-mono">CPU ${cpu}</span>
+          <span class="text-label-sm font-label-sm text-emerald-400 font-mono">${cpu}</span>
         </div>
       </div>
       <!-- Script Presets Dropdown & Run CTA -->
       <div class="flex items-center gap-2">
         <select class="code-preset-select bg-[#121620] text-label-sm font-label-sm font-mono text-white/80 py-1 px-2.5 rounded-lg border-0 ring-1 ring-white/10 focus:ring-emerald-500 cursor-pointer">
-          <option value="sync-workspace.ps1" ${preset === 'sync-workspace.ps1' ? 'selected' : ''}>sync-workspace.ps1</option>
           <option value="system-info.ps1" ${preset === 'system-info.ps1' ? 'selected' : ''}>system-info.ps1</option>
+          <option value="sync-workspace.ps1" ${preset === 'sync-workspace.ps1' ? 'selected' : ''}>sync-workspace.ps1</option>
           <option value="list-processes.ps1" ${preset === 'list-processes.ps1' ? 'selected' : ''}>list-processes.ps1</option>
           <option value="network-ping.ps1" ${preset === 'network-ping.ps1' ? 'selected' : ''}>network-ping.ps1</option>
           <option value="clean-temp.ps1" ${preset === 'clean-temp.ps1' ? 'selected' : ''}>clean-temp.ps1</option>
@@ -67,7 +68,7 @@ export function renderCodeHTML(card) {
       <div class="code-output-log whitespace-pre-wrap leading-relaxed text-slate-300 font-mono text-label-sm font-label-sm">${output}</div>
       <!-- Pulsing Prompt Line -->
       <div class="flex items-center gap-2 pt-1 text-emerald-400">
-        <span>PS C:\\Kumo\\spatial-engine&gt;</span>
+        <span>PS ${cwd}&gt;</span>
         <span class="w-2 h-3.5 bg-emerald-400 inline-block animate-pulse"></span>
       </div>
     </div>
@@ -77,9 +78,7 @@ export function renderCodeHTML(card) {
       <div class="flex items-center gap-3">
         <span>UTF-8</span>
         <span>•</span>
-        <span>CRLF</span>
-        <span>•</span>
-        <span>Windows Safe Gate</span>
+        <span>Safety Gate Active</span>
       </div>
       <div class="flex items-center gap-2">
         <button class="code-clear-btn hover:text-white transition-colors cursor-pointer">Clear</button>
@@ -121,34 +120,35 @@ export function attachCodeEvents(el, card, onSave, onToast) {
       return;
     }
 
+    const cwd = card.data.cwd || 'Workspace';
     onToast?.(`Executing: ${cmd.split('\n')[0].slice(0, 30)}...`);
     if (logView) {
-      logView.textContent = `PS C:\\Kumo\\spatial-engine> ${cmd}\n[INFO] Executing in local sandbox process...\n`;
+      logView.textContent = `PS ${cwd}> ${cmd}\n[INFO] Executing in local sandbox process...\n`;
     }
 
     try {
       const res = await runSystemAction('powershell.read', { command: cmd }, onToast);
       if (res?.ok && res.result?.output) {
-        const out = `PS C:\\Kumo\\spatial-engine> ${cmd}\n[INFO] Process completed with Exit Code 0\n\n${res.result.output}`;
+        const out = `PS ${cwd}> ${cmd}\n[INFO] Process completed with Exit Code 0\n\n${res.result.output}`;
         card.data.output = out;
         if (logView) logView.textContent = out;
         onSave?.();
         onToast?.('✓ Script execution completed');
       } else if (res?.error) {
-        const out = `PS C:\\Kumo\\spatial-engine> ${cmd}\n[ERROR] ${res.error}`;
+        const out = `PS ${cwd}> ${cmd}\n[ERROR] ${res.error}`;
         card.data.output = out;
         if (logView) logView.textContent = out;
         onSave?.();
         onToast?.(`Notice: ${res.error}`);
       } else {
-        const out = `PS C:\\Kumo\\spatial-engine> ${cmd}\n[OK] Script executed.\n[SUCCESS] Workbench listener active on 127.0.0.1:4429.`;
+        const out = `PS ${cwd}> ${cmd}\n[OK] Script executed successfully.`;
         card.data.output = out;
         if (logView) logView.textContent = out;
         onSave?.();
         onToast?.('✓ Command completed');
       }
     } catch (err) {
-      const out = `PS C:\\Kumo\\spatial-engine> ${cmd}\n[ERROR] ${err.message}`;
+      const out = `PS ${cwd}> ${cmd}\n[ERROR] ${err.message}`;
       card.data.output = out;
       if (logView) logView.textContent = out;
       onSave?.();
@@ -157,7 +157,8 @@ export function attachCodeEvents(el, card, onSave, onToast) {
 
   // Clear log
   el.querySelector('.code-clear-btn')?.addEventListener('click', () => {
-    const out = 'PS C:\\Kumo\\spatial-engine> Console output cleared.';
+    const cwd = card.data.cwd || 'Workspace';
+    const out = `PS ${cwd}> Console output cleared.`;
     card.data.output = out;
     if (logView) logView.textContent = out;
     onSave?.();

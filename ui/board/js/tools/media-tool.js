@@ -3,8 +3,9 @@ import { runSystemAction } from '../actions.js';
 
 export function renderMediaHTML(card) {
   const data = card.data || {};
-  const track = data.track || 'Midnight City';
-  const artist = data.artist || 'M83 • Spotify Session';
+  const isPlaying = data.isPlaying || false;
+  const track = data.track || 'Media Controller Idle';
+  const artist = data.artist || 'Spotify / System Media • Click Play or Launch App';
 
   return `<header class="h-12 bg-secondary-container/40 border-b border-secondary-container/50 px-4 flex items-center justify-between select-none cursor-grab" data-drag-handle="${card.id}">
       <div class="flex items-center gap-2.5">
@@ -19,7 +20,7 @@ export function renderMediaHTML(card) {
         </div>
       </div>
       <div class="flex items-center gap-2">
-        <span class="px-2 py-0.5 rounded-full text-label-sm font-label-sm bg-emerald-100 text-emerald-800 font-medium">SMTC Active</span>
+        <span class="px-2 py-0.5 rounded-full text-label-sm font-label-sm ${isPlaying ? 'bg-emerald-100 text-emerald-800' : 'bg-surface-container-highest text-secondary'} font-medium media-status-pill">${isPlaying ? 'Playing' : 'Ready'}</span>
         <span class="material-symbols-outlined text-secondary text-[18px]">drag_indicator</span>
       </div>
     </header>
@@ -30,24 +31,24 @@ export function renderMediaHTML(card) {
           <span class="material-symbols-outlined text-[24px]">music_note</span>
         </div>
         <div class="flex flex-col min-w-0 flex-1">
-          <span class="font-semibold text-body-md truncate">${track}</span>
-          <span class="text-label-sm text-secondary truncate">${artist}</span>
+          <span class="font-semibold text-body-md truncate media-track-title">${track}</span>
+          <span class="text-label-sm text-secondary truncate media-artist-title">${artist}</span>
         </div>
       </div>
 
       <div class="flex items-center justify-center gap-3 pt-1">
-        <button class="btn-prev w-10 h-10 rounded-full bg-surface-container-high hover:bg-surface-container-highest active:scale-95 flex items-center justify-center transition-all" title="Previous">
+        <button class="btn-prev w-10 h-10 rounded-full bg-surface-container-high hover:bg-surface-container-highest active:scale-95 flex items-center justify-center transition-all cursor-pointer" title="Previous Track">
           <span class="material-symbols-outlined text-[20px]">skip_previous</span>
         </button>
-        <button class="btn-play w-12 h-12 rounded-full bg-primary text-white hover:bg-primary/90 active:scale-95 flex items-center justify-center shadow-md transition-all" title="Play / Pause">
-          <span class="material-symbols-outlined text-[24px]">play_arrow</span>
+        <button class="btn-play w-12 h-12 rounded-full bg-primary text-white hover:bg-primary/90 active:scale-95 flex items-center justify-center shadow-md transition-all cursor-pointer" title="Play / Pause">
+          <span class="material-symbols-outlined text-[24px] play-pause-icon">${isPlaying ? 'pause' : 'play_arrow'}</span>
         </button>
-        <button class="btn-next w-10 h-10 rounded-full bg-surface-container-high hover:bg-surface-container-highest active:scale-95 flex items-center justify-center transition-all" title="Next">
+        <button class="btn-next w-10 h-10 rounded-full bg-surface-container-high hover:bg-surface-container-highest active:scale-95 flex items-center justify-center transition-all cursor-pointer" title="Next Track">
           <span class="material-symbols-outlined text-[20px]">skip_next</span>
         </button>
-        <button class="btn-focus-spotify ml-auto px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-700 text-label-sm font-semibold hover:bg-emerald-100 transition-all flex items-center gap-1">
+        <button class="btn-focus-spotify ml-auto px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-700 text-label-sm font-semibold hover:bg-emerald-100 transition-all flex items-center gap-1 cursor-pointer">
           <span class="material-symbols-outlined text-[14px]">open_in_new</span>
-          <span>App</span>
+          <span>Spotify</span>
         </button>
       </div>
     </div>`;
@@ -55,22 +56,35 @@ export function renderMediaHTML(card) {
 
 export function attachMediaEvents(el, card, onSave, onToast) {
   el.querySelector('.btn-play')?.addEventListener('click', async () => {
+    card.data.isPlaying = !card.data.isPlaying;
+    if (card.data.isPlaying && !card.data.track) {
+      card.data.track = 'Streaming Media Session';
+      card.data.artist = 'System Audio Stream Active';
+    }
+    const icon = el.querySelector('.play-pause-icon');
+    if (icon) icon.textContent = card.data.isPlaying ? 'pause' : 'play_arrow';
+    const pill = el.querySelector('.media-status-pill');
+    if (pill) {
+      pill.textContent = card.data.isPlaying ? 'Playing' : 'Ready';
+      pill.className = `px-2 py-0.5 rounded-full text-label-sm font-label-sm ${card.data.isPlaying ? 'bg-emerald-100 text-emerald-800' : 'bg-surface-container-highest text-secondary'} font-medium media-status-pill`;
+    }
     await runSystemAction('media.playPause', {}, onToast);
-    onToast?.('Playback toggled');
+    onSave?.();
+    onToast?.(card.data.isPlaying ? '▶ Playback started' : '⏸ Playback paused');
   });
 
   el.querySelector('.btn-next')?.addEventListener('click', async () => {
     await runSystemAction('media.next', {}, onToast);
-    onToast?.('Next track');
+    onToast?.('⏭ Next track signal dispatched');
   });
 
   el.querySelector('.btn-prev')?.addEventListener('click', async () => {
     await runSystemAction('media.previous', {}, onToast);
-    onToast?.('Previous track');
+    onToast?.('⏮ Previous track signal dispatched');
   });
 
   el.querySelector('.btn-focus-spotify')?.addEventListener('click', () => {
     runSystemAction('app.open', { name: 'spotify' }, onToast);
-    onToast?.('Opening Spotify...');
+    onToast?.('Opening Spotify client...');
   });
 }
