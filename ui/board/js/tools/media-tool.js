@@ -55,9 +55,37 @@ export function renderMediaHTML(card) {
 }
 
 export function attachMediaEvents(el, card, onSave, onToast) {
+  async function refreshMedia() {
+    try {
+      const res = await runSystemAction('media.status');
+      if (res?.ok && res?.result) {
+        const { isPlaying, artist, track } = res.result;
+        card.data.isPlaying = isPlaying;
+        if (track) card.data.track = track;
+        if (artist) card.data.artist = artist;
+
+        const trackEl = el.querySelector('.media-track-title');
+        const artistEl = el.querySelector('.media-artist-title');
+        const icon = el.querySelector('.play-pause-icon');
+        const pill = el.querySelector('.media-status-pill');
+
+        if (trackEl && card.data.track) trackEl.textContent = card.data.track;
+        if (artistEl && card.data.artist) artistEl.textContent = card.data.artist;
+        if (icon) icon.textContent = isPlaying ? 'pause' : 'play_arrow';
+        if (pill) {
+          pill.textContent = isPlaying ? 'Playing' : 'Ready';
+          pill.className = `px-2 py-0.5 rounded-full text-label-sm font-label-sm ${isPlaying ? 'bg-emerald-100 text-emerald-800' : 'bg-surface-container-highest text-secondary'} font-medium media-status-pill`;
+        }
+      }
+    } catch (_) {}
+  }
+
+  // Initial poll on mount
+  refreshMedia();
+
   el.querySelector('.btn-play')?.addEventListener('click', async () => {
     card.data.isPlaying = !card.data.isPlaying;
-    if (card.data.isPlaying && !card.data.track) {
+    if (card.data.isPlaying && (!card.data.track || card.data.track === 'Media Controller Idle')) {
       card.data.track = 'Streaming Media Session';
       card.data.artist = 'System Audio Stream Active';
     }
@@ -71,20 +99,24 @@ export function attachMediaEvents(el, card, onSave, onToast) {
     await runSystemAction('media.playPause', {}, onToast);
     onSave?.();
     onToast?.(card.data.isPlaying ? '▶ Playback started' : '⏸ Playback paused');
+    setTimeout(refreshMedia, 600);
   });
 
   el.querySelector('.btn-next')?.addEventListener('click', async () => {
     await runSystemAction('media.next', {}, onToast);
     onToast?.('⏭ Next track signal dispatched');
+    setTimeout(refreshMedia, 600);
   });
 
   el.querySelector('.btn-prev')?.addEventListener('click', async () => {
     await runSystemAction('media.previous', {}, onToast);
     onToast?.('⏮ Previous track signal dispatched');
+    setTimeout(refreshMedia, 600);
   });
 
-  el.querySelector('.btn-focus-spotify')?.addEventListener('click', () => {
-    runSystemAction('app.open', { name: 'spotify' }, onToast);
+  el.querySelector('.btn-focus-spotify')?.addEventListener('click', async () => {
     onToast?.('Opening Spotify client...');
+    await runSystemAction('app.open', { name: 'spotify' }, onToast);
+    setTimeout(refreshMedia, 1200);
   });
 }

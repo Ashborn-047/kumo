@@ -43,6 +43,7 @@ const ACTIONS = {
   'media.mute':       { tier: TIER.GREEN,  fn: () => sendMediaKey('Mute') },
   'media.volUp':      { tier: TIER.GREEN,  fn: () => sendMediaKey('VolumeUp') },
   'media.volDown':    { tier: TIER.GREEN,  fn: () => sendMediaKey('VolumeDown') },
+  'media.status':     { tier: TIER.GREEN,  fn: getMediaStatus },
   'mascot.sleep':     { tier: TIER.GREEN,  fn: sleepMascot },
 
   // YELLOW — needs confirmation (or auto-confirm in settings)
@@ -267,19 +268,38 @@ function openApp({ name, appId, app }) {
 
   // Smart aliases for editor and terminal
   if (cleanName === 'code' || cleanName === 'vscode' || cleanName === 'editor') {
-    // Check if code is available or Cursor is installed
-    target = 'code';
-    try {
-      const caps = systemScanner.getCapabilitiesSync();
-      const devApps = caps?.categories?.development || [];
-      const hasCode = devApps.some(a => a.id === 'visual-studio-code' || a.id === 'code');
-      const hasCursor = devApps.find(a => a.id === 'cursor' || a.name.toLowerCase().includes('cursor'));
-      if (!hasCode && hasCursor) {
-        target = hasCursor.appId || 'Anysphere.Cursor';
-      }
-    } catch (_) {}
+    const cwd = process.cwd();
+    return new Promise((resolve) => {
+      execFile('powershell.exe', ['-NoProfile', '-Command', `
+        if (Get-Command cursor -ErrorAction SilentlyContinue) {
+          Start-Process 'cursor.cmd' -ArgumentList '${cwd}' -WorkingDirectory '${cwd}'
+          Write-Output 'OK:cursor'
+        } elseif (Get-Command code -ErrorAction SilentlyContinue) {
+          Start-Process 'code' -ArgumentList '${cwd}' -WorkingDirectory '${cwd}'
+          Write-Output 'OK:code'
+        } else {
+          Start-Process 'shell:AppsFolder\\Anysphere.Cursor' -ErrorAction SilentlyContinue
+          Write-Output 'OK:cursor-app'
+        }
+      `], { timeout: 5000 }, (err, stdout) => {
+        resolve({ opened: stdout?.trim() || 'code' });
+      });
+    });
   } else if (cleanName === 'terminal' || cleanName === 'wt') {
-    target = 'powershell.exe';
+    const cwd = process.cwd();
+    return new Promise((resolve) => {
+      execFile('powershell.exe', ['-NoProfile', '-Command', `
+        if (Get-Command wt -ErrorAction SilentlyContinue) {
+          Start-Process 'wt.exe' -ArgumentList '-d', '${cwd}'
+          Write-Output 'OK:wt'
+        } else {
+          Start-Process 'powershell.exe' -WorkingDirectory '${cwd}'
+          Write-Output 'OK:powershell'
+        }
+      `], { timeout: 5000 }, (err, stdout) => {
+        resolve({ opened: stdout?.trim() || 'powershell' });
+      });
+    });
   }
 
   // Look up in system capabilities cache
@@ -526,6 +546,32 @@ function sendMediaKey(actionType = 'Toggle') {
     execFile('powershell.exe', ['-NoProfile', '-Command', ps], { timeout: 3500 }, (err, stdout, stderr) => {
       if (err) reject(new Error(stderr || err.message));
       else resolve({ executed: actionType });
+    });
+  });
+}
+
+function getMediaStatus() {
+  return new Promise((resolve) => {
+    const ps = `
+      $sp = Get-Process -Name Spotify -ErrorAction SilentlyContinue | Where-Object { \${'$_'}.MainWindowTitle -ne '' } | Select-Object -First 1
+      if ($sp -and $sp.MainWindowTitle -and $sp.MainWindowTitle -ne 'Spotify' -and $sp.MainWindowTitle -notlike 'Spotify *') {
+        $parts = $sp.MainWindowTitle -split ' - ', 2
+        if ($parts.Count -ge 2) {
+          @{ isPlaying = $true; artist = $parts[0].Trim(); track = $parts[1].Trim() } | ConvertTo-Json -Compress
+        } else {
+          @{ isPlaying = $true; artist = 'Spotify'; track = $sp.MainWindowTitle.Trim() } | ConvertTo-Json -Compress
+        }
+      } else {
+        @{ isPlaying = [bool]$sp; artist = if ($sp) { 'Spotify Desktop' } else { 'Spotify / System Media' }; track = if ($sp) { 'Spotify Ready' } else { 'Media Controller Idle' } } | ConvertTo-Json -Compress
+      }
+    `;
+    execFile('powershell.exe', ['-NoProfile', '-Command', ps], { timeout: 3500 }, (err, stdout) => {
+      try {
+        const parsed = JSON.parse(stdout?.trim() || '{}');
+        resolve(parsed);
+      } catch {
+        resolve({ isPlaying: false, artist: 'Spotify / System Media', track: 'Media Controller Idle' });
+      }
     });
   });
 }

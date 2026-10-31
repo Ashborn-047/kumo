@@ -42,11 +42,11 @@ export function renderWorkspaceHTML(card) {
       </div>
 
       <div class="flex gap-2.5 pt-1">
-        <button class="btn-open-code flex-1 py-2 px-3 rounded-xl bg-primary text-white text-body-sm font-medium hover:bg-primary/90 active:scale-98 transition-all flex items-center justify-center gap-1.5 shadow-sm cursor-pointer">
+        <button class="btn-open-code flex-1 py-2 px-3 rounded-xl bg-primary text-white text-body-sm font-medium hover:bg-primary/90 active:scale-98 transition-all flex items-center justify-center gap-1.5 shadow-sm cursor-pointer" title="Open workspace in Cursor / VS Code">
           <span class="material-symbols-outlined text-[16px]">code</span>
-          <span>Open in VS Code</span>
+          <span>Open in Editor</span>
         </button>
-        <button class="btn-git-status flex-1 py-2 px-3 rounded-xl bg-surface-container-high text-on-surface text-body-sm font-medium hover:bg-surface-container-highest active:scale-98 transition-all flex items-center justify-center gap-1.5 cursor-pointer">
+        <button class="btn-git-status flex-1 py-2 px-3 rounded-xl bg-surface-container-high text-on-surface text-body-sm font-medium hover:bg-surface-container-highest active:scale-98 transition-all flex items-center justify-center gap-1.5 cursor-pointer" title="Open PowerShell terminal in workspace root">
           <span class="material-symbols-outlined text-[16px]">terminal</span>
           <span>Open Terminal</span>
         </button>
@@ -55,13 +55,17 @@ export function renderWorkspaceHTML(card) {
 }
 
 export function attachWorkspaceEvents(el, card, onSave, onToast) {
-  el.querySelector('.btn-open-code')?.addEventListener('click', () => {
+  el.querySelector('.btn-open-code')?.addEventListener('click', async () => {
     onToast?.('Launching code editor in workspace root...');
-    runSystemAction('app.open', { name: 'code' }, onToast);
+    const res = await runSystemAction('app.open', { name: 'code' }, onToast);
+    if (res?.ok) onToast?.('✓ Code editor launched in project root');
+    else onToast?.(`Notice: ${res?.error || 'Editor launched'}`);
   });
 
-  el.querySelector('.btn-git-status')?.addEventListener('click', () => {
+  el.querySelector('.btn-git-status')?.addEventListener('click', async () => {
     onToast?.('Launching terminal in project root...');
-    runSystemAction('app.open', { name: 'terminal' }, onToast);
+    const res = await runSystemAction('app.open', { name: 'terminal' }, onToast);
+    if (res?.ok) onToast?.('✓ Terminal launched in project root');
+    else onToast?.(`Notice: ${res?.error || 'Terminal launched'}`);
   });
 }

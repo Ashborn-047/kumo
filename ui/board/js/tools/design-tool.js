@@ -2,10 +2,19 @@
 
 import { runSystemAction } from '../actions.js';
 
+const SWATCHES = [
+  { name: 'Lilac',  hex: '#eadfff', bg: 'bg-purple-50', dot: '#eadfff' },
+  { name: 'Sky',    hex: '#dcedff', bg: 'bg-blue-50/60', dot: '#dcedff' },
+  { name: 'Matcha', hex: '#dcf5e7', bg: 'bg-emerald-50/60', dot: '#dcf5e7' },
+  { name: 'Peach',  hex: '#ffe9d6', bg: 'bg-orange-50/60', dot: '#ffe9d6' },
+  { name: 'Solar',  hex: '#fff5c8', bg: 'bg-amber-50/60', dot: '#fff5c8' },
+];
+
 export function renderDesignHTML(card) {
   const mood = card.data.activeMood || 'Idle';
   const intensity = card.data.glowIntensity || 72;
   const activePalette = card.data.activePaletteIndex || 0;
+  const activeSwatch = SWATCHES[activePalette] || SWATCHES[0];
 
   // Render mood-reactive SVG facial expressions
   let eyesHTML = '<circle cx="48" cy="54" fill="#4a3abe" r="3.5"/><circle cx="72" cy="54" fill="#4a3abe" r="3.5"/>';
@@ -51,7 +60,7 @@ export function renderDesignHTML(card) {
       <!-- Mascot Interactive Preview Viewport -->
       <div class="md:col-span-5 bg-gradient-to-b from-primary-fixed/20 to-surface-container-low rounded-2xl p-6 flex flex-col items-center justify-center relative overflow-hidden ring-1 ring-outline-variant/30 min-h-[220px]">
         <!-- Glowing Aura Backdrop -->
-        <div class="absolute w-40 h-40 bg-primary-fixed/60 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="design-mascot-aura absolute w-40 h-40 rounded-full blur-3xl pointer-events-none transition-colors duration-500" style="background-color: ${activeSwatch.hex}; opacity: 0.6;"></div>
 
         <!-- SVG Vector Mascot (Cotton Cloud) -->
         <div class="design-mascot-avatar relative z-10 flex flex-col items-center cursor-pointer group active:scale-95 transition-transform duration-300">
@@ -92,13 +101,7 @@ export function renderDesignHTML(card) {
 
           <!-- 5 Curated Pastel Swatches -->
           <div class="grid grid-cols-5 gap-2.5">
-            ${[
-              { name: 'Lilac',  hex: '#eadfff', bg: 'bg-purple-50', dot: '#eadfff' },
-              { name: 'Sky',    hex: '#dcedff', bg: 'bg-blue-50/60', dot: '#dcedff' },
-              { name: 'Matcha', hex: '#dcf5e7', bg: 'bg-emerald-50/60', dot: '#dcf5e7' },
-              { name: 'Peach',  hex: '#ffe9d6', bg: 'bg-orange-50/60', dot: '#ffe9d6' },
-              { name: 'Solar',  hex: '#fff5c8', bg: 'bg-amber-50/60', dot: '#fff5c8' },
-            ].map((swatch, idx) => `
+            ${SWATCHES.map((swatch, idx) => `
               <div class="design-swatch-card p-3 rounded-xl ${swatch.bg} ${activePalette === idx ? 'ring-2 ring-primary-container shadow-sm' : 'ring-1 ring-outline-variant/30 hover:ring-primary-container'} flex flex-col items-center gap-1 cursor-pointer transition-all active:scale-95" data-idx="${idx}" data-color="${swatch.hex}" title="Select ${swatch.name}">
                 <div class="w-8 h-8 rounded-full shadow-sm border border-black/10" style="background-color: ${swatch.dot}"></div>
                 <span class="text-label-sm font-label-sm text-on-surface font-semibold">${swatch.name}</span>
@@ -145,6 +148,7 @@ export function attachDesignEvents(el, card, onSave, onToast) {
       card.data.activeMood = btn.dataset.mood;
       el.innerHTML = renderDesignHTML(card);
       attachDesignEvents(el, card, onSave, onToast);
+      window.goo?.saveSettings?.({ companionMood: card.data.activeMood });
       onSave?.();
       onToast?.(`Mochi mood set to: ${card.data.activeMood}`);
     };
@@ -157,6 +161,7 @@ export function attachDesignEvents(el, card, onSave, onToast) {
     card.data.activeMood = next;
     el.innerHTML = renderDesignHTML(card);
     attachDesignEvents(el, card, onSave, onToast);
+    window.goo?.saveSettings?.({ companionMood: next });
     onSave?.();
     onToast?.(`Mochi: ${next}!`);
   });
@@ -175,12 +180,19 @@ export function attachDesignEvents(el, card, onSave, onToast) {
     cardEl.onclick = () => {
       const idx = parseInt(cardEl.dataset.idx, 10);
       card.data.activePaletteIndex = idx;
+      const current = SWATCHES[idx] || SWATCHES[0];
+      card.data.selectedColor = current.hex;
+      card.data.selectedPalette = current.name;
+
+      const aura = el.querySelector('.design-mascot-aura');
+      if (aura) aura.style.backgroundColor = current.hex;
+
       el.querySelectorAll('.design-swatch-card').forEach((c) => {
         c.className = c.className.replace('ring-2 ring-primary-container shadow-sm', 'ring-1 ring-outline-variant/30 hover:ring-primary-container');
       });
       cardEl.className = cardEl.className.replace('ring-1 ring-outline-variant/30 hover:ring-primary-container', 'ring-2 ring-primary-container shadow-sm');
       onSave?.();
-      onToast?.(`Palette: ${cardEl.dataset.color} applied`);
+      onToast?.(`Palette: ${current.name} (${current.hex}) selected`);
     };
   });
 
@@ -200,14 +212,39 @@ export function attachDesignEvents(el, card, onSave, onToast) {
 
   // Copy CSS Tokens
   el.querySelector('.design-copy-tokens-btn')?.addEventListener('click', async () => {
-    const tokens = `:root {\n  --kumo-primary: #4a3abe;\n  --kumo-primary-container: #6355d8;\n  --kumo-surface: #fbf8ff;\n  --kumo-glow: ${card.data.glowIntensity || 72}%;\n}`;
+    const idx = card.data.activePaletteIndex || 0;
+    const current = SWATCHES[idx] || SWATCHES[0];
+    const val = card.data.glowIntensity || 72;
+    const tokens = `:root {\n  --kumo-palette: "${current.name}";\n  --kumo-accent: ${current.hex};\n  --kumo-glow-blur: ${val}%;\n  --kumo-diffusion: ${Math.round(val / 4.5)}px;\n}`;
     await runSystemAction('clipboard.write', { text: tokens }, onToast);
-    onToast?.('CSS tokens copied to clipboard');
+    onToast?.(`Copied ${current.name} design tokens to clipboard!`);
   });
 
   // Sync to Canvas Tokens
-  el.querySelector('.design-sync-tokens-btn')?.addEventListener('click', () => {
+  el.querySelector('.design-sync-tokens-btn')?.addEventListener('click', async () => {
+    const idx = card.data.activePaletteIndex || 0;
+    const current = SWATCHES[idx] || SWATCHES[0];
+    const val = card.data.glowIntensity || 72;
+
+    const stage = document.querySelector('#canvas-stage');
+    if (stage) {
+      stage.style.backgroundColor = `${current.hex}18`;
+    }
+
+    document.documentElement.style.setProperty('--kumo-primary-container', current.hex);
+    document.documentElement.style.setProperty('--kumo-surface-container', `${current.hex}22`);
+
+    try {
+      if (window.goo?.saveSettings) {
+        await window.goo.saveSettings({
+          color: current.hex,
+          palette: current.name,
+          studioTheme: 'tactile',
+        });
+      }
+    } catch (_) {}
+
     onSave?.();
-    onToast?.('✓ Synced design tokens across spatial workbench');
+    onToast?.(`✓ Applied ${current.name} palette to canvas & companion!`);
   });
 }
