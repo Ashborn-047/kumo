@@ -1,6 +1,6 @@
 // ── ui/board/js/state.js: Workbench State & Presets ──
 
-export const BOARD_STORAGE_KEY = 'kumo:assistant_board_v5';
+export const BOARD_STORAGE_KEY = 'kumo:assistant_board_v6';
 
 export const DESIGN_PALETTES = [
   { name: 'Kumo Classic', colors: ['#EADFFF', '#DCEDFF', '#DCF5E7', '#FFE9D6', '#FFF5C8'] },

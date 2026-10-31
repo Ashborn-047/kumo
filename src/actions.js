@@ -213,8 +213,10 @@ function searchFiles({ query, directory }) {
   });
 }
 
-function openApp({ name }) {
-  const cleanName = String(name).toLowerCase().trim();
+function openApp({ name, appId, app }) {
+  const query = String(appId || name || app || '').trim();
+  const cleanName = query.toLowerCase();
+
   const known = {
     calculator: 'calc.exe',
     calc: 'calc.exe',
@@ -222,19 +224,15 @@ function openApp({ name }) {
     paint: 'mspaint.exe',
     mspaint: 'mspaint.exe',
     explorer: 'explorer.exe',
-    code: 'code',
-    vscode: 'code',
-    terminal: 'wt.exe',
-    edge: 'msedge',
-    chrome: 'chrome',
-    brave: 'brave',
+    files: 'explorer.exe',
+    chrome: 'chrome.exe',
+    edge: 'msedge.exe',
+    brave: 'brave.exe',
     spotify: 'spotify:',
     whatsapp: 'whatsapp:',
     telegram: 'tg:',
     steam: 'steam:',
     discord: 'discord:',
-    claude: 'shell:AppsFolder\\AnthropicPBC.Claude_fnn82j28hfe8t!Claude',
-    chatgpt: 'shell:AppsFolder\\OpenAI.ChatGPT-Desktop_2p2nqsd0c76g0!ChatGPT',
     word: 'winword',
     excel: 'excel',
     powerpoint: 'powerpnt',
@@ -246,30 +244,50 @@ function openApp({ name }) {
     clock: 'ms-clock:',
     photos: 'ms-photos:',
     store: 'ms-windows-store:',
-    blender: 'shell:AppsFolder\\BlenderFoundation.Blender_ppwjx1n5r4v9t!BLENDER',
     taskmgr: 'taskmgr.exe',
     'task manager': 'taskmgr.exe',
     snippingtool: 'SnippingTool.exe',
     snip: 'SnippingTool.exe',
+    powershell: 'powershell.exe',
+    pwsh: 'powershell.exe',
+    cmd: 'cmd.exe',
   };
 
   let target = known[cleanName];
 
-  // Check deep system scan capabilities cache for exact or fuzzy match across all 155+ host apps
+  // Smart aliases for editor and terminal
+  if (cleanName === 'code' || cleanName === 'vscode' || cleanName === 'editor') {
+    // Check if code is available or Cursor is installed
+    target = 'code';
+    try {
+      const caps = systemScanner.getCapabilitiesSync();
+      const devApps = caps?.categories?.development || [];
+      const hasCode = devApps.some(a => a.id === 'visual-studio-code' || a.id === 'code');
+      const hasCursor = devApps.find(a => a.id === 'cursor' || a.name.toLowerCase().includes('cursor'));
+      if (!hasCode && hasCursor) {
+        target = hasCursor.appId || 'Anysphere.Cursor';
+      }
+    } catch (_) {}
+  } else if (cleanName === 'terminal' || cleanName === 'wt') {
+    target = 'powershell.exe';
+  }
+
+  // Look up in system capabilities cache
   if (!target) {
     try {
       const caps = systemScanner.getCapabilitiesSync();
       if (caps && caps.categories) {
         for (const cat of Object.keys(caps.categories)) {
           const match = caps.categories[cat].find(a =>
-            a.name.toLowerCase() === cleanName ||
+            a.appId === query ||
+            a.appId?.toLowerCase() === cleanName ||
             a.id === cleanName ||
-            (cleanName.length >= 3 && a.name.toLowerCase().includes(cleanName))
+            a.name.toLowerCase() === cleanName ||
+            (cleanName.length >= 3 && a.name.toLowerCase().includes(cleanName)) ||
+            (cleanName.length >= 3 && cleanName.includes(a.name.toLowerCase()))
           );
           if (match && match.appId) {
-            target = (match.appId.includes('\\') || match.appId.includes('.') || match.appId.includes('!'))
-              ? `shell:AppsFolder\\${match.appId}`
-              : match.appId;
+            target = match.appId;
             break;
           }
         }
@@ -277,36 +295,63 @@ function openApp({ name }) {
     } catch {}
   }
 
-  if (!target) target = name;
+  if (!target) target = query;
 
   return new Promise((resolve, reject) => {
-    const safeTarget = target.replace(/['"`;$()]/g, '');
+    // If target exists as a real file path
+    if (fs.existsSync(target)) {
+      shell.openPath(target).then((res) => {
+        if (!res) return resolve({ opened: target });
+        execFile('powershell.exe', ['-NoProfile', '-Command', `Start-Process '${target}'`], (err) => {
+          if (!err) resolve({ opened: target });
+          else reject(new Error(`Could not open path: ${target}`));
+        });
+      });
+      return;
+    }
 
-    // Non-blocking Windows kernel process dispatcher via Start-Process
-    const psCmd = `try { Start-Process '${safeTarget}' -ErrorAction Stop; Write-Output 'OK' } catch { Write-Error $_.Exception.Message }`;
-    execFile('powershell.exe', ['-NoProfile', '-Command', psCmd], { timeout: 3500 }, (err, stdout) => {
+    const safeTarget = target.replace(/['"`;$()]/g, '');
+    let psCmd = '';
+
+    if (safeTarget.startsWith('shell:AppsFolder\\')) {
+      psCmd = `Start-Process '${safeTarget}' -ErrorAction Stop`;
+    } else if (safeTarget.includes('\\') || safeTarget.includes('.') || safeTarget.includes('!') || safeTarget.startsWith('{') || safeTarget.startsWith('Microsoft.')) {
+      psCmd = `Start-Process 'shell:AppsFolder\\${safeTarget}' -ErrorAction Stop`;
+    } else if (safeTarget.endsWith(':') || safeTarget.endsWith('.exe')) {
+      psCmd = `Start-Process '${safeTarget}' -ErrorAction Stop`;
+    } else {
+      psCmd = `Start-Process '${safeTarget}' -ErrorAction Stop`;
+    }
+
+    execFile('powershell.exe', ['-NoProfile', '-Command', `try { ${psCmd}; Write-Output 'OK' } catch { Write-Error $_.Exception.Message }`], { timeout: 4000 }, (err, stdout) => {
       if (!err && stdout && stdout.includes('OK')) {
         return resolve({ opened: target });
       }
 
-      // Dynamic fallback: Search installed StartApps in PowerShell
-      const cleanSearch = cleanName.replace(/['"`;$()]/g, '');
-      const psSearch = `Get-StartApps | Where-Object { $_.Name -like '*${cleanSearch}*' } | Select-Object -First 1 -ExpandProperty AppID`;
-      execFile('powershell.exe', ['-NoProfile', '-Command', psSearch], { timeout: 4000 }, (psErr, psOut) => {
-        const appId = psOut?.trim();
-        if (appId) {
-          execFile('powershell.exe', ['-NoProfile', '-Command', `Start-Process 'shell:AppsFolder\\${appId}'`], (appErr) => {
-            if (appErr) reject(new Error(`Could not open app: ${name}`));
-            else resolve({ opened: appId });
-          });
-        } else if (fs.existsSync(target)) {
-          shell.openPath(target).then((res) => {
-            if (res) reject(new Error(`Could not open app: ${name}`));
-            else resolve({ opened: target });
-          });
-        } else {
-          reject(new Error(`Application "${name}" was not found on your system.`));
+      // Try alternate without shell:AppsFolder or with it
+      const altCmd = psCmd.includes('shell:AppsFolder')
+        ? `Start-Process '${safeTarget}' -ErrorAction Stop`
+        : `Start-Process 'shell:AppsFolder\\${safeTarget}' -ErrorAction Stop`;
+
+      execFile('powershell.exe', ['-NoProfile', '-Command', `try { ${altCmd}; Write-Output 'OK' } catch { Write-Error $_.Exception.Message }`], { timeout: 4000 }, (err2, stdout2) => {
+        if (!err2 && stdout2 && stdout2.includes('OK')) {
+          return resolve({ opened: target });
         }
+
+        // Dynamic search in StartApps
+        const cleanSearch = cleanName.replace(/['"`;$()]/g, '');
+        const psSearch = `Get-StartApps | Where-Object { $_.Name -like '*${cleanSearch}*' -or $_.AppID -like '*${cleanSearch}*' } | Select-Object -First 1 -ExpandProperty AppID`;
+        execFile('powershell.exe', ['-NoProfile', '-Command', psSearch], { timeout: 4000 }, (psErr, psOut) => {
+          const foundAppId = psOut?.trim();
+          if (foundAppId) {
+            execFile('powershell.exe', ['-NoProfile', '-Command', `Start-Process 'shell:AppsFolder\\${foundAppId}'`], (appErr) => {
+              if (appErr) reject(new Error(`Could not open app: ${name}`));
+              else resolve({ opened: foundAppId });
+            });
+          } else {
+            reject(new Error(`Application "${name}" was not found on your system.`));
+          }
+        });
       });
     });
   });

@@ -102,11 +102,12 @@ export function attachLauncherEvents(el, card, onSave, onToast) {
   // Launch App
   el.querySelectorAll('.app-slot-tile').forEach((tile) => {
     tile.onclick = async () => {
-      const app = tile.dataset.appId || tile.dataset.appName;
-      onToast?.(`Launching ${tile.dataset.appName}...`);
-      const res = await runSystemAction('app.open', { name: app }, onToast);
+      const appName = tile.dataset.appName;
+      const appId = tile.dataset.appId;
+      onToast?.(`Launching ${appName}...`);
+      const res = await runSystemAction('app.open', { name: appName, appId }, onToast);
       if (res?.ok) {
-        onToast?.(`Launched ${tile.dataset.appName}`);
+        onToast?.(`✓ Launched ${appName}`);
       } else {
         onToast?.(`Notice: ${res?.error || 'Action dispatched'}`);
       }
