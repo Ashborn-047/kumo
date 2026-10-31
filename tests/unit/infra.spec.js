@@ -200,14 +200,23 @@ test.describe('Infrastructure: Execution & Security Gating', () => {
 
   test('forwards conversation history seamlessly through intent router', async () => {
     const ai = require('../../src/ai');
+    const settings = require('../../src/settings');
     let capturedHistory = null;
     let capturedMsg = null;
     const origSend = ai.sendMessage;
+    const origGet = settings.get;
+    const origIsOnline = intentRouter.isOnline;
+
     ai.sendMessage = async (msg, hist) => {
       capturedMsg = msg;
       capturedHistory = hist;
       return 'Test reply';
     };
+    settings.get = () => ({
+      ...origGet(),
+      apiKey: 'mock-api-key',
+    });
+    intentRouter.isOnline = async () => true;
 
     try {
       const mockHistory = [
@@ -219,6 +228,8 @@ test.describe('Infrastructure: Execution & Security Gating', () => {
       expect(capturedHistory).toEqual(mockHistory);
     } finally {
       ai.sendMessage = origSend;
+      settings.get = origGet;
+      intentRouter.isOnline = origIsOnline;
     }
   });
 });

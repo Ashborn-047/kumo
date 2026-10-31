@@ -152,10 +152,14 @@ const APP_ALIASES = {
  */
 async function isOnline() {
   try {
-    const { exec } = require('child_process');
+    const dns = require('dns');
     return new Promise((resolve) => {
-      exec('ping -n 1 -w 1500 8.8.8.8', { timeout: 3000 }, (err, stdout) => {
-        resolve(!err && stdout.includes('TTL='));
+      dns.lookup('openrouter.ai', (err) => {
+        if (!err) return resolve(true);
+        const { exec } = require('child_process');
+        exec('ping -n 1 -w 1500 8.8.8.8', { timeout: 3000 }, (pErr, stdout) => {
+          resolve(!pErr && stdout.includes('TTL='));
+        });
       });
     });
   } catch {
@@ -313,6 +317,11 @@ async function processOffline(text) {
         reply: formatOfflineSuccess('app.open', { name: directApp }, result),
         actionResults,
       };
+    } else {
+      return {
+        reply: `⚠️ ${result.error || 'Could not launch that application.'}`,
+        actionResults,
+      };
     }
   }
 
@@ -435,7 +444,7 @@ async function route(text, historyOrOnChunk = [], maybeOnChunk = null) {
   }
 
   // Check connectivity
-  const online = await isOnline();
+  const online = typeof module.exports.isOnline === 'function' ? await module.exports.isOnline() : await isOnline();
 
   if (!online) {
     const result = await processOffline(text);
