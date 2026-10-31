@@ -3,10 +3,31 @@
 // Phase 0 + 1: Overlay window, tray, global hotkey, AI chat.
 // ============================================================
 
+const electron = require('electron');
+
+// When spawned from an IDE terminal (VS Code / Cursor / Antigravity),
+// ELECTRON_RUN_AS_NODE is often inherited in the environment, causing
+// electron to run as raw Node.js where require('electron') returns the
+// path string to electron.exe instead of the Electron API.
+// Detect this condition and re-spawn cleanly without ELECTRON_RUN_AS_NODE.
+if (typeof electron === 'string' || !electron.app) {
+  const { spawn } = require('child_process');
+  const path = require('path');
+  const env = { ...process.env };
+  delete env.ELECTRON_RUN_AS_NODE;
+  const electronExe = typeof electron === 'string' ? electron : (process.env.ELECTRON_EXEC_PATH || 'electron');
+  const child = spawn(electronExe, [path.join(__dirname, '..'), ...process.argv.slice(2)], {
+    stdio: 'inherit',
+    env
+  });
+  child.on('close', (code) => process.exit(code ?? 0));
+  return;
+}
+
 const {
   app, BrowserWindow, ipcMain,
   globalShortcut, shell, nativeImage, Notification
-} = require('electron');
+} = electron;
 const path = require('path');
 
 const overlayManager = require('./overlay-manager');

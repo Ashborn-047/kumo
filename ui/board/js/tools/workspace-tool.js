@@ -6,7 +6,8 @@ export function renderWorkspaceHTML(card) {
   const branch = data.branch || 'main';
   const repo = data.repo || 'Local Workspace';
   const nodeVer = data.nodeVersion || (typeof process !== 'undefined' ? process.version : 'Active');
-  const envStatus = data.platform || (navigator.platform.includes('Win') ? 'Windows Native' : 'POSIX Host');
+  const isWin = typeof navigator !== 'undefined' && (/Win/i.test(navigator.userAgent || ''));
+  const envStatus = data.platform || (isWin ? 'Windows Native' : 'POSIX Host');
 
   return `<header class="h-12 bg-secondary-container/40 border-b border-secondary-container/50 px-4 flex items-center justify-between select-none cursor-grab" data-drag-handle="${card.id}">
       <div class="flex items-center gap-2.5">

@@ -57,10 +57,10 @@ export function renderMediaHTML(card) {
 export function attachMediaEvents(el, card, onSave, onToast) {
   async function refreshMedia() {
     try {
-      const res = await runSystemAction('media.status');
+      const res = await runSystemAction('media.status', {}, onToast);
       if (res?.ok && res?.result) {
         const { isPlaying, artist, track } = res.result;
-        card.data.isPlaying = isPlaying;
+        card.data.isPlaying = Boolean(isPlaying);
         if (track) card.data.track = track;
         if (artist) card.data.artist = artist;
 
@@ -77,7 +77,9 @@ export function attachMediaEvents(el, card, onSave, onToast) {
           pill.className = `px-2 py-0.5 rounded-full text-label-sm font-label-sm ${isPlaying ? 'bg-emerald-100 text-emerald-800' : 'bg-surface-container-highest text-secondary'} font-medium media-status-pill`;
         }
       }
-    } catch (_) {}
+    } catch {
+      // Audio bridge status query fallback
+    }
   }
 
   // Initial poll on mount

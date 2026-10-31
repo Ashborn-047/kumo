@@ -168,7 +168,7 @@ export function attachDesignEvents(el, card, onSave, onToast) {
 
   // Sound toggle
   el.querySelector('.design-sound-btn')?.addEventListener('click', () => {
-    card.data.soundEnabled = card.data.soundEnabled === false ? true : false;
+    card.data.soundEnabled = !card.data.soundEnabled;
     onSave?.();
     onToast?.(card.data.soundEnabled ? 'Companion audio haptics enabled' : 'Companion audio muted');
     const icon = el.querySelector('.design-sound-btn .material-symbols-outlined');
@@ -199,13 +199,16 @@ export function attachDesignEvents(el, card, onSave, onToast) {
   // Glow Slider
   const slider = el.querySelector('.design-glow-slider');
   const readout = el.querySelector('.design-glow-readout');
-  slider?.addEventListener('input', () => {
-    const val = parseInt(slider.value, 10);
+  slider?.addEventListener('input', (e) => {
+    const target = /** @type {HTMLInputElement} */ (e.target || slider);
+    const val = parseInt(target?.value || '72', 10);
     card.data.glowIntensity = val;
     if (readout) readout.textContent = `${val}% Blur / ${Math.round(val / 4.5)}px Diffusion`;
     // Apply dynamic box-shadow across cards
     document.querySelectorAll('.kumo-canvas-card').forEach((c) => {
-      c.style.boxShadow = `0px 1px 3px rgba(46,59,82,0.05), 0px ${Math.round(val / 6)}px ${Math.round(val / 2.5)}px -6px rgba(46,59,82,${(val / 700).toFixed(2)})`;
+      if (c instanceof HTMLElement) {
+        c.style.boxShadow = `0px 1px 3px rgba(46,59,82,0.05), 0px ${Math.round(val / 6)}px ${Math.round(val / 2.5)}px -6px rgba(46,59,82,${(val / 700).toFixed(2)})`;
+      }
     });
     onSave?.();
   });
@@ -224,10 +227,9 @@ export function attachDesignEvents(el, card, onSave, onToast) {
   el.querySelector('.design-sync-tokens-btn')?.addEventListener('click', async () => {
     const idx = card.data.activePaletteIndex || 0;
     const current = SWATCHES[idx] || SWATCHES[0];
-    const val = card.data.glowIntensity || 72;
 
     const stage = document.querySelector('#canvas-stage');
-    if (stage) {
+    if (stage instanceof HTMLElement) {
       stage.style.backgroundColor = `${current.hex}18`;
     }
 
@@ -235,14 +237,17 @@ export function attachDesignEvents(el, card, onSave, onToast) {
     document.documentElement.style.setProperty('--kumo-surface-container', `${current.hex}22`);
 
     try {
-      if (window.goo?.saveSettings) {
-        await window.goo.saveSettings({
+      const goo = window['goo'];
+      if (goo?.saveSettings) {
+        await goo.saveSettings({
           color: current.hex,
           palette: current.name,
           studioTheme: 'tactile',
         });
       }
-    } catch (_) {}
+    } catch {
+      // Companion IPC settings persistence fallback
+    }
 
     onSave?.();
     onToast?.(`✓ Applied ${current.name} palette to canvas & companion!`);
