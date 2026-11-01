@@ -253,3 +253,4 @@ function renderDropDOM(el, card, saveStateCb, toastCb) {
     attachDropEvents(el, card, saveStateCb, toastCb);
   }
 }
+

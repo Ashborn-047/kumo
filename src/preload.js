@@ -80,6 +80,9 @@ contextBridge.exposeInMainWorld('goo', {
   onIslandExpandChanged: (cb)          => ipcRenderer.on('island:expand-changed', (_e, d) => cb(d)),
   onIslandPopOut:        (cb)          => ipcRenderer.on('island:pop-out', (_e, d) => cb(d)),
   islandStartDrag:       (filePath)    => ipcRenderer.send('island:start-drag', filePath),
+  onClipboardChange:     (cb)          => ipcRenderer.on('island:clipboard-change', (_e, d) => cb(d)),
+  setClipboardWatch:     (enabled)     => ipcRenderer.send('island:set-clipboard-watch', Boolean(enabled)),
+  getClipboardWatch:     ()            => ipcRenderer.invoke('island:get-clipboard-watch'),
 
   // Live Windows SMTC & Media Status Bridge
   getMediaStatus:        ()            => ipcRenderer.invoke('media:get-status'),

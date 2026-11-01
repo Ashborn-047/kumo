@@ -280,6 +280,14 @@ function registerIpcHandlers({
   ipcMain.on('island:set-hit', (_event, interactive) => islandManager.setHit(interactive));
   ipcMain.on('island:set-expanded', (_event, expanded) => islandManager.setExpanded(expanded));
   ipcMain.on('island:snap-edge', (_event, edge) => islandManager.snapToEdge(edge));
+  ipcMain.on('island:set-clipboard-watch', (_event, enabled) => {
+    const clipboardWatcher = require('../clipboard-watcher');
+    clipboardWatcher.setWatching(enabled);
+  });
+  ipcMain.handle('island:get-clipboard-watch', () => {
+    const clipboardWatcher = require('../clipboard-watcher');
+    return clipboardWatcher.getWatching();
+  });
   ipcMain.handle('island:get-config', () => ({
     edge: islandManager.getEdge(),
     expanded: islandManager.isIslandExpanded(),

@@ -470,6 +470,11 @@
                   </div>
 
                   <div class="shelf-header-actions font-mono">
+                    <div class="shelf-dock-selector font-mono" id="shelf-dock-selector">
+                      <button class="dock-edge-btn active" data-edge="top" title="Dock Top Center">Top</button>
+                      <button class="dock-edge-btn" data-edge="left" title="Dock Left Edge">Left</button>
+                      <button class="dock-edge-btn" data-edge="right" title="Dock Right Edge">Right</button>
+                    </div>
                     <span class="shelf-count-badge" id="shelf-count-badge">0 items</span>
                     <button id="btn-shelf-clear" class="btn-shelf-clear" title="Clear all drops">
                       <svg class="lucide-icon icon-sm" viewBox="0 0 24 24">
@@ -496,12 +501,39 @@
                     <button class="filter-chip" data-filter="file">Files</button>
                     <button class="filter-chip" data-filter="link">Links</button>
                     <button class="filter-chip" data-filter="snippet">Text</button>
+                    <button class="filter-chip" data-filter="stack">Stacks</button>
+                    <button id="btn-toggle-auto-copy" class="filter-chip auto-copy-chip active" title="Toggle Auto-Capture Clipboard">Auto-Copy</button>
                   </div>
                 </div>
 
                 <!-- Horizontal Cards Carousel -->
                 <div class="edge-cards-carousel" id="edge-cards-carousel">
                   <!-- Dynamically populated via edge-drop.js -->
+                </div>
+
+                <!-- Full-Size Preview & Stack Lightbox Modal -->
+                <div id="edge-preview-modal" class="edge-preview-modal hidden font-sans">
+                  <div class="preview-backdrop" id="preview-backdrop"></div>
+                  <div class="preview-card">
+                    <div class="preview-header">
+                      <div class="preview-title-cluster truncate">
+                        <span id="preview-modal-badge" class="preview-badge font-mono">FILE</span>
+                        <span id="preview-modal-title" class="preview-title truncate font-sans">Preview</span>
+                      </div>
+                      <button id="preview-modal-close" class="preview-close-btn" title="Close Preview">
+                        <svg class="lucide-icon icon-sm" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                      </button>
+                    </div>
+                    <div class="preview-body" id="preview-modal-body"></div>
+                    <div class="preview-footer font-sans">
+                      <span id="preview-modal-meta" class="preview-meta font-mono">Just now</span>
+                      <div class="preview-footer-actions">
+                        <button id="preview-btn-pin" class="btn-preview-act font-sans">Pin to Board</button>
+                        <button id="preview-btn-copy" class="btn-preview-act font-sans">Copy</button>
+                        <button id="preview-btn-open" class="btn-preview-act btn-preview-primary font-sans">Open</button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

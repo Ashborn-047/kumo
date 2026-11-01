@@ -37,6 +37,7 @@ const trayManager    = require('./tray');
 const settings       = require('./settings');
 const ai             = require('./ai');
 const islandManager  = require('./island');
+const clipboardWatcher = require('./clipboard-watcher');
 const { registerIpcHandlers } = require('./main/ipc-handlers');
 const { startTelemetryBroadcast, startMediaSync } = require('./main/telemetry-service');
 
@@ -178,6 +179,7 @@ app.whenReady().then(async () => {
     }
     startTelemetryBroadcast(boardManager);
     startMediaSync(islandManager, boardManager, ampManager);
+    clipboardWatcher.startWatcher(islandManager.get());
   };
 
   if (primaryWin && typeof primaryWin.once === 'function') {
