@@ -162,13 +162,52 @@
    Inverted fillet wings flare seamlessly in porcelain white at Y: 0px
    ══════════════════════════════════════════════════════════════ */
 .island-wrapper.state-unrolled .seamless-chassis {
-  width: 520px;
-  min-height: 330px;
+  width: 540px;
+  min-height: 340px;
   background: #ffffff;
   border: 1px solid var(--card-border);
   border-top: none;
   border-radius: 0 0 22px 22px;
   box-shadow: var(--shadow-drawer);
+}
+
+/* Auto-expand when preview lightbox or detailed inspection is active */
+.island-wrapper.state-unrolled.is-preview-active .seamless-chassis {
+  width: 580px;
+  min-height: 440px;
+}
+
+/* Drag-to-Resize Handle at the bottom of the unrolled card */
+.island-resize-handle {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 14px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  cursor: ns-resize;
+  z-index: 70;
+  border-radius: 0 0 22px 22px;
+}
+
+.island-wrapper.state-unrolled .island-resize-handle {
+  display: flex;
+}
+
+.resize-handle-bar {
+  width: 36px;
+  height: 4px;
+  border-radius: 4px;
+  background: #d8d4e4;
+  transition: background 0.15s ease, width 0.15s ease;
+}
+
+.island-resize-handle:hover .resize-handle-bar,
+.seamless-chassis.is-resizing .resize-handle-bar {
+  background: var(--iris-action);
+  width: 48px;
 }
 
 .island-wrapper.state-unrolled .fillet-wing-left,

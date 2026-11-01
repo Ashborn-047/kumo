@@ -10,8 +10,8 @@ const path = require('path');
 let islandWindow = null;
 let currentEdge = 'top';
 
-const CANVAS_WIDTH = 640;
-const CANVAS_HEIGHT = 500;
+const CANVAS_WIDTH = 720;
+const CANVAS_HEIGHT = 600;
 
 function calculatePosition(edge = currentEdge) {
   const primaryDisplay = screen.getPrimaryDisplay();

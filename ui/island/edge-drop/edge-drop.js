@@ -272,9 +272,15 @@ function initEdgeDropWidget(stateController, switchTabCallback) {
   }
 
   // ── FEATURE 5: Lightbox Preview Modal Logic ──
+  const islandWrapperEl = document.getElementById('island-wrapper');
+
   function openPreview(item) {
     activePreviewItem = item;
     if (!previewModal) return;
+
+    if (islandWrapperEl) {
+      islandWrapperEl.classList.add('is-preview-active');
+    }
 
     if (previewTitle) previewTitle.textContent = item.name;
     if (previewBadge) previewBadge.textContent = item.badge || item.type.toUpperCase();
@@ -308,7 +314,7 @@ function initEdgeDropWidget(stateController, switchTabCallback) {
         `;
       } else {
         previewBody.innerHTML = `
-          <div class="font-mono text-xs whitespace-pre-wrap select-text p-2 bg-slate-50 dark:bg-slate-900 rounded-lg max-h-36 overflow-y-auto">${escapeHtml(item.content || item.preview || item.name)}</div>
+          <div class="font-mono text-xs whitespace-pre-wrap select-text p-3 bg-slate-50 dark:bg-slate-900 rounded-lg max-h-56 overflow-y-auto leading-relaxed border border-outline-variant/20">${escapeHtml(item.content || item.preview || item.name)}</div>
         `;
       }
     }
@@ -318,6 +324,9 @@ function initEdgeDropWidget(stateController, switchTabCallback) {
 
   function closePreview() {
     previewModal?.classList.add('hidden');
+    if (islandWrapperEl) {
+      islandWrapperEl.classList.remove('is-preview-active');
+    }
     activePreviewItem = null;
   }
 

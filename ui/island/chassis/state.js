@@ -41,6 +41,17 @@ function initStateController() {
     wrapper.classList.remove('state-peek', 'state-resting', 'state-unrolled');
     wrapper.classList.add(`state-${state}`);
 
+    if (state === 'unrolled') {
+      const savedHeight = localStorage.getItem('kumo:island-unrolled-height');
+      if (savedHeight && !wrapper.classList.contains('is-preview-active')) {
+        chassis.style.height = `${savedHeight}px`;
+        chassis.style.minHeight = `${savedHeight}px`;
+      }
+    } else {
+      chassis.style.height = '';
+      chassis.style.minHeight = '';
+    }
+
     if (state === 'peek') {
       setHit(false);
     } else {
@@ -214,6 +225,49 @@ function initStateController() {
   if (window.goo?.onIslandPopOut) {
     window.goo.onIslandPopOut(() => {
       popOut();
+    });
+  }
+
+  // Tactile Drag-to-Resize Island Handle
+  const resizeHandle = document.getElementById('island-resize-handle');
+  if (resizeHandle) {
+    let isResizing = false;
+    let startY = 0;
+    let startH = 0;
+
+    resizeHandle.addEventListener('mousedown', (e) => {
+      if (currentState !== 'unrolled') return;
+      e.preventDefault();
+      e.stopPropagation();
+      isResizing = true;
+      startY = e.clientY;
+      startH = chassis.offsetHeight;
+      chassis.classList.add('is-resizing');
+      document.body.style.cursor = 'ns-resize';
+
+      const onMouseMove = (ev) => {
+        if (!isResizing) return;
+        const deltaY = ev.clientY - startY;
+        const newHeight = Math.min(520, Math.max(330, startH + deltaY));
+        chassis.style.height = `${newHeight}px`;
+        chassis.style.minHeight = `${newHeight}px`;
+      };
+
+      const onMouseUp = () => {
+        if (!isResizing) return;
+        isResizing = false;
+        chassis.classList.remove('is-resizing');
+        document.body.style.cursor = '';
+        window.removeEventListener('mousemove', onMouseMove);
+        window.removeEventListener('mouseup', onMouseUp);
+        const finalH = chassis.offsetHeight;
+        if (finalH) {
+          localStorage.setItem('kumo:island-unrolled-height', String(finalH));
+        }
+      };
+
+      window.addEventListener('mousemove', onMouseMove);
+      window.addEventListener('mouseup', onMouseUp);
     });
   }
 
