@@ -159,6 +159,20 @@ export const DEFAULT_CARDS = [
     },
     zIndex: 5,
   },
+  {
+    id: 'card-drop-1',
+    type: 'drop',
+    title: 'Edge Drop & Web Stash',
+    x: 60,
+    y: 1760,
+    width: 580,
+    data: {
+      items: [],
+      activeSubFilter: 'all',
+      searchQuery: '',
+    },
+    zIndex: 9,
+  },
 ];
 
 export const state = {

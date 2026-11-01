@@ -162,6 +162,23 @@ export function addNewTool(type, extra = {}) {
         zIndex: ++state.nextZIndex,
       };
       break;
+
+    case 'drop':
+      newCard = {
+        id,
+        type: 'drop',
+        title: extra.title || 'Edge Drop & Web Stash',
+        x: centerX,
+        y: centerY,
+        width: 580,
+        data: {
+          items: extra.items || [],
+          activeSubFilter: 'all',
+          searchQuery: '',
+        },
+        zIndex: ++state.nextZIndex,
+      };
+      break;
   }
 
   if (newCard) {

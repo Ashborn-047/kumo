@@ -17,6 +17,7 @@ import { renderTelemetryHTML, attachTelemetryEvents } from './tools/telemetry-to
 import { renderNetworkHTML, attachNetworkEvents } from './tools/network-tool.js';
 import { renderMediaHTML, attachMediaEvents } from './tools/media-tool.js';
 import { renderWorkspaceHTML, attachWorkspaceEvents } from './tools/workspace-tool.js';
+import { renderDropHTML, attachDropEvents } from './tools/drop-tool.js';
 
 const $ = (s) => document.querySelector(s);
 
@@ -85,6 +86,7 @@ export function renderCards() {
       case 'network':   bodyHTML = renderNetworkHTML(card); break;
       case 'media':     bodyHTML = renderMediaHTML(card); break;
       case 'workspace': bodyHTML = renderWorkspaceHTML(card); break;
+      case 'drop':      bodyHTML = renderDropHTML(card); break;
       default:          bodyHTML = `
         <header class="h-10 bg-slate-100/90 border-b border-slate-200/70 px-3.5 flex items-center justify-between select-none cursor-grab" data-drag-handle="${card.id}">
           <div class="flex items-center gap-2">
@@ -164,6 +166,7 @@ export function renderCards() {
       case 'network':   attachNetworkEvents(el, card, saveState, toast); break;
       case 'media':     attachMediaEvents(el, card, saveState, toast); break;
       case 'workspace': attachWorkspaceEvents(el, card, saveState, toast); break;
+      case 'drop':      attachDropEvents(el, card, saveState, toast); break;
     }
   });
 

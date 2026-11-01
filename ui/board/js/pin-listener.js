@@ -97,7 +97,63 @@ export function setupPinListener() {
       return;
     }
 
-    // Non-media card pinning (notes, edge drops, etc.)
+    // If an item is pinned from Edge Drop: Route strictly into the dedicated Edge Drop & Web Stash deck!
+    const isDrop = cardData.type === 'drop' || cardData.type === 'link' || cardData.id?.startsWith('card-drop-') || Boolean(cardData.data?.url);
+    if (isDrop) {
+      const itemTitle = cardData.title || cardData.data?.text || 'Pinned Item';
+      const itemUrl = cardData.data?.url || (cardData.type === 'link' ? cardData.data?.text : '');
+      const itemType = cardData.data?.itemType || (itemUrl || cardData.type === 'link' ? 'link' : (cardData.data?.path ? 'file' : 'snippet'));
+      const itemBadge = cardData.data?.badge || (itemType === 'link' ? 'URL' : itemType.toUpperCase());
+
+      const dropEntry = {
+        id: `drop-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+        title: itemTitle,
+        url: itemUrl,
+        text: cardData.data?.text || cardData.title || '',
+        itemType,
+        badge: itemBadge,
+        color: cardData.data?.color || 'lilac',
+        pinnedAt: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      };
+
+      let dropCard = state.cards.find((c) => c.type === 'drop');
+      if (dropCard) {
+        if (!Array.isArray(dropCard.data.items)) dropCard.data.items = [];
+        const existingIdx = dropCard.data.items.findIndex(
+          (i) => (i.url && i.url === itemUrl) || (i.title && i.title === itemTitle)
+        );
+        if (existingIdx !== -1) {
+          dropCard.data.items.splice(existingIdx, 1);
+        }
+        dropCard.data.items.unshift(dropEntry);
+        dropCard.zIndex = ++state.nextZIndex;
+        toast(`Pinned "${itemTitle}" to Edge Drop & Web Stash!`);
+      } else {
+        const offset = (state.cards.length % 5) * 40;
+        dropCard = {
+          id: 'card-drop-hub',
+          type: 'drop',
+          title: 'Edge Drop & Web Stash',
+          x: Math.max(60, 200 + offset),
+          y: Math.max(80, 160 + offset),
+          width: 580,
+          data: {
+            items: [dropEntry],
+            activeSubFilter: 'all',
+            searchQuery: '',
+          },
+          zIndex: ++state.nextZIndex,
+        };
+        state.cards.push(dropCard);
+        toast(`Pinned "${itemTitle}" to Edge Drop & Web Stash!`);
+      }
+      saveState();
+      renderCards();
+      updateMiniMap();
+      return;
+    }
+
+    // Non-media card pinning (notes, custom cards, etc.)
     const existing = state.cards.find((c) => c.id === cardData.id);
     if (existing) {
       existing.data = { ...existing.data, ...(cardData.data || {}) };

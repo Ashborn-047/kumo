@@ -28,6 +28,7 @@ function initBoardWidget() {
       case 'code': return '#TERMINAL';
       case 'notes': return (c.data?.items && c.data.items.length > 0) ? '#TODO' : '#SCRATCHPAD';
       case 'design': return '#THEME-LAB';
+      case 'drop': return '#EDGE-DROP';
       case 'link': return '#LINK';
       default: return `#${(c.type || 'CARD').toUpperCase()}`;
     }
@@ -54,6 +55,7 @@ function initBoardWidget() {
       case 'writer': return 'Kumo Neural Engine AI prompt studio';
       case 'code': return 'PowerShell & DevOps console terminal';
       case 'design': return 'Mascot companion moods & theme color palettes';
+      case 'drop': return (c.data?.items && c.data.items.length > 0) ? `${c.data.items.length} saved links & staged drops` : 'Edge Drop & Web Stash Deck';
       case 'notes': return 'Sprint tasks, checklists, and scratchpad notes';
       default: return 'Active workspace tool card';
     }
@@ -63,7 +65,7 @@ function initBoardWidget() {
     if (c.color) return c.color;
     switch (c.type) {
       case 'telemetry': case 'code': return 'sky';
-      case 'writer': case 'design': case 'media': return 'lilac';
+      case 'writer': case 'design': case 'media': case 'drop': return 'lilac';
       case 'workspace': case 'network': case 'launcher': case 'notes': return 'peach';
       default: return 'sky';
     }

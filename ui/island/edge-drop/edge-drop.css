@@ -224,6 +224,19 @@
   cursor: grabbing;
 }
 
+.is-link-card {
+  cursor: pointer;
+}
+
+.is-link-card:hover .item-name {
+  color: var(--iris-action);
+  text-decoration: underline;
+}
+
+.is-link-card .item-top {
+  cursor: pointer;
+}
+
 .item-top {
   display: flex;
   align-items: center;

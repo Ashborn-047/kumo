@@ -109,18 +109,44 @@ function initEdgeDropWidget(stateController, switchTabCallback) {
         }
       });
 
+      // Direct Click-to-Open for Links in default browser
+      const isLink = item.type === 'link' || /^(https?:\/\/|www\.|[a-zA-Z0-9-]+\.[a-zA-Z]{2,})/i.test(item.content || item.name);
+      if (isLink) {
+        card.classList.add('is-link-card');
+        card.title = 'Click to open in default browser (or drag to stage)';
+        const rawUrl = item.content || item.name;
+        const fullUrl = /^https?:\/\//i.test(rawUrl) ? rawUrl : `https://${rawUrl}`;
+
+        card.addEventListener('click', (e) => {
+          if (e.target.closest('.item-action-btns') || e.target.closest('button')) return;
+          window.IslandHaptics?.playHaptic('pop');
+          if (window.goo?.openExternal) {
+            window.goo.openExternal(fullUrl);
+          } else {
+            window.open(fullUrl, '_blank');
+          }
+        });
+      }
+
       // Pin to Kumoboard
       card.querySelector('.btn-act-pin')?.addEventListener('click', (e) => {
         e.stopPropagation();
         window.IslandHaptics?.playHaptic('pop');
 
+        const rawUrl = item.content || (item.type === 'link' ? item.name : '');
+        const fullUrl = isLink ? (/^https?:\/\//i.test(rawUrl) ? rawUrl : `https://${rawUrl}`) : '';
+
         if (window.goo?.pinCardToBoard) {
           window.goo.pinCardToBoard({
             id: `card-drop-${Date.now()}`,
-            type: 'notes',
+            type: 'drop',
             title: item.name,
             data: {
+              url: fullUrl,
               text: item.preview || item.path || item.name,
+              itemType: item.type,
+              path: item.path,
+              badge: item.badge,
               color: item.type === 'link' ? 'lilac' : 'sky'
             }
           });
@@ -128,6 +154,8 @@ function initEdgeDropWidget(stateController, switchTabCallback) {
 
         window.IslandBoard?.addCard?.({
           id: Date.now().toString(),
+          type: 'drop',
+          title: item.name,
           tag: item.type === 'link' ? '#LINK' : '#FILE',
           text: item.name,
           color: item.type === 'link' ? 'lilac' : 'sky',
