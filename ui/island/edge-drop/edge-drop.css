@@ -632,3 +632,269 @@
   background: #5044b8;
 }
 
+/* Add Note Filter Chip */
+.add-note-chip {
+  background: var(--lilac-tint);
+  border-color: var(--lilac-border);
+  color: var(--iris-action);
+  font-weight: 700;
+}
+
+.add-note-chip:hover {
+  background: var(--iris-action);
+  color: #ffffff;
+  border-color: var(--iris-action);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   RIGHT-CLICK SHELF CONTEXT MENU
+   Floating glassmorphic popup positioned at cursor coordinates
+   ────────────────────────────────────────────────────────────── */
+.edge-context-menu {
+  position: fixed;
+  z-index: 1200;
+  min-width: 175px;
+  background: #ffffff;
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  box-shadow: 0 10px 28px -4px rgba(18, 15, 38, 0.2), 0 2px 6px rgba(0, 0, 0, 0.04);
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  animation: popIn 0.15s var(--spring-ease);
+}
+
+.edge-context-menu.hidden {
+  display: none !important;
+}
+
+.ctx-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  color: var(--text-dark);
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+.ctx-menu-item:hover {
+  background: #f1ecf7;
+  color: var(--iris-action);
+}
+
+.ctx-menu-item.text-danger:hover {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.ctx-divider {
+  height: 1px;
+  background: #f1ecf7;
+  margin: 3px 0;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   QUICK NOTE MODAL (WARM PORCELAIN LIGHTBOX)
+   ────────────────────────────────────────────────────────────── */
+.edge-note-modal {
+  position: absolute;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+}
+
+.edge-note-modal.hidden {
+  display: none !important;
+}
+
+.note-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(18, 15, 38, 0.45);
+  backdrop-filter: blur(4px);
+}
+
+.note-modal-card {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.22);
+  border: 1px solid var(--card-border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 2;
+  animation: popIn 0.2s var(--spring-ease);
+}
+
+.note-modal-header {
+  height: 38px;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #f1ecf7;
+  background: #fbf9fd;
+}
+
+.note-modal-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.note-modal-close-btn {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: #7b748d;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.note-modal-close-btn:hover {
+  background: #f1ecf7;
+  color: var(--text-dark);
+}
+
+.note-modal-body {
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.note-input-title {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--card-border-subtle);
+  background: #faf8fd;
+  color: var(--text-dark);
+  font-size: 11px;
+  font-weight: 600;
+  outline: none;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.note-input-title:focus {
+  border-color: var(--iris-action);
+  background: #ffffff;
+}
+
+.note-input-content {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 80px;
+  max-height: 140px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--card-border-subtle);
+  background: #faf8fd;
+  color: var(--text-dark);
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.5;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.note-input-content:focus {
+  border-color: var(--iris-action);
+  background: #ffffff;
+}
+
+.note-tags-picker {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding-top: 2px;
+}
+
+.note-tag-btn {
+  font-size: 8px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 5px;
+  border: 1px solid var(--card-border);
+  background: #f8f6fc;
+  color: #726b85;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.note-tag-btn:hover {
+  border-color: var(--iris-action);
+  color: var(--iris-action);
+}
+
+.note-tag-btn.active {
+  background: var(--iris-tint);
+  border-color: var(--iris-action);
+  color: var(--iris-action);
+}
+
+.note-modal-footer {
+  padding: 8px 14px;
+  border-top: 1px solid #f1ecf7;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  background: #fbf9fd;
+}
+
+.btn-note-cancel {
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 600;
+  border: 1px solid var(--card-border);
+  background: #ffffff;
+  color: var(--text-dark);
+  cursor: pointer;
+}
+
+.btn-note-cancel:hover {
+  background: #f1ecf7;
+}
+
+.btn-note-save {
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 600;
+  border: 1px solid var(--iris-action);
+  background: var(--iris-action);
+  color: #ffffff;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(99, 85, 216, 0.25);
+  transition: background 0.15s ease;
+}
+
+.btn-note-save:hover {
+  background: #5044b8;
+}
+

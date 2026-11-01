@@ -27,24 +27,58 @@ function initEdgeDropWidget(stateController, switchTabCallback) {
   const previewBtnCopy = document.getElementById('preview-btn-copy');
   const previewBtnOpen = document.getElementById('preview-btn-open');
 
+  // Context Menu & Quick Note Elements
+  const panelEdge = document.getElementById('panel-edge');
+  const contextMenu = document.getElementById('edge-context-menu');
+  const ctxAddNote = document.getElementById('ctx-add-note');
+  const ctxPasteClip = document.getElementById('ctx-paste-clip');
+  const ctxFilterNotes = document.getElementById('ctx-filter-notes');
+  const ctxClearShelf = document.getElementById('ctx-clear-shelf');
+  const btnAddQuickNote = document.getElementById('btn-add-quick-note');
+
+  // Quick Note Modal Elements
+  const noteModal = document.getElementById('edge-note-modal');
+  const noteModalBackdrop = document.getElementById('note-modal-backdrop');
+  const noteModalClose = document.getElementById('note-modal-close');
+  const noteModalCancel = document.getElementById('note-modal-cancel');
+  const noteModalSave = document.getElementById('note-modal-save');
+  const noteInputTitle = document.getElementById('note-input-title');
+  const noteInputContent = document.getElementById('note-input-content');
+  const noteTagBtns = document.querySelectorAll('.note-tag-btn');
+  let activeNoteTag = 'NOTE';
+
   let shelfItems = [];
+  try {
+    const saved = localStorage.getItem('kumo:edge-drop-items');
+    if (saved) shelfItems = JSON.parse(saved);
+  } catch {}
+
   let currentFilter = 'all';
   let searchQuery = '';
   let autoCopyActive = true;
   let activePreviewItem = null;
 
+  function saveShelfToStorage() {
+    try {
+      localStorage.setItem('kumo:edge-drop-items', JSON.stringify(shelfItems));
+    } catch {}
+  }
+
   function renderShelfUI() {
     if (!edgeCarousel) return;
+    saveShelfToStorage();
 
     let filtered = shelfItems.filter(item => {
       if (currentFilter === 'stack') return item.type === 'stack';
+      if (currentFilter === 'snippet') return item.type === 'snippet' || ['NOTE', 'IDEA', 'TODO', 'SCRATCH', 'TEXT', 'CLIPBOARD'].includes(item.badge);
       if (currentFilter !== 'all' && item.type !== currentFilter) return false;
       if (searchQuery.trim()) {
         const query = searchQuery.toLowerCase();
         const matchesName = (item.name || '').toLowerCase().includes(query);
         const matchesPreview = (item.preview || '').toLowerCase().includes(query);
         const matchesContent = (item.content || '').toLowerCase().includes(query);
-        return matchesName || matchesPreview || matchesContent;
+        const matchesBadge = (item.badge || '').toLowerCase().includes(query);
+        return matchesName || matchesPreview || matchesContent || matchesBadge;
       }
       return true;
     });
@@ -447,6 +481,150 @@ function initEdgeDropWidget(stateController, switchTabCallback) {
       currentFilter = chip.dataset.filter || 'all';
       renderShelfUI();
     });
+  });
+
+  // ── FEATURE 6: Notes and Search (Right-Click Menu & Quick Note Modal) ──
+  function showContextMenu(clientX, clientY) {
+    if (!contextMenu) return;
+    contextMenu.classList.remove('hidden');
+    const menuW = 180;
+    const menuH = 140;
+    const x = Math.min(clientX, window.innerWidth - menuW - 10);
+    const y = Math.min(clientY, window.innerHeight - menuH - 10);
+    contextMenu.style.left = `${Math.max(10, x)}px`;
+    contextMenu.style.top = `${Math.max(10, y)}px`;
+  }
+
+  function hideContextMenu() {
+    if (contextMenu) contextMenu.classList.add('hidden');
+  }
+
+  panelEdge?.addEventListener('contextmenu', (e) => {
+    // Only intercept context menu within edge drop panel
+    if (e.target.closest('#edge-note-modal') || e.target.closest('#edge-preview-modal')) return;
+    e.preventDefault();
+    showContextMenu(e.clientX, e.clientY);
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('#edge-context-menu')) {
+      hideContextMenu();
+    }
+  });
+
+  function openNoteModal() {
+    hideContextMenu();
+    if (!noteModal) return;
+    if (noteInputTitle) noteInputTitle.value = '';
+    if (noteInputContent) noteInputContent.value = '';
+    activeNoteTag = 'NOTE';
+    noteTagBtns.forEach(b => b.classList.toggle('active', b.dataset.tag === 'NOTE'));
+    noteModal.classList.remove('hidden');
+    setTimeout(() => noteInputContent?.focus(), 60);
+  }
+
+  function closeNoteModal() {
+    if (noteModal) noteModal.classList.add('hidden');
+  }
+
+  function saveQuickNote() {
+    const title = noteInputTitle?.value?.trim() || '';
+    const content = noteInputContent?.value?.trim() || '';
+    if (!content && !title) return;
+
+    const noteName = title || (content.length > 26 ? content.slice(0, 26) + '...' : content);
+
+    shelfItems.unshift({
+      id: `note-${Date.now()}`,
+      name: noteName,
+      content: content || title,
+      type: 'snippet',
+      badge: activeNoteTag || 'NOTE',
+      preview: content || title,
+      time: 'Just now'
+    });
+
+    window.IslandHaptics?.playHaptic('pop');
+    closeNoteModal();
+    renderShelfUI();
+  }
+
+  ctxAddNote?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    openNoteModal();
+  });
+
+  btnAddQuickNote?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    window.IslandHaptics?.playHaptic('pop');
+    openNoteModal();
+  });
+
+  ctxPasteClip?.addEventListener('click', async (e) => {
+    e.stopPropagation();
+    hideContextMenu();
+    try {
+      if (navigator.clipboard?.readText) {
+        const text = await navigator.clipboard.readText();
+        if (text && text.trim()) {
+          const trimmed = text.trim();
+          const isUrl = /^(https?:\/\/|www\.|[a-zA-Z0-9-]+\.[a-zA-Z]{2,}(\/.*)?$)/i.test(trimmed);
+          shelfItems.unshift({
+            id: `clip-${Date.now()}`,
+            name: isUrl ? trimmed : (trimmed.slice(0, 28) + (trimmed.length > 28 ? '...' : '')),
+            content: trimmed,
+            type: isUrl ? 'link' : 'snippet',
+            badge: isUrl ? 'URL' : 'CLIPBOARD',
+            preview: trimmed,
+            time: 'Just now'
+          });
+          window.IslandHaptics?.playHaptic('drop');
+          renderShelfUI();
+        }
+      }
+    } catch {}
+  });
+
+  ctxFilterNotes?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    hideContextMenu();
+    window.IslandHaptics?.playHaptic('pop');
+    filterChips.forEach(c => c.classList.toggle('active', c.dataset.filter === 'snippet'));
+    currentFilter = 'snippet';
+    renderShelfUI();
+  });
+
+  ctxClearShelf?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    hideContextMenu();
+    window.IslandHaptics?.playHaptic('pop');
+    shelfItems = [];
+    renderShelfUI();
+  });
+
+  noteModalClose?.addEventListener('click', closeNoteModal);
+  noteModalCancel?.addEventListener('click', closeNoteModal);
+  noteModalBackdrop?.addEventListener('click', closeNoteModal);
+  noteModalSave?.addEventListener('click', saveQuickNote);
+
+  noteTagBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      noteTagBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeNoteTag = btn.dataset.tag || 'NOTE';
+    });
+  });
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      hideContextMenu();
+      closeNoteModal();
+    } else if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+      if (noteModal && !noteModal.classList.contains('hidden')) {
+        saveQuickNote();
+      }
+    }
   });
 
   // Ambient Drag Detection over whole window (Spring unroll + overlay)

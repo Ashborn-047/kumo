@@ -496,15 +496,67 @@
                     <button class="filter-chip active" data-filter="all">All</button>
                     <button class="filter-chip" data-filter="file">Files</button>
                     <button class="filter-chip" data-filter="link">Links</button>
-                    <button class="filter-chip" data-filter="snippet">Text</button>
+                    <button class="filter-chip" data-filter="snippet">Notes</button>
                     <button class="filter-chip" data-filter="stack">Stacks</button>
                     <button id="btn-toggle-auto-copy" class="filter-chip auto-copy-chip active" title="Toggle Auto-Capture Clipboard">Auto-Copy</button>
+                    <button id="btn-add-quick-note" class="filter-chip add-note-chip" title="Add a Note (+)">+ Note</button>
                   </div>
                 </div>
 
                 <!-- Horizontal Cards Carousel -->
                 <div class="edge-cards-carousel" id="edge-cards-carousel">
                   <!-- Dynamically populated via edge-drop.js -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Right-Click Shelf Context Menu -->
+            <div id="edge-context-menu" class="edge-context-menu hidden font-sans">
+              <button class="ctx-menu-item" id="ctx-add-note">
+                <svg class="lucide-icon icon-sm" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                <span>New Note</span>
+              </button>
+              <button class="ctx-menu-item" id="ctx-paste-clip">
+                <svg class="lucide-icon icon-sm" viewBox="0 0 24 24"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg>
+                <span>Paste from Clipboard</span>
+              </button>
+              <button class="ctx-menu-item" id="ctx-filter-notes">
+                <svg class="lucide-icon icon-sm" viewBox="0 0 24 24"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                <span>Show Only Notes</span>
+              </button>
+              <div class="ctx-divider"></div>
+              <button class="ctx-menu-item text-danger" id="ctx-clear-shelf">
+                <svg class="lucide-icon icon-sm" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                <span>Clear Shelf</span>
+              </button>
+            </div>
+
+            <!-- Quick Note Creation Modal (Covers Chassis) -->
+            <div id="edge-note-modal" class="edge-note-modal hidden font-sans">
+              <div class="note-modal-backdrop" id="note-modal-backdrop"></div>
+              <div class="note-modal-card">
+                <div class="note-modal-header">
+                  <div class="note-modal-title">
+                    <svg class="lucide-icon icon-sm text-iris" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                    <span>Add Quick Note</span>
+                  </div>
+                  <button id="note-modal-close" class="note-modal-close-btn" title="Cancel">
+                    <svg class="lucide-icon icon-sm" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                  </button>
+                </div>
+                <div class="note-modal-body">
+                  <input type="text" id="note-input-title" class="note-input-title font-sans" placeholder="Note title (e.g. Meeting Note, Task, Idea)..." />
+                  <textarea id="note-input-content" class="note-input-content font-sans" placeholder="Write your note or snippet here..."></textarea>
+                  <div class="note-tags-picker font-mono">
+                    <button type="button" class="note-tag-btn active" data-tag="NOTE">NOTE</button>
+                    <button type="button" class="note-tag-btn" data-tag="IDEA">IDEA</button>
+                    <button type="button" class="note-tag-btn" data-tag="TODO">TODO</button>
+                    <button type="button" class="note-tag-btn" data-tag="SCRATCH">SCRATCH</button>
+                  </div>
+                </div>
+                <div class="note-modal-footer">
+                  <button id="note-modal-cancel" class="btn-note-cancel font-sans">Cancel</button>
+                  <button id="note-modal-save" class="btn-note-save font-sans">Save to Shelf</button>
                 </div>
               </div>
             </div>
