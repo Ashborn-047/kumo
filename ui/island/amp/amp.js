@@ -189,7 +189,13 @@ function initAmpWidget() {
     });
   }
 
-  setTimeout(pollLiveMedia, 600);
+  // Defer initial status poll to idle so boot remains instant
+  setTimeout(pollLiveMedia, 3500);
+
+  return {
+    pollLiveMedia,
+    applyMediaState,
+  };
 }
 
 window.IslandAmp = { init: initAmpWidget };

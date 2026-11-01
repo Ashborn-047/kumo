@@ -168,9 +168,11 @@ function initBoardWidget() {
     });
   }
 
-  loadBoardData();
+  // Defer board file I/O until after initial boot animation
+  setTimeout(loadBoardData, 2000);
 
   return {
+    loadBoardData,
     addCard: (card) => {
       dynamicCards.unshift(card);
       renderCards();

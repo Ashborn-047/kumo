@@ -50,6 +50,7 @@ function create(preloadPath) {
     x: bounds.x,
     y: bounds.y,
     transparent: true,
+    backgroundColor: '#00000000',
     frame: false,
     alwaysOnTop: 'screen-saver',
     skipTaskbar: true,

@@ -81,8 +81,6 @@
       peakHoldTicks[i] = 0;
       rainPositions[i] = 10 + Math.random() * 20;
     }
-
-    tryInitLiveAudio().catch(() => {});
   }
 
   function setMode(mode) {

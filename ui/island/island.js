@@ -39,6 +39,12 @@ document.addEventListener('DOMContentLoaded', () => {
       if (key === tabName) widgetPanels[key]?.classList.add('active');
       else widgetPanels[key]?.classList.remove('active');
     });
+
+    if (tabName === 'board') {
+      window.IslandBoard?.loadBoardData?.();
+    } else if (tabName === 'amp') {
+      window.IslandAmp?.pollLiveMedia?.();
+    }
   }
 
   navTabs.forEach(tab => {

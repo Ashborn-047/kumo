@@ -115,7 +115,12 @@ app.whenReady().then(async () => {
 
   if (cfg.apiKey) {
     ai.init(cfg.apiKey);
-    ai.detectBestModel().catch(console.warn);
+    // Only detect if model is not already set, and defer to idle so boot remains instant
+    if (!cfg.model) {
+      setTimeout(() => {
+        ai.detectBestModel().catch(console.warn);
+      }, 8000);
+    }
   }
 
   applyLoginItem(cfg.autostart);

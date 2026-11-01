@@ -139,7 +139,7 @@ function startMediaSync(islandManager, boardManager, ampManager) {
         }
       } catch {}
     }, 4500);
-  }, 2500);
+  }, 4000);
 }
 
 module.exports = {
