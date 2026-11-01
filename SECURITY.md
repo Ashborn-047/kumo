@@ -19,9 +19,9 @@ We take the security and integrity of Kumo seriously. If you discover a security
 
 Please do **NOT** report security vulnerabilities through public GitHub issues.
 
-Instead, please report security issues privately via:
-- **Email**: pushan.work047@gmail.com
-- **Subject**: `[SECURITY VULNERABILITY] Kumo - <Brief description>`
+Instead, please report security vulnerabilities privately using GitHub's built-in tool:
+- **GitHub Private Vulnerability Reporting**: [Open a Security Advisory](https://github.com/Ashborn-047/kumo/security/advisories/new)
+- **Direct Maintainer Contact**: [@Ashborn-047 on GitHub](https://github.com/Ashborn-047)
 
 Include the following details in your report:
 1. Type of issue (e.g. IPC channel exposure, arbitrary command execution, path traversal).
@@ -56,3 +56,4 @@ All autonomous actions proposed by AI models must pass through the execution gat
 - All boards, settings, and clipboard staging caches are stored exclusively on the user's local disk (`%APPDATA%\Kumo`).
 - Zero telemetry, analytics tracking, or external data collection.
 - Network requests are restricted to user-configured AI inference endpoints (OpenRouter).
+

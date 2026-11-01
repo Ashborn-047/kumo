@@ -143,3 +143,4 @@ fix(clipboard): resolve mutex lock contention during screen capture
 - **Bug Reports**: Open an issue on GitHub with reproduction steps, OS version, and console logs.
 - **Feature Requests**: Open an issue describing the problem, proposed solution, and alternative designs.
 - **Security Vulnerabilities**: Follow our [Security Policy](SECURITY.md) to report sensitive issues privately.
+

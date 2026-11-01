@@ -59,8 +59,7 @@ representative at an online or offline event.
 ## Enforcement
 
 Instances of abusive, harassing, or otherwise unacceptable behavior may be
-reported to the project maintainers at:
-pushan.work047@gmail.com
+reported to the project maintainers by contacting [@Ashborn-047](https://github.com/Ashborn-047) on GitHub.
 
 All complaints will be reviewed and investigated promptly and fairly.
 
@@ -118,3 +117,4 @@ community.
 This Code of Conduct is adapted from the [Contributor Covenant](https://www.contributor-covenant.org),
 version 2.1, available at
 https://www.contributor-covenant.org/version/2/1/code_of_conduct.html
+
