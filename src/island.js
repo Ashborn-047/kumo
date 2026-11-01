@@ -1,7 +1,8 @@
 // ============================================================
 // island.js — Pulse Dynamic Island Overlay Window Controller
-// Flush bezel docking, fixed transparent canvas (zero DWM stutter).
+// Dynamic state-based window sizing (zero screen blockage).
 // Multi-edge docking (Top default, Left, Right — bottom prohibited).
+// Standard topmost level (yields cleanly to Snipping Tool & OS overlays).
 // ============================================================
 
 const { BrowserWindow, screen } = require('electron');
@@ -9,13 +10,21 @@ const path = require('path');
 
 let islandWindow = null;
 let currentEdge = 'top';
+let currentState = 'peek';
 
-const CANVAS_WIDTH = 720;
-const CANVAS_HEIGHT = 600;
+const SIZES = {
+  peek: { width: 160, height: 26 },
+  resting: { width: 400, height: 56 },
+  unrolled: { width: 720, height: 600 }
+};
 
-function calculatePosition(edge = currentEdge) {
+function calculatePosition(edge = currentEdge, state = currentState) {
   const primaryDisplay = screen.getPrimaryDisplay();
   const { width: screenW, height: screenH } = primaryDisplay.workAreaSize;
+
+  const size = SIZES[state] || SIZES.unrolled;
+  let width = size.width;
+  let height = size.height;
 
   let x = 0;
   let y = 0;
@@ -23,26 +32,27 @@ function calculatePosition(edge = currentEdge) {
   switch (edge) {
     case 'left':
       x = 0;
-      y = Math.round((screenH - CANVAS_HEIGHT) / 2);
+      y = Math.round((screenH - height) / 2);
       break;
     case 'right':
-      x = screenW - CANVAS_WIDTH;
-      y = Math.round((screenH - CANVAS_HEIGHT) / 2);
+      x = screenW - width;
+      y = Math.round((screenH - height) / 2);
       break;
     case 'top':
     default:
-      x = Math.round((screenW - CANVAS_WIDTH) / 2);
+      x = Math.round((screenW - width) / 2);
       y = 0;
       break;
   }
 
-  return { x, y, width: CANVAS_WIDTH, height: CANVAS_HEIGHT };
+  return { x, y, width, height };
 }
 
 function create(preloadPath) {
   if (islandWindow) return islandWindow;
 
-  const bounds = calculatePosition('top');
+  currentState = 'peek';
+  const bounds = calculatePosition('top', 'peek');
 
   islandWindow = new BrowserWindow({
     width: bounds.width,
@@ -52,7 +62,7 @@ function create(preloadPath) {
     transparent: true,
     backgroundColor: '#00000000',
     frame: false,
-    alwaysOnTop: 'screen-saver',
+    alwaysOnTop: true, // Standard topmost: floats above normal apps, yields cleanly to Snipping Tool
     skipTaskbar: true,
     resizable: false,
     hasShadow: false,
@@ -67,17 +77,27 @@ function create(preloadPath) {
 
   islandWindow.loadFile(path.join(__dirname, '../ui/island/index.html'));
   islandWindow.once('ready-to-show', () => {
-    islandWindow?.show();
+    islandWindow?.showInactive();
   });
-
-  // Default passthrough: ignore clicks on transparent areas, forward mouse movement
-  islandWindow.setIgnoreMouseEvents(true, { forward: true });
 
   islandWindow.on('closed', () => {
     islandWindow = null;
   });
 
   return islandWindow;
+}
+
+function setState(state) {
+  if (!['peek', 'resting', 'unrolled'].includes(state)) return;
+  currentState = state;
+  if (!islandWindow || islandWindow.isDestroyed()) return;
+
+  const bounds = calculatePosition(currentEdge, currentState);
+  islandWindow.setBounds(bounds, false);
+
+  if (currentState !== 'unrolled') {
+    islandWindow.setIgnoreMouseEvents(false);
+  }
 }
 
 function snapToEdge(edge) {
@@ -89,33 +109,38 @@ function snapToEdge(edge) {
   }
 
   currentEdge = edge;
-  if (!islandWindow) return;
+  if (!islandWindow || islandWindow.isDestroyed()) return;
 
-  const bounds = calculatePosition(currentEdge);
+  const bounds = calculatePosition(currentEdge, currentState);
   islandWindow.setBounds(bounds, false);
   islandWindow.webContents.send('island:edge-changed', { edge: currentEdge });
 }
 
 function setHit(interactive) {
   if (!islandWindow || islandWindow.isDestroyed()) return;
-  if (interactive) {
+  // In compact peek/resting states, the window is tightly sized to the chassis,
+  // so global forward hooks are eliminated.
+  if (interactive || currentState !== 'unrolled') {
     islandWindow.setIgnoreMouseEvents(false);
   } else {
-    islandWindow.setIgnoreMouseEvents(true, { forward: true });
+    // Transparent pass-through when unrolled and mouse is outside card
+    islandWindow.setIgnoreMouseEvents(true);
   }
 }
 
-function show()  { islandWindow?.show(); }
+function show()  { islandWindow?.showInactive(); }
 function hide()  { islandWindow?.hide(); }
 function toggle(){ islandWindow?.isVisible() ? hide() : show(); }
 function popOut(){
   if (!islandWindow || islandWindow.isDestroyed()) return;
-  islandWindow.show();
+  setState('resting');
+  islandWindow.showInactive();
   islandWindow.webContents.send('island:pop-out');
 }
 function get()   { return islandWindow; }
 function getEdge() { return currentEdge; }
-function isIslandExpanded() { return false; }
+function getState() { return currentState; }
+function isIslandExpanded() { return currentState === 'unrolled'; }
 
 module.exports = {
   create,
@@ -125,6 +150,8 @@ module.exports = {
   popOut,
   get,
   snapToEdge,
+  setState,
+  getState,
   setHit,
   getEdge,
   isIslandExpanded,

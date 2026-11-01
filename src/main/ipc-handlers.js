@@ -278,6 +278,7 @@ function registerIpcHandlers({
 
   // Dynamic Island
   ipcMain.on('island:set-hit', (_event, interactive) => islandManager.setHit(interactive));
+  ipcMain.on('island:set-state', (_event, state) => islandManager.setState(state));
   ipcMain.on('island:set-expanded', (_event, expanded) => islandManager.setExpanded(expanded));
   ipcMain.on('island:snap-edge', (_event, edge) => islandManager.snapToEdge(edge));
   ipcMain.on('island:set-clipboard-watch', (_event, enabled) => {

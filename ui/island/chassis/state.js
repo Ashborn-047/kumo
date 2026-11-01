@@ -38,6 +38,10 @@ function initStateController() {
     if (currentState === state) return;
     currentState = state;
 
+    if (window.goo?.islandSetState) {
+      window.goo.islandSetState(state);
+    }
+
     wrapper.classList.remove('state-peek', 'state-resting', 'state-unrolled');
     wrapper.classList.add(`state-${state}`);
 

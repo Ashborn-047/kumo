@@ -73,6 +73,7 @@ contextBridge.exposeInMainWorld('goo', {
 
   // Pulse Dynamic Island Bridge
   islandSetHit:          (interactive) => ipcRenderer.send('island:set-hit', Boolean(interactive)),
+  islandSetState:        (state)       => ipcRenderer.send('island:set-state', state),
   islandSetExpanded:     (expanded)    => ipcRenderer.send('island:set-expanded', Boolean(expanded)),
   islandSnapEdge:        (edge)        => ipcRenderer.send('island:snap-edge', edge),
   islandGetConfig:       ()            => ipcRenderer.invoke('island:get-config'),
