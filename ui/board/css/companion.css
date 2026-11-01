@@ -1,0 +1,226 @@
+/* ============================================================
+   companion.css — Resident In-Canvas Kumo Co-Pilot (Spatial Migration)
+   Warm Tactile Spatial Design Language (Strictly Zero Emojis)
+   ============================================================ */
+
+.resident-companion-wrap {
+  position: fixed;
+  bottom: 8.5rem; /* Sits directly above the minimap */
+  right: 1.5rem;
+  z-index: 45;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.625rem;
+  pointer-events: auto;
+  user-select: none;
+}
+
+/* Floating Avatar Core */
+.resident-avatar-core {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%);
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 10px 24px -4px rgba(124, 58, 237, 0.35), 0 2px 6px rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
+  animation: residentHover 3.6s ease-in-out infinite;
+}
+
+.resident-avatar-core:hover {
+  transform: scale(1.08) translateY(-2px);
+  box-shadow: 0 14px 28px -4px rgba(124, 58, 237, 0.45), 0 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+.resident-avatar-core:active {
+  transform: scale(0.94);
+}
+
+/* Tactile Cloud Mascot Face Inside Avatar */
+.resident-cloud-face {
+  position: relative;
+  width: 32px;
+  height: 22px;
+  background: #ffffff;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+
+.resident-eye {
+  width: 3px;
+  height: 5px;
+  background: #1e1b4b;
+  border-radius: 2px;
+  animation: residentBlink 4.2s infinite;
+}
+
+.resident-blush {
+  position: absolute;
+  bottom: 3px;
+  width: 4px;
+  height: 2px;
+  border-radius: 2px;
+  background: #f472b6;
+  opacity: 0.8;
+}
+
+.resident-blush.left { left: 4px; }
+.resident-blush.right { right: 4px; }
+
+/* Status Dot */
+.resident-status-dot {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #10b981;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.5);
+}
+
+/* Landing Cloud Ripple Rings */
+.resident-cloud-ripple {
+  position: absolute;
+  inset: -14px;
+  border-radius: 28px;
+  border: 2px solid rgba(167, 139, 250, 0.6);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.resident-companion-wrap.landing .resident-cloud-ripple {
+  animation: cloudRippleRing 0.75s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+}
+
+.resident-companion-wrap.landing .resident-avatar-core {
+  animation: residentLand 0.6s cubic-bezier(0.17, 0.89, 0.32, 1.28) forwards;
+}
+
+.resident-companion-wrap.leaping .resident-avatar-core {
+  animation: residentLeap 0.45s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Interactive Co-Pilot Speech Bubble */
+.resident-speech-bubble {
+  max-width: 280px;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  border-radius: 18px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 2px 6px rgba(0, 0, 0, 0.05);
+  font-family: inherit;
+  font-size: 0.8125rem;
+  color: #1e293b;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transform-origin: bottom right;
+  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.resident-speech-bubble.hidden {
+  display: none;
+  opacity: 0;
+  transform: scale(0.85) translateY(8px);
+}
+
+.resident-bubble-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-weight: 700;
+  color: #6355d8;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.resident-bubble-text {
+  font-size: 0.8125rem;
+  line-height: 1.35;
+  color: #334155;
+}
+
+.resident-quick-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding-top: 0.25rem;
+  border-top: 1px solid rgba(226, 232, 240, 0.7);
+}
+
+.resident-action-pill {
+  padding: 0.25rem 0.625rem;
+  border-radius: 8px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.resident-action-pill:hover {
+  background: #ede9fe;
+  color: #6355d8;
+  border-color: #c4b5fd;
+}
+
+.resident-action-pill.pill-return {
+  background: #fdf2f8;
+  color: #db2777;
+  border-color: #fbcfe8;
+}
+
+.resident-action-pill.pill-return:hover {
+  background: #fce7f3;
+  color: #be185d;
+  border-color: #f472b6;
+}
+
+/* Keyframes */
+@keyframes residentHover {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes residentBlink {
+  0%, 93%, 100% { transform: scaleY(1); }
+  96% { transform: scaleY(0.1); }
+}
+
+@keyframes cloudRippleRing {
+  0% { transform: scale(0.8); opacity: 0.9; }
+  100% { transform: scale(1.65); opacity: 0; }
+}
+
+@keyframes residentLand {
+  0% { transform: translateY(-40px) scale(0.3); opacity: 0; }
+  60% { transform: translateY(4px) scale(1.15, 0.85); opacity: 1; }
+  80% { transform: translateY(-2px) scale(0.95, 1.05); }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+@keyframes residentLeap {
+  0% { transform: scale(1) translateY(0); opacity: 1; }
+  30% { transform: scale(1.25, 0.7) translateY(4px); opacity: 1; }
+  100% { transform: scale(0.2, 1.4) translateY(-60px); opacity: 0; }
+}

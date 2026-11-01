@@ -140,48 +140,9 @@ export function setupPinListener() {
   });
 }
 
-export function setupCompanionSpatialMigration() {
-  const residentKumo = document.getElementById('canvas-resident-kumo');
-  const residentBubble = document.getElementById('resident-kumo-bubble');
-  const residentBubbleText = document.getElementById('resident-kumo-bubble-text');
-  const residentAvatar = document.getElementById('resident-kumo-avatar');
+import { initResidentCompanion } from './resident-companion.js';
 
-  function showKumoBubble(text, durationMs = 3500) {
-    if (!residentBubble || !residentBubbleText) return;
-    residentBubbleText.textContent = text;
-    residentBubble.classList.remove('hidden');
-    setTimeout(() => {
-      residentBubble.classList.add('hidden');
-    }, durationMs);
-  }
-
-  if (residentAvatar) {
-    residentAvatar.addEventListener('click', () => {
-      const cmdBar = document.getElementById('command-bar');
-      if (cmdBar) cmdBar.click();
-      showKumoBubble('What would you like to plan or build today?', 3000);
-    });
-  }
-
-  if (window.goo?.onCompanionBoardEnter) {
-    window.goo.onCompanionBoardEnter(() => {
-      if (residentKumo) {
-        residentKumo.style.transform = 'translateY(40px) scale(0.3)';
-        residentKumo.style.opacity = '0';
-        setTimeout(() => {
-          residentKumo.style.transition = 'transform 0.5s cubic-bezier(0.17, 0.89, 0.32, 1.28), opacity 0.3s ease';
-          residentKumo.style.transform = 'translateY(0) scale(1)';
-          residentKumo.style.opacity = '1';
-          showKumoBubble('Puff dived in from Pulse Island! Ready to co-pilot.', 4000);
-        }, 150);
-      }
-    });
-  }
-
-  window.addEventListener('beforeunload', () => {
-    if (window.goo?.companionLeapReturn) {
-      window.goo.companionLeapReturn();
-    }
-  });
+export function setupCompanionSpatialMigration(deps = {}) {
+  return initResidentCompanion(deps);
 }
 

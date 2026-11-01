@@ -118,5 +118,9 @@ test.describe('Kumoboard — Spatial Workbench', () => {
     // Verify Settings button exists in top navbar
     const settingsBtn = boardPage.locator('#btn-settings');
     await expect(settingsBtn).toBeVisible();
+
+    // Verify Resident In-Canvas Co-Pilot avatar exists
+    const residentAvatar = boardPage.locator('#resident-kumo-avatar');
+    await expect(residentAvatar).toBeVisible();
   });
 });

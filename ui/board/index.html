@@ -651,12 +651,42 @@
   </div>
 
   <!-- ================= RESIDENT IN-CANVAS KUMO CO-PILOT (SPATIAL MIGRATION) ================= -->
-  <div id="canvas-resident-kumo" class="fixed bottom-6 right-6 z-40 flex items-center gap-3 transition-all duration-300 pointer-events-auto">
-    <div id="resident-kumo-bubble" class="hidden bg-surface-container-lowest/95 backdrop-blur-md px-3.5 py-1.5 rounded-2xl shadow-lg border border-outline-variant/30 text-xs font-semibold text-on-surface ring-1 ring-primary/20">
-      <span id="resident-kumo-bubble-text">☁️ Kumo is ready on canvas</span>
+  <div id="canvas-resident-kumo" class="resident-companion-wrap">
+    <!-- Co-Pilot Speech Bubble & Action Popout -->
+    <div id="resident-kumo-bubble" class="resident-speech-bubble hidden">
+      <div class="resident-bubble-header">
+        <span>Kumo Resident Co-Pilot</span>
+        <span class="material-symbols-outlined text-[14px]">auto_awesome</span>
+      </div>
+      <p id="resident-kumo-bubble-text" class="resident-bubble-text">Puff dived in from Pulse Island! Co-pilot active on canvas.</p>
+      <div class="resident-quick-actions">
+        <button type="button" id="btn-kumo-cmd" class="resident-action-pill" title="Open Omnibar (Ctrl+K)">
+          <span class="material-symbols-outlined text-[13px]">terminal</span>
+          <span>Command</span>
+        </button>
+        <button type="button" id="btn-kumo-note" class="resident-action-pill" title="Add Sticky Note">
+          <span class="material-symbols-outlined text-[13px]">sticky_note_2</span>
+          <span>+ Note</span>
+        </button>
+        <button type="button" id="btn-kumo-return" class="resident-action-pill pill-return" title="Return to Desktop Island">
+          <span class="material-symbols-outlined text-[13px]">north</span>
+          <span>Leap Out</span>
+        </button>
+      </div>
     </div>
-    <div id="resident-kumo-avatar" class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-primary to-purple-500 shadow-xl ring-2 ring-white/90 dark:ring-white/20 flex items-center justify-center cursor-pointer active:scale-95 hover:scale-105 transition-all text-2xl select-none" title="Kumo In-Canvas Co-Pilot (Click to ask or plan)">
-      <span class="animate-bounce inline-block">☁️</span>
+
+    <!-- Avatar with Shockwave Ripple -->
+    <div class="relative">
+      <div class="resident-cloud-ripple"></div>
+      <div id="resident-kumo-avatar" class="resident-avatar-core" title="Kumo In-Canvas Co-Pilot (Click for actions or to leap back)">
+        <div class="resident-cloud-face">
+          <span class="resident-eye"></span>
+          <span class="resident-eye"></span>
+          <span class="resident-blush left"></span>
+          <span class="resident-blush right"></span>
+        </div>
+        <span class="resident-status-dot"></span>
+      </div>
     </div>
   </div>
 

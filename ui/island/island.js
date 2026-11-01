@@ -51,4 +51,35 @@ document.addEventListener('DOMContentLoaded', () => {
   window.IslandAssistant?.init();
   window.IslandAmp?.init();
   window.IslandEdgeDrop?.init(stateController, switchTab);
+
+  // 4. Companion Spatial Migration ("Dive-In / Leap-Out")
+  const pillMascot = document.getElementById('pill-mascot');
+  const headerBrand = document.getElementById('header-brand');
+
+  if (window.goo?.onCompanionDive) {
+    window.goo.onCompanionDive(() => {
+      if (!pillMascot) return;
+      pillMascot.classList.remove('leaping');
+      pillMascot.classList.add('diving');
+      window.IslandHaptics?.playHaptic('snap');
+      setTimeout(() => {
+        pillMascot.classList.remove('diving');
+        pillMascot.classList.add('dormant');
+        if (headerBrand) headerBrand.textContent = 'PULSE // CO-PILOT ON CANVAS';
+      }, 350);
+    });
+  }
+
+  if (window.goo?.onCompanionLeap) {
+    window.goo.onCompanionLeap(() => {
+      if (!pillMascot) return;
+      pillMascot.classList.remove('dormant', 'diving');
+      pillMascot.classList.add('leaping');
+      window.IslandHaptics?.playHaptic('pop');
+      if (headerBrand) headerBrand.textContent = 'PULSE // DECK V4';
+      setTimeout(() => {
+        pillMascot.classList.remove('leaping');
+      }, 450);
+    });
+  }
 });

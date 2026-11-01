@@ -34,5 +34,5 @@ export { toast, saveState, loadState, updateMiniMap, renderCards, addNewTool, ap
 
   // Pinning & Spatial Companion Migration
   setupPinListener();
-  setupCompanionSpatialMigration();
+  setupCompanionSpatialMigration({ addNewTool, toast });
 })();
