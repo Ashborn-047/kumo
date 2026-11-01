@@ -147,6 +147,7 @@
   box-shadow: var(--shadow-bezel-drop);
   cursor: pointer;
   border: none;
+  overflow: hidden;
 }
 
 .island-wrapper.state-resting .fillet-wing-left,

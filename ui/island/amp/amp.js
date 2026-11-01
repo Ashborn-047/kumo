@@ -6,6 +6,9 @@
 
 function initAmpWidget() {
   const marqueeText = document.getElementById('marquee-text');
+  const marqueeTrack = document.getElementById('marquee-track');
+  const marqueeWell = document.getElementById('header-marquee');
+  const headerMusicBars = document.getElementById('header-music-bars');
   const pillTime = document.getElementById('pill-time');
   const btnHeroAction = document.getElementById('btn-hero-action');
   const ampSongTitle = document.getElementById('amp-song-title');
@@ -36,6 +39,28 @@ function initAmpWidget() {
   // Initialize Visualizer Engine
   window.AmpVisualizer?.init(spectrumRack);
 
+  function updateMarquee(text) {
+    if (!marqueeText) return;
+    marqueeText.textContent = text;
+    if (!marqueeTrack || !marqueeWell) return;
+
+    requestAnimationFrame(() => {
+      const barsWidth = (headerMusicBars && headerMusicBars.offsetParent !== null) ? (headerMusicBars.offsetWidth + 6) : 0;
+      const wellWidth = marqueeWell.clientWidth;
+      const available = wellWidth - barsWidth - 16;
+      const trackWidth = marqueeTrack.scrollWidth;
+
+      if (trackWidth > available && available > 30) {
+        const diff = trackWidth - available;
+        marqueeTrack.style.setProperty('--marquee-distance', `-${diff + 8}px`);
+        marqueeTrack.classList.add('is-overflowing');
+      } else {
+        marqueeTrack.classList.remove('is-overflowing');
+        marqueeTrack.style.removeProperty('--marquee-distance');
+      }
+    });
+  }
+
   function setPlayingState(play) {
     isPlaying = Boolean(play);
     const heroPlayIcon = btnHeroAction?.querySelector('.icon-play');
@@ -48,12 +73,20 @@ function initAmpWidget() {
       if (heroPauseIcon) heroPauseIcon.style.display = 'block';
       if (ampPlayIcon) ampPlayIcon.style.display = 'none';
       if (ampPauseIcon) ampPauseIcon.style.display = 'block';
+      if (headerMusicBars) {
+        headerMusicBars.classList.add('is-playing');
+        headerMusicBars.classList.remove('is-paused');
+      }
       window.AmpVisualizer?.setPlaying(true);
     } else {
       if (heroPlayIcon) heroPlayIcon.style.display = 'block';
       if (heroPauseIcon) heroPauseIcon.style.display = 'none';
       if (ampPlayIcon) ampPlayIcon.style.display = 'block';
       if (ampPauseIcon) ampPauseIcon.style.display = 'none';
+      if (headerMusicBars) {
+        headerMusicBars.classList.remove('is-playing');
+        headerMusicBars.classList.add('is-paused');
+      }
       window.AmpVisualizer?.setPlaying(false);
     }
   }
@@ -72,7 +105,8 @@ function initAmpWidget() {
         const cleanSource = isSpotify ? 'Spotify' : 'System Media';
         ampSongArtist.textContent = `${meta.artist || 'Unknown Artist'} · ${cleanSource} Audio Stream`;
       }
-      if (marqueeText) marqueeText.textContent = `${meta.title} · ${meta.artist || ''}`;
+      const trackStr = meta.artist ? `${meta.title} · ${meta.artist}` : meta.title;
+      updateMarquee(trackStr);
 
       const posStr = window.AmpControls?.formatTime(meta.position) || '0:00';
       const durStr = window.AmpControls?.formatTime(meta.duration) || '0:00';
@@ -92,7 +126,7 @@ function initAmpWidget() {
       if (ampSongArtist) ampSongArtist.textContent = 'Spotify / Windows Media Player Ready';
       if (ampTimeCurrent) ampTimeCurrent.textContent = '0:00';
       if (ampTimeTotal) ampTimeTotal.textContent = '0:00';
-      if (marqueeText) marqueeText.textContent = 'Kumo Amp · Idle';
+      updateMarquee('Kumo Amp · Ready');
       if (pillTime) pillTime.textContent = '0:00';
       if (ampSeekFill) ampSeekFill.style.width = '0%';
       if (ampSeekThumb) ampSeekThumb.style.left = '0%';
@@ -188,6 +222,9 @@ function initAmpWidget() {
       applyMediaState(meta);
     });
   }
+
+  // Initialize resting marquee display
+  updateMarquee(marqueeText?.textContent || 'Paper Lanterns · Kiri Moon');
 
   // Defer initial status poll to idle so boot remains instant
   setTimeout(pollLiveMedia, 3500);

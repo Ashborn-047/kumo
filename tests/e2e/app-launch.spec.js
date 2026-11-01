@@ -108,6 +108,29 @@ test.describe('Kumo Application Boot & Windows', () => {
       await firstWin.evaluate(() => document.getElementById('btn-toggle-mascot')?.click());
       await expect(firstWin.locator('#mascot-toggle-label')).toHaveText('MASCOT ON');
       await expect(toggleBtn).not.toHaveClass(/is-off/);
+
+      // Verify resting header layout: brand is hidden to maximize song clarity
+      const headerBrand = firstWin.locator('#header-brand');
+      await expect(headerBrand).toBeHidden();
+
+      // Verify music visualizer bars, marquee track text, and play/pause action are visible
+      await expect(firstWin.locator('#header-music-bars')).toBeVisible();
+      await expect(firstWin.locator('#marquee-text')).toBeVisible();
+      const heroAction = firstWin.locator('#btn-hero-action');
+      await expect(heroAction).toBeVisible();
+
+      // Ensure hero action button is within chassis bounds (not clipped)
+      await firstWin.waitForFunction(() => {
+        const chassis = document.querySelector('.seamless-chassis');
+        return chassis && Math.round(chassis.getBoundingClientRect().width) >= 340;
+      });
+      const heroBox = await heroAction.boundingBox();
+      const chassisBox = await firstWin.locator('.seamless-chassis').boundingBox();
+      expect(heroBox).toBeTruthy();
+      expect(chassisBox).toBeTruthy();
+      if (heroBox && chassisBox) {
+        expect(heroBox.x + heroBox.width).toBeLessThanOrEqual(chassisBox.x + chassisBox.width);
+      }
     } finally {
       await app.close();
       if (fs.existsSync(islandTempUserData)) {

@@ -22,7 +22,7 @@
 .island-wrapper.state-resting .chassis-header {
   display: flex;
   height: 40px;
-  padding: 0 10px 0 12px;
+  padding: 0 12px 0 12px;
   background: transparent;
   color: #ffffff;
   border-bottom: none;
@@ -40,7 +40,7 @@
 .header-left {
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 6px;
   flex-shrink: 0;
 }
 
@@ -266,31 +266,36 @@
   transition: color 0.25s ease;
 }
 
-.island-wrapper.state-resting .chassis-brand {
-  color: #b9a7ff;
+.island-wrapper.state-resting .chassis-brand,
+.island-wrapper.state-resting .mascot-status-dot {
+  display: none !important;
 }
 
 .island-wrapper.state-unrolled .chassis-brand {
   color: var(--iris-action);
 }
 
-/* Center Marquee Well */
+/* Center Music / Marquee Well */
 .marquee-well {
   flex: 1;
+  min-width: 0;
   max-width: 175px;
-  height: 22px;
+  height: 24px;
   border-radius: 999px;
   display: flex;
   align-items: center;
   overflow: hidden;
   padding: 0 8px;
-  margin: 0 6px;
+  margin: 0 4px;
+  gap: 6px;
+  box-sizing: border-box;
   transition: background-color 0.25s ease, border-color 0.25s ease;
 }
 
 .island-wrapper.state-resting .marquee-well {
-  background: #0f1420;
-  border: 1px solid #1c2336;
+  background: rgba(18, 24, 38, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.35);
 }
 
 .island-wrapper.state-unrolled .marquee-well {
@@ -298,45 +303,113 @@
   border: 1px solid #e7e0f2;
 }
 
+/* Mini Audio Equalizer Visualizer */
+.mini-music-bars {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 12px;
+  flex-shrink: 0;
+}
+
+.mini-music-bars .bar {
+  width: 2px;
+  border-radius: 1px;
+  background: var(--phosphor);
+  box-shadow: 0 0 4px rgba(142, 230, 184, 0.4);
+  transition: height 0.15s ease, opacity 0.15s ease;
+}
+
+.mini-music-bars .bar-1 { height: 5px; }
+.mini-music-bars .bar-2 { height: 11px; }
+.mini-music-bars .bar-3 { height: 7px; }
+
+.mini-music-bars.is-playing .bar-1 {
+  animation: eqBounce1 0.75s ease-in-out infinite alternate;
+}
+.mini-music-bars.is-playing .bar-2 {
+  animation: eqBounce2 0.55s ease-in-out infinite alternate 0.15s;
+}
+.mini-music-bars.is-playing .bar-3 {
+  animation: eqBounce3 0.65s ease-in-out infinite alternate 0.3s;
+}
+
+@keyframes eqBounce1 {
+  0% { height: 3px; }
+  100% { height: 11px; }
+}
+@keyframes eqBounce2 {
+  0% { height: 11px; }
+  100% { height: 4px; }
+}
+@keyframes eqBounce3 {
+  0% { height: 4px; }
+  100% { height: 10px; }
+}
+
+.mini-music-bars.is-paused .bar,
+.mini-music-bars:not(.is-playing) .bar {
+  height: 3px;
+  opacity: 0.35;
+  animation: none;
+}
+
+/* Marquee Track */
 .marquee-track {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   white-space: nowrap;
   font-size: 10px;
-  animation: marqueeScroll 14s linear infinite;
+  min-width: 0;
+  will-change: transform;
   transition: color 0.25s ease;
 }
 
 .island-wrapper.state-resting .marquee-track {
-  color: #e2ddf2;
+  color: #ffffff;
+  font-weight: 600;
+  letter-spacing: 0.02em;
 }
 
 .island-wrapper.state-unrolled .marquee-track {
-  color: #494262;
-  font-weight: 500;
+  color: #3b3552;
+  font-weight: 600;
 }
 
-@keyframes marqueeScroll {
-  0%   { transform: translateX(100%); }
-  100% { transform: translateX(-100%); }
+.marquee-track.is-overflowing {
+  animation: marqueeGlide 10s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+
+@keyframes marqueeGlide {
+  0%, 25% { transform: translateX(0); }
+  70%, 85% { transform: translateX(var(--marquee-distance, -30px)); }
+  100% { transform: translateX(0); }
 }
 
 /* Header Right: Time, Play & Dock Buttons */
 .header-right {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 7px;
   flex-shrink: 0;
 }
 
+.island-wrapper.state-resting .header-right {
+  gap: 6px;
+  padding-right: 2px;
+}
+
 .pill-time {
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: 700;
+  letter-spacing: 0.02em;
+  flex-shrink: 0;
   transition: color 0.25s ease;
 }
 
 .island-wrapper.state-resting .pill-time {
   color: var(--phosphor);
-  text-shadow: 0 0 6px rgba(142, 230, 184, 0.4);
+  text-shadow: 0 0 6px rgba(142, 230, 184, 0.35);
 }
 
 .island-wrapper.state-unrolled .pill-time {
@@ -353,13 +426,21 @@
   justify-content: center;
   border: none;
   cursor: pointer;
+  flex-shrink: 0;
   transition: transform 0.15s ease, background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .island-wrapper.state-resting .btn-hero-action {
+  width: 22px;
+  height: 22px;
   background: var(--lavender);
   color: var(--deep-obsidian);
   box-shadow: 0 2px 6px rgba(185, 167, 255, 0.35);
+}
+
+.island-wrapper.state-resting .btn-hero-action:hover {
+  transform: scale(1.1);
+  background: #cfc4ff;
 }
 
 .island-wrapper.state-unrolled .btn-hero-action {
