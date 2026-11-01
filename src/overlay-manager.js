@@ -11,10 +11,17 @@ const { BrowserWindow, screen } = require('electron');
 const path = require('path');
 
 let overlayWindow = null;
+let cachedPreloadPath = null;
+
+function setPreload(preloadPath) {
+  if (preloadPath) cachedPreloadPath = preloadPath;
+}
 
 function create(preloadPath) {
+  if (preloadPath) cachedPreloadPath = preloadPath;
   if (overlayWindow && !overlayWindow.isDestroyed()) return overlayWindow;
 
+  const targetPreload = preloadPath || cachedPreloadPath;
   const primaryDisplay = screen.getPrimaryDisplay();
   const { width, height } = primaryDisplay.workAreaSize;
 
@@ -34,7 +41,7 @@ function create(preloadPath) {
     hasShadow: false,
     show: false,                // remain hidden until explicitly displayed
     webPreferences: {
-      preload: preloadPath,
+      preload: targetPreload,
       contextIsolation: true,
       nodeIntegration: false,
     },
@@ -50,9 +57,15 @@ function create(preloadPath) {
   return overlayWindow;
 }
 
-function show()  { overlayWindow?.show(); }
+function show(preloadPath) {
+  if (!overlayWindow || overlayWindow.isDestroyed()) {
+    create(preloadPath || cachedPreloadPath);
+  }
+  overlayWindow?.show();
+}
+
 function hide()  { overlayWindow?.hide(); }
 function toggle(){ overlayWindow?.isVisible() ? hide() : show(); }
 function get()   { return overlayWindow; }
 
-module.exports = { create, show, hide, toggle, get };
+module.exports = { create, show, hide, toggle, get, setPreload };

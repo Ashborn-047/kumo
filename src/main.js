@@ -108,23 +108,7 @@ function applySavedSettings(saved, incoming = {}) {
 app.whenReady().then(async () => {
   app.setAppUserModelId('com.kumo.app');
 
-  // Configure seamless desktop loopback audio capture for real-time music FFT visualizer
-  try {
-    const { session, desktopCapturer } = electron;
-    if (session?.defaultSession && typeof session.defaultSession.setDisplayMediaRequestHandler === 'function') {
-      session.defaultSession.setDisplayMediaRequestHandler((request, callback) => {
-        desktopCapturer.getSources({ types: ['screen'] })
-          .then((sources) => {
-            callback({ video: sources[0], audio: 'loopback' });
-          })
-          .catch(() => {
-            callback({});
-          });
-      });
-    }
-  } catch (err) {
-    console.warn('[main] loopback audio capture setup:', err.message);
-  }
+  overlayManager.setPreload(PRELOAD);
 
   const cfg = settings.get();
 
@@ -156,10 +140,27 @@ app.whenReady().then(async () => {
 
   // Defer secondary windows and background monitoring until primary window is ready
   const initBackgroundServices = () => {
+    // Configure desktop loopback audio capture on idle
+    try {
+      const { session, desktopCapturer } = electron;
+      if (session?.defaultSession && typeof session.defaultSession.setDisplayMediaRequestHandler === 'function') {
+        session.defaultSession.setDisplayMediaRequestHandler((request, callback) => {
+          desktopCapturer.getSources({ types: ['screen'] })
+            .then((sources) => {
+              callback({ video: sources[0], audio: 'loopback' });
+            })
+            .catch(() => {
+              callback({});
+            });
+        });
+      }
+    } catch (err) {
+      console.warn('[main] loopback audio capture setup:', err.message);
+    }
+
     islandManager.create(PRELOAD);
-    overlayManager.create(PRELOAD);
-    if (!firstRun && !cfg.startMinimized) {
-      overlayManager.hide();
+    if (cfg.startMinimized) {
+      overlayManager.create(PRELOAD);
     }
     startTelemetryBroadcast(boardManager);
     startMediaSync(islandManager, boardManager, ampManager);
