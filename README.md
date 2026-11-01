@@ -38,7 +38,7 @@
   Featuring an organic physics companion, the kinetic Pulse Dynamic Island bezel overlay, the Edge Drop desktop staging shelf, live Windows SMTC media control (Kumo Amp), real-time OpenRouter token streaming, a 3-tier desktop action safety gate, and an infinite spatial planning canvas ported from Mochiboard.
 </p>
 
-[Quick Start](#quick-start) • [Pulse Dynamic Island](#pulse-dynamic-island) • [Edge Drop Shelf](#edge-drop-desktop-shelf) • [Architecture](#system-architecture) • [Security & Safety](#3-tier-safety-system) • [Hotkeys](#hotkeys--shortcuts)
+[Quick Start](#quick-start) • [Pulse Dynamic Island](#pulse-dynamic-island) • [Edge Drop Shelf](#edge-drop-desktop-shelf) • [Architecture](#system-architecture) • [Contributing](CONTRIBUTING.md) • [Code of Conduct](CODE_OF_CONDUCT.md) • [Security](SECURITY.md) • [License](LICENSE)
 
 </div>
 
@@ -65,6 +65,7 @@
   - [Manual Setup](#manual-setup)
 - [Hotkeys & Shortcuts](#hotkeys--shortcuts)
 - [Extending Kumo (Developer Guide)](#extending-kumo)
+- [Contributing](#contributing)
 - [Packaging & Distribution](#packaging--distribution)
 - [Roadmap](#roadmap)
 - [License & Acknowledgments](#license--acknowledgments)
@@ -345,6 +346,23 @@ dist/Kumo Setup 0.1.0.exe
 - [ ] Multi-monitor display selection
 - [ ] Voice input / TTS audio feedback
 - [ ] System tray notification badges for reminders
+
+---
+
+## Contributing
+
+We welcome contributions to Kumo. Whether fixing a bug, adding a new action, or polishing UI components, here is how you can help:
+
+1. **Review our Guidelines**: Please read our [Contributing Guide](CONTRIBUTING.md) and [Code of Conduct](CODE_OF_CONDUCT.md).
+2. **Zero-Emoji Policy**: Kumo enforces a strict zero-emoji standard across all source code, comments, UI strings, and commit messages. Use Lucide SVG icons instead.
+3. **Verify Tests**: Ensure syntax checks and test suites pass locally before submitting:
+   ```powershell
+   npm run test:unit
+   npm run test:e2e
+   ```
+4. **Submit a Pull Request**: Create a feature branch, commit with Conventional Commits, and submit a PR for review.
+
+For security concerns, please refer to our [Security Policy](SECURITY.md).
 
 ---
 
