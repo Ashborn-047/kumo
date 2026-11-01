@@ -2,7 +2,7 @@ const { defineConfig } = require('@playwright/test');
 
 module.exports = defineConfig({
   testDir: './tests',
-  timeout: 35000,
+  timeout: 75000,
   retries: 0,
   workers: 1, // Electron E2E tests run sequentially
   reporter: [

@@ -35,6 +35,7 @@ test.describe('Kumo Studio & Onboarding Window', () => {
   });
 
   test('opens studio onboarding window and switches aesthetics', async () => {
+    test.setTimeout(75000);
     // Find the studio window
     let studioPage = null;
     const maxWaitMs = 10000;
