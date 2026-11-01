@@ -16,23 +16,78 @@ function initBoardWidget() {
   let activeBoard = null;
   let dynamicCards = [];
 
+  function getCardTag(c) {
+    if (c.tag) return c.tag;
+    switch (c.type) {
+      case 'telemetry': return '#TELEMETRY';
+      case 'network': return '#NETWORK';
+      case 'media': return '#MEDIA';
+      case 'workspace': return '#WORKSPACE';
+      case 'launcher': return '#LAUNCHER';
+      case 'writer': return '#AI-STUDIO';
+      case 'code': return '#TERMINAL';
+      case 'notes': return (c.data?.items && c.data.items.length > 0) ? '#TODO' : '#SCRATCHPAD';
+      case 'design': return '#THEME-LAB';
+      case 'link': return '#LINK';
+      default: return `#${(c.type || 'CARD').toUpperCase()}`;
+    }
+  }
+
+  function getCardSnippet(c) {
+    if (c.text) return c.text;
+    if (c.content) return c.content;
+    if (c.data?.scratchText) return c.data.scratchText;
+    if (c.data?.items && Array.isArray(c.data.items) && c.data.items.length > 0) {
+      return c.data.items[0].text || 'Task checklist item';
+    }
+    if (c.data?.code) {
+      const codeStr = String(c.data.code).trim();
+      return codeStr.length > 55 ? codeStr.slice(0, 52) + '...' : codeStr;
+    }
+    if (c.data?.prompt) return String(c.data.prompt).trim();
+    switch (c.type) {
+      case 'telemetry': return 'CPU, Memory, & Hardware telemetry monitor';
+      case 'network': return 'IP, Gateway, DNS, & Sentinel status';
+      case 'media': return 'System Media & live track controller';
+      case 'workspace': return 'Git repositories, branches, & dev environment';
+      case 'launcher': return 'Quick app shortcuts & indexed system tools';
+      case 'writer': return 'Kumo Neural Engine AI prompt studio';
+      case 'code': return 'PowerShell & DevOps console terminal';
+      case 'design': return 'Mascot companion moods & theme color palettes';
+      case 'notes': return 'Sprint tasks, checklists, and scratchpad notes';
+      default: return 'Active workspace tool card';
+    }
+  }
+
+  function getCardColor(c) {
+    if (c.color) return c.color;
+    switch (c.type) {
+      case 'telemetry': case 'code': return 'sky';
+      case 'writer': case 'design': case 'media': return 'lilac';
+      case 'workspace': case 'network': case 'launcher': case 'notes': return 'peach';
+      default: return 'sky';
+    }
+  }
+
   async function loadBoardData() {
     try {
       if (window.goo?.listBoards) {
         const boards = await window.goo.listBoards();
         if (Array.isArray(boards) && boards.length > 0) {
           activeBoard = boards[0];
-          if (boardNameDisplay) boardNameDisplay.textContent = activeBoard.name || 'Active Canvas';
+          if (boardNameDisplay) boardNameDisplay.textContent = activeBoard.name || 'Kumoboard';
           
           if (window.goo?.loadBoard) {
             const fullBoard = await window.goo.loadBoard(activeBoard.id);
             if (fullBoard && Array.isArray(fullBoard.cards) && fullBoard.cards.length > 0) {
               dynamicCards = fullBoard.cards.map(c => ({
                 id: c.id || String(Date.now()),
-                tag: c.type === 'link' ? '#LINK' : (c.tag || '#NOTE'),
-                text: c.text || c.content || '',
-                color: c.color || 'sky',
-                time: c.time || 'Active'
+                type: c.type || 'notes',
+                title: c.title || (c.type ? `${c.type.charAt(0).toUpperCase() + c.type.slice(1)} Hub` : 'Canvas Card'),
+                tag: getCardTag(c),
+                text: getCardSnippet(c),
+                color: getCardColor(c),
+                time: c.time || 'Canvas Active'
               }));
               renderCards();
               return;
@@ -52,7 +107,7 @@ function initBoardWidget() {
     const count = dynamicCards.length;
     if (badgeCount) badgeCount.textContent = count;
     if (pinnedCountVal) pinnedCountVal.textContent = count;
-    if (boardNodesCount) boardNodesCount.textContent = count > 0 ? `${count} Active Notes` : 'Canvas Ready';
+    if (boardNodesCount) boardNodesCount.textContent = count > 0 ? `${count} Active Cards` : 'Canvas Ready';
 
     if (!matrixDynamic) return;
     matrixDynamic.innerHTML = '';
@@ -67,8 +122,8 @@ function initBoardWidget() {
           <rect width="7" height="7" x="14" y="14" rx="1"/>
           <rect width="7" height="7" x="3" y="14" rx="1"/>
         </svg>
-        <span class="sticky-empty-title font-sans">No Pinned Notes Yet</span>
-        <span class="sticky-empty-desc font-sans">Click '+ New Sticky Note' or drag desktop files here</span>
+        <span class="sticky-empty-title font-sans">No Canvas Cards Yet</span>
+        <span class="sticky-empty-desc font-sans">Click '+ New Sticky Note' or open full canvas</span>
       `;
       emptyEl.addEventListener('click', () => {
         createNewStickyNote();
@@ -86,9 +141,10 @@ function initBoardWidget() {
       cardEl.className = `sticky-card ${colorClass} font-sans`;
       cardEl.innerHTML = `
         <div class="sticky-meta font-mono">
-          <span class="sticky-tag ${textClass}">${card.tag || '#NOTE'}</span>
+          <span class="sticky-tag ${textClass}">${card.tag || '#CARD'}</span>
           <span class="sticky-dot ${dotClass}"></span>
         </div>
+        <div class="sticky-title font-sans">${escapeHtml(card.title || '')}</div>
         <p class="sticky-text font-sans">${escapeHtml(card.text || '')}</p>
         <span class="sticky-time font-mono">${card.time || 'Active'}</span>
       `;
@@ -121,6 +177,8 @@ function initBoardWidget() {
 
     const newNote = {
       id: Date.now().toString(),
+      type: 'notes',
+      title: 'Sticky Note',
       tag: '#QUICK-NOTE',
       text: noteText.trim(),
       color: randomColor,
@@ -159,8 +217,10 @@ function initBoardWidget() {
     window.goo.onCardPinned((card) => {
       dynamicCards.unshift({
         id: Date.now().toString(),
-        tag: card.type === 'link' ? '#LINK' : '#PINNED',
-        text: card.text || '',
+        type: card.type || 'notes',
+        title: card.title || 'Pinned Card',
+        tag: card.type === 'link' ? '#LINK' : (card.tag || '#PINNED'),
+        text: card.text || card.data?.text || card.content || '',
         color: card.color || 'sky',
         time: 'Just now'
       });
