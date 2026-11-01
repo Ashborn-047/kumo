@@ -42,36 +42,45 @@
 }
 
 /* ══════════════════════════════════════════════════════════════
-   MODULAR NAVIGATION SWITCHER (4 FLAGS)
+   MODULAR NAVIGATION SWITCHER (4 FLAGS - ICON-ONLY DOCK)
    Kumoboard, Assistant, Kumo Amp, Edge Drop
    Jelly-Pop kinetic spring physics, Strictly SVG icons
    ══════════════════════════════════════════════════════════════ */
 .modular-nav {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 6px;
-  padding: 2px 0 4px 0;
-  flex-shrink: 0;
-}
-
-.nav-tab {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 5px;
-  padding: 6px 6px;
+  gap: 8px;
+  padding: 0 0 3px 0;
+  flex-shrink: 0;
+  width: 100%;
+}
+
+.nav-tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 32px;
+  min-width: 44px;
+  padding: 0 12px;
   border-radius: 10px;
   border: 1px solid var(--card-border-subtle);
   background: #fbf9fd;
   color: #55506b;
-  font-size: 11px;
-  font-weight: 600;
   cursor: pointer;
+  position: relative;
   transition: transform 0.28s var(--spring-ease),
               background 0.2s ease,
               border-color 0.2s ease,
               color 0.2s ease,
               box-shadow 0.2s ease;
+}
+
+.nav-tab .lucide-icon {
+  width: 16px;
+  height: 16px;
+  stroke-width: 2.1;
 }
 
 .nav-tab:hover {
@@ -91,7 +100,7 @@
   border-color: var(--iris-action);
   color: var(--iris-action);
   box-shadow: 0 4px 12px -2px rgba(99, 85, 216, 0.18), 0 1px 3px rgba(0, 0, 0, 0.05);
-  transform: translateY(-1.5px) scale(1.02);
+  transform: translateY(-1.5px) scale(1.04);
   animation: jellyPop 0.35s var(--spring-ease);
 }
 
@@ -99,21 +108,21 @@
   0%   { transform: scale(0.92); }
   45%  { transform: scale(1.06); }
   75%  { transform: scale(0.98); }
-  100% { transform: translateY(-1.5px) scale(1.02); }
+  100% { transform: translateY(-1.5px) scale(1.04); }
 }
 
 /* Pop-up jelly bounce on active SVG tab icon */
 .nav-tab.active .lucide-icon {
   animation: iconJellyPop 0.4s var(--spring-ease);
-  transform: scale(1.22) translateY(-1px);
+  transform: scale(1.15) translateY(-0.5px);
   stroke: var(--iris-action);
 }
 
 @keyframes iconJellyPop {
   0%   { transform: scale(1) translateY(0); }
-  40%  { transform: scale(1.35) translateY(-3px); }
-  75%  { transform: scale(1.15) translateY(-0.5px); }
-  100% { transform: scale(1.22) translateY(-1px); }
+  40%  { transform: scale(1.25) translateY(-2px); }
+  75%  { transform: scale(1.1) translateY(-0.5px); }
+  100% { transform: scale(1.15) translateY(-0.5px); }
 }
 
 .tab-badge-peach {
@@ -127,20 +136,23 @@
 }
 
 .tab-live-dot {
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: #10b981;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.5);
+  display: inline-block;
 }
 
 .tab-tag-smtc {
-  font-size: 8px;
+  font-size: 7.5px;
   font-weight: 700;
   padding: 1px 4px;
   border-radius: 4px;
   background: var(--sky-tint);
   color: var(--sky-text);
   border: 1px solid var(--sky-border);
+  letter-spacing: 0.2px;
 }
 
 /* Modular Stage Container */
