@@ -58,10 +58,10 @@ export function renderDropHTML(card) {
       <!-- Search & Sub-Filter Bar -->
       <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2">
         <div class="flex items-center gap-1 overflow-x-auto py-0.5 font-mono text-[11px]">
-          <button class="drop-sub-filter px-2.5 py-1 rounded-lg font-semibold transition-all ${activeSubFilter === 'all' ? 'bg-primary text-on-primary shadow-xs' : 'bg-surface-container-low text-secondary hover:text-on-surface'}" data-filter="all">All</button>
-          <button class="drop-sub-filter px-2.5 py-1 rounded-lg font-semibold transition-all ${activeSubFilter === 'links' ? 'bg-primary text-on-primary shadow-xs' : 'bg-surface-container-low text-secondary hover:text-on-surface'}" data-filter="links">Links &amp; Web</button>
-          <button class="drop-sub-filter px-2.5 py-1 rounded-lg font-semibold transition-all ${activeSubFilter === 'files' ? 'bg-primary text-on-primary shadow-xs' : 'bg-surface-container-low text-secondary hover:text-on-surface'}" data-filter="files">Files &amp; Apps</button>
-          <button class="drop-sub-filter px-2.5 py-1 rounded-lg font-semibold transition-all ${activeSubFilter === 'snippets' ? 'bg-primary text-on-primary shadow-xs' : 'bg-surface-container-low text-secondary hover:text-on-surface'}" data-filter="snippets">Snippets</button>
+          <button class="drop-sub-filter px-2.5 py-1 rounded-lg font-semibold transition-all ${activeSubFilter === 'all' ? 'bg-primary text-on-primary shadow-xs' : 'bg-surface-container-low text-secondary hover:text-on-surface'}" data-drop-filter="all">All</button>
+          <button class="drop-sub-filter px-2.5 py-1 rounded-lg font-semibold transition-all ${activeSubFilter === 'links' ? 'bg-primary text-on-primary shadow-xs' : 'bg-surface-container-low text-secondary hover:text-on-surface'}" data-drop-filter="links">Links &amp; Web</button>
+          <button class="drop-sub-filter px-2.5 py-1 rounded-lg font-semibold transition-all ${activeSubFilter === 'files' ? 'bg-primary text-on-primary shadow-xs' : 'bg-surface-container-low text-secondary hover:text-on-surface'}" data-drop-filter="files">Files &amp; Apps</button>
+          <button class="drop-sub-filter px-2.5 py-1 rounded-lg font-semibold transition-all ${activeSubFilter === 'snippets' ? 'bg-primary text-on-primary shadow-xs' : 'bg-surface-container-low text-secondary hover:text-on-surface'}" data-drop-filter="snippets">Snippets</button>
         </div>
 
         <div class="relative flex items-center">
@@ -188,7 +188,7 @@ export function attachDropEvents(el, card, saveStateCb, toastCb) {
   el.querySelectorAll('.drop-sub-filter').forEach((btn) => {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
-      cardData.activeSubFilter = btn.dataset.filter || 'all';
+      cardData.activeSubFilter = btn.dataset.dropFilter || btn.dataset.filter || 'all';
       saveStateCb();
       renderDropDOM(el, card, saveStateCb, toastCb);
     });

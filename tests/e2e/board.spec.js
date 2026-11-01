@@ -82,12 +82,12 @@ test.describe('Kumoboard — Spatial Workbench', () => {
     await expect(boardPage.locator('#command-bar')).toBeVisible();
 
     // Verify Tool Category Navigation Pills
-    const allFilter = boardPage.locator('button[data-filter="all"]');
-    const systemFilter = boardPage.locator('button[data-filter="launcher"]');
-    const writingFilter = boardPage.locator('button[data-filter="writer"]');
-    const codeFilter = boardPage.locator('button[data-filter="code"]');
-    const designFilter = boardPage.locator('button[data-filter="design"]');
-    const notesFilter = boardPage.locator('button[data-filter="notes"]');
+    const allFilter = boardPage.locator('.nav-filter-btn[data-filter="all"]');
+    const systemFilter = boardPage.locator('.nav-filter-btn[data-filter="launcher"]');
+    const writingFilter = boardPage.locator('.nav-filter-btn[data-filter="writer"]');
+    const codeFilter = boardPage.locator('.nav-filter-btn[data-filter="code"]');
+    const designFilter = boardPage.locator('.nav-filter-btn[data-filter="design"]');
+    const notesFilter = boardPage.locator('.nav-filter-btn[data-filter="notes"]');
 
     await expect(allFilter).toBeVisible();
     await expect(systemFilter).toBeVisible();
