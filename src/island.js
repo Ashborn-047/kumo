@@ -48,11 +48,11 @@ function calculatePosition(edge = currentEdge, state = currentState) {
   return { x, y, width, height };
 }
 
-function create(preloadPath) {
+function create(preloadPath, initialState = 'resting') {
   if (islandWindow) return islandWindow;
 
-  currentState = 'peek';
-  const bounds = calculatePosition('top', 'peek');
+  currentState = initialState;
+  const bounds = calculatePosition(currentEdge || 'top', initialState);
 
   islandWindow = new BrowserWindow({
     width: bounds.width,

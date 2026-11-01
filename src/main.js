@@ -106,6 +106,18 @@ function applySavedSettings(saved, incoming = {}) {
   return saved;
 }
 
+// Enforce single instance so repeated launches do not lock Chromium GPU/profile cache
+if (process.env.NODE_ENV !== 'test') {
+  const gotLock = app.requestSingleInstanceLock();
+  if (!gotLock) {
+    app.quit();
+    return;
+  }
+  app.on('second-instance', () => {
+    islandManager.popOut();
+  });
+}
+
 // ── App ready ─────────────────────────────────────────────────
 app.whenReady().then(async () => {
   app.setAppUserModelId('com.kumo.app');
@@ -143,9 +155,9 @@ app.whenReady().then(async () => {
     primaryWin = studioManager.open(PRELOAD, { mode: 'wizard' }, getActiveTaskbarIcon());
   } else {
     // Every time the user opens the application, only the island pops out, not the board
-    primaryWin = islandManager.create(PRELOAD);
     const islandEdge = cfg.island?.edge || cfg.islandEdge || 'top';
     islandManager.snapToEdge(islandEdge);
+    primaryWin = islandManager.create(PRELOAD, 'resting');
     if (primaryWin && typeof primaryWin.once === 'function') {
       primaryWin.once('ready-to-show', () => {
         islandManager.popOut();
@@ -173,7 +185,6 @@ app.whenReady().then(async () => {
       console.warn('[main] loopback audio capture setup:', err.message);
     }
 
-    islandManager.create(PRELOAD);
     if (cfg.startMinimized) {
       overlayManager.create(PRELOAD);
     }

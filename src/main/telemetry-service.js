@@ -29,8 +29,8 @@ function refreshGitInfoAsync() {
   });
 }
 
-// Initial fetch in background
-refreshGitInfoAsync();
+// Initial fetch deferred to idle / first broadcast
+
 
 function getSystemTelemetry() {
   const totalMem = Math.max(1, Math.round(os.totalmem() / 1024 / 1024 / 1024));

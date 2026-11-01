@@ -22,7 +22,7 @@ function initStateController() {
   const assistantMascotOrb = document.getElementById('assistant-mascot-orb');
   const assistantOrbDot = document.getElementById('assistant-orb-dot');
 
-  let currentState = 'peek';
+  let currentState = 'resting';
   let hoverUnrollTimer = null;
   let idlePeekTimer = null;
   let isMascotEnabled = true;
@@ -275,10 +275,12 @@ function initStateController() {
     });
   }
 
-  // Automatically pop out on initial boot
-  setTimeout(() => {
-    popOut();
-  }, 150);
+  // On initial boot, the island displays in resting state; collapse to peek after idle
+  idlePeekTimer = setTimeout(() => {
+    if (currentState === 'resting') {
+      setState('peek');
+    }
+  }, 5000);
 
   return {
     getState: () => currentState,
