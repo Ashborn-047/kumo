@@ -122,5 +122,16 @@ test.describe('Kumo Studio & Onboarding Window', () => {
     const launchBtn = studioPage.locator('#btn-launch-companion');
     await expect(launchBtn).toBeVisible();
     await expect(launchBtn).toContainText('Launch Kumo');
+
+    // Trigger launch to desktop island (studio window closes itself on launch)
+    await studioPage.evaluate(() => document.getElementById('btn-launch-companion').click()).catch(() => {});
+    await new Promise((r) => setTimeout(r, 1000));
+
+    // Verify Kumoboard does NOT open, only the Pulse Dynamic Island appears
+    const activeWindows = electronApp.windows();
+    const hasBoard = activeWindows.some((w) => w.url().includes('ui/board/index.html'));
+    expect(hasBoard).toBe(false);
+    const hasIsland = activeWindows.some((w) => w.url().includes('ui/island/index.html'));
+    expect(hasIsland).toBe(true);
   });
 });

@@ -7,8 +7,8 @@ import { state } from './wizard-state.js';
 export const STEP_TITLES = {
   1: 'Step 1 of 4 • Connect Brain',
   2: 'Step 2 of 4 • Engine Selection',
-  3: 'Step 3 of 4 • Persona & Palette',
-  4: 'Step 4 of 4 • Hotkeys & Review'
+  3: 'Step 3 of 4 • Persona & Edge Dock',
+  4: 'Step 4 of 4 • Pulse Island & Review'
 };
 
 export function setActiveStepTab(stepNum) {
@@ -162,15 +162,10 @@ export function setupNavigationAndLaunch() {
         if (window.goo.launchCompanion) {
           await window.goo.launchCompanion(settingsPayload);
         }
-        if (window.goo.showOverlay) window.goo.showOverlay();
-        if (window.goo.openBoard) window.goo.openBoard();
         if (window.goo.closeStudio) window.goo.closeStudio();
       } catch (err) {
         console.error('Failed to save settings or launch via IPC:', err);
-        window.location.href = '/ui/board/index.html';
       }
-    } else {
-      window.location.href = '/ui/board/index.html';
     }
   });
 

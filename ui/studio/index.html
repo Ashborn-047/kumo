@@ -319,12 +319,12 @@
 <!-- Tab 3: Persona -->
 <button class="flex items-center justify-center gap-1.5 py-2 px-2 rounded-xl transition-all font-label-md text-label-md text-secondary hover:text-on-surface cursor-pointer" id="tab-btn-3" onclick="goToStep(3)">
 <span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
-<span class="truncate">3. Persona</span>
+<span class="truncate">3. Persona &amp; Dock</span>
 </button>
-<!-- Tab 4: Hotkeys -->
+<!-- Tab 4: Island Launch -->
 <button class="flex items-center justify-center gap-1.5 py-2 px-2 rounded-xl transition-all font-label-md text-label-md text-secondary hover:text-on-surface cursor-pointer" id="tab-btn-4" onclick="goToStep(4)">
 <span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
-<span class="truncate">4. Hotkeys</span>
+<span class="truncate">4. Island Launch</span>
 </button>
 </div>
 <!-- ================= STEP 1 PANEL: CONNECT AI BRAIN ================= -->
@@ -666,6 +666,30 @@
 <button class="hover:text-primary transition-colors cursor-pointer" onclick="setBlush(100)" type="button">Ultra Glow (100%)</button>
 </div>
 </div>
+<!-- Pulse Island Screen Edge Docking Card -->
+<div class="bg-surface-container-low p-4 rounded-2xl border border-outline-variant/30 flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<div>
+<p class="font-body-md text-body-md font-semibold text-on-surface">Screen Edge Bezel Docking</p>
+<p class="font-body-sm text-body-sm text-secondary">Where Pulse Dynamic Island docks at your screen bezel</p>
+</div>
+<span class="font-label-sm text-label-sm text-primary font-bold bg-primary-fixed px-2.5 py-0.5 rounded-lg" id="edgeBadge">Top Bezel</span>
+</div>
+<div class="grid grid-cols-3 gap-2.5 pt-1">
+<button type="button" class="dock-edge-btn py-2.5 px-3 rounded-xl border border-primary bg-primary text-on-primary font-label-md text-[13px] font-bold flex flex-col items-center gap-1.5 transition-all shadow-xs cursor-pointer" onclick="selectIslandEdge(this, 'top')">
+<span class="material-symbols-outlined text-[20px]">vertical_align_top</span>
+<span>Top (Flush)</span>
+</button>
+<button type="button" class="dock-edge-btn py-2.5 px-3 rounded-xl border border-outline-variant/40 bg-surface-container-lowest text-secondary hover:text-on-surface font-label-md text-[13px] font-semibold flex flex-col items-center gap-1.5 transition-all cursor-pointer" onclick="selectIslandEdge(this, 'left')">
+<span class="material-symbols-outlined text-[20px]">align_horizontal_left</span>
+<span>Left Edge</span>
+</button>
+<button type="button" class="dock-edge-btn py-2.5 px-3 rounded-xl border border-outline-variant/40 bg-surface-container-lowest text-secondary hover:text-on-surface font-label-md text-[13px] font-semibold flex flex-col items-center gap-1.5 transition-all cursor-pointer" onclick="selectIslandEdge(this, 'right')">
+<span class="material-symbols-outlined text-[20px]">align_horizontal_right</span>
+<span>Right Edge</span>
+</button>
+</div>
+</div>
 <!-- Step 3 Dedicated Bottom Action Bar -->
 <div class="pt-3 border-t border-surface-container flex items-center justify-between">
 <button class="py-2.5 px-4 rounded-xl border border-outline-variant/60 text-secondary hover:text-on-surface font-label-md text-label-md transition-colors flex items-center gap-1.5" onclick="goToStep(2)" type="button">
@@ -673,45 +697,71 @@
 <span>Back to Engine</span>
 </button>
 <button class="py-3 px-6 rounded-2xl bg-primary hover:bg-primary-container text-on-primary font-headline-sm text-[14px] font-bold shadow-md shadow-primary/25 transition-all flex items-center gap-2 active:scale-95" onclick="goToStep(4)" type="button">
-<span>Next: Hotkeys &amp; Review</span>
+<span>Next: Island &amp; Review</span>
 <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
 </button>
 </div>
 </div>
-<!-- ================= STEP 4 PANEL: SUMMON & REVIEW ================= -->
+<!-- ================= STEP 4 PANEL: PULSE DYNAMIC ISLAND & REVIEW ================= -->
 <div class="hidden flex-col gap-5" id="step-panel-4">
 <div class="flex items-center justify-between pb-1">
 <div class="flex items-center gap-2">
-<span class="material-symbols-outlined text-primary text-[20px]">keyboard</span>
-<h2 class="text-headline-sm font-headline-sm text-on-surface text-[16px] font-bold">4. Summon &amp; Keyboard Shortcuts</h2>
+<span class="material-symbols-outlined text-primary text-[20px]">dynamic_form</span>
+<h2 class="text-headline-sm font-headline-sm text-on-surface text-[16px] font-bold">4. Pulse Dynamic Island &amp; Launch</h2>
 </div>
 <span class="font-label-sm text-label-sm text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 font-semibold">
-              Global Hooks Ready
+              Island Ready
             </span>
 </div>
-<!-- Shortcut Configuration Cards -->
+<!-- Dynamic Island Feature Showcase Cards -->
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-<div class="p-3.5 bg-surface-container-low rounded-2xl border border-outline-variant/30 flex items-center justify-between">
+<div class="p-3.5 bg-surface-container-low rounded-2xl border border-outline-variant/30 flex items-start gap-3">
+<div class="w-9 h-9 rounded-xl bg-primary-fixed flex items-center justify-center shrink-0 text-primary">
+<span class="material-symbols-outlined text-[20px]">dock_to_bottom</span>
+</div>
 <div>
-<p class="text-body-sm font-body-sm font-semibold text-on-surface">Summon Overlay</p>
-<p class="text-[11px] text-secondary">Brings Kumo to mouse pointer</p>
+<p class="text-body-sm font-body-sm font-semibold text-on-surface">Screen Bezel Island</p>
+<p class="text-[11px] text-secondary leading-snug">Snaps flush to your screen bezel as a 12px passive tab. Hover to reveal live system metrics, clock, and tactical tools.</p>
+</div>
+</div>
+<div class="p-3.5 bg-surface-container-low rounded-2xl border border-outline-variant/30 flex items-start gap-3">
+<div class="w-9 h-9 rounded-xl bg-secondary-fixed flex items-center justify-center shrink-0 text-secondary">
+<span class="material-symbols-outlined text-[20px]">upload_file</span>
+</div>
+<div>
+<p class="text-body-sm font-body-sm font-semibold text-on-surface">Edge Drop Shelf</p>
+<p class="text-[11px] text-secondary leading-snug">Drag files directly to your screen bezel for automated AI summaries, inspections, and smart format conversions.</p>
+</div>
+</div>
+<div class="p-3.5 bg-surface-container-low rounded-2xl border border-outline-variant/30 flex items-start gap-3">
+<div class="w-9 h-9 rounded-xl bg-[#eadfff] flex items-center justify-center shrink-0 text-primary">
+<span class="material-symbols-outlined text-[20px]">equalizer</span>
+</div>
+<div>
+<p class="text-body-sm font-body-sm font-semibold text-on-surface">Music &amp; Visualizer HUD</p>
+<p class="text-[11px] text-secondary leading-snug">Real-time Spotify &amp; SMTC controller with multi-mode audio FFT visualizers nestled right on your bezel.</p>
+</div>
+</div>
+<div class="p-3.5 bg-surface-container-low rounded-2xl border border-outline-variant/30 flex items-start gap-3">
+<div class="w-9 h-9 rounded-xl bg-emerald-100 flex items-center justify-center shrink-0 text-emerald-800">
+<span class="material-symbols-outlined text-[20px]">motion_blur</span>
+</div>
+<div>
+<p class="text-body-sm font-body-sm font-semibold text-on-surface">Spatial Migration</p>
+<p class="text-[11px] text-secondary leading-snug">Kumo lives in the Island on your desktop. Opening Kumoboard makes your companion dive straight into the canvas!</p>
+</div>
+</div>
+</div>
+<!-- Shortcut Configuration Cards -->
+<div class="p-3 bg-surface-container-low rounded-2xl border border-outline-variant/30 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[18px]">keyboard</span>
+<span class="text-body-sm font-body-sm font-semibold text-on-surface">Omnibar &amp; Quick Prompt:</span>
 </div>
 <div class="flex items-center gap-1 font-label-sm text-label-sm font-semibold">
-<kbd class="px-2 py-1 rounded-lg bg-surface-container-lowest border border-outline-variant shadow-xs text-on-surface">Alt</kbd>
+<kbd class="px-2 py-0.5 rounded-lg bg-surface-container-lowest border border-outline-variant shadow-xs text-on-surface">Alt</kbd>
 <span class="text-outline">+</span>
-<kbd class="px-2 py-1 rounded-lg bg-surface-container-lowest border border-outline-variant shadow-xs text-on-surface">Space</kbd>
-</div>
-</div>
-<div class="p-3.5 bg-surface-container-low rounded-2xl border border-outline-variant/30 flex items-center justify-between">
-<div>
-<p class="text-body-sm font-body-sm font-semibold text-on-surface">Command Palette</p>
-<p class="text-[11px] text-secondary">Quick prompt action bar</p>
-</div>
-<div class="flex items-center gap-1 font-label-sm text-label-sm font-semibold">
-<kbd class="px-2 py-1 rounded-lg bg-surface-container-lowest border border-outline-variant shadow-xs text-on-surface">Ctrl</kbd>
-<span class="text-outline">+</span>
-<kbd class="px-2 py-1 rounded-lg bg-surface-container-lowest border border-outline-variant shadow-xs text-on-surface">K</kbd>
-</div>
+<kbd class="px-2 py-0.5 rounded-lg bg-surface-container-lowest border border-outline-variant shadow-xs text-on-surface">Space</kbd>
 </div>
 </div>
 <!-- Setup Summary Review Capsule -->
@@ -722,20 +772,20 @@
 </div>
 <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center pt-1">
 <div class="bg-surface-container-lowest/80 p-2 rounded-xl border border-outline-variant/30">
-<p class="text-[10px] text-secondary uppercase font-semibold">Engine</p>
-<p class="font-label-sm text-label-sm font-bold text-on-surface truncate">3D Mochi Bot</p>
+<p class="text-[10px] text-secondary uppercase font-semibold">Mascot</p>
+<p class="font-label-sm text-label-sm font-bold text-on-surface truncate" id="summaryReviewEngine">3D Mochi Bot</p>
 </div>
 <div class="bg-surface-container-lowest/80 p-2 rounded-xl border border-outline-variant/30">
 <p class="text-[10px] text-secondary uppercase font-semibold">Theme Tint</p>
-<p class="font-label-sm text-label-sm font-bold text-primary truncate">Soft Lilac</p>
+<p class="font-label-sm text-label-sm font-bold text-primary truncate" id="summaryReviewPalette">Soft Lilac</p>
 </div>
 <div class="bg-surface-container-lowest/80 p-2 rounded-xl border border-outline-variant/30">
-<p class="text-[10px] text-secondary uppercase font-semibold">Physics</p>
-<p class="font-label-sm text-label-sm font-bold text-on-surface truncate">Spring 60fps</p>
+<p class="text-[10px] text-secondary uppercase font-semibold">Island Dock</p>
+<p class="font-label-sm text-label-sm font-bold text-on-surface truncate" id="summaryReviewDock">Top Bezel</p>
 </div>
 <div class="bg-surface-container-lowest/80 p-2 rounded-xl border border-outline-variant/30">
-<p class="text-[10px] text-secondary uppercase font-semibold">Daemon Port</p>
-<p class="font-label-sm text-label-sm font-bold text-emerald-600 truncate">:4429 Loopback</p>
+<p class="text-[10px] text-secondary uppercase font-semibold">Desktop Mode</p>
+<p class="font-label-sm text-label-sm font-bold text-emerald-600 truncate">Island Active</p>
 </div>
 </div>
 </div>
@@ -747,7 +797,7 @@
     <span>Back to Persona</span>
   </button>
   <label class="hidden sm:inline-flex items-center gap-2 text-secondary hover:text-on-surface text-[12px] font-medium cursor-pointer select-none">
-    <input type="checkbox" id="keepStudioOpenCheck" class="w-4 h-4 rounded text-primary focus:ring-primary accent-primary" checked>
+    <input type="checkbox" id="keepStudioOpenCheck" class="w-4 h-4 rounded text-primary focus:ring-primary accent-primary">
     <span>Keep Studio open (Dev mode)</span>
   </label>
 </div>
@@ -758,7 +808,7 @@
 </button>
 <button id="btn-launch-companion" class="flex-1 sm:flex-none py-3.5 px-6 rounded-2xl bg-primary hover:bg-primary-container text-on-primary font-headline-sm text-[15px] font-bold shadow-lg shadow-primary/25 hover:shadow-primary/35 transition-all flex items-center justify-center gap-2 active:scale-95 cursor-pointer" onclick="launchCompanion()" type="button">
 <span class="material-symbols-outlined text-[20px]">rocket_launch</span>
-<span>Launch Kumo</span>
+<span>Launch Kumo to Island</span>
 </button>
 </div>
 </div>
@@ -1969,8 +2019,8 @@ function setMood(button, moodName) {
 const stepMeta = {
   1: { title: "Step 1 of 4 • Connect Brain", short: "1. Connect" },
   2: { title: "Step 2 of 4 • Engine Selection", short: "2. Engine" },
-  3: { title: "Step 3 of 4 • Persona & Palette", short: "3. Persona" },
-  4: { title: "Step 4 of 4 • Hotkeys & Review", short: "4. Hotkeys" }
+  3: { title: "Step 3 of 4 • Persona & Edge Dock", short: "3. Persona & Dock" },
+  4: { title: "Step 4 of 4 • Pulse Island & Review", short: "4. Island Launch" }
 };
 
 function updateKeyStatusBadge(val) {
@@ -2057,6 +2107,10 @@ function goToStep(stepNumber) {
   if (stepNumber === 4) {
     const sumEngine = document.getElementById('summaryReviewEngine');
     if (sumEngine) sumEngine.textContent = selectedEngineName;
+    const sumPalette = document.getElementById('summaryReviewPalette');
+    if (sumPalette) sumPalette.textContent = selectedPaletteName;
+    const sumDock = document.getElementById('summaryReviewDock');
+    if (sumDock) sumDock.textContent = selectedIslandEdge === 'top' ? 'Top Bezel' : (selectedIslandEdge === 'left' ? 'Left Edge' : 'Right Edge');
   }
 }
 
@@ -2181,13 +2235,33 @@ function resetStageView() {
   triggerPokeSquish();
 }
 
+let selectedIslandEdge = 'top';
+
+function selectIslandEdge(btn, edge) {
+  selectedIslandEdge = edge;
+  document.querySelectorAll('.dock-edge-btn').forEach(b => {
+    b.className = 'dock-edge-btn py-2.5 px-3 rounded-xl border border-outline-variant/40 bg-surface-container-lowest text-secondary hover:text-on-surface font-label-md text-[13px] font-semibold flex flex-col items-center gap-1.5 transition-all cursor-pointer';
+  });
+  if (btn) {
+    btn.className = 'dock-edge-btn py-2.5 px-3 rounded-xl border border-primary bg-primary text-on-primary font-label-md text-[13px] font-bold flex flex-col items-center gap-1.5 transition-all shadow-xs cursor-pointer';
+  }
+  const badge = document.getElementById('edgeBadge');
+  if (badge) {
+    badge.textContent = edge === 'top' ? 'Top Bezel' : (edge === 'left' ? 'Left Edge' : 'Right Edge');
+  }
+  const sumDock = document.getElementById('summaryReviewDock');
+  if (sumDock) {
+    sumDock.textContent = edge === 'top' ? 'Top Bezel' : (edge === 'left' ? 'Left Edge' : 'Right Edge');
+  }
+}
+
 async function launchCompanion() {
   const launchBtn = document.getElementById('btn-launch-companion');
-  const keepOpen = document.getElementById('keepStudioOpenCheck')?.checked ?? true;
+  const keepOpen = document.getElementById('keepStudioOpenCheck')?.checked ?? false;
 
   if (launchBtn) {
     launchBtn.disabled = true;
-    launchBtn.innerHTML = '<span class="material-symbols-outlined text-[20px] animate-spin">progress_activity</span><span>Launching Kumo…</span>';
+    launchBtn.innerHTML = '<span class="material-symbols-outlined text-[20px] animate-spin">progress_activity</span><span>Launching to Island…</span>';
   }
 
   const keyVal = document.getElementById('apiKeyInput')?.value?.trim() || '';
@@ -2201,6 +2275,12 @@ async function launchCompanion() {
     palette: selectedPaletteName,
     color: selectedPaletteHex,
     blush: currentBlushVal / 100,
+    island: {
+      enabled: true,
+      edge: selectedIslandEdge,
+      soundHaptics: true,
+    },
+    islandEdge: selectedIslandEdge,
     keepOpen: keepOpen,
   };
 
@@ -2209,8 +2289,6 @@ async function launchCompanion() {
       await window.goo.launchCompanion(launchConfig);
     } else {
       await window.goo?.saveSettings?.(launchConfig);
-      window.goo?.showOverlay?.();
-      window.goo?.openBoard?.();
       if (!keepOpen) {
         window.goo?.closeStudio?.();
       }
@@ -2218,9 +2296,9 @@ async function launchCompanion() {
 
     if (keepOpen && launchBtn) {
       launchBtn.disabled = false;
-      launchBtn.innerHTML = '<span class="material-symbols-outlined text-[20px] text-emerald-400">check_circle</span><span>Active (Re-launch)</span>';
+      launchBtn.innerHTML = '<span class="material-symbols-outlined text-[20px] text-emerald-400">check_circle</span><span>Island Active (Re-launch)</span>';
       setTimeout(() => {
-        launchBtn.innerHTML = '<span class="material-symbols-outlined text-[20px]">rocket_launch</span><span>Re-apply &amp; Launch</span>';
+        launchBtn.innerHTML = '<span class="material-symbols-outlined text-[20px]">rocket_launch</span><span>Launch Kumo to Island</span>';
       }, 2000);
     }
   } catch (err) {

@@ -89,17 +89,19 @@ function registerIpcHandlers({
   ipcMain.handle('studio:launch', (_, data) => {
     const saved = settings.save({ ...(data || {}), firstRun: false });
     applySavedSettings(saved, data || {});
-    overlayManager.show();
-    overlayManager.get()?.webContents.send('settings:updated', saved);
-    overlayManager.get()?.webContents.executeJavaScript(
-      `window.dispatchEvent(new CustomEvent('goo:launched', { detail: ${JSON.stringify({
-        companionName: saved.companionName,
-        userName: saved.userName,
-      })} }))`
-    );
-    if (!saved.startMinimized) {
-      boardManager.openBoardWindow(PRELOAD, getActiveTaskbarIcon());
-    }
+
+    // Reveal Pulse Dynamic Island with the mascot at the user-chosen screen edge
+    const islandEdge = saved.island?.edge || data?.islandEdge || 'top';
+    const islandWin = islandManager.create(PRELOAD);
+    islandManager.snapToEdge(islandEdge);
+    islandWin.show();
+    islandWin.webContents.send('settings:updated', saved);
+    islandWin.webContents.send('companion:island-enter');
+    islandWin.webContents.send('island:edge-changed', { edge: islandEdge });
+
+    // Explicit constraint: Kumoboard does not open on onboarding finish.
+    // Only the Dynamic Island and mascot appear on the desktop.
+
     if (!data?.keepOpen) {
       studioManager.close();
     }

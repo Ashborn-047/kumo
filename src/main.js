@@ -66,6 +66,7 @@ function broadcastSettings(updated) {
   boardManager.get()?.webContents.send(payload, updated);
   studioManager.get()?.webContents.send(payload, updated);
   ampManager.get()?.webContents.send(payload, updated);
+  islandManager.get()?.webContents.send(payload, updated);
 }
 
 function getActiveMascotRecord() {
