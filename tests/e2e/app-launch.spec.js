@@ -46,4 +46,75 @@ test.describe('Kumo Application Boot & Windows', () => {
     const windows = electronApp.windows();
     expect(windows.length).toBeGreaterThanOrEqual(1);
   });
+
+  test('normal boot opens pulse island only and toggles mascot on/off', async () => {
+    // Close the initial instance from beforeEach so we can launch with firstRun: false
+    if (electronApp) {
+      await electronApp.close();
+      electronApp = null;
+    }
+
+    const islandTempUserData = fs.mkdtempSync(path.join(os.tmpdir(), 'kumo-test-island-'));
+    fs.writeFileSync(
+      path.join(islandTempUserData, 'config.json'),
+      JSON.stringify({ firstRun: false, startMinimized: false, islandEdge: 'top' })
+    );
+
+    // Launch app instance in normal boot mode
+    const app = await electron.launch({
+      args: ['.', `--user-data-dir=${islandTempUserData}`],
+      env: {
+        ...process.env,
+        NODE_ENV: 'test',
+        ELECTRON_RUN_AS_NODE: undefined,
+      },
+    });
+
+    try {
+      const firstWin = await app.firstWindow();
+      expect(firstWin).toBeTruthy();
+      await firstWin.waitForLoadState('domcontentloaded');
+
+      const url = firstWin.url();
+      expect(url).toContain('ui/island/index.html');
+
+      // Verify Kumoboard is NOT opened
+      const windows = app.windows();
+      const hasBoard = windows.some((w) => w.url().includes('ui/board/index.html'));
+      expect(hasBoard).toBe(false);
+
+      // Wait for island DOM to be ready and activate resting state
+      await firstWin.waitForSelector('#btn-toggle-mascot', { state: 'attached' });
+      await firstWin.evaluate(() => {
+        const wrap = document.getElementById('island-wrapper');
+        wrap?.classList.remove('state-peek');
+        wrap?.classList.add('state-resting');
+        if (window.IslandState?.controller) {
+          window.IslandState.controller.setState('resting');
+        }
+      });
+
+      // Verify mascot toggle button exists and is visible
+      const toggleBtn = firstWin.locator('#btn-toggle-mascot');
+      await expect(toggleBtn).toBeVisible({ timeout: 10000 });
+      await expect(firstWin.locator('#mascot-toggle-label')).toHaveText('MASCOT ON');
+
+      // Toggle mascot OFF
+      await firstWin.evaluate(() => document.getElementById('btn-toggle-mascot')?.click());
+      await expect(firstWin.locator('#mascot-toggle-label')).toHaveText('MASCOT OFF');
+      await expect(toggleBtn).toHaveClass(/is-off/);
+
+      // Toggle mascot back ON
+      await firstWin.evaluate(() => document.getElementById('btn-toggle-mascot')?.click());
+      await expect(firstWin.locator('#mascot-toggle-label')).toHaveText('MASCOT ON');
+      await expect(toggleBtn).not.toHaveClass(/is-off/);
+    } finally {
+      await app.close();
+      if (fs.existsSync(islandTempUserData)) {
+        try {
+          fs.rmSync(islandTempUserData, { recursive: true, force: true });
+        } catch (_) {}
+      }
+    }
+  });
 });

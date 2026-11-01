@@ -25,11 +25,13 @@ const DEFAULTS = {
   autostart:       false,
   startMinimized:  false,
   studioTheme:     'light',
+  mascotEnabled:   true,
   island: {
     enabled:       true,
     edge:          'top',
     style:         'seamless',
     soundHaptics:  true,
+    mascotEnabled: true,
   },
   permissions: {
     appLaunch:         true,

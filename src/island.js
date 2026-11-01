@@ -107,6 +107,11 @@ function setHit(interactive) {
 function show()  { islandWindow?.show(); }
 function hide()  { islandWindow?.hide(); }
 function toggle(){ islandWindow?.isVisible() ? hide() : show(); }
+function popOut(){
+  if (!islandWindow || islandWindow.isDestroyed()) return;
+  islandWindow.show();
+  islandWindow.webContents.send('island:pop-out');
+}
 function get()   { return islandWindow; }
 function getEdge() { return currentEdge; }
 function isIslandExpanded() { return false; }
@@ -116,6 +121,7 @@ module.exports = {
   show,
   hide,
   toggle,
+  popOut,
   get,
   snapToEdge,
   setHit,

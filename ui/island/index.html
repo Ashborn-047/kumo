@@ -45,13 +45,17 @@
         <!-- HEADER ROW (Shared across Resting & Unrolled States) -->
         <div id="chassis-header" class="chassis-header">
           
-          <!-- Left: Mascot Puff & Telemetry Status -->
+          <!-- Left: Mascot Puff, Toggle Button & Telemetry Status -->
           <div class="header-left">
-            <div id="pill-mascot" class="puff-mascot" title="Puff Companion (Click to hop)">
+            <div id="pill-mascot" class="puff-mascot" title="Mascot Companion (Click to toggle)">
               <span class="puff-eye"></span>
               <span class="puff-eye"></span>
             </div>
-            <span class="mascot-status-dot"></span>
+            <button id="btn-toggle-mascot" class="btn-mascot-toggle font-mono" title="Toggle Mascot Companion On/Off">
+              <span class="mascot-toggle-dot"></span>
+              <span id="mascot-toggle-label">MASCOT ON</span>
+            </button>
+            <span class="mascot-status-dot" id="mascot-status-dot"></span>
             <span class="chassis-brand font-mono" id="header-brand">PULSE // DECK V4</span>
           </div>
 
@@ -201,28 +205,34 @@
               <div class="assistant-status-card">
                 <div class="assistant-left">
                   <div class="mascot-orb-wrap">
-                    <div class="mascot-orb">
+                    <div class="mascot-orb" id="assistant-mascot-orb">
                       <span class="orb-eye"></span>
                       <span class="orb-eye"></span>
                     </div>
-                    <span class="orb-status-dot"></span>
+                    <span class="orb-status-dot" id="assistant-orb-dot"></span>
                   </div>
                   <div>
                     <div class="assistant-name-line font-sans">
                       <span class="assistant-name">Kumo Companion</span>
-                      <span class="status-listening-pill font-mono">READY</span>
+                      <span class="status-listening-pill font-mono" id="assistant-status-badge">READY</span>
                     </div>
                     <p class="assistant-meta font-mono" id="assistant-context-meta">Context: Windows Desktop active</p>
                   </div>
                 </div>
 
-                <div class="mic-shortcut-badge font-mono">
-                  <svg class="lucide-icon icon-sm" viewBox="0 0 24 24">
-                    <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
-                    <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-                    <line x1="12" y1="19" x2="12" y2="22"/>
-                  </svg>
-                  <span>Alt+Space</span>
+                <div class="assistant-card-actions">
+                  <button id="btn-assistant-toggle-mascot" class="btn-assistant-toggle font-mono" title="Toggle Mascot Companion On/Off">
+                    <span class="assistant-toggle-dot"></span>
+                    <span id="assistant-toggle-label">MASCOT ACTIVE</span>
+                  </button>
+                  <div class="mic-shortcut-badge font-mono">
+                    <svg class="lucide-icon icon-sm" viewBox="0 0 24 24">
+                      <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+                      <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                      <line x1="12" y1="19" x2="12" y2="22"/>
+                    </svg>
+                    <span>Alt+Space</span>
+                  </div>
                 </div>
               </div>
 

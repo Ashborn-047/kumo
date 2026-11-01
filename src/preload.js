@@ -78,6 +78,7 @@ contextBridge.exposeInMainWorld('goo', {
   islandGetConfig:       ()            => ipcRenderer.invoke('island:get-config'),
   onIslandEdgeChanged:   (cb)          => ipcRenderer.on('island:edge-changed', (_e, d) => cb(d)),
   onIslandExpandChanged: (cb)          => ipcRenderer.on('island:expand-changed', (_e, d) => cb(d)),
+  onIslandPopOut:        (cb)          => ipcRenderer.on('island:pop-out', (_e, d) => cb(d)),
   islandStartDrag:       (filePath)    => ipcRenderer.send('island:start-drag', filePath),
 
   // Live Windows SMTC & Media Status Bridge

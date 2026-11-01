@@ -41,9 +41,19 @@ test.describe('Kumoboard — Spatial Workbench', () => {
   });
 
   test('loads Kumoboard canvas, tools, navigation and zoom controls', async () => {
+    // Open Kumoboard window via the active Pulse Dynamic Island window
+    const firstWin = await electronApp.firstWindow();
+    expect(firstWin).toBeTruthy();
+    await firstWin.waitForLoadState('domcontentloaded');
+    await firstWin.evaluate(() => {
+      if (window.goo?.openBoard) {
+        window.goo.openBoard();
+      }
+    });
+
     // Find Kumoboard window
     let boardPage = null;
-    const maxWaitMs = 12000;
+    const maxWaitMs = 15000;
     const start = Date.now();
 
     while (!boardPage && Date.now() - start < maxWaitMs) {

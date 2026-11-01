@@ -12,9 +12,20 @@ function initStateController() {
   const btnDockToggle = document.getElementById('btn-dock-toggle');
   const marqueeText = document.getElementById('marquee-text');
 
+  // Mascot Toggle Elements
+  const btnToggleMascot = document.getElementById('btn-toggle-mascot');
+  const mascotToggleLabel = document.getElementById('mascot-toggle-label');
+  const mascotStatusDot = document.getElementById('mascot-status-dot');
+  const btnAssistantToggleMascot = document.getElementById('btn-assistant-toggle-mascot');
+  const assistantToggleLabel = document.getElementById('assistant-toggle-label');
+  const assistantStatusBadge = document.getElementById('assistant-status-badge');
+  const assistantMascotOrb = document.getElementById('assistant-mascot-orb');
+  const assistantOrbDot = document.getElementById('assistant-orb-dot');
+
   let currentState = 'peek';
   let hoverUnrollTimer = null;
   let idlePeekTimer = null;
+  let isMascotEnabled = true;
 
   function setHit(interactive) {
     if (window.goo?.islandSetHit) {
@@ -23,6 +34,7 @@ function initStateController() {
   }
 
   function setState(state) {
+    clearTimeout(idlePeekTimer);
     if (currentState === state) return;
     currentState = state;
 
@@ -36,7 +48,7 @@ function initStateController() {
     }
   }
 
-  function scheduleIdleCollapse() {
+  function scheduleIdleCollapse(delay = 900) {
     clearTimeout(hoverUnrollTimer);
     clearTimeout(idlePeekTimer);
 
@@ -46,7 +58,61 @@ function initStateController() {
       idlePeekTimer = setTimeout(() => {
         setState('peek');
       }, 3500);
-    }, 900);
+    }, delay);
+  }
+
+  function popOut() {
+    clearTimeout(hoverUnrollTimer);
+    clearTimeout(idlePeekTimer);
+    setHit(true);
+    setState('resting');
+    window.IslandHaptics?.playHaptic('pop');
+
+    // Display resting preview for 5 seconds before tucking flush to bezel
+    idlePeekTimer = setTimeout(() => {
+      if (currentState === 'resting') {
+        setState('peek');
+      }
+    }, 5000);
+  }
+
+  function setMascotEnabled(enabled, syncSettings = true) {
+    isMascotEnabled = Boolean(enabled);
+
+    if (isMascotEnabled) {
+      pillMascot?.classList.remove('mascot-off', 'dormant');
+      btnToggleMascot?.classList.remove('is-off');
+      if (mascotToggleLabel) mascotToggleLabel.textContent = 'MASCOT ON';
+      mascotStatusDot?.classList.remove('is-off');
+      btnAssistantToggleMascot?.classList.remove('is-off');
+      if (assistantToggleLabel) assistantToggleLabel.textContent = 'MASCOT ACTIVE';
+      if (assistantStatusBadge) assistantStatusBadge.textContent = 'READY';
+      assistantMascotOrb?.classList.remove('mascot-off');
+      assistantOrbDot?.classList.remove('is-off');
+    } else {
+      pillMascot?.classList.add('mascot-off', 'dormant');
+      btnToggleMascot?.classList.add('is-off');
+      if (mascotToggleLabel) mascotToggleLabel.textContent = 'MASCOT OFF';
+      mascotStatusDot?.classList.add('is-off');
+      btnAssistantToggleMascot?.classList.add('is-off');
+      if (assistantToggleLabel) assistantToggleLabel.textContent = 'MASCOT OFF';
+      if (assistantStatusBadge) assistantStatusBadge.textContent = 'OFFLINE';
+      assistantMascotOrb?.classList.add('mascot-off');
+      assistantOrbDot?.classList.add('is-off');
+
+      if (window.goo?.hideOverlay) {
+        window.goo.hideOverlay();
+      }
+    }
+
+    if (syncSettings && window.goo?.saveSettings) {
+      window.goo.saveSettings({ mascotEnabled: isMascotEnabled });
+    }
+  }
+
+  function toggleMascot() {
+    window.IslandHaptics?.playHaptic('pop');
+    setMascotEnabled(!isMascotEnabled, true);
   }
 
   capsulePeek?.addEventListener('mouseenter', () => {
@@ -97,18 +163,23 @@ function initStateController() {
     }
   });
 
+  btnToggleMascot?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleMascot();
+  });
+
+  btnAssistantToggleMascot?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleMascot();
+  });
+
   pillMascot?.addEventListener('click', (e) => {
     e.stopPropagation();
-    window.IslandHaptics?.playHaptic('pop');
     pillMascot.style.transform = 'translateY(-4px) scale(1.15)';
     setTimeout(() => {
       pillMascot.style.transform = '';
     }, 250);
-
-    // Summons / toggles the floating desktop companion widget
-    if (window.goo?.toggleOverlay) {
-      window.goo.toggleOverlay();
-    }
+    toggleMascot();
   });
 
   // Mascot Spatial Migration ("Dive-In / Leap-Out")
@@ -130,14 +201,36 @@ function initStateController() {
     });
   }
 
-  // Initial State: Start at peek
-  setState('peek');
+  // Initial Settings Sync for Mascot toggle
+  if (window.goo?.getSettings) {
+    window.goo.getSettings().then((cfg) => {
+      if (cfg && cfg.mascotEnabled === false) {
+        setMascotEnabled(false, false);
+      }
+    }).catch(() => {});
+  }
+
+  // IPC Pop-Out listener
+  if (window.goo?.onIslandPopOut) {
+    window.goo.onIslandPopOut(() => {
+      popOut();
+    });
+  }
+
+  // Automatically pop out on initial boot
+  setTimeout(() => {
+    popOut();
+  }, 150);
 
   return {
     getState: () => currentState,
     setState,
     setHit,
-    scheduleIdleCollapse
+    popOut,
+    scheduleIdleCollapse,
+    setMascotEnabled,
+    toggleMascot,
+    isMascotEnabled: () => isMascotEnabled,
   };
 }
 

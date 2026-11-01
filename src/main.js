@@ -135,8 +135,16 @@ app.whenReady().then(async () => {
   let primaryWin = null;
   if (firstRun) {
     primaryWin = studioManager.open(PRELOAD, { mode: 'wizard' }, getActiveTaskbarIcon());
-  } else if (!cfg.startMinimized) {
-    primaryWin = boardManager.openBoardWindow(PRELOAD, getActiveTaskbarIcon());
+  } else {
+    // Every time the user opens the application, only the island pops out, not the board
+    primaryWin = islandManager.create(PRELOAD);
+    const islandEdge = cfg.island?.edge || cfg.islandEdge || 'top';
+    islandManager.snapToEdge(islandEdge);
+    if (primaryWin && typeof primaryWin.once === 'function') {
+      primaryWin.once('ready-to-show', () => {
+        islandManager.popOut();
+      });
+    }
   }
 
   // Defer secondary windows and background monitoring until primary window is ready

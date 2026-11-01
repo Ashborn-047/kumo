@@ -13,6 +13,9 @@
 document.addEventListener('DOMContentLoaded', () => {
   // 1. Initialize 3-State Seamless Chassis Controller
   const stateController = window.IslandState?.init();
+  if (window.IslandState) {
+    window.IslandState.controller = stateController;
+  }
 
   // 2. Setup Modular Nav Tab Switching with Jelly Pop Animation
   const navTabs = document.querySelectorAll('.nav-tab');
