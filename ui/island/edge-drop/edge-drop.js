@@ -31,7 +31,9 @@ function initEdgeDropWidget(stateController, switchTabCallback) {
       return true;
     });
 
-    if (shelfCountBadge) shelfCountBadge.textContent = `${shelfItems.length} items`;
+    if (shelfCountBadge) {
+      shelfCountBadge.textContent = `${shelfItems.length} ${shelfItems.length === 1 ? 'item' : 'items'}`;
+    }
     edgeCarousel.innerHTML = '';
 
     if (filtered.length === 0) {
@@ -226,13 +228,14 @@ function initEdgeDropWidget(stateController, switchTabCallback) {
         });
       });
     } else if (textData) {
-      const isUrl = /^https?:\/\//i.test(textData.trim());
+      const trimmed = textData.trim();
+      const isUrl = /^(https?:\/\/|www\.|[a-zA-Z0-9-]+\.[a-zA-Z]{2,}(\/.*)?$)/i.test(trimmed);
       shelfItems.unshift({
-        name: isUrl ? textData.trim() : (textData.slice(0, 28) + (textData.length > 28 ? '...' : '')),
-        content: textData,
+        name: isUrl ? trimmed : (trimmed.slice(0, 28) + (trimmed.length > 28 ? '...' : '')),
+        content: trimmed,
         type: isUrl ? 'link' : 'snippet',
         badge: isUrl ? 'URL' : 'TEXT',
-        preview: textData,
+        preview: trimmed,
         time: 'Just now'
       });
     }
