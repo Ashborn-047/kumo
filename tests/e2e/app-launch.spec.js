@@ -117,4 +117,44 @@ test.describe('Kumo Application Boot & Windows', () => {
       }
     }
   });
+
+  test('enforces strict cold boot performance budget under 1500ms', async () => {
+    if (electronApp) {
+      await electronApp.close();
+      electronApp = null;
+    }
+
+    const budgetTempUserData = fs.mkdtempSync(path.join(os.tmpdir(), 'kumo-test-budget-'));
+    fs.writeFileSync(
+      path.join(budgetTempUserData, 'config.json'),
+      JSON.stringify({ firstRun: false, startMinimized: false, islandEdge: 'top' })
+    );
+
+    const startTime = Date.now();
+    const app = await electron.launch({
+      args: ['.', `--user-data-dir=${budgetTempUserData}`],
+      env: {
+        ...process.env,
+        NODE_ENV: 'test',
+        ELECTRON_RUN_AS_NODE: undefined,
+      },
+    });
+
+    try {
+      const firstWin = await app.firstWindow();
+      expect(firstWin).toBeTruthy();
+      await firstWin.waitForLoadState('load');
+      const bootDurationMs = Date.now() - startTime;
+
+      // Strict performance budget ensures no heavy OS/COM/disk tasks creep into boot
+      expect(bootDurationMs).toBeLessThan(1500);
+    } finally {
+      await app.close();
+      if (fs.existsSync(budgetTempUserData)) {
+        try {
+          fs.rmSync(budgetTempUserData, { recursive: true, force: true });
+        } catch (_) {}
+      }
+    }
+  });
 });
