@@ -71,7 +71,7 @@ test.describe('Kumo Studio & Onboarding Window', () => {
     await expect(studioPage.locator('#stageRightColumn')).toBeHidden();
 
     // Step to Step 2 (Engine): Interactive Stage becomes visible
-    await studioPage.locator('#tab-btn-2').evaluate((el) => el.click());
+    await studioPage.locator('#tab-btn-2').click({ force: true });
     await expect(studioPage.locator('text=2. Choose Companion Engine')).toBeVisible();
     await expect(studioPage.locator('#stageRightColumn')).toBeVisible();
 
@@ -80,10 +80,9 @@ test.describe('Kumo Studio & Onboarding Window', () => {
     await expect(botCanvas).toBeVisible();
 
     // Verify Category Filter buttons work (Filter 2D)
-    const filterBtn2d = studioPage.locator('#filter-btn-2d');
-    await filterBtn2d.evaluate((el) => el.click());
+    await studioPage.locator('#filter-btn-2d').click({ force: true });
     const pixelCard = studioPage.locator('#card-mascot-pixel2d');
-    await pixelCard.evaluate((el) => el.click());
+    await pixelCard.click({ force: true });
     await expect(pixelCard).toHaveClass(/border-primary/);
 
     // Verify 2D Pixel Canvas becomes active on stage
@@ -92,29 +91,26 @@ test.describe('Kumo Studio & Onboarding Window', () => {
 
     // Click 'Happy' mood button and verify mood pill state
     const happyBtn = studioPage.locator('.mood-btn', { hasText: 'Happy' });
-    await happyBtn.evaluate((el) => el.click());
+    await happyBtn.click({ force: true });
     await expect(happyBtn).toHaveClass(/bg-primary-fixed/);
 
     // Click 'Thinking' mood button and verify mood pill state
     const thinkingBtn = studioPage.locator('.mood-btn', { hasText: 'Thinking' });
-    await thinkingBtn.evaluate((el) => el.click());
+    await thinkingBtn.click({ force: true });
     await expect(thinkingBtn).toHaveClass(/bg-primary-fixed/);
 
     // Switch back to 3D category and select 3D Voxel Bot
-    const filterBtn3d = studioPage.locator('#filter-btn-3d');
-    await filterBtn3d.evaluate((el) => el.click());
+    await studioPage.locator('#filter-btn-3d').click({ force: true });
     const voxelCard = studioPage.locator('#card-mascot-voxel3d');
-    await voxelCard.evaluate((el) => el.click());
+    await voxelCard.click({ force: true });
     await expect(botCanvas).toBeVisible();
 
     // Step to Step 3 (Persona & Swatches)
-    const tabBtn3 = studioPage.locator('#tab-btn-3');
-    await tabBtn3.evaluate((el) => el.click());
+    await studioPage.locator('#tab-btn-3').click({ force: true });
     await expect(studioPage.locator('text=3. Color Palette & Blush Intensity')).toBeVisible();
 
     // Step to Step 4 (Hotkeys & Launch)
-    const tabBtn4 = studioPage.locator('#tab-btn-4');
-    await tabBtn4.evaluate((el) => el.click());
+    await studioPage.locator('#tab-btn-4').click({ force: true });
     await expect(studioPage.locator('text=4. Summon & Keyboard Shortcuts')).toBeVisible();
 
     // Verify Launch button exists and is clickable

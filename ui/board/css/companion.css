@@ -224,3 +224,4 @@
   30% { transform: scale(1.25, 0.7) translateY(4px); opacity: 1; }
   100% { transform: scale(0.2, 1.4) translateY(-60px); opacity: 0; }
 }
+

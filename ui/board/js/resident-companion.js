@@ -152,3 +152,4 @@ export function initResidentCompanion({ addNewTool, toast }) {
     triggerLeapReturn,
   };
 }
+
