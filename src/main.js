@@ -147,14 +147,15 @@ app.whenReady().then(async () => {
   });
 
   const firstRun = settings.isFirstRun();
+  let primaryWin = null;
   if (firstRun) {
-    studioManager.open(PRELOAD, { mode: 'wizard' }, getActiveTaskbarIcon());
+    primaryWin = studioManager.open(PRELOAD, { mode: 'wizard' }, getActiveTaskbarIcon());
   } else if (!cfg.startMinimized) {
-    boardManager.openBoardWindow(PRELOAD, getActiveTaskbarIcon());
+    primaryWin = boardManager.openBoardWindow(PRELOAD, getActiveTaskbarIcon());
   }
 
-  // Stagger background overlays slightly so primary window renders immediately with zero lag
-  setTimeout(() => {
+  // Defer secondary windows and background monitoring until primary window is ready
+  const initBackgroundServices = () => {
     islandManager.create(PRELOAD);
     overlayManager.create(PRELOAD);
     if (!firstRun && !cfg.startMinimized) {
@@ -162,7 +163,15 @@ app.whenReady().then(async () => {
     }
     startTelemetryBroadcast(boardManager);
     startMediaSync(islandManager, boardManager, ampManager);
-  }, 120);
+  };
+
+  if (primaryWin && typeof primaryWin.once === 'function') {
+    primaryWin.once('ready-to-show', () => {
+      setTimeout(initBackgroundServices, 250);
+    });
+  } else {
+    setTimeout(initBackgroundServices, 600);
+  }
 
   const activeRecord = getActiveMascotRecord();
   trayManager.create({

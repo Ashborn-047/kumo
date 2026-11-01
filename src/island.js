@@ -56,6 +56,7 @@ function create(preloadPath) {
     resizable: false,
     hasShadow: false,
     focusable: true,
+    show: false,
     webPreferences: {
       preload: preloadPath,
       contextIsolation: true,
@@ -64,6 +65,9 @@ function create(preloadPath) {
   });
 
   islandWindow.loadFile(path.join(__dirname, '../ui/island/index.html'));
+  islandWindow.once('ready-to-show', () => {
+    islandWindow?.show();
+  });
 
   // Default passthrough: ignore clicks on transparent areas, forward mouse movement
   islandWindow.setIgnoreMouseEvents(true, { forward: true });

@@ -95,45 +95,51 @@ function getSystemTelemetry() {
 let telemetryInterval = null;
 function startTelemetryBroadcast(boardManager) {
   if (telemetryInterval) return;
-  telemetryInterval = setInterval(() => {
-    const boardWin = boardManager.get();
-    if (boardWin && !boardWin.isDestroyed() && boardWin.isVisible()) {
-      const data = getSystemTelemetry();
-      boardWin.webContents.send('board:telemetry-update', data);
-    }
-  }, 3000);
+  setTimeout(() => {
+    telemetryInterval = setInterval(() => {
+      const boardWin = boardManager.get();
+      if (boardWin && !boardWin.isDestroyed() && boardWin.isVisible()) {
+        const data = getSystemTelemetry();
+        boardWin.webContents.send('board:telemetry-update', data);
+      }
+    }, 3000);
+  }, 1500);
 }
 
 let lastMediaSignature = '';
+let mediaSyncInterval = null;
 function startMediaSync(islandManager, boardManager, ampManager) {
-  setInterval(async () => {
-    const islandWin = islandManager.get();
-    const boardWin = boardManager.get();
-    const ampWin = ampManager?.get?.();
-    const isIslandVisible = islandWin && !islandWin.isDestroyed() && islandWin.isVisible();
-    const isBoardVisible = boardWin && !boardWin.isDestroyed() && boardWin.isVisible();
-    const isAmpVisible = ampWin && !ampWin.isDestroyed() && ampWin.isVisible();
-    if (!isIslandVisible && !isBoardVisible && !isAmpVisible) return;
+  if (mediaSyncInterval) return;
+  setTimeout(() => {
+    mediaSyncInterval = setInterval(async () => {
+      const islandWin = islandManager.get();
+      const boardWin = boardManager.get();
+      const ampWin = ampManager?.get?.();
+      const isIslandVisible = islandWin && !islandWin.isDestroyed() && islandWin.isVisible();
+      const isBoardVisible = boardWin && !boardWin.isDestroyed() && boardWin.isVisible();
+      const isAmpVisible = ampWin && !ampWin.isDestroyed() && ampWin.isVisible();
+      if (!isIslandVisible && !isBoardVisible && !isAmpVisible) return;
 
-    try {
-      const res = await actions.run('media.status', {});
-      const status = res?.result || res;
-      if (!status) return;
-      const signature = `${status.title}-${status.artist}-${status.status}-${status.position}`;
-      if (signature !== lastMediaSignature) {
-        lastMediaSignature = signature;
-        if (isIslandVisible) {
-          islandWin.webContents.send('media:status-update', status);
+      try {
+        const res = await actions.run('media.status', {});
+        const status = res?.result || res;
+        if (!status) return;
+        const signature = `${status.title}-${status.artist}-${status.status}-${status.position}`;
+        if (signature !== lastMediaSignature) {
+          lastMediaSignature = signature;
+          if (isIslandVisible) {
+            islandWin.webContents.send('media:status-update', status);
+          }
+          if (isBoardVisible) {
+            boardWin.webContents.send('media:status-update', status);
+          }
+          if (isAmpVisible) {
+            ampWin.webContents.send('media:status-update', status);
+          }
         }
-        if (isBoardVisible) {
-          boardWin.webContents.send('media:status-update', status);
-        }
-        if (isAmpVisible) {
-          ampWin.webContents.send('media:status-update', status);
-        }
-      }
-    } catch {}
-  }, 4500);
+      } catch {}
+    }, 4500);
+  }, 2500);
 }
 
 module.exports = {

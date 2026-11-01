@@ -13,6 +13,8 @@ const path = require('path');
 let overlayWindow = null;
 
 function create(preloadPath) {
+  if (overlayWindow && !overlayWindow.isDestroyed()) return overlayWindow;
+
   const primaryDisplay = screen.getPrimaryDisplay();
   const { width, height } = primaryDisplay.workAreaSize;
 
@@ -30,6 +32,7 @@ function create(preloadPath) {
     skipTaskbar: true,          // lives in tray
     resizable: false,
     hasShadow: false,
+    show: false,                // remain hidden until explicitly displayed
     webPreferences: {
       preload: preloadPath,
       contextIsolation: true,

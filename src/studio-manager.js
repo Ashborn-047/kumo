@@ -25,6 +25,7 @@ function openStudioWindow(preloadPath, options = {}, iconImage) {
     title: 'Kumo Studio — Desktop Customizer & Lab',
     icon: iconImage || path.join(__dirname, '../assets/icon.png'),
     autoHideMenuBar: true,
+    show: false,
     backgroundColor: '#0a0d14',
     webPreferences: {
       preload: preloadPath,
@@ -43,6 +44,10 @@ function openStudioWindow(preloadPath, options = {}, iconImage) {
 
   const studioPath = path.join(__dirname, '../ui/studio/index.html');
   studioWindow.loadFile(studioPath, { query });
+  studioWindow.once('ready-to-show', () => {
+    studioWindow?.show();
+    studioWindow?.focus();
+  });
 
   studioWindow.on('closed', () => {
     studioWindow = null;
@@ -81,4 +86,3 @@ module.exports = {
   closeStudio,
   control,
 };
-
