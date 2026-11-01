@@ -56,22 +56,25 @@
           ]
         }
       ],
-      "icon": "assets/icon.ico",
-      "artifactName": "${productName}-${version}-${target}.${ext}"
+      "icon": "assets/icon.ico"
     },
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "Kumo"
+      "shortcutName": "Kumo",
+      "artifactName": "${productName}-Setup-${version}.${ext}"
     },
     "files": [
       "src/**/*",
       "ui/**/*",
       "assets/**/*",
       "design-system/**/*"
-    ]
+    ],
+    "portable": {
+      "artifactName": "${productName}-${version}-portable.${ext}"
+    }
   },
   "allowScripts": {
     "electron@31.7.7": true
