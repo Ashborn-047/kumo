@@ -1,7 +1,7 @@
 <div align="center">
 
-# ☁️ Kumo (雲)
-### Animated AI Desktop Companion & Infinite Spatial Planning Canvas for Windows
+# Kumo (雲)
+### Animated AI Desktop Companion, Pulse Dynamic Island & Infinite Spatial Planning Canvas for Windows
 
 <!-- Project & Repository Health Badges -->
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge&logo=open-source-initiative&logoColor=white)](LICENSE)
@@ -20,7 +20,7 @@
 [![JavaScript: ES2022](https://img.shields.io/badge/JavaScript-ES2022-F7DF1E?style=flat-square&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 [![HTML5: Canvas 2D](https://img.shields.io/badge/HTML5-Canvas%202D%20Physics-E34F26?style=flat-square&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API)
 [![CSS3: Glassmorphism](https://img.shields.io/badge/CSS3-Backdrop%20Blur%20%26%20Glass-1572B6?style=flat-square&logo=css3&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/CSS)
-[![PowerShell: Automation](https://img.shields.io/badge/PowerShell-Automation-5391FE?style=flat-square&logo=powershell&logoColor=white)](https://learn.microsoft.com/en-us/powershell/)
+[![PowerShell: SMTC Automation](https://img.shields.io/badge/PowerShell-SMTC%20%26%20Automation-5391FE?style=flat-square&logo=powershell&logoColor=white)](https://learn.microsoft.com/en-us/powershell/)
 [![NSIS Installer](https://img.shields.io/badge/Packaging-NSIS%20x64%20Installer-00599E?style=flat-square)](https://nsis.sourceforge.io/)
 
 <br/>
@@ -30,82 +30,120 @@
 [![LLM: Llama 3.3 70B](https://img.shields.io/badge/LLM-Meta%20Llama%203.3%2070B-0467DF?style=flat-square&logo=meta&logoColor=white)](https://ai.meta.com/)
 [![LLM: Gemini Flash 1.5](https://img.shields.io/badge/LLM-Google%20Gemini%20Flash-4285F4?style=flat-square&logo=google&logoColor=white)](https://deepmind.google/technologies/gemini/)
 [![LLM: DeepSeek R1](https://img.shields.io/badge/LLM-DeepSeek%20R1-10A37F?style=flat-square)](https://www.deepseek.com/)
-[![LLM: Qwen 2.5 72B](https://img.shields.io/badge/LLM-Alibaba%20Qwen%202.5-FF6A00?style=flat-square)](https://github.com/QwenLM)
 [![Architecture: Local First](https://img.shields.io/badge/Architecture-Local--First%20JSON-000000?style=flat-square)](https://localfirstweb.dev/)
-[![Security: 3-Tier Gate](https://img.shields.io/badge/Security-3--Tier%20Action%20Gate-2EA44F?style=flat-square)](https://github.com/Ashborn-047/kumo#-3-tier-safety-system)
+[![Security: 3-Tier Gate](https://img.shields.io/badge/Security-3--Tier%20Action%20Gate-2EA44F?style=flat-square)](https://github.com/Ashborn-047/kumo#3-tier-safety-system)
 
 <p align="center">
-  <b>Kumo</b> is a high-performance, privacy-first desktop companion for Windows.<br/>
-  Featuring an organic physics-animated canvas mascot, real-time token streaming via OpenRouter, a 3-tier desktop automation safety gate, and an infinite spatial planning canvas ported from Mochiboard.
+  <b>Kumo</b> is a privacy-first, high-performance desktop productivity suite for Windows.<br/>
+  Featuring an organic physics companion, the kinetic Pulse Dynamic Island bezel overlay, the Edge Drop desktop staging shelf, live Windows SMTC media control (Kumo Amp), real-time OpenRouter token streaming, a 3-tier desktop action safety gate, and an infinite spatial planning canvas ported from Mochiboard.
 </p>
 
-[Quick Start](#-quick-start) • [Architecture](#-system-architecture) • [Security & Safety](#-3-tier-safety-system) • [Developer Guide](#-extending-kumo) • [Hotkeys](#-hotkeys--shortcuts)
+[Quick Start](#quick-start) • [Pulse Dynamic Island](#pulse-dynamic-island) • [Edge Drop Shelf](#edge-drop-desktop-shelf) • [Architecture](#system-architecture) • [Security & Safety](#3-tier-safety-system) • [Hotkeys](#hotkeys--shortcuts)
 
 </div>
 
 ---
 
-## 📖 Table of Contents
-- [Why Kumo?](#-why-kumo)
-- [Key Features](#-key-features)
-- [System Architecture](#-system-architecture)
+## Table of Contents
+- [Why Kumo?](#why-kumo)
+- [Key Features](#key-features)
+  - [Pulse Dynamic Island](#pulse-dynamic-island)
+  - [Edge Drop Desktop Shelf](#edge-drop-desktop-shelf)
+  - [Kumo Amp & Windows SMTC](#kumo-amp--live-windows-smtc)
+  - [Kumoboard Infinite Canvas](#kumoboard-infinite-spatial-canvas)
+  - [Organic Mascot & Asset Studio](#organic-physics-mascot--asset-studio)
+  - [Real-Time Streaming AI](#real-time-streaming-ai)
+  - [3-Tier Safety Gate](#3-tier-safety-system)
+- [System Architecture](#system-architecture)
   - [Architectural Overview](#architectural-overview)
   - [Component Deep Dive](#component-deep-dive)
   - [Data Flow & IPC Channel Specification](#data-flow--ipc-channel-specification)
-- [3-Tier Safety System](#-3-tier-safety-system)
-- [Performance & Security Model](#-performance--security-model)
-- [Quick Start](#-quick-start)
+- [Performance & Security Model](#performance--security-model)
+- [Quick Start](#quick-start)
   - [Prerequisites](#prerequisites)
   - [One-Click Setup](#one-click-setup-powershell)
   - [Manual Setup](#manual-setup)
-- [Hotkeys & Shortcuts](#-hotkeys--shortcuts)
-- [Extending Kumo (Developer Guide)](#-extending-kumo)
-  - [1. Adding New Desktop Actions](#1-adding-a-new-desktop-action)
-  - [2. Adding Mascot States & Animations](#2-adding-a-mascot-animation-or-emotion)
-  - [3. Configuring AI Models](#3-configuring-ai-models)
-- [Packaging & Distribution](#-packaging--distribution)
-- [Roadmap](#-roadmap)
-- [License & Acknowledgments](#-license--acknowledgments)
+- [Hotkeys & Shortcuts](#hotkeys--shortcuts)
+- [Extending Kumo (Developer Guide)](#extending-kumo)
+- [Packaging & Distribution](#packaging--distribution)
+- [Roadmap](#roadmap)
+- [License & Acknowledgments](#license--acknowledgments)
 
 ---
 
-## 💡 Why Kumo?
+## Why Kumo?
 
-Most desktop AI assistants are clunky Electron windows or browser tabs that consume screen real estate and demand constant alt-tabbing. 
+Most desktop AI assistants are heavy application windows that clutter your taskbar, block desktop space, and require constant window switching.
 
-**Kumo takes a fundamentally different design approach:**
-1. **Unobtrusive & Organic**: Lives as a frameless, transparent canvas blob directly on your wallpaper. Transparent regions let normal mouse clicks pass straight through to whatever application is behind it (`setIgnoreMouseEvents(true, { forward: true })`).
-2. **Instant Accessibility**: Press <kbd>Alt</kbd> + <kbd>Space</kbd> anywhere in Windows to summon Kumo's glassmorphic chat bar.
-3. **Spatial Thinking**: Instead of losing notes in endless chat transcripts, Kumo includes an integrated, local-first infinite planning canvas (notes, to-dos, cards, connections, typography).
-4. **Local-First & Safe**: All boards and settings are stored locally on your machine in `%APPDATA%\Kumo`. No remote tracking, no telemetry, and all system actions pass through strict execution safety gates.
-
----
-
-## ✨ Key Features
-
-- **🐾 Organic Physics Mascot (`ui/overlay/goo.js`)**:
-  - Rendered entirely on HTML5 Canvas using cubic Bézier curves.
-  - Procedural breathing, blinking, squash-and-stretch hopping, and real-time cursor gaze tracking.
-  - Sleep mode: Enters slumber with floating `Zzz` particles after 60 seconds of inactivity; wakes up on mouse movement.
-  - Five expressive emotional states: `idle`, `thinking`, `talking`, `happy`, and `sleeping`.
-
-- **💬 Real-Time Streaming AI (`src/ai.js`)**:
-  - Powered by [OpenRouter](https://openrouter.ai/) for access to free, state-of-the-art open models (`Llama 3.3 70B`, `Gemini Flash 1.5`, `DeepSeek R1`, `Qwen 2.5 72B`).
-  - True token-by-token server-sent event (SSE) streaming directly into an animated speech bubble.
-  - Conversation history with persistent in-memory caching and exportable logs.
-
-- **📋 Infinite Spatial Planning Canvas (`ui/board/`)**:
-  - Full infinite canvas ported from Mochiboard.
-  - Add text notes, task lists, inspirational images, and connectors.
-  - Atomic JSON disk persistence in `%APPDATA%\Kumo\boards\`.
-  - Built-in AI Canvas Assistant: Ask Kumo to brainstorm ideas, structure research, or populate cards directly on your board.
-
-- **🛡️ 3-Tier Security Gate (`src/actions.js`)**:
-  - Protects your workstation with transparent execution policies (`GREEN` silent, `YELLOW` confirmation prompt, `RED` hard refusal).
+**Kumo takes a unified, multi-tier spatial approach:**
+1. **Zero-Gap Bezel Docking**: The **Pulse Dynamic Island** rests flush against your screen bezel (top, left, or right). It tucks into a passive 12px peek indicator, expands to a resting pill, and unrolls into a warm porcelain tool stage.
+2. **Instant Desktop Staging**: The **Edge Drop Shelf** lets you drag, drop, and stage files, URLs, text snippets, and screenshots without switching apps. Group items into multi-item stacks and view them in full-screen lightboxes.
+3. **Background Media Sync**: **Kumo Amp** interfaces directly with Windows System Media Transport Controls (SMTC) to display track titles, artists, album artwork, and interactive play/pause controls with live audio rhythm visualizers.
+4. **Spatial Thinking**: **Kumoboard** provides an infinite canvas for cards, notes, tasks, images, connections, and AI brainstorming. Dual-mode card pinning routes drops between the island and the main board.
+5. **Local-First & Privacy-Centric**: All boards, shelf items, and settings are stored locally on your machine in `%APPDATA%\Kumo`. System actions execute through strict, transparent safety gates.
 
 ---
 
-## 🏗️ System Architecture
+## Key Features
+
+### Pulse Dynamic Island
+- **3-State Kinetic Morphing Chassis (`ui/island/`)**:
+  - `Peek State` (120 x 12 px): A sleek, passive obsidian indicator sitting flush against the bezel.
+  - `Resting State` (360 x 40 px): Displays companion orb, SMTC media track marquee, timecode, and quick play/pause.
+  - `Unrolled State` (540 x 330 px+): Unrolls into a full porcelain deck featuring 4 dedicated modular widgets.
+- **Dynamic Window Sizing & Non-Intrusive Passthrough**:
+  - Automatically bounds the transparent Electron window (160x26 in peek, 400x56 in resting, 720x600 in unrolled).
+  - Eliminates screen-blocking transparent hits and removes OS mouse hook contention with Windows Snipping Tool.
+- **Drag-to-Resize Handle**: Tactile bottom drag bar to expand the deck from 330px up to 520px with local storage height memory.
+- **Compact Icon Dock Navigation**: Replaces bulky text tabs with compact Jelly-Pop spring buttons, live status dots, and active card badges.
+- **Multi-Edge Docking**: Dock seamlessly to Top Bezel, Left Edge, or Right Edge.
+
+### Edge Drop Desktop Shelf
+- **Desktop Staging Area (`ui/island/edge-drop/`)**:
+  - Drop files, images, code snippets, and web links directly onto the shelf or ambient drop targets.
+  - Native drag-out: drag items back into any desktop app (Photoshop, VS Code, Discord, Slack, Explorer).
+- **Copy as Usual Daemon (`src/clipboard-watcher.js`)**:
+  - Non-blocking background watcher captures copied text, URLs, and screenshots into the shelf.
+  - Efficient 48-byte bitmap memory sampling avoids heavy PNG encoding on idle intervals and prevents Windows clipboard locks.
+- **Stacks (Multi-Item Bundles)**: Drag and drop cards on top of each other to bundle them into layered stacks with count badges.
+- **Full-Size Lightbox Preview**: Inspect full screenshots, long code blocks, and stack contents in an expanded modal.
+- **Clickable Links**: Direct one-click URL opening in your default system browser.
+- **Kumoboard Stash Deck Integration**: Send items from the shelf directly to Kumoboard via the dedicated Edge Drop stash deck.
+
+### Kumo Amp & Live Windows SMTC
+- **Live System Media Transport Controls (`src/media-sync.js`, `ui/amp/`)**:
+  - Intercepts active playback from Spotify, Chrome, Edge, iTunes, and Windows Media Player.
+  - Live metadata: song title, artist, album art, position, duration, and play/pause/prev/next controls.
+- **Audio Rhythm Visualizer**: Real-time frequency waveform animation reactive to system sound playback.
+- **Standalone Amp Mini-Player**: Pop out a compact glassmorphic desktop music deck with volume control and track queue.
+
+### Kumoboard Infinite Spatial Canvas
+- **Spatial Planning Canvas (`ui/board/`)**:
+  - Infinite pan/zoom canvas for notes, checklists, code blocks, cards, and arrows.
+  - 9 Synchronized default cards (`#TELEMETRY`, `#NETWORK`, `#MEDIA`, `#WORKSPACE`, `#LAUNCHER`, `#AI-STUDIO`, `#TERMINAL`, `#TODO`, `#THEME-LAB`).
+  - Dual-mode card pinning: pin cards from the mascot popout or Edge Drop directly into your workspace.
+  - Atomic JSON persistence in `%APPDATA%\Kumo\boards\`.
+
+### Organic Physics Mascot & Asset Studio
+- **Procedural Bézier Mascot (`ui/overlay/goo.js`)**:
+  - Rendered on HTML5 Canvas with breathing, eye-gaze tracking, blinking, hopping, and sleep mode with floating particles.
+  - Companion Spatial Migration ("Dive-In / Leap-Out"): Mascot leaps between the desktop overlay, the island pill, and the board.
+- **3D & 2D Asset Studio (`ui/studio/`, `assets/Lab/`)**: Personalization suite to customize mascot palettes, lighting, and expressions.
+
+### Real-Time Streaming AI
+- **OpenRouter Streaming Integration (`src/ai.js`)**:
+  - Access to top open models (`Llama 3.3 70B`, `Gemini Flash 1.5`, `DeepSeek R1`, `Qwen 2.5 72B`).
+  - Server-sent events (SSE) token streaming directly into dynamic speech bubbles.
+
+### 3-Tier Safety System
+- **Action Security Gate (`src/actions.js`)**:
+  - `GREEN`: Silent execution for safe, read-only operations (clipboard read/write, scoped file search, browser URL opening).
+  - `YELLOW`: Explicit user confirmation for system modifications (app launch, folder open, PowerShell inspection).
+  - `RED`: Automatic refusal for destructive actions (file deletion, formatting, registry edits).
+
+---
+
+## System Architecture
 
 ### Architectural Overview
 
@@ -114,10 +152,13 @@ Kumo is built on **Electron 31**, strictly enforcing `contextIsolation: true` an
 ```mermaid
 graph TD
     subgraph "Main Process (Node.js & Native OS Runtime)"
-        MAIN["src/main.js<br/>Window Lifecycle & Hotkeys"]
-        OM["src/overlay-manager.js<br/>Transparent Overlay Window"]
-        BM["src/board-manager.js<br/>Canvas Window & Atomic File I/O"]
-        TRAY["src/tray.js<br/>Windows System Tray"]
+        MAIN["src/main.js<br/>App Lifecycle, Tray & Hotkeys"]
+        ISLAND_MGR["src/island.js<br/>Pulse Dynamic Island Controller"]
+        OVERLAY_MGR["src/overlay-manager.js<br/>Desktop Companion Overlay"]
+        BOARD_MGR["src/board-manager.js<br/>Kumoboard Spatial Window & Disk I/O"]
+        AMP_MGR["src/amp-manager.js<br/>Standalone Kumo Amp Player"]
+        CLIP_WATCH["src/clipboard-watcher.js<br/>Non-Blocking Clipboard Watcher"]
+        MEDIA_SYNC["src/media-sync.js<br/>Windows SMTC PowerShell Bridge"]
         ACT["src/actions.js<br/>3-Tier Safety Gated Dispatcher"]
         AI["src/ai.js<br/>OpenRouter SSE Client"]
         CFG["src/settings.js<br/>%APPDATA%/Kumo/config.json"]
@@ -127,117 +168,82 @@ graph TD
         PRELOAD["src/preload.js<br/>contextBridge.exposeInMainWorld('goo', ...)"]
     end
 
-    subgraph "Renderer Processes (Web UI)"
-        OVERLAY["ui/overlay/<br/>Mascot, Chat Bar, Speech Bubble"]
-        BOARD["ui/board/<br/>Mochiboard Infinite Planning Canvas"]
-        BRIDGE["ui/board/bridge.js<br/>window.MB Compatibility Layer"]
+    subgraph "Renderer Windows (Web UI)"
+        ISLAND["ui/island/<br/>Dynamic Island, Edge Drop, Stage"]
+        OVERLAY["ui/overlay/<br/>Mascot Physics, Chat Bar, Speech Bubble"]
+        BOARD["ui/board/<br/>Kumoboard Infinite Planning Canvas"]
+        AMP_UI["ui/amp/<br/>Standalone Kumo Amp Glass Deck"]
+        STUDIO["ui/studio/<br/>3D & 2D Mascot Asset Studio"]
     end
 
-    MAIN --> OM & BM & TRAY & ACT & AI & CFG
-    OM --> PRELOAD --> OVERLAY
-    BM --> PRELOAD --> BRIDGE --> BOARD
+    MAIN --> ISLAND_MGR & OVERLAY_MGR & BOARD_MGR & AMP_MGR & CLIP_WATCH & MEDIA_SYNC & ACT & AI & CFG
+    ISLAND_MGR --> PRELOAD --> ISLAND
+    OVERLAY_MGR --> PRELOAD --> OVERLAY
+    BOARD_MGR --> PRELOAD --> BOARD
+    AMP_MGR --> PRELOAD --> AMP_UI
+    MEDIA_SYNC --> |PowerShell WinRT| OS_SMTC[Windows System Media Controls]
+    CLIP_WATCH --> |Clipboard API| OS_CLIP[Windows Clipboard]
     ACT --> |System API| OS[Windows OS / PowerShell]
     AI --> |HTTPS / SSE| OPENROUTER[OpenRouter API]
-    BM --> |Atomic Disk I/O| DISK["%APPDATA%/Kumo/boards/*.json"]
+    BOARD_MGR --> |Atomic Disk I/O| DISK["%APPDATA%/Kumo/boards/*.json"]
 ```
 
 ### Component Deep Dive
 
 | Component | Path | Responsibility |
 |---|---|---|
-| **Main Process Entry** | [`src/main.js`](src/main.js) | App lifecycle, global hotkey registration (<kbd>Alt</kbd>+<kbd>Space</kbd>), IPC endpoint routing, tray setup. |
-| **Overlay Window Controller** | [`src/overlay-manager.js`](src/overlay-manager.js) | Coordinates the transparent, frameless, always-on-top companion window. Manages dynamic click pass-through via `setIgnoreMouseEvents`. |
-| **Canvas Manager & I/O** | [`src/board-manager.js`](src/board-manager.js) | Spawns the 1280x800 Mochiboard window. Manages atomic writes (`.tmp` → swap) in `%APPDATA%\Kumo\boards\`. |
-| **Security Preload Bridge** | [`src/preload.js`](src/preload.js) | Context bridge exposing sandboxed APIs (`window.goo.sendMessage`, `window.goo.action`, `window.goo.board.*`). |
-| **Safety Actions Dispatcher** | [`src/actions.js`](src/actions.js) | Validates and dispatches desktop actions (clipboard, fast file search, app launching) according to security tiers. |
-| **AI Streaming Client** | [`src/ai.js`](src/ai.js) | Connects to OpenRouter OpenAI-compatible streaming endpoints. Handles prompt injection, structured action parsing (`[ACTION:{...}]`), and canvas helpers. |
-| **Mascot Physics & Canvas** | [`ui/overlay/goo.js`](ui/overlay/goo.js) | Canvas 2D render loop. Handles Bézier deformation, procedural eye-gaze tracking, blinking, hop physics, and sleep particles. |
-| **Mochiboard Bridge** | [`ui/board/bridge.js`](ui/board/bridge.js) | Polyfills 29 native methods (`window.MB`) required by the Mochiboard canvas engine, routing file operations through Electron IPC. |
+| **Main Process Entry** | [`src/main.js`](src/main.js) | Application lifecycle, global hotkeys, background service bootstrap, and tray setup. |
+| **Pulse Dynamic Island** | [`src/island.js`](src/island.js) | Multi-edge docking controller, dynamic state-based window bounds, and hit-testing. |
+| **Clipboard Watcher** | [`src/clipboard-watcher.js`](src/clipboard-watcher.js) | Non-blocking background clipboard daemon with memory sampling and zero Snipping Tool locks. |
+| **Media Sync Engine** | [`src/media-sync.js`](src/media-sync.js) | Windows SMTC background integration running [`src/media-helper.ps1`](src/media-helper.ps1). |
+| **Overlay Window** | [`src/overlay-manager.js`](src/overlay-manager.js) | Frameless transparent desktop companion window with click passthrough. |
+| **Canvas Manager** | [`src/board-manager.js`](src/board-manager.js) | Spawns Kumoboard window with atomic file swap persistence in `%APPDATA%\Kumo\boards\`. |
+| **Security Bridge** | [`src/preload.js`](src/preload.js) | Sandboxed API context bridge (`window.goo.*`). |
+| **Safety Actions Dispatcher** | [`src/actions.js`](src/actions.js) | 3-tier action validation for safe computer interaction. |
+| **AI Streaming Client** | [`src/ai.js`](src/ai.js) | OpenRouter SSE client with tool-calling and structured canvas actions. |
+| **Island Stage & Edge Drop** | [`ui/island/`](ui/island/) | Unrolled chassis, icon-only dock, Edge Drop shelf, Stacks, and Lightbox preview. |
+| **Kumoboard Engine** | [`ui/board/`](ui/board/) | Spatial planning canvas engine, card connectors, and Edge Drop stash deck. |
 
 ### Data Flow & IPC Channel Specification
 
 ```
-Renderer (Overlay / Board)                    Main Process (Node.js)
+Renderer (Island / Board / Overlay)             Main Process (Node.js)
          │                                              │
          │─── ipcRenderer.send('chat:message') ────────>│ (src/main.js)
          │                                              ├── ai.chatStream()
          │<── ipcRenderer.sendToFrame('chat:stream') ───┤ (Streams tokens to UI)
          │                                              │
-         │─── ipcRenderer.invoke('board:save') ────────>│ (src/board-manager.js)
-         │                                              ├── Atomic write (.tmp -> .json)
-         │<── returns { success: true } ────────────────┤
+         │─── ipcRenderer.send('island:set-state') ────>│ (src/island.js)
+         │                                              ├── Resize window bounds (160x26 -> 720x600)
          │                                              │
-         │─── ipcRenderer.invoke('system:action') ─────>│ (src/actions.js)
-         │                                              ├── 3-Tier Security Inspection
-         │<── returns { success, result } ──────────────┤
+         │<── ipcRenderer.on('island:clipboard-change')─┤ (src/clipboard-watcher.js)
+         │                                              ├── Push auto-copied text, links & snips
+         │                                              │
+         │─── ipcRenderer.invoke('media:get-status') ──>│ (src/media-sync.js)
+         │<── returns { title, artist, isPlaying } ─────┤
 ```
 
 ---
 
-## 🛡️ 3-Tier Safety System
+## Performance & Security Model
 
-To ensure that autonomous AI agents cannot harm user workstations, Kumo enforces a strict 3-tier safety gate inside [`src/actions.js`](src/actions.js):
-
-```
-                        ┌─────────────────────────────────┐
-                        │   AI Proposes Desktop Action    │
-                        └────────────────┬────────────────┘
-                                         │
-                 ┌───────────────────────┼───────────────────────┐
-                 ▼                       ▼                       ▼
-         ┌───────────────┐       ┌───────────────┐       ┌───────────────┐
-         │     GREEN     │       │    YELLOW     │       │      RED      │
-         │  Safe / Read  │       │ System Mod /  │       │ Destructive / │
-         │   Automated   │       │ User Preview  │       │  Dangerous    │
-         └───────┬───────┘       └───────┬───────┘       └───────┬───────┘
-                 │                       │                       │
-                 ▼                       ▼                       ▼
-           Execute Now           Require User Consent      Permanently Block
-        (Clipboard, Read,      (App Launch, PowerShell,   (Delete, Format,
-          File Search)              Open Explorer)          Registry Mod)
-```
-
-1. **🟢 GREEN (Silent Execution)**:
-   - Read / Write Clipboard (`clipboard.read`, `clipboard.write`)
-   - Fast file search scoped to user directories (`file.search`)
-   - Open safe web URLs in default browser (`url.open`)
-   - Query system date, time, and hardware specs (`system.time`, `system.info`)
-
-2. **🟡 YELLOW (Confirmation Preview)**:
-   - Launch local applications (`app.open`: Notepad, Calculator, VS Code, Chrome, etc.)
-   - Open folder paths in Windows Explorer (`folder.open`)
-   - Read-only PowerShell queries (`powershell.read`)
-
-3. **🔴 RED (Hard Blocked)**:
-   - Arbitrary script execution, file deletion, disk formatting, registry edits.
-   - Refused automatically with a security alert.
+- **Zero Screen Blockage**: In passive peek state, the island window bounds shrink to `160 x 26 px`, leaving the rest of your screen completely clear and free of transparent hitboxes.
+- **Snipping Tool Friendly**: Standard `alwaysOnTop: true` priority and non-blocking clipboard sampling ensure Windows Snipping Tool (`Win+Shift+S`) never freezes or deadlocks.
+- **Memory Footprint**: Typical idle usage is ~50MB RAM for the island and ~60MB for the desktop companion overlay.
+- **CPU Throttling**: The companion render loop automatically throttles frame rates during inactivity and sleep states.
+- **Zero Telemetry**: Kumo never sends analytics or telemetry. Outbound traffic is restricted to OpenRouter for AI inference.
+- **Atomic Disk Writes**: Canvas boards use atomic `.tmp` file swapping to prevent corruption during unexpected shutdowns.
 
 ---
 
-## ⚡ Performance & Security Model
-
-- **Memory Footprint**: Average idle memory consumption is ~60MB RAM for the overlay window and ~120MB when the infinite canvas is actively running.
-- **CPU Overhead**: Mascot rendering uses `requestAnimationFrame` with dirty-checking; when Kumo goes into sleep mode after 60s of inactivity, frame rates throttle down automatically to save CPU/GPU cycles.
-- **Zero Telemetry**: Kumo never dials home. Only outbound calls are direct HTTPS connections to OpenRouter for AI inference.
-- **Atomic File Saving**: Boards are written to a `.tmp` file first and swapped atomically via `fs.renameSync`, preventing file corruption during sudden system shutdowns.
-- **Electron Hardening**:
-  - `contextIsolation: true`
-  - `nodeIntegration: false`
-  - `sandbox: false` (only for preload bridge)
-  - `enableRemoteModule: false`
-
----
-
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 - **OS**: Windows 10 or 11 (64-bit)
 - **Node.js**: v20.0.0 or higher ([Download Node.js](https://nodejs.org/))
-- **OpenRouter Key**: Free API key from [OpenRouter](https://openrouter.ai/keys)
+- **OpenRouter Key**: Free API key from [OpenRouter](https://openrouter.ai/keys) (optional, for AI features)
 
 ### One-Click Setup (PowerShell)
-
-Clone the repository and run the included installer:
 
 ```powershell
 git clone https://github.com/Ashborn-047/kumo.git
@@ -255,41 +261,37 @@ npm install
 npm start
 ```
 
-On first launch:
-1. Click the ⚙️ gear icon above Kumo to open **Settings**.
-2. Paste your **OpenRouter API Key** (`sk-or-v1-...`).
-3. Pick your preferred mascot pastel color theme and start chatting!
-
 ---
 
-## ⌨️ Hotkeys & Shortcuts
+## Hotkeys & Shortcuts
 
 | Action | Shortcut | Target |
 |---|---|---|
-| **Summon / Focus Chat** | <kbd>Alt</kbd> + <kbd>Space</kbd> | Global (works from any app) |
-| **Toggle Chat Input** | Left Click on Mascot | Overlay Window |
-| **Reposition Companion** | Click & Drag Mascot | Overlay Window |
-| **Open Planning Canvas** | Click 📋 icon on hover | Spawns Mochiboard Window |
-| **Open Chat History** | Click 💬 icon on hover | Overlay Window |
-| **Open Settings** | Click ⚙️ icon on hover | Overlay Window |
-| **Dismiss Chat / Bubble** | <kbd>Esc</kbd> or click wallpaper | Active Window |
+| **Summon / Focus Chat** | <kbd>Alt</kbd> + <kbd>Space</kbd> | Global (works from any application) |
+| **Dock / Collapse Island** | <kbd>Esc</kbd> | Pulse Dynamic Island |
+| **Hover to Reveal Island** | Mouse hover on top bezel | Pulse Dynamic Island Peek Tab |
+| **Toggle Mascot Companion** | Click Mascot Orb in Island Header | Dynamic Island / Overlay |
+| **Toggle Chat Input** | Left Click on Mascot | Desktop Companion Overlay |
+| **Reposition Companion** | Click & Drag Mascot | Desktop Companion Overlay |
+| **Open Planning Canvas** | Click Board Icon in Island Dock | Spawns Kumoboard Window |
+| **Open Kumo Amp Player** | Click SMTC Badge / Amp Tab | Spawns Standalone Amp Deck |
+| **Open Settings & Studio** | Click Settings Icon | Overlay / Studio Window |
 
 ---
 
-## 🛠️ Extending Kumo
+## Extending Kumo
 
 ### 1. Adding a New Desktop Action
 
-All computer interactions are handled in [`src/actions.js`](src/actions.js). To add a new action (e.g., getting battery percentage or volume control):
+All system interactions are handled in [`src/actions.js`](src/actions.js):
 
-1. **Define the handler function:**
+1. **Define the action handler:**
    ```javascript
    async function getBatteryStatus() {
-     // Run native command or query
      return { percent: 85, charging: true };
    }
    ```
-2. **Assign a safety tier & register it in `dispatch`:**
+2. **Assign a safety tier & register it:**
    ```javascript
    const TIERS = {
      'system.battery': 'GREEN', // Safe read-only
@@ -299,38 +301,18 @@ All computer interactions are handled in [`src/actions.js`](src/actions.js). To 
    case 'system.battery':
      return { success: true, result: await getBatteryStatus() };
    ```
-3. **Expose the action in `SYSTEM_PROMPT` in [`src/ai.js`](src/ai.js)** so Kumo knows how to invoke it.
+3. **Register in `SYSTEM_PROMPT` inside [`src/ai.js`](src/ai.js)** so Kumo can trigger it via tool calls.
 
-### 2. Adding a Mascot Animation or Emotion
+### 2. Adding Modular Widgets to Pulse Island
 
-Mascot rendering is managed by the 2D loop in [`ui/overlay/goo.js`](ui/overlay/goo.js):
-
-- **Add an emotional state:** Add your state to the state machine in `goo.js`:
-  ```javascript
-  // Example: Surprised state with wide eyes
-  if (state === 'surprised') {
-    eyeScaleY = 1.4;
-    pupilScale = 0.7;
-  }
-  ```
-- **Trigger from chat controller:** Call `window.gooState.setStateTemp('surprised', 2000)` inside [`ui/overlay/chat.js`](ui/overlay/chat.js).
-
-### 3. Configuring AI Models
-
-OpenRouter supports hundreds of models. You can add or change default models in [`src/ai.js`](src/ai.js) and [`ui/overlay/index.html`](ui/overlay/index.html):
-
-```javascript
-const FREE_MODELS = [
-  'meta-llama/llama-3.3-70b-instruct:free',
-  'google/gemini-flash-1.5:free',
-  'deepseek/deepseek-r1:free',
-  'qwen/qwen-2.5-72b-instruct:free'
-];
-```
+The modular stage in [`ui/island/`](ui/island/) supports extensible widgets:
+- Add a new tab button to `<nav class="modular-nav">` in [`ui/island/index.html`](ui/island/index.html).
+- Add a corresponding panel container `<div class="widget-panel" id="panel-yourwidget">`.
+- Register the tab switch target in [`ui/island/island.js`](ui/island/island.js).
 
 ---
 
-## 📦 Packaging & Distribution
+## Packaging & Distribution
 
 To build a standalone Windows `.exe` installer (NSIS):
 
@@ -339,36 +321,41 @@ To build a standalone Windows `.exe` installer (NSIS):
 npm run dist
 ```
 
-The resulting package will be generated under:
+Generated installer:
 ```
 dist/Kumo Setup 0.1.0.exe
 ```
 
 ---
 
-## 🗺️ Roadmap
+## Roadmap
 
 - [x] Organic canvas companion with Bézier physics & gaze tracking
 - [x] OpenRouter SSE streaming chat integration
 - [x] Port of Mochiboard infinite canvas with native Electron IPC bridge
+- [x] Pulse Dynamic Island with 3-state morphing chassis (peek, resting, unrolled)
+- [x] Multi-edge bezel docking (Top, Left, Right)
+- [x] Edge Drop desktop shelf for drag, drop, and staging
+- [x] Non-blocking clipboard daemon with fast memory sampling
+- [x] Stacks (multi-item drag-to-group bundles) and lightbox preview modal
+- [x] Live Windows SMTC media integration (Kumo Amp) & audio rhythm visualizer
+- [x] Compact icon-only navigation dock to maximize stage space
+- [x] 3D & 2D Mascot Asset Studio & Theme Lab
 - [x] 3-Tier safety gate for system actions
-- [x] Inactivity sleep mode with floating particles
-- [x] Color swatch personalizer & glassmorphism settings
-- [ ] Multi-monitor support (snap to different screens)
-- [ ] Voice input / TTS voice feedback
-- [ ] Notification badges on Windows System Tray for calendar / reminders
-- [ ] Canvas snapshot thumbnail previews in chat bubble
+- [ ] Multi-monitor display selection
+- [ ] Voice input / TTS audio feedback
+- [ ] System tray notification badges for reminders
 
 ---
 
-## 📄 License & Acknowledgments
+## License & Acknowledgments
 
 - **License**: Released under the [MIT License](LICENSE).
-- **Mochiboard Engine**: Spatial canvas ported from the brilliant work in [Mochiboard](https://github.com/jessawolfe-ux/mochiboard) (MIT).
-- **Icons**: [Material Icons](https://fonts.google.com/icons) (Apache 2.0).
+- **Mochiboard Engine**: Spatial canvas ported from the work in [Mochiboard](https://github.com/jessawolfe-ux/mochiboard) (MIT).
+- **Icons**: Lucide SVG Icons & Material Icons (MIT / Apache 2.0).
 
 ---
 
 <div align="center">
-  <sub>Built with ☁️ by <a href="https://github.com/Ashborn-047">Ashborn-047</a></sub>
+  <sub>Built with care by <a href="https://github.com/Ashborn-047">Ashborn-047</a></sub>
 </div>
