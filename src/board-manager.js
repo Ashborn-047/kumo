@@ -3,9 +3,6 @@
 // Opens the Mochiboard canvas in a separate BrowserWindow.
 // Reads/writes board JSON files from %APPDATA%\Kumo\boards\
 // ============================================================
-// TODO Phase 2: implement all board file operations
-// TODO Phase 2: board list / home screen
-// TODO Phase 2: autosave every 30 seconds
 
 const electron = require('electron');
 const { BrowserWindow } = electron;
@@ -19,11 +16,24 @@ const DATA_DIR   = path.join(userDataDir, 'boards');
 const INDEX_FILE = path.join(userDataDir, 'boards-index.json');
 
 let boardWindow = null;
+let onOpenCallback = null;
+let onCloseCallback = null;
+
+function setLifecycleHooks({ onOpen, onClose }) {
+  if (onOpen) onOpenCallback = onOpen;
+  if (onClose) onCloseCallback = onClose;
+}
 
 // ── Window ────────────────────────────────────────────────────
 
-function openBoardWindow(preloadPath) {
-  if (boardWindow) { boardWindow.focus(); return; }
+function openBoardWindow(preloadPath, iconImage) {
+  if (boardWindow && !boardWindow.isDestroyed()) {
+    if (iconImage) {
+      try { boardWindow.setIcon(iconImage); } catch {}
+    }
+    boardWindow.focus();
+    return boardWindow;
+  }
 
   boardWindow = new BrowserWindow({
     width: 1280,
@@ -31,9 +41,10 @@ function openBoardWindow(preloadPath) {
     minWidth: 800,
     minHeight: 600,
     title: 'Kumoboard — Assistant Workbench',
-    icon: path.join(__dirname, '../assets/icon.png'),
+    icon: iconImage || path.join(__dirname, '../assets/icon.png'),
     autoHideMenuBar: true,
-    show: true,
+    show: false,
+    backgroundColor: '#fbf8fc',
     center: true,
     webPreferences: {
       preload: preloadPath,
@@ -46,8 +57,18 @@ function openBoardWindow(preloadPath) {
   boardWindow.once('ready-to-show', () => {
     boardWindow.show();
     boardWindow.focus();
+    if (typeof onOpenCallback === 'function') {
+      try { onOpenCallback(boardWindow); } catch (e) { console.warn(e); }
+    }
   });
-  boardWindow.on('closed', () => { boardWindow = null; });
+  boardWindow.on('closed', () => {
+    boardWindow = null;
+    if (typeof onCloseCallback === 'function') {
+      try { onCloseCallback(); } catch (e) { console.warn(e); }
+    }
+  });
+
+  return boardWindow;
 }
 
 function focusBoard() { boardWindow?.focus(); }
@@ -105,63 +126,51 @@ function saveFolders(folders) {
 function deleteBoard(id) {
   ensureDataDir();
   const filePath = path.join(DATA_DIR, `${id}.json`);
-  try {
-    if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
-    let index = listBoards().filter(b => b.id !== id);
-    fs.writeFileSync(INDEX_FILE + '.tmp', JSON.stringify(index));
-    fs.renameSync(INDEX_FILE + '.tmp', INDEX_FILE);
-    return true;
-  } catch (e) {
-    console.error('Failed to delete board', e);
-    return false;
-  }
+  try { fs.unlinkSync(filePath); } catch {}
+
+  let index = listBoards().filter(b => b.id !== id);
+  fs.writeFileSync(INDEX_FILE, JSON.stringify(index));
+  return true;
 }
 
 function revealBoards() {
   ensureDataDir();
-  const { shell } = require('electron');
-  shell.openPath(DATA_DIR);
+  electron.shell.openPath(DATA_DIR);
 }
 
-function exportBoard(id, format = 'markdown') {
+function exportBoard(id, format) {
   const board = loadBoard(id);
-  if (!board) return null;
-  if (format === 'json') {
-    return JSON.stringify(board, null, 2);
+  if (!board) return false;
+
+  const exportDir = path.join(userDataDir, 'exports');
+  fs.mkdirSync(exportDir, { recursive: true });
+
+  if (format === 'markdown') {
+    const md = `# ${board.name}\n\n` +
+      board.cards.map(c => `### ${c.type}\n${c.text || ''}\n`).join('\n');
+    const outPath = path.join(exportDir, `${board.name}.md`);
+    fs.writeFileSync(outPath, md);
+    electron.shell.showItemInFolder(outPath);
+    return true;
   }
 
-  // Generate markdown representation
-  let md = `# ${board.name || 'Untitled Board'}\n\n`;
-  if (board.cards && Array.isArray(board.cards)) {
-    board.cards.forEach((card) => {
-      if (card.type === 'title') {
-        md += `\n## ${card.text || 'Section'}\n\n`;
-      } else if (card.type === 'todo') {
-        md += `### ${card.text || 'To-Do List'}\n`;
-        (card.items || []).forEach((it) => {
-          const mark = it.done ? '[x]' : '[ ]';
-          md += `- ${mark} ${it.t || ''}\n`;
-        });
-        md += '\n';
-      } else if (card.type === 'note') {
-        md += `> **Note (${card.color || 'default'}):**\n> ${card.text || ''}\n\n`;
-      }
-    });
-  }
-  return md;
+  const outPath = path.join(exportDir, `${board.name}.json`);
+  fs.writeFileSync(outPath, JSON.stringify(board, null, 2));
+  electron.shell.showItemInFolder(outPath);
+  return true;
 }
 
 module.exports = {
   openBoardWindow,
   focusBoard,
   get,
+  setLifecycleHooks,
   listBoards,
   loadBoard,
   saveBoard,
-  deleteBoard,
   getFolders,
   saveFolders,
+  deleteBoard,
   revealBoards,
   exportBoard,
-  DATA_DIR,
 };

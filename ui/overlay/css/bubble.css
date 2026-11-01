@@ -1,0 +1,122 @@
+/* ============================================================
+   ui/overlay/css/bubble.css — Reply Speech Bubble Component
+   Warm Porcelain Surface, Downward Stem Pointer, and Pill Title
+   Strictly Zero Emojis per user design mandate.
+   ============================================================ */
+
+.bubble {
+  position: absolute;
+  top: 12px;
+  left: 14px;
+  right: 14px;
+  max-height: 180px;
+  background: var(--white-card);
+  border: 1px solid var(--card-border);
+  border-radius: 18px;
+  padding: 12px 16px;
+  box-shadow: var(--shadow-bubble);
+  animation: pop-in 0.22s var(--spring-ease);
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+}
+
+.bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -9px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 9px solid transparent;
+  border-top-color: var(--white-card);
+  border-bottom: none;
+  filter: drop-shadow(0 2px 1.5px rgba(46, 59, 82, 0.12));
+}
+
+#bubble-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.bubble-title {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--lilac-text);
+  background: var(--lilac-tint);
+  border: 1px solid var(--lilac-border);
+  padding: 2px 8px;
+  border-radius: 9999px;
+}
+
+.bubble-close-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.bubble-close-btn:hover {
+  color: var(--text-dark);
+  background: var(--card-border-subtle);
+  transform: scale(1.1);
+}
+
+#bubble-text {
+  color: var(--text-dark);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.5;
+  word-break: break-word;
+  overflow-y: auto;
+  max-height: 110px;
+  padding-right: 4px;
+}
+
+#bubble-text::-webkit-scrollbar {
+  width: 4px;
+}
+
+#bubble-text::-webkit-scrollbar-thumb {
+  background: var(--card-border);
+  border-radius: 4px;
+}
+
+.bubble-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.bubble-btn {
+  background: var(--canvas-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  color: var(--iris-action);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.bubble-btn:hover {
+  background: var(--lilac-tint);
+  border-color: var(--lilac-border);
+  color: var(--lilac-text);
+}
+

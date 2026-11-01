@@ -49,6 +49,9 @@ export function renderCodeHTML(card) {
           <span class="material-symbols-outlined text-[15px]">play_arrow</span>
           <span>Execute</span>
         </button>
+        <button class="w-6 h-6 rounded-md hover:bg-white/10 text-white/40 hover:text-rose-400 flex items-center justify-center transition-colors cursor-pointer ml-1" data-act="del" title="Delete card">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
       </div>
     </header>
 

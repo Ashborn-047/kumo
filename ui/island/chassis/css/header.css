@@ -1,0 +1,234 @@
+/* ============================================================
+   Pulse Dynamic Island — chassis/css/header.css
+   Chassis Header Row & Resting Pill Elements:
+   - Puff Mascot & eyes animation
+   - Center Marquee Well
+   - Pill Time, Play/Pause Hero Action, & Dock Pill
+   ============================================================ */
+
+/* ══════════════════════════════════════════════════════════════
+   CHASSIS HEADER ROW
+   Morphs from dark resting pill to warm porcelain header
+   ══════════════════════════════════════════════════════════════ */
+.chassis-header {
+  display: none;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+.island-wrapper.state-resting .chassis-header {
+  display: flex;
+  height: 40px;
+  padding: 0 10px 0 12px;
+  background: transparent;
+  color: #ffffff;
+  border-bottom: none;
+}
+
+.island-wrapper.state-unrolled .chassis-header {
+  display: flex;
+  height: 42px;
+  padding: 0 14px;
+  background: #ffffff;
+  border-bottom: 1px solid #f0ecf6;
+  color: var(--text-dark);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-shrink: 0;
+}
+
+/* Mascot Companion Orb */
+.puff-mascot {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--lavender);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(185, 167, 255, 0.4);
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.puff-mascot:hover {
+  transform: scale(1.15);
+}
+
+.puff-eye {
+  width: 2.5px;
+  height: 4px;
+  background: var(--deep-obsidian);
+  border-radius: 2px;
+  animation: blinkEyes 4.5s infinite;
+}
+
+@keyframes blinkEyes {
+  0%, 94%, 100% { transform: scaleY(1); }
+  97% { transform: scaleY(0.1); }
+}
+
+.mascot-status-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--phosphor);
+  box-shadow: 0 0 8px var(--phosphor);
+  animation: pulseGlow 1.8s infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.85; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+
+.chassis-brand {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  transition: color 0.25s ease;
+}
+
+.island-wrapper.state-resting .chassis-brand {
+  color: #b9a7ff;
+}
+
+.island-wrapper.state-unrolled .chassis-brand {
+  color: var(--iris-action);
+}
+
+/* Center Marquee Well */
+.marquee-well {
+  flex: 1;
+  max-width: 175px;
+  height: 22px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  padding: 0 8px;
+  margin: 0 6px;
+  transition: background-color 0.25s ease, border-color 0.25s ease;
+}
+
+.island-wrapper.state-resting .marquee-well {
+  background: #0f1420;
+  border: 1px solid #1c2336;
+}
+
+.island-wrapper.state-unrolled .marquee-well {
+  background: #f4f0fa;
+  border: 1px solid #e7e0f2;
+}
+
+.marquee-track {
+  display: inline-block;
+  white-space: nowrap;
+  font-size: 10px;
+  animation: marqueeScroll 14s linear infinite;
+  transition: color 0.25s ease;
+}
+
+.island-wrapper.state-resting .marquee-track {
+  color: #e2ddf2;
+}
+
+.island-wrapper.state-unrolled .marquee-track {
+  color: #494262;
+  font-weight: 500;
+}
+
+@keyframes marqueeScroll {
+  0%   { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+/* Header Right: Time, Play & Dock Buttons */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.pill-time {
+  font-size: 11px;
+  font-weight: 700;
+  transition: color 0.25s ease;
+}
+
+.island-wrapper.state-resting .pill-time {
+  color: var(--phosphor);
+  text-shadow: 0 0 6px rgba(142, 230, 184, 0.4);
+}
+
+.island-wrapper.state-unrolled .pill-time {
+  color: var(--iris-action);
+}
+
+/* Hero Action (Play / Pause Pill) */
+.btn-hero-action {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.15s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.island-wrapper.state-resting .btn-hero-action {
+  background: var(--lavender);
+  color: var(--deep-obsidian);
+  box-shadow: 0 2px 6px rgba(185, 167, 255, 0.35);
+}
+
+.island-wrapper.state-unrolled .btn-hero-action {
+  background: var(--lilac-tint);
+  border: 1px solid var(--lilac-border);
+  color: var(--iris-action);
+}
+
+.btn-hero-action:hover {
+  transform: scale(1.1);
+}
+
+/* Dock Button (ESC DOCK) */
+.btn-dock-pill {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 999px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.island-wrapper.state-resting .btn-dock-pill {
+  display: none;
+}
+
+.island-wrapper.state-unrolled .btn-dock-pill {
+  display: inline-flex;
+  background: #f0ecf8;
+  color: #61587d;
+  border: 1px solid #ddd6ee;
+}
+
+.btn-dock-pill:hover {
+  background: #e4ddf2;
+  color: var(--iris-action);
+}
+

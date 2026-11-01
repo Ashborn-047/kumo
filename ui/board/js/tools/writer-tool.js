@@ -41,6 +41,9 @@ export function renderWriterHTML(card) {
       <div class="flex items-center gap-3">
         <span class="text-label-sm font-label-sm font-mono text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full ring-1 ring-emerald-200/50 writer-engine-status">Engine Ready</span>
         <span class="material-symbols-outlined text-secondary text-[18px]">drag_indicator</span>
+        <button class="w-6 h-6 rounded-md hover:bg-rose-100/70 text-slate-400 hover:text-rose-600 flex items-center justify-center transition-colors cursor-pointer" data-act="del" title="Delete card">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
       </div>
     </header>
 

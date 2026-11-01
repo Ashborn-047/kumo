@@ -1,0 +1,670 @@
+/* ============================================================
+   ui/amp/amp.css — Standalone 400px Deck MK-IV Tactile Styling
+   Strictly Zero Emojis (Warm Tactile Pastel Design System)
+   ============================================================ */
+
+:root {
+  --canvas-bg: #fbf8fc;
+  --white-surface: #ffffff;
+  --card-border: #e2dded;
+  --card-border-subtle: #eeebf5;
+  --iris-action: #6355d8;
+  --iris-hover: #5042c4;
+  --iris-glow: rgba(99, 85, 216, 0.35);
+  --lcd-midnight: #090c16;
+  --phosphor-green: #8ee6b8;
+  --peach-tint: #ffeedd;
+  --peach-border: #fcd7b9;
+  --peach-text: #c2410c;
+  --text-dark: #1e192b;
+  --text-muted: #7b7490;
+  --text-dim: #a49eb6;
+  --font-sans: 'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --spring-ease: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: transparent;
+  color: var(--text-dark);
+  padding: 10px;
+  overflow: hidden;
+  user-select: none;
+}
+
+.amp-standalone-window {
+  background: var(--canvas-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 24px;
+  padding: 14px 16px;
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.22), 0 4px 12px rgba(99, 85, 216, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+/* ── Drag Header / Titlebar ── */
+.amp-titlebar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 2px;
+  cursor: grab;
+  user-select: none;
+}
+
+body.is-dragging,
+body.is-dragging * {
+  cursor: grabbing !important;
+  user-select: none !important;
+}
+
+.titlebar-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  pointer-events: none;
+}
+
+.drag-grip {
+  color: #a8a0be;
+}
+
+.amp-brand-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--text-dark);
+}
+
+.amp-version-badge {
+  font-size: 8px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: #ede8fb;
+  color: var(--iris-action);
+  border: 1px solid #ddd5f5;
+}
+
+.titlebar-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.smtc-live-badge {
+  font-size: 8px;
+  font-weight: 700;
+  color: var(--phosphor-green);
+  background: #0d121f;
+  padding: 2.5px 8px;
+  border-radius: 9999px;
+  border: 1px solid #1e263d;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.pulse-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 5px #10b981;
+  animation: pulse 2s infinite;
+}
+
+.titlebar-btn-close {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid #ded8eb;
+  background: #ffffff;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.titlebar-btn-close:hover {
+  background: #fee2e2;
+  border-color: #fca5a5;
+  color: #dc2626;
+}
+
+/* ── Component 1: Dark LCD Deck ── */
+.amp-lcd-card {
+  background: var(--lcd-midnight);
+  border: 1px solid #1a2238;
+  border-radius: 16px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #ffffff;
+}
+
+.lcd-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.lcd-vinyl-badge {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--iris-action), #7a3ee8);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(99, 85, 216, 0.4);
+}
+
+.lcd-track-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.lcd-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.25;
+}
+
+.lcd-subtitle {
+  font-size: 8.5px;
+  color: #928ca6;
+  margin-top: 1.5px;
+}
+
+.lcd-dsp-meta {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.lcd-time-readout {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--phosphor-green);
+}
+
+.lcd-dsp-tag {
+  font-size: 7.5px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 3px;
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  display: inline-block;
+  margin-top: 2px;
+}
+
+.spectrum-rack {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  height: 38px;
+  gap: 2px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid #161e33;
+}
+
+.spec-bar-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  height: 100%;
+}
+
+.spec-peak {
+  width: 100%;
+  height: 1.5px;
+  background: #ffffff;
+  margin-bottom: 1px;
+  border-radius: 0.5px;
+  transition: opacity 0.2s ease;
+}
+
+.spec-bar {
+  width: 100%;
+  background: linear-gradient(180deg, #f59e0b 0%, var(--iris-action) 60%, #4c1d95 100%);
+  border-radius: 1px;
+  min-height: 2px;
+  transition: height 0.06s ease, transform 0.06s ease;
+}
+
+/* ── Pattern Modes (BARS, MIRROR, WAVE, DOTS, RAIN) ── */
+.spectrum-rack.mode-bars .spec-bar {
+  background: linear-gradient(180deg, #f59e0b 0%, var(--iris-action) 60%, #4c1d95 100%);
+}
+
+.spectrum-rack.mode-mirror .spec-bar {
+  background: linear-gradient(180deg, #8ee6b8 0%, #3b82f6 50%, #6355d8 100%);
+  border-radius: 2px 2px 0 0;
+}
+.spectrum-rack.mode-mirror .spec-peak {
+  background: #8ee6b8;
+  box-shadow: 0 0 4px #8ee6b8;
+}
+
+.spectrum-rack.mode-wave .spec-bar {
+  background: #8ee6b8;
+  border-radius: 9999px;
+  box-shadow: 0 0 6px #8ee6b8, 0 0 12px rgba(142, 230, 184, 0.4);
+}
+.spectrum-rack.mode-wave .spec-peak {
+  background: #b9a7ff;
+  height: 2px;
+  border-radius: 50%;
+  box-shadow: 0 0 5px #b9a7ff;
+}
+
+.spectrum-rack.mode-dots .spec-bar {
+  background: #b9a7ff;
+  border-radius: 50%;
+  width: 4px;
+  height: 4px !important;
+  box-shadow: 0 0 6px #b9a7ff;
+}
+.spectrum-rack.mode-dots .spec-peak {
+  background: #f59e0b;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  box-shadow: 0 0 5px #f59e0b;
+  margin-bottom: 2px;
+}
+
+.spectrum-rack.mode-rain .spec-bar {
+  background: linear-gradient(180deg, #10b981 0%, rgba(16, 185, 129, 0.2) 100%);
+  border-radius: 1px;
+}
+.spectrum-rack.mode-rain .spec-peak {
+  background: #8ee6b8;
+  height: 3px;
+  border-radius: 2px;
+  box-shadow: 0 2px 6px #8ee6b8;
+}
+
+.lcd-mode-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 7.5px;
+}
+
+.mode-label {
+  color: #616e8e;
+  font-weight: 700;
+}
+
+.mode-buttons {
+  display: flex;
+  gap: 3px;
+}
+
+.mode-btn {
+  font-size: 7.5px;
+  font-weight: 700;
+  padding: 1.5px 6px;
+  border-radius: 3px;
+  border: 1px solid #232c45;
+  background: transparent;
+  color: #7b88aa;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.mode-btn.active {
+  background: var(--phosphor-green);
+  color: #070a14;
+  border-color: var(--phosphor-green);
+}
+
+/* ── Component 2: Seek Scrubber ── */
+.amp-scrubber-section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.scrub-labels {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 8.5px;
+  color: var(--text-muted);
+}
+
+.scrub-ready-label {
+  color: #b45309;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.scrub-track {
+  position: relative;
+  height: 6px;
+  background: #eeebf5;
+  border-radius: 9999px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: height 0.15s ease;
+}
+
+.scrub-track:hover {
+  height: 8px;
+}
+
+.scrub-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--iris-action), #a494f8);
+  border-radius: 9999px;
+  pointer-events: none;
+  transition: width 0.1s linear;
+}
+
+.scrub-thumb {
+  position: absolute;
+  top: 50%;
+  width: 13px;
+  height: 13px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid var(--iris-action);
+  box-shadow: 0 1px 4px rgba(99, 85, 216, 0.4);
+  pointer-events: none;
+}
+
+/* ── Component 3: Tactile Transport Controls ── */
+.amp-transport-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+  padding: 2px 0;
+}
+
+.win-trans-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  border: 1px solid var(--card-border-subtle);
+  background: #ffffff;
+  color: var(--text-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 9.5px;
+  font-weight: 700;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+  transition: all 0.15s ease;
+}
+
+.win-trans-btn:hover {
+  background: #f5f1fa;
+  border-color: #ded6ee;
+  transform: translateY(-1px);
+}
+
+.win-trans-btn:active {
+  transform: scale(0.95);
+}
+
+.win-trans-hero {
+  width: 48px;
+  height: 48px;
+  border-radius: 9999px;
+  border: none;
+  background: var(--iris-action);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 6px 18px var(--iris-glow);
+  transition: all 0.2s var(--spring-ease);
+}
+
+.win-trans-hero:hover {
+  background: var(--iris-hover);
+  transform: translateY(-1px) scale(1.06);
+  box-shadow: 0 8px 24px rgba(99, 85, 216, 0.45);
+}
+
+.win-trans-hero:active {
+  transform: scale(0.94);
+}
+
+/* ── Component 4: Volume & Eject / Pin ── */
+.amp-volume-eject-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.volume-capsule {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #ffffff;
+  border: 1px solid var(--card-border-subtle);
+  border-radius: 9999px;
+  padding: 4px 10px;
+  height: 32px;
+}
+
+.vol-slider {
+  flex: 1;
+  height: 4px;
+  accent-color: var(--iris-action);
+  cursor: pointer;
+}
+
+.vol-label {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--text-muted);
+  min-width: 26px;
+  text-align: right;
+}
+
+.btn-pin-eject {
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 9999px;
+  background: var(--peach-tint);
+  border: 1px solid var(--peach-border);
+  color: var(--peach-text);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 9px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-pin-eject:hover {
+  background: #ffe3c9;
+  transform: translateY(-1px);
+}
+
+/* ── Component 5: Source Selector Grid ── */
+.amp-sources-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+}
+
+.source-pill {
+  padding: 6px 0;
+  border-radius: 9999px;
+  border: 1px solid var(--card-border-subtle);
+  background: #ffffff;
+  color: var(--text-dark);
+  font-size: 9px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.source-pill:hover {
+  background: #f7f4fc;
+  border-color: #dcd6eb;
+}
+
+.source-pill.active {
+  border-color: #10b981;
+  color: #065f46;
+  font-weight: 700;
+  box-shadow: 0 1px 3px rgba(16, 185, 129, 0.15);
+}
+
+.source-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.dot-green { background: #10b981; }
+.dot-orange { background: #f97316; }
+.dot-red { background: #ef4444; }
+.dot-purple { background: #8b5cf6; }
+
+/* ── Component 6: Upcoming Queue Box ── */
+.amp-queue-box {
+  background: #ffffff;
+  border: 1px solid var(--card-border-subtle);
+  border-radius: 14px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.queue-box-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 8px;
+  color: var(--text-muted);
+}
+
+.queue-title-text {
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.queue-crossfade-tag {
+  color: var(--iris-action);
+  font-weight: 700;
+}
+
+.queue-track-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.queue-track-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 6px;
+  border-radius: 6px;
+  font-size: 10px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.queue-track-row:hover {
+  background: #f7f4fc;
+}
+
+.queue-track-row.active {
+  background: #ede8fb;
+  color: var(--iris-action);
+  font-weight: 700;
+}
+
+.track-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  flex: 1;
+}
+
+.track-num {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: #928ca6;
+}
+
+.track-name {
+  truncate;
+}
+
+.track-artist {
+  color: #8c85a0;
+  font-size: 9px;
+}
+
+.track-right {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: #8c85a0;
+  flex-shrink: 0;
+}
+
+.track-dot-active {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #10b981;
+}
+
+.amp-footer-caption {
+  text-align: center;
+  font-size: 8px;
+  color: #a49eb6;
+  font-style: italic;
+  padding-top: 2px;
+}
+
+.icon-sm { width: 14px; height: 14px; stroke-width: 2; }
+.icon-md { width: 20px; height: 20px; stroke-width: 2; }
+.lucide-icon { stroke: currentColor; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+

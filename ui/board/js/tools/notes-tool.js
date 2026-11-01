@@ -39,6 +39,9 @@ export function renderNotesHTML(card) {
           <div class="w-2.5 h-2.5 rounded-full bg-slate-300/80 hover:bg-rose-400 transition-colors cursor-pointer" data-act="del" title="Close"></div>
         </div>
         <span class="material-symbols-outlined text-secondary text-[18px]">drag_indicator</span>
+        <button class="w-6 h-6 rounded-md hover:bg-black/5 text-slate-400 hover:text-rose-600 flex items-center justify-center transition-colors cursor-pointer" data-act="del" title="Delete card">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
       </div>
     </header>
 

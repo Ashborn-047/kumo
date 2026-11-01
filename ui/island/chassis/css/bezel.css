@@ -1,0 +1,178 @@
+/* ============================================================
+   Pulse Dynamic Island — chassis/css/bezel.css
+   Seamless Morphing Bezel Integration:
+   - State 0 (Peek): 120x12px edge tab
+   - State 1 (Resting): 340x40px dark obsidian pill at top screen bezel (Y: 0px)
+   - State C (Unrolled): 520x330px cohesive porcelain white warm pastel card
+   Strict inner clipping to eliminate any protruding line artifacts
+   ============================================================ */
+
+/* Hit-Testing Wrapper (Docked flush to top screen bezel Y: 0px) */
+.island-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   SEAMLESS MORPHING CHASSIS
+   Continuous Zero-Gap Top Bezel Integration
+   ══════════════════════════════════════════════════════════════ */
+.seamless-chassis {
+  position: relative;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  pointer-events: auto;
+  box-sizing: border-box;
+  overflow: visible;
+  transition: width 0.32s cubic-bezier(0.34, 1.56, 0.64, 1),
+              min-height 0.32s cubic-bezier(0.34, 1.56, 0.64, 1),
+              background-color 0.25s ease,
+              border-color 0.25s ease,
+              border-radius 0.32s ease,
+              box-shadow 0.32s ease;
+  z-index: 50;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   INVERTED FILLET WINGS (LEFT & RIGHT)
+   Flaring smoothly into the top screen bezel (Y: 0px)
+   ────────────────────────────────────────────────────────────── */
+.fillet-wing-left,
+.fillet-wing-right {
+  position: absolute;
+  top: 0;
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+  z-index: 60;
+  transition: fill 0.25s ease;
+}
+
+.fillet-wing-left {
+  left: -16px;
+  fill: var(--deep-obsidian);
+}
+
+.fillet-wing-right {
+  right: -16px;
+  fill: var(--deep-obsidian);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   INNER CHASSIS CONTAINER
+   Enforces strict border-radius clipping so internal dividers/borders
+   NEVER poke out or cause horizontal line glitches
+   ────────────────────────────────────────────────────────────── */
+.chassis-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   STATE 0: PASSIVE PEEK EDGE TAB (120 × 12 px)
+   ══════════════════════════════════════════════════════════════ */
+.island-wrapper.state-peek .seamless-chassis {
+  width: 120px;
+  height: 12px;
+  background: var(--deep-obsidian);
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  border: none;
+}
+
+.island-wrapper.state-peek .fillet-wing-left,
+.island-wrapper.state-peek .fillet-wing-right {
+  display: none;
+}
+
+.capsule-peek {
+  display: none;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.island-wrapper.state-peek .capsule-peek {
+  display: flex;
+}
+
+.peek-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--phosphor);
+  box-shadow: 0 0 6px var(--phosphor);
+  animation: pulseGlow 2s infinite ease-in-out;
+}
+
+.peek-label {
+  font-size: 7.5px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #9f9ab2;
+}
+
+.peek-accent {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--lavender);
+  opacity: 0.7;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   STATE 1: RESTING BEZEL PILL (340 × 40 px)
+   Deep Obsidian (#07090e) flush to screen bezel
+   Strictly zero protruding lines
+   ══════════════════════════════════════════════════════════════ */
+.island-wrapper.state-resting .seamless-chassis {
+  width: 340px;
+  height: 40px;
+  background: var(--deep-obsidian);
+  border-radius: 0 0 20px 20px;
+  box-shadow: var(--shadow-bezel-drop);
+  cursor: pointer;
+  border: none;
+}
+
+.island-wrapper.state-resting .fillet-wing-left,
+.island-wrapper.state-resting .fillet-wing-right {
+  display: block;
+  fill: var(--deep-obsidian);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   STATE C: UNROLLED WARM PASTEL CARD (520 × 330 px)
+   Porcelain White (#ffffff), tactile 1px border #c8c4d6,
+   Inverted fillet wings flare seamlessly in porcelain white at Y: 0px
+   ══════════════════════════════════════════════════════════════ */
+.island-wrapper.state-unrolled .seamless-chassis {
+  width: 520px;
+  min-height: 330px;
+  background: #ffffff;
+  border: 1px solid var(--card-border);
+  border-top: none;
+  border-radius: 0 0 22px 22px;
+  box-shadow: var(--shadow-drawer);
+}
+
+.island-wrapper.state-unrolled .fillet-wing-left,
+.island-wrapper.state-unrolled .fillet-wing-right {
+  display: block;
+  fill: #ffffff;
+}
+

@@ -5,7 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Kumo</title>
   <link rel="stylesheet" href="overlay.css" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" />
   <!-- Three.js r128 for 3D Mochi mascot -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
@@ -15,7 +17,7 @@
     <div id="bubble" class="bubble hidden">
       <div id="bubble-header">
         <span class="bubble-title" id="bubble-title">Kumo</span>
-        <button id="bubble-close" class="bubble-close-btn" title="Dismiss">×</button>
+        <button id="bubble-close" class="bubble-close-btn" title="Dismiss"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
       </div>
       <div id="bubble-text"></div>
       <div id="bubble-actions" class="bubble-actions hidden">
@@ -55,9 +57,9 @@
     <div id="mascot-wrap" title="Drag to move • Click to chat">
       <canvas id="goo-canvas" width="160" height="180"></canvas>
       <div id="mascot-controls" class="mascot-controls">
-        <button id="btn-quick-board" class="control-btn" title="Open Kumoboard"><span class="material-symbols-outlined" style="font-size:15px; color:#baa0ff;">dashboard</span></button>
-        <button id="btn-quick-history" class="control-btn" title="Chat History"><span class="material-symbols-outlined" style="font-size:15px; color:#baa0ff;">chat</span></button>
-        <button id="btn-quick-settings" class="control-btn" title="Settings"><span class="material-symbols-outlined" style="font-size:15px; color:#baa0ff;">tune</span></button>
+        <button id="btn-quick-board" class="control-btn" title="Open Kumoboard"><span class="material-symbols-outlined" style="font-size:15px;">dashboard</span></button>
+        <button id="btn-quick-history" class="control-btn" title="Chat History"><span class="material-symbols-outlined" style="font-size:15px;">chat</span></button>
+        <button id="btn-quick-settings" class="control-btn" title="Settings"><span class="material-symbols-outlined" style="font-size:15px;">tune</span></button>
         <button id="btn-quick-sleep" class="control-btn" title="Hide Mascot (Wake anytime from Kumoboard, System Tray, or Alt+Space)"><span class="material-symbols-outlined" style="font-size:15px; color:#ff8a80;">visibility_off</span></button>
       </div>
     </div>
@@ -65,7 +67,7 @@
     <!-- Chat input bar -->
     <div id="chat-bar" class="hidden">
       <input id="chat-input" type="text" placeholder="Ask Kumo anything… (Esc to close)" autocomplete="off" />
-      <button id="chat-send" title="Send message">↑</button>
+      <button id="chat-send" title="Send message"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg></button>
     </div>
 
     <!-- Quick Settings Modal -->
@@ -73,7 +75,7 @@
       <div class="settings-card">
         <div class="settings-header">
           <h3>Kumo Settings</h3>
-          <button id="settings-close" class="bubble-close-btn">×</button>
+          <button id="settings-close" class="bubble-close-btn" title="Close"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
         </div>
         <div class="settings-body">
           <label class="settings-label">
@@ -109,7 +111,7 @@
       <div class="history-card">
         <div class="settings-header">
           <h3>Chat History</h3>
-          <button id="history-close" class="bubble-close-btn">×</button>
+          <button id="history-close" class="bubble-close-btn" title="Close"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
         </div>
         <div id="history-list" class="history-list">
           <div class="history-empty">No conversations yet.</div>
@@ -122,6 +124,10 @@
   </div>
 
   <script type="module" src="goo.js"></script>
+  <script src="js/interaction-manager.js"></script>
+  <script src="js/bubble-controller.js"></script>
+  <script src="js/popout-controller.js"></script>
+  <script src="js/modals-controller.js"></script>
   <script src="chat.js"></script>
 </body>
 </html>

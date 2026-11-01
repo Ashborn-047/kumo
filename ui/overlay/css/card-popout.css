@@ -1,0 +1,207 @@
+/* ============================================================
+   ui/overlay/css/card-popout.css — Contextual Assistant Card Popout
+   Dual-Mode Live Card Contract Matching Kumoboard Canvas Specs
+   Strictly Zero Emojis per user design mandate.
+   ============================================================ */
+
+.card-popout {
+  position: absolute;
+  top: 10px;
+  left: 14px;
+  right: 14px;
+  max-height: 280px;
+  background: var(--white-card);
+  border: 1px solid var(--card-border);
+  border-radius: 18px;
+  box-shadow: 0 16px 40px -4px rgba(99, 85, 216, 0.18), 0 4px 14px rgba(46, 59, 82, 0.06);
+  animation: pop-in 0.24s var(--spring-ease);
+  display: flex;
+  flex-direction: column;
+  z-index: 15;
+  overflow: hidden;
+}
+
+.card-popout.hidden {
+  display: none !important;
+}
+
+.card-popout-header {
+  padding: 10px 14px;
+  background: var(--canvas-bg);
+  border-bottom: 1px solid var(--card-border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-popout-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.card-popout-icon-box {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: var(--lilac-tint);
+  border: 1px solid var(--lilac-border);
+  color: var(--iris-action);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.card-popout-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-dark);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -0.2px;
+}
+
+.card-popout-subtitle {
+  font-size: 10px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.card-popout-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.card-popout-btn {
+  background: var(--canvas-bg);
+  border: 1px solid var(--card-border);
+  color: var(--text-muted);
+  border-radius: 8px;
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.15s;
+}
+
+.card-popout-btn:hover {
+  background: var(--lilac-tint);
+  border-color: var(--lilac-border);
+  color: var(--lilac-text);
+}
+
+.card-popout-btn.pin-btn {
+  background: var(--lilac-tint);
+  border-color: var(--lilac-border);
+  color: var(--lilac-text);
+}
+
+.card-popout-btn.pin-btn:hover {
+  background: var(--iris-action);
+  color: #ffffff;
+  border-color: var(--iris-action);
+}
+
+.card-popout-btn.close-btn {
+  padding: 4px 6px;
+}
+
+.card-popout-body {
+  padding: 12px 14px;
+  overflow-y: auto;
+  max-height: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 12px;
+  background: var(--white-card);
+}
+
+.metric-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.metric-pill {
+  flex: 1;
+  background: var(--canvas-bg);
+  border: 1px solid var(--card-border-subtle);
+  border-radius: 10px;
+  padding: 7px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.metric-label {
+  font-size: 10px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  font-family: var(--font-mono);
+  font-weight: 600;
+}
+
+.metric-val {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.popout-action-row {
+  display: flex;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.popout-action-btn {
+  flex: 1;
+  background: var(--canvas-bg);
+  border: 1px solid var(--card-border);
+  color: var(--text-dark);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  transition: all 0.15s;
+}
+
+.popout-action-btn:hover {
+  background: var(--lilac-tint);
+  border-color: var(--lilac-border);
+  color: var(--lilac-text);
+}
+
+.popout-action-btn.primary {
+  background: var(--iris-action);
+  border-color: var(--iris-action);
+  color: #ffffff;
+}
+
+.popout-action-btn.primary:hover {
+  background: var(--iris-hover);
+}
+
+.popout-action-btn.danger {
+  background: var(--peach-tint);
+  border-color: var(--peach-border);
+  color: var(--peach-text);
+}
+

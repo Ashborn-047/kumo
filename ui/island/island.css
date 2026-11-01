@@ -1,0 +1,17 @@
+/* ============================================================
+   Pulse Dynamic Island — island.css (Aggregator)
+   Segregated Modular Architecture:
+   - shared/variables.css : Design tokens & Lucide SVG baseline
+   - chassis/chassis.css   : Seamless morphing chassis & navigation
+   - board/board.css       : Slot 01: Kumoboard Spatial Sync
+   - assistant/assistant.css: Slot 02: Kumo Assistant Companion
+   - amp/amp.css           : Slot 03: Kumo Amp Retro-Modern Deck
+   - edge-drop/edge-drop.css: Slot 04: Edge Drop Desktop Shelf
+   ============================================================ */
+
+@import "shared/variables.css";
+@import "chassis/chassis.css";
+@import "board/board.css";
+@import "assistant/assistant.css";
+@import "amp/amp.css";
+@import "edge-drop/edge-drop.css";

@@ -1,0 +1,216 @@
+/* ============================================================
+   Pulse Dynamic Island — assistant/assistant.css
+   Kumo Assistant Companion Component
+   Clean Warm Pastel Styling
+   Strictly Lucide SVG icons (Zero Emojis)
+   ============================================================ */
+
+.assistant-status-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: #ffffff;
+  border: 1px solid var(--card-border-subtle);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.assistant-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mascot-orb-wrap {
+  position: relative;
+}
+
+.mascot-orb {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--lilac-tint);
+  border: 1px solid var(--lavender);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+}
+
+.orb-eye {
+  width: 2.5px;
+  height: 2.5px;
+  border-radius: 50%;
+  background: var(--iris-action);
+}
+
+.orb-status-dot {
+  position: absolute;
+  bottom: -1px;
+  right: -1px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--phosphor);
+  border: 1.5px solid #ffffff;
+}
+
+.assistant-name-line {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.assistant-name {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.status-listening-pill {
+  font-size: 7.5px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 999px;
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.assistant-meta {
+  font-size: 8.5px;
+  color: #8c869e;
+}
+
+.mic-shortcut-badge {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: #f3f0fa;
+  color: #554e70;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Assistant Dynamic Command Input Box */
+.assistant-input-box {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #ffffff;
+  border: 1px solid var(--card-border-subtle);
+  border-radius: 10px;
+  padding: 5px 8px 5px 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  margin: 6px 0;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.assistant-input-box:focus-within {
+  border-color: var(--iris-action);
+  box-shadow: 0 0 0 2px rgba(99, 85, 216, 0.12);
+}
+
+.input-sparkle {
+  color: var(--iris-action);
+  display: flex;
+  align-items: center;
+}
+
+.assistant-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 11px;
+  color: var(--text-dark);
+}
+
+.assistant-input::placeholder {
+  color: #aaa4ba;
+}
+
+.btn-assistant-go {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: var(--iris-action);
+  color: #ffffff;
+  font-size: 9px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.btn-assistant-go:hover {
+  background: var(--iris-hover);
+}
+
+/* Flagship Quick Action Chips */
+.assistant-quick-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.quick-title {
+  font-size: 7.5px;
+  font-weight: 700;
+  color: #8c869e;
+  letter-spacing: 0.06em;
+}
+
+.quick-chips {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+}
+
+.chip-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 4px 6px;
+  border-radius: 8px;
+  font-size: 9.5px;
+  font-weight: 600;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+  white-space: nowrap;
+}
+
+.chip-action:hover {
+  transform: translateY(-1px);
+}
+
+.chip-lilac {
+  background: var(--lilac-tint);
+  border-color: var(--lilac-border);
+  color: var(--lilac-text);
+}
+
+.chip-sky {
+  background: var(--sky-tint);
+  border-color: var(--sky-border);
+  color: var(--sky-text);
+}
+
+.chip-peach {
+  background: var(--peach-tint);
+  border-color: var(--peach-border);
+  color: var(--peach-text);
+}
+
+.chip-white {
+  background: #ffffff;
+  border-color: var(--card-border-subtle);
+  color: #55506b;
+}
+

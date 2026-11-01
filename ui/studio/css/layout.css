@@ -1,0 +1,153 @@
+/* ── Kumo Studio: Layout, Sidebar & Navigation ── */
+* { box-sizing: border-box; margin: 0; }
+html, body { height: 100%; }
+
+body {
+  font: 400 14px/1.55 var(--font);
+  color: var(--c-text);
+  background: radial-gradient(var(--c-dot) 1px, transparent 1.5px) 0 0/22px 22px, var(--c-bg);
+  overflow: hidden;
+  transition: background var(--duration-normal), color var(--duration-normal);
+}
+
+.ic { width: 17px; height: 17px; flex: none; }
+
+.page {
+  display: grid;
+  grid-template-columns: var(--ds-sidebar) 1fr;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ── Sidebar ── */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-5) var(--space-4);
+  background: var(--c-surface);
+  border-right: 1px solid var(--c-border);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-5);
+  font-size: 18px;
+}
+.brand b { font-weight: 800; }
+.brand small {
+  font: 600 10px var(--mono);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--c-text-3);
+  margin-left: 2px;
+}
+.logo-dot {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--r-full);
+  background: var(--pink);
+  color: var(--blush-ink);
+}
+
+.eyebrow {
+  font: 600 11px var(--mono);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--c-text-3);
+}
+.sidebar .eyebrow { margin: 0 var(--space-2) var(--space-2); }
+
+nav { display: flex; flex-direction: column; gap: 2px; }
+
+.slink {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 9px var(--space-3);
+  border: 1px solid transparent;
+  border-radius: var(--r-md);
+  background: none;
+  color: var(--c-text-2);
+  font: 600 13.5px var(--font);
+  cursor: pointer;
+  text-align: left;
+  transition: all var(--duration-fast) var(--ease-spring);
+}
+.slink:hover { background: var(--c-row-hover); color: var(--c-text); }
+.slink.on {
+  background: var(--c-surface-2);
+  border-color: var(--c-border-2);
+  color: var(--c-text);
+}
+.slink.on .ic { color: var(--pink); }
+
+.sbottom {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.theme-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 9px var(--space-3);
+  border-radius: var(--r-md);
+  border: 1px solid var(--c-border-2);
+  background: var(--c-surface-2);
+  color: var(--c-text-2);
+  font: 600 12.5px var(--font);
+  cursor: pointer;
+}
+.theme-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: linear-gradient(90deg, var(--ink) 50%, var(--paper) 50%);
+  border: 1px solid var(--c-border-2);
+}
+
+/* ── Studio Body (Centering Content & Floating Companion duo) ── */
+.studio-body {
+  display: grid;
+  grid-template-columns: minmax(320px, 480px) minmax(230px, 290px);
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  gap: clamp(24px, 4vw, 52px);
+  padding: clamp(16px, 3vh, 36px) clamp(20px, 3vw, 44px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ── Main Content & Panels ── */
+.main {
+  width: 100%;
+  max-width: 480px;
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.panel {
+  display: none;
+  width: 100%;
+}
+.panel.on {
+  display: block;
+  animation: in .45s var(--ease-smooth);
+}
+@keyframes in {
+  from { opacity: 0; transform: translateY(8px); }
+}
+

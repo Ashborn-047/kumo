@@ -1,0 +1,169 @@
+/* ============================================================
+   Pulse Dynamic Island — chassis/css/stage-nav.css
+   Unrolled Body, Modular Navigation & Stage Container:
+   - 4-Flag Modular Navigation Switcher
+   - Jelly-Pop kinetic spring physics
+   - Strictly Lucide SVG stroke icons
+   - Modular stage container & active widget panel display
+   ============================================================ */
+
+/* ══════════════════════════════════════════════════════════════
+   UNROLLED BODY (ZERO FLOATING GAP, CONTINUOUS SURFACE)
+   Contains the 4 Core Tabs & Stage
+   ══════════════════════════════════════════════════════════════ */
+.unrolled-body {
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 14px 14px 14px;
+  width: 100%;
+  box-sizing: border-box;
+  animation: fadeInBody 0.25s ease-out;
+}
+
+.island-wrapper.state-unrolled .unrolled-body {
+  display: flex;
+}
+
+.island-wrapper.state-peek .unrolled-body,
+.island-wrapper.state-resting .unrolled-body {
+  display: none !important;
+}
+
+@keyframes fadeInBody {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   MODULAR NAVIGATION SWITCHER (4 FLAGS)
+   Kumoboard, Assistant, Kumo Amp, Edge Drop
+   Jelly-Pop kinetic spring physics, Strictly SVG icons
+   ══════════════════════════════════════════════════════════════ */
+.modular-nav {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  padding: 2px 0 4px 0;
+  flex-shrink: 0;
+}
+
+.nav-tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 6px 6px;
+  border-radius: 10px;
+  border: 1px solid var(--card-border-subtle);
+  background: #fbf9fd;
+  color: #55506b;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.28s var(--spring-ease),
+              background 0.2s ease,
+              border-color 0.2s ease,
+              color 0.2s ease,
+              box-shadow 0.2s ease;
+}
+
+.nav-tab:hover {
+  background: #f2eefa;
+  border-color: #d8d3e5;
+  color: var(--iris-action);
+  transform: translateY(-1px);
+}
+
+.nav-tab:active {
+  transform: scale(0.95);
+}
+
+/* Jelly-Pop Active Tab */
+.nav-tab.active {
+  background: #ffffff;
+  border-color: var(--iris-action);
+  color: var(--iris-action);
+  box-shadow: 0 4px 12px -2px rgba(99, 85, 216, 0.18), 0 1px 3px rgba(0, 0, 0, 0.05);
+  transform: translateY(-1.5px) scale(1.02);
+  animation: jellyPop 0.35s var(--spring-ease);
+}
+
+@keyframes jellyPop {
+  0%   { transform: scale(0.92); }
+  45%  { transform: scale(1.06); }
+  75%  { transform: scale(0.98); }
+  100% { transform: translateY(-1.5px) scale(1.02); }
+}
+
+/* Pop-up jelly bounce on active SVG tab icon */
+.nav-tab.active .lucide-icon {
+  animation: iconJellyPop 0.4s var(--spring-ease);
+  transform: scale(1.22) translateY(-1px);
+  stroke: var(--iris-action);
+}
+
+@keyframes iconJellyPop {
+  0%   { transform: scale(1) translateY(0); }
+  40%  { transform: scale(1.35) translateY(-3px); }
+  75%  { transform: scale(1.15) translateY(-0.5px); }
+  100% { transform: scale(1.22) translateY(-1px); }
+}
+
+.tab-badge-peach {
+  font-size: 8.5px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 999px;
+  background: var(--peach-tint);
+  color: var(--peach-text);
+  border: 1px solid var(--peach-border);
+}
+
+.tab-live-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #10b981;
+}
+
+.tab-tag-smtc {
+  font-size: 8px;
+  font-weight: 700;
+  padding: 1px 4px;
+  border-radius: 4px;
+  background: var(--sky-tint);
+  color: var(--sky-text);
+  border: 1px solid var(--sky-border);
+}
+
+/* Modular Stage Container */
+.modular-stage {
+  flex: 1;
+  min-height: 185px;
+  overflow: hidden;
+  position: relative;
+  border-radius: 14px;
+  background: #fbf9fd;
+  border: 1px solid var(--card-border-subtle);
+  padding: 10px;
+}
+
+.widget-panel {
+  display: none !important;
+  width: 100%;
+  height: 100%;
+}
+
+.widget-panel.active {
+  display: flex !important;
+  flex-direction: column;
+  justify-content: space-between;
+}
+

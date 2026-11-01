@@ -1,0 +1,206 @@
+/* ============================================================
+   Pulse Dynamic Island — amp/css/controls.css
+   Warm Tactile Pastel Seek Scrubber, Transport Deck & Volume
+   Strictly Zero Emojis
+   ============================================================ */
+
+/* ── Seek Scrubber Bar (Stitch pulse_edge_suite_warm_pastel.html) ── */
+.amp-scrubber-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+  padding: 0 2px;
+}
+
+.scrub-time {
+  font-size: 8.5px;
+  font-weight: 600;
+  color: var(--text-muted);
+  min-width: 26px;
+  letter-spacing: -0.02em;
+}
+
+.scrub-time-right {
+  text-align: right;
+}
+
+.scrub-track-wrapper {
+  position: relative;
+  flex: 1;
+  height: 6px;
+  background: #eeebf5;
+  border-radius: 9999px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: height 0.15s ease;
+}
+
+.scrub-track-wrapper:hover {
+  height: 8px;
+}
+
+.scrub-track-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--iris-action, #6355d8), #9e8ff5);
+  border-radius: 9999px;
+  pointer-events: none;
+  transition: width 0.1s linear;
+}
+
+.scrub-track-thumb {
+  position: absolute;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid var(--iris-action, #6355d8);
+  box-shadow: 0 1px 4px rgba(99, 85, 216, 0.35);
+  pointer-events: none;
+  opacity: 0.95;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.scrub-track-wrapper:hover .scrub-track-thumb {
+  transform: translate(-50%, -50%) scale(1.18);
+  opacity: 1;
+}
+
+/* ── Tactile Transport Controls & Volume Deck ── */
+.amp-controls-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-top: 5px;
+  padding: 2px 0;
+}
+
+.transport-cluster {
+  display: flex;
+  align-items: center;
+  gap: 4.5px;
+}
+
+.trans-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  border: 1px solid #eeebf5;
+  background: #ffffff;
+  color: var(--text-dark, #1e192b);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 8.5px;
+  font-weight: 700;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.12s ease;
+}
+
+.trans-btn:hover {
+  background: #f5f1fa;
+  border-color: #ded6ee;
+  transform: translateY(-1px);
+}
+
+.trans-btn:active {
+  transform: scale(0.95);
+}
+
+/* Hero Iris Circular Play/Pause Button */
+.trans-btn-hero {
+  width: 34px;
+  height: 34px;
+  border-radius: 9999px;
+  border: none;
+  background: var(--iris-action, #6355d8);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(99, 85, 216, 0.32);
+  transition: background 0.15s ease, transform 0.18s var(--spring-ease), box-shadow 0.18s ease;
+}
+
+.trans-btn-hero:hover {
+  background: var(--iris-hover, #5042c4);
+  transform: translateY(-1px) scale(1.05);
+  box-shadow: 0 5px 14px rgba(99, 85, 216, 0.42);
+}
+
+.trans-btn-hero:active {
+  transform: scale(0.94);
+}
+
+/* Secondary Actions: Volume Capsule & Pin Media */
+.deck-actions-cluster {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.volume-capsule {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: #f6f3fa;
+  border: 1px solid #eeebf5;
+  border-radius: 9999px;
+  padding: 3px 8px;
+  height: 28px;
+}
+
+.vol-icon {
+  color: #7c7494;
+  flex-shrink: 0;
+}
+
+.vol-slider {
+  width: 46px;
+  height: 3px;
+  accent-color: var(--iris-action, #6355d8);
+  cursor: pointer;
+}
+
+.vol-pct {
+  font-size: 8.5px;
+  font-weight: 700;
+  color: #635c7a;
+  min-width: 22px;
+  text-align: right;
+}
+
+.btn-pin-media {
+  height: 28px;
+  padding: 0 9px;
+  border-radius: 9999px;
+  background: #f3effe;
+  border: 1px solid #ded6f8;
+  color: var(--iris-action, #6355d8);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 8.5px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(99, 85, 216, 0.05);
+  transition: all 0.15s ease;
+}
+
+.btn-pin-media:hover {
+  background: #eae3fd;
+  border-color: #cfc2f5;
+  color: #4b3bb8;
+  transform: translateY(-1px);
+}
+
+.btn-pin-media:active {
+  transform: scale(0.95);
+}
+

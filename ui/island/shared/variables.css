@@ -1,0 +1,106 @@
+/* ============================================================
+   Pulse Dynamic Island — shared/variables.css
+   Soft Warm Pastel Design Tokens & Lucide Icon Styles
+   (Strictly No Emojis)
+   ============================================================ */
+
+:root {
+  /* Warm Pastel Surfaces */
+  --canvas-bg: #fbf8fc;
+  --white-card: #ffffff;
+  --card-border: #c8c4d6;
+  --card-border-subtle: #eeebf5;
+
+  /* Flagship Soft Pastels */
+  --lilac-tint: #eadfff;
+  --lilac-border: #d4c5f9;
+  --lilac-text: #4a3c8c;
+
+  --sky-tint: #dcedff;
+  --sky-border: #bad9fc;
+  --sky-text: #1d4ed8;
+
+  --peach-tint: #ffe9d6;
+  --peach-border: #ffd2b0;
+  --peach-text: #c2410c;
+
+  --lavender: #b9a7ff;
+  --phosphor: #8ee6b8;
+  --iris-action: #6355d8;
+  --iris-hover: #5042c4;
+  --iris-glow: rgba(99, 85, 216, 0.28);
+
+  /* Deep Tones */
+  --deep-obsidian: #07090e;
+  --lcd-midnight: #070a14;
+  --text-dark: #1e192b;
+  --text-muted: #6b6480;
+  --text-dim: #948ea5;
+
+  /* Typography */
+  --font-sans: 'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Shadows */
+  --shadow-bezel-drop: 0 8px 24px -4px rgba(0, 0, 0, 0.45);
+  --shadow-drawer: 0 18px 44px -8px rgba(99, 85, 216, 0.2), 0 8px 20px rgba(0, 0, 0, 0.06);
+
+  /* Spring Ease */
+  --spring-ease: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: transparent;
+  color: var(--text-dark);
+  overflow: hidden;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-sans { font-family: var(--font-sans); }
+.font-mono { font-family: var(--font-mono); }
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   SHADCN / LUCIDE SVG ICON BASELINE (STRICTLY NO EMOJIS)
+   ────────────────────────────────────────────────────────────── */
+.lucide-icon {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
+  transition: transform 0.25s var(--spring-ease), stroke 0.2s ease;
+}
+
+.icon-sm {
+  width: 12px;
+  height: 12px;
+}
+
+.icon-lg {
+  width: 18px;
+  height: 18px;
+}
+
+.icon-xl {
+  width: 24px;
+  height: 24px;
+}
+

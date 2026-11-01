@@ -32,13 +32,32 @@ let mascot = createMascot(canvas, {
   smile: currentConfig.smile,
 });
 
+const ENGINE_MAP = {
+  'cotton-cloud': 'cotton',
+  'cotton': 'cotton',
+  'cloud': 'cotton',
+  'kumo': 'cotton',
+  'mochi-droplet': 'droplet',
+  'droplet': 'droplet',
+  'mochi': 'droplet',
+  'kubo-bot': 'kubo',
+  'kubo': 'kubo',
+  '3d-mochi-gel': 'gel3d',
+  'gel3d': 'gel3d',
+  '3d': 'voxel3d',
+  'voxel3d': 'voxel3d',
+  '2d': 'pixel2d',
+  'pixel2d': 'pixel2d',
+};
+
 // Update mascot from settings object
 function applySettings(cfg) {
   if (!cfg) return;
   currentConfig = { ...currentConfig, ...cfg };
 
-  if (cfg.engine) {
-    mascot.setEngine(cfg.engine);
+  const targetEngine = cfg.engine || ENGINE_MAP[cfg.activeMascotId] || ENGINE_MAP[cfg.mascot] || (cfg.avatarType && cfg.avatarType !== 'vector' ? ENGINE_MAP[cfg.avatarType] : null);
+  if (targetEngine) {
+    mascot.setEngine(targetEngine);
   } else if (cfg.avatarType) {
     mascot.setType(cfg.avatarType);
   }

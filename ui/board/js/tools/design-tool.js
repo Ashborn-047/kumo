@@ -52,6 +52,9 @@ export function renderDesignHTML(card) {
           <span class="material-symbols-outlined text-[18px]">${card.data.soundEnabled !== false ? 'volume_up' : 'volume_off'}</span>
         </button>
         <span class="material-symbols-outlined text-secondary text-[18px]">drag_indicator</span>
+        <button class="w-6 h-6 rounded-md hover:bg-rose-100/70 text-slate-400 hover:text-rose-600 flex items-center justify-center transition-colors cursor-pointer" data-act="del" title="Delete card">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
       </div>
     </header>
 
@@ -107,6 +110,29 @@ export function renderDesignHTML(card) {
                 <span class="text-label-sm font-label-sm text-on-surface font-semibold">${swatch.name}</span>
                 <span class="text-[9px] font-mono text-secondary">${swatch.hex}</span>
               </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <!-- Mascot Persona & Tray Sync Selector -->
+        <div class="bg-surface-container-low p-3.5 rounded-xl flex flex-col gap-2">
+          <div class="flex items-center justify-between text-label-sm font-label-sm">
+            <span class="text-on-surface font-semibold">Active Mascot (Taskbar &amp; Tray Icon)</span>
+            <span class="text-secondary text-[11px] font-mono">Syncs to Tray in Real-time</span>
+          </div>
+          <div class="grid grid-cols-3 sm:grid-cols-6 gap-2">
+            ${[
+              { id: 'cotton-cloud', name: 'Cotton Cloud', img: '../../assets/mascot/cotton-cloud/cotton-cloud.png' },
+              { id: 'kubo-bot',     name: 'Kubo Bot',     img: '../../assets/mascot/kubo-bot/kubo-bot.png' },
+              { id: 'mochi-droplet',name: 'Mochi Droplet',img: '../../assets/mascot/mochi-droplet/mochi-droplet.png' },
+              { id: '3d-mochi-gel', name: 'Mochi Gel',    img: '../../assets/mascot/3d-mochi-gel/mochi-gel-3d.png' },
+              { id: '2d',           name: 'Pixel Cloud',  img: '../../assets/mascot/2d/pixel-cloud-2d.png' },
+              { id: '3d',           name: 'Voxel Bot',    img: '../../assets/mascot/3d/voxel-bot-3d.png' },
+            ].map(m => `
+              <button class="design-mascot-select-btn p-2 rounded-xl flex flex-col items-center gap-1.5 transition-all cursor-pointer ${(card.data.activeMascotId || 'cotton-cloud') === m.id ? 'bg-primary-fixed text-primary ring-2 ring-primary shadow-xs' : 'bg-surface-container hover:bg-surface-container-high text-secondary'}" data-mascot-id="${m.id}" title="Select ${m.name}">
+                <img src="${m.img}" alt="${m.name}" class="w-7 h-7 object-contain"/>
+                <span class="text-[10px] font-semibold truncate w-full text-center">${m.name}</span>
+              </button>
             `).join('')}
           </div>
         </div>
@@ -175,6 +201,22 @@ export function attachDesignEvents(el, card, onSave, onToast) {
     if (icon) icon.textContent = card.data.soundEnabled ? 'volume_up' : 'volume_off';
   });
 
+  // Mascot selection & Tray/Taskbar real-time sync
+  el.querySelectorAll('.design-mascot-select-btn').forEach((btn) => {
+    btn.onclick = async () => {
+      const mascotId = btn.dataset.mascotId;
+      card.data.activeMascotId = mascotId;
+      onSave?.();
+      el.querySelectorAll('.design-mascot-select-btn').forEach((b) => {
+        b.className = `design-mascot-select-btn p-2 rounded-xl flex flex-col items-center gap-1.5 transition-all cursor-pointer ${b.dataset.mascotId === mascotId ? 'bg-primary-fixed text-primary ring-2 ring-primary shadow-xs' : 'bg-surface-container hover:bg-surface-container-high text-secondary'}`;
+      });
+      if (window.goo?.setMascot) {
+        await window.goo.setMascot(mascotId);
+        onToast?.(`Updated Tray & Taskbar icon to ${btn.title.replace('Select ', '')}`);
+      }
+    };
+  });
+
   // Swatch selection
   el.querySelectorAll('.design-swatch-card').forEach((cardEl) => {
     cardEl.onclick = () => {
@@ -199,18 +241,25 @@ export function attachDesignEvents(el, card, onSave, onToast) {
   // Glow Slider
   const slider = el.querySelector('.design-glow-slider');
   const readout = el.querySelector('.design-glow-readout');
+  const initialGlow = card.data.glowIntensity || 72;
+  const initShadow = `0px 1px 3px rgba(46,59,82,0.05), 0px ${Math.round(initialGlow / 6)}px ${Math.round(initialGlow / 2.5)}px -6px rgba(46,59,82,${(initialGlow / 700).toFixed(2)})`;
+  document.documentElement.style.setProperty('--card-dynamic-shadow', initShadow);
+
+  let glowDebounceTimer = null;
   slider?.addEventListener('input', (e) => {
     const target = /** @type {HTMLInputElement} */ (e.target || slider);
     const val = parseInt(target?.value || '72', 10);
     card.data.glowIntensity = val;
     if (readout) readout.textContent = `${val}% Blur / ${Math.round(val / 4.5)}px Diffusion`;
-    // Apply dynamic box-shadow across cards
-    document.querySelectorAll('.kumo-canvas-card').forEach((c) => {
-      if (c instanceof HTMLElement) {
-        c.style.boxShadow = `0px 1px 3px rgba(46,59,82,0.05), 0px ${Math.round(val / 6)}px ${Math.round(val / 2.5)}px -6px rgba(46,59,82,${(val / 700).toFixed(2)})`;
-      }
+    // Hardware-accelerated dynamic shadow via CSS variable on stage
+    const shadowVal = `0px 1px 3px rgba(46,59,82,0.05), 0px ${Math.round(val / 6)}px ${Math.round(val / 2.5)}px -6px rgba(46,59,82,${(val / 700).toFixed(2)})`;
+    requestAnimationFrame(() => {
+      document.documentElement.style.setProperty('--card-dynamic-shadow', shadowVal);
     });
-    onSave?.();
+    clearTimeout(glowDebounceTimer);
+    glowDebounceTimer = setTimeout(() => {
+      onSave?.();
+    }, 300);
   });
 
   // Copy CSS Tokens
@@ -250,6 +299,6 @@ export function attachDesignEvents(el, card, onSave, onToast) {
     }
 
     onSave?.();
-    onToast?.(`✓ Applied ${current.name} palette to canvas & companion!`);
+    onToast?.(`Applied ${current.name} palette to canvas & companion!`);
   });
 }

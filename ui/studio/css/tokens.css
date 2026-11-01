@@ -1,0 +1,112 @@
+/* ── Kumo Design System: Core Tokens & Theme Modes ── */
+:root {
+  --ink: #494848;
+  --ink-soft: #8d8595;
+  --ink-faint: #b9b2c2;
+  --paper: #ffffff;
+  --dot: #e3dcee;
+  --sky: #dcedff;
+  --sky-deep: #8cc1ff;
+  --sky-ink: #164273;
+  --butter: #fff5c8;
+  --butter-deep: #f3d96a;
+  --butter-ink: #614e05;
+  --blush: #ffecec;
+  --blush-ink: #701c38;
+  --pink: #ff9ec4;
+  --pink-deep: #f27aa8;
+  --mint: #dcf5e7;
+  --mint-deep: #7ad3a3;
+  --mint-ink: #115332;
+  --lilac: #eadfff;
+  --lilac-deep: #b89bff;
+  --lilac-ink: #482387;
+  --peach: #ffe9d6;
+  --peach-deep: #ffb48a;
+  --peach-ink: #78340d;
+  --coral: #ff9a7b;
+  --select: #0d99ff;
+
+  --font-sans: "DM Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-hand: "Caveat", "Comic Sans MS", cursive;
+  --font: var(--font-sans);
+  --mono: var(--font-mono);
+  --hand: var(--font-hand);
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 18px;
+  --r-xl: 22px;
+  --r-full: 999px;
+
+  --shadow-subtle: 0 3px 10px rgba(120, 80, 120, .10);
+  --shadow-panel: 0 8px 28px rgba(120, 80, 120, .12), 0 0 0 1px rgba(120, 80, 120, .05);
+  --shadow-card: 0 10px 30px rgba(120, 80, 120, .10), 0 1px 3px rgba(0, 0, 0, .04);
+  --shadow-dock: 0 12px 30px rgba(40, 20, 60, .30);
+  --shadow-pop: 0 16px 36px rgba(0, 0, 0, .16);
+
+  --bg-canvas: #fbf8fc;
+  --bg-surface: #ffffff;
+  --bg-glass: rgba(255, 255, 255, .88);
+  --bg-glass-heavy: rgba(255, 255, 255, .94);
+  --bg-dock: rgba(40, 40, 48, .94);
+
+  --ease-spring: cubic-bezier(.2, .8, .3, 1);
+  --ease-pop: cubic-bezier(.2, .9, .3, 1.4);
+  --ease-smooth: cubic-bezier(.16, 1, .3, 1);
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+
+  --ds-font: var(--font-sans);
+  --ds-mono: var(--font-mono);
+  --ds-hand: var(--font-hand);
+  --ds-sidebar: 220px;
+}
+
+/* ── Dark / Light Themes ── */
+html[data-theme="dark"] {
+  --c-bg: #09080f;
+  --c-surface: #111019;
+  --c-surface-2: #18161f;
+  --c-border: rgba(255, 255, 255, .07);
+  --c-border-2: rgba(255, 255, 255, .12);
+  --c-text: #e8e4f0;
+  --c-text-2: #9990a8;
+  --c-text-3: #5e5670;
+  --c-code-bg: #0d0c14;
+  --c-row-hover: rgba(255, 255, 255, .03);
+  --c-accent: #8cc1ff;
+  --c-dot: rgba(255, 255, 255, .04);
+  --bg-canvas: #09080f;
+  --bg-surface: #111019;
+  --bg-glass: rgba(26, 23, 36, .75);
+}
+
+html[data-theme="light"] {
+  --c-bg: #faf8fc;
+  --c-surface: #ffffff;
+  --c-surface-2: #f5f1f8;
+  --c-border: rgba(0, 0, 0, .07);
+  --c-border-2: rgba(0, 0, 0, .12);
+  --c-text: #1e1a24;
+  --c-text-2: #6d6480;
+  --c-text-3: #a89dba;
+  --c-code-bg: #f0ecf4;
+  --c-row-hover: rgba(0, 0, 0, .025);
+  --c-accent: #164273;
+  --c-dot: rgba(0, 0, 0, .04);
+  --bg-canvas: #faf8fc;
+  --bg-surface: #ffffff;
+  --bg-glass: rgba(255, 255, 255, .9);
+}
+

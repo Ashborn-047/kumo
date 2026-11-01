@@ -1,0 +1,64 @@
+/* ============================================================
+   ui/overlay/css/chat-bar.css — Mascot Floating Chat Input Bar
+   Rounded Pill Card, Soft Iris Focus Ring, Action Send Button
+   Strictly Zero Emojis per user design mandate.
+   ============================================================ */
+
+#chat-bar {
+  width: calc(100% - 28px);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--white-card);
+  border: 1.5px solid rgba(200, 196, 214, 0.85);
+  border-radius: 18px;
+  padding: 6px 8px 6px 14px;
+  box-shadow: 0 8px 24px -4px rgba(99, 85, 216, 0.14), 0 2px 8px rgba(46, 59, 82, 0.05);
+  animation: slide-up 0.22s var(--spring-ease);
+  z-index: 10;
+  transition: all 0.2s ease;
+}
+
+#chat-bar:focus-within {
+  border-color: var(--iris-action);
+  box-shadow: 0 0 0 3px rgba(99, 85, 216, 0.18), 0 8px 24px -4px rgba(99, 85, 216, 0.16);
+}
+
+#chat-input {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  color: var(--text-dark);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  min-width: 0;
+  padding: 4px 0;
+}
+
+#chat-input::placeholder {
+  color: var(--text-dim);
+  font-weight: 400;
+}
+
+#chat-send {
+  background: var(--iris-action);
+  border: none;
+  border-radius: 12px;
+  width: 30px;
+  height: 30px;
+  color: #ffffff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+#chat-send:hover {
+  background: var(--iris-hover);
+  transform: scale(1.06);
+}
+

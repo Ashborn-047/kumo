@@ -3,9 +3,6 @@
 // Exposes a safe, restricted API to the renderer via
 // contextBridge. Renderer CANNOT access Node directly.
 // ============================================================
-// TODO Phase 1: expose chat send/receive
-// TODO Phase 2: expose board save/load
-// TODO Phase 3: expose system actions (safety-gated)
 
 const { contextBridge, ipcRenderer } = require('electron');
 
@@ -49,9 +46,14 @@ contextBridge.exposeInMainWorld('goo', {
   launchCompanion: (data)           => ipcRenderer.invoke('studio:launch', data),
   studioWindow:    (action)         => ipcRenderer.send('studio:window', action),
   openExternal:    (url)            => ipcRenderer.invoke('shell:open-external', url),
+  getMascot:       ()               => ipcRenderer.invoke('mascot:get'),
+  listMascots:     ()               => ipcRenderer.invoke('mascot:list'),
+  setMascot:       (mascotId)       => ipcRenderer.invoke('mascot:set', mascotId),
 
   // Window controls
   openBoard:        ()         => ipcRenderer.send('window:open-board'),
+  openAmpWindow:    ()         => ipcRenderer.send('window:open-amp'),
+  closeAmpWindow:   ()         => ipcRenderer.send('window:close-amp'),
   hideOverlay:      ()         => ipcRenderer.send('window:hide-overlay'),
   showOverlay:      ()         => ipcRenderer.send('window:show-overlay'),
   toggleOverlay:    ()         => ipcRenderer.invoke('window:toggle-overlay'),
@@ -68,4 +70,24 @@ contextBridge.exposeInMainWorld('goo', {
   // Dual-mode card pinning: from mascot popout to Kumoboard canvas
   pinCardToBoard: (card) => ipcRenderer.send('board:pin-card', card),
   onCardPinned:   (cb)   => ipcRenderer.on('board:card-pinned', (_e, card) => cb(card)),
+
+  // Pulse Dynamic Island Bridge
+  islandSetHit:          (interactive) => ipcRenderer.send('island:set-hit', Boolean(interactive)),
+  islandSetExpanded:     (expanded)    => ipcRenderer.send('island:set-expanded', Boolean(expanded)),
+  islandSnapEdge:        (edge)        => ipcRenderer.send('island:snap-edge', edge),
+  islandGetConfig:       ()            => ipcRenderer.invoke('island:get-config'),
+  onIslandEdgeChanged:   (cb)          => ipcRenderer.on('island:edge-changed', (_e, d) => cb(d)),
+  onIslandExpandChanged: (cb)          => ipcRenderer.on('island:expand-changed', (_e, d) => cb(d)),
+  islandStartDrag:       (filePath)    => ipcRenderer.send('island:start-drag', filePath),
+
+  // Live Windows SMTC & Media Status Bridge
+  getMediaStatus:        ()            => ipcRenderer.invoke('media:get-status'),
+  getMediaQueue:         ()            => ipcRenderer.invoke('media:get-queue'),
+  onMediaStatusUpdate:   (cb)          => ipcRenderer.on('media:status-update', (_e, d) => cb(d)),
+
+  // Companion Spatial Migration ("Dive-In / Leap-Out")
+  onCompanionDive:       (cb)          => ipcRenderer.on('companion:dive-exit', (_e, d) => cb(d)),
+  onCompanionBoardEnter: (cb)          => ipcRenderer.on('companion:board-enter', (_e, d) => cb(d)),
+  onCompanionLeap:       (cb)          => ipcRenderer.on('companion:island-enter', (_e, d) => cb(d)),
+  companionLeapReturn:   ()            => ipcRenderer.send('companion:board-exit'),
 });

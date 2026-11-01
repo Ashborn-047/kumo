@@ -1,0 +1,7 @@
+/* ============================================================
+   Pulse Dynamic Island — chassis/chassis.css
+   Master Stylesheet Manifest
+   ============================================================ */
+@import "./css/bezel.css";
+@import "./css/header.css";
+@import "./css/stage-nav.css";

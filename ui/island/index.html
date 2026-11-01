@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Pulse Dynamic Island & Edge Drop Shelf Suite</title>
+  <!-- Google Fonts: Plus Jakarta Sans, JetBrains Mono, Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="island.css">
+</head>
+
+<body>
+  <!-- Centered Hit-Testing Wrapper snapped directly to Screen Bezel Y: 0px -->
+  <div id="island-wrapper" class="island-wrapper state-peek">
+
+    <!-- ══════════════════════════════════════════════════════════════
+         01: SEAMLESS MORPHING ISLAND CHASSIS (FLUSH TOP-EDGE, 0px GAP)
+         Continuous Zero-Gap Top Bezel Integration
+         ══════════════════════════════════════════════════════════════ -->
+    <div id="seamless-chassis" class="seamless-chassis">
+
+      <!-- Inverted Bezier Fillet Wings Flaring to Screen Bezel -->
+      <svg class="fillet-wing-left" viewBox="0 0 16 16">
+        <path d="M 0 0 C 8.8 0 16 7.2 16 16 L 16 0 Z"></path>
+      </svg>
+      <svg class="fillet-wing-right" viewBox="0 0 16 16">
+        <path d="M 16 0 C 7.2 0 0 7.2 0 16 L 0 0 Z"></path>
+      </svg>
+
+      <!-- Inner Chassis: Enforces strict border-radius clipping to prevent line artifacts -->
+      <div class="chassis-inner">
+
+        <!-- STATE 0: Passive 12px Edge Tab -->
+        <div id="capsule-peek" class="capsule-peek" title="Pulse Dynamic Island (Hover to reveal)">
+          <span class="peek-dot"></span>
+          <span class="peek-label font-mono">KUMO</span>
+          <span class="peek-line"></span>
+          <span class="peek-accent"></span>
+        </div>
+
+        <!-- HEADER ROW (Shared across Resting & Unrolled States) -->
+        <div id="chassis-header" class="chassis-header">
+          
+          <!-- Left: Mascot Puff & Telemetry Status -->
+          <div class="header-left">
+            <div id="pill-mascot" class="puff-mascot" title="Puff Companion (Click to hop)">
+              <span class="puff-eye"></span>
+              <span class="puff-eye"></span>
+            </div>
+            <span class="mascot-status-dot"></span>
+            <span class="chassis-brand font-mono" id="header-brand">PULSE // DECK V4</span>
+          </div>
+
+          <!-- Center: Scrolling Marquee Track -->
+          <div class="marquee-well" id="header-marquee">
+            <div class="marquee-track font-mono" id="marquee-track">
+              <span id="marquee-text">Paper Lanterns · Kiri Moon</span>
+            </div>
+          </div>
+
+          <!-- Right: Phosphor Timecode, Play Action & Dock Button -->
+          <div class="header-right">
+            <span class="pill-time font-mono" id="pill-time">0:45</span>
+            
+            <button id="btn-hero-action" class="btn-hero-action" title="Play / Pause">
+              <svg class="lucide-icon icon-sm icon-pause" viewBox="0 0 24 24">
+                <rect width="4" height="16" x="6" y="4"/>
+                <rect width="4" height="16" x="14" y="4"/>
+              </svg>
+              <svg class="lucide-icon icon-sm icon-play" viewBox="0 0 24 24" style="display:none;">
+                <polygon points="5 3 19 12 5 21 5 3"/>
+              </svg>
+            </button>
+
+            <button id="btn-dock-toggle" class="btn-dock-pill font-mono" title="ESC to dock">
+              <span>ESC DOCK</span>
+            </button>
+          </div>
+
+        </div>
+
+        <!-- ══════════════════════════════════════════════════════════════
+             STATE 2: UNROLLED BODY (ZERO FLOATING GAP, CONTINUOUS SURFACE)
+             Houses the 4 Core Dedicated Widgets + Ambient Drop Target
+             ══════════════════════════════════════════════════════════════ -->
+        <div id="unrolled-body" class="unrolled-body">
+
+          <!-- Modular Navigation Tabs (4 Core Dedicated Tools) -->
+          <nav class="modular-nav font-sans" id="modular-nav">
+            <button class="nav-tab active" data-tab="board" id="tab-btn-board">
+              <svg class="lucide-icon" viewBox="0 0 24 24">
+                <rect width="7" height="7" x="3" y="3" rx="1"/>
+                <rect width="7" height="7" x="14" y="3" rx="1"/>
+                <rect width="7" height="7" x="14" y="14" rx="1"/>
+                <rect width="7" height="7" x="3" y="14" rx="1"/>
+              </svg>
+              <span class="tab-label">Kumoboard</span>
+              <span class="tab-badge-peach font-mono" id="badge-board-count">0</span>
+            </button>
+
+            <button class="nav-tab" data-tab="assistant" id="tab-btn-assistant">
+              <svg class="lucide-icon" viewBox="0 0 24 24">
+                <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/>
+              </svg>
+              <span class="tab-label">Assistant</span>
+              <span class="tab-live-dot"></span>
+            </button>
+
+            <button class="nav-tab" data-tab="amp" id="tab-btn-amp">
+              <svg class="lucide-icon" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M6 12c0-1.7.7-3.2 1.8-4.2"/>
+                <circle cx="12" cy="12" r="2"/>
+                <path d="M18 12c0 1.7-.7 3.2-1.8 4.2"/>
+              </svg>
+              <span class="tab-label">Kumo Amp</span>
+              <span class="tab-tag-smtc font-mono">SMTC</span>
+            </button>
+
+            <button class="nav-tab" data-tab="edge" id="tab-btn-edge">
+              <svg class="lucide-icon" viewBox="0 0 24 24">
+                <polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/>
+                <path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>
+              </svg>
+              <span class="tab-label">Edge Drop</span>
+            </button>
+          </nav>
+
+          <!-- Modular Widget Stage -->
+          <div class="modular-stage" id="modular-stage">
+
+            <!-- ──────────────────────────────────────────────────────────
+                 SLOT 01: KUMOBOARD WIDGET (DYNAMIC CANVAS QUICK-VIEW)
+                 Clean, spacious, fully dynamic horizontal carousel
+                 ────────────────────────────────────────────────────────── -->
+            <div id="widget-board" class="widget-panel active">
+              <div class="board-top-row">
+                <div class="board-brand-cluster">
+                  <div class="board-portal-icon">
+                    <svg class="lucide-icon icon-sm" viewBox="0 0 24 24">
+                      <rect width="7" height="7" x="3" y="3" rx="1"/>
+                      <rect width="7" height="7" x="14" y="3" rx="1"/>
+                      <rect width="7" height="7" x="14" y="14" rx="1"/>
+                      <rect width="7" height="7" x="3" y="14" rx="1"/>
+                    </svg>
+                    <span class="portal-dot"></span>
+                  </div>
+                  <div>
+                    <h3 class="board-title font-sans">Kumoboard Spatial Sync</h3>
+                    <div class="board-sub font-mono">
+                      <span id="board-name-display">Active Canvas</span>
+                      <span>•</span>
+                      <span class="highlight-iris" id="board-nodes-count">Live</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="pinned-counter-badge font-mono" id="pinned-counter-badge">
+                  <svg class="lucide-icon icon-sm" viewBox="0 0 24 24">
+                    <path d="M12 17v5"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/>
+                  </svg>
+                  <span><span id="pinned-count-val">0</span> Active Notes</span>
+                </div>
+              </div>
+
+              <!-- Dynamic Horizontal Cards Carousel -->
+              <div class="sticky-matrix" id="sticky-matrix-dynamic">
+                <!-- Dynamically populated via board.js -->
+              </div>
+
+              <!-- Board Bottom Actions -->
+              <div class="board-bottom-row">
+                <button id="btn-board-new-sticky" class="btn-sky-add font-sans">
+                  <svg class="lucide-icon icon-sm" viewBox="0 0 24 24">
+                    <line x1="12" y1="5" x2="12" y2="19"/>
+                    <line x1="5" y1="12" x2="19" y2="12"/>
+                  </svg>
+                  <span>New Sticky Note</span>
+                </button>
+
+                <button id="btn-board-open-full" class="btn-open-canvas font-mono">
+                  <span>Open Full Board</span>
+                  <svg class="lucide-icon icon-sm" viewBox="0 0 24 24">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                    <polyline points="15 3 21 3 21 9"/>
+                    <line x1="10" y1="14" x2="21" y2="3"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- ──────────────────────────────────────────────────────────
+                 SLOT 02: KUMO ASSISTANT WIDGET (AMBIENT COMPANION & PROMPT BAR)
+                 Clean, responsive, interactive
+                 ────────────────────────────────────────────────────────── -->
+            <div id="widget-assistant" class="widget-panel">
+              <div class="assistant-status-card">
+                <div class="assistant-left">
+                  <div class="mascot-orb-wrap">
+                    <div class="mascot-orb">
+                      <span class="orb-eye"></span>
+                      <span class="orb-eye"></span>
+                    </div>
+                    <span class="orb-status-dot"></span>
+                  </div>
+                  <div>
+                    <div class="assistant-name-line font-sans">
+                      <span class="assistant-name">Kumo Companion</span>
+                      <span class="status-listening-pill font-mono">READY</span>
+                    </div>
+                    <p class="assistant-meta font-mono" id="assistant-context-meta">Context: Windows Desktop active</p>
+                  </div>
+                </div>
+
+                <div class="mic-shortcut-badge font-mono">
+                  <svg class="lucide-icon icon-sm" viewBox="0 0 24 24">
+                    <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+                    <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                    <line x1="12" y1="19" x2="12" y2="22"/>
+                  </svg>
+                  <span>Alt+Space</span>
+                </div>
+              </div>
+
+              <!-- Command Input Box -->
+              <div class="assistant-input-box">
+                <span class="input-sparkle">
+                  <svg class="lucide-icon icon-sm" viewBox="0 0 24 24">
+                    <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/>
+                  </svg>
+                </span>
+                <input type="text" id="input-assistant-query" class="assistant-input font-sans"
+                  placeholder="Ask Kumo anything or type a desktop action...">
+                <button id="btn-assistant-go" class="btn-assistant-go font-mono">
+                  <span>GO</span>
+                  <svg class="lucide-icon icon-sm" viewBox="0 0 24 24">
+                    <line x1="5" y1="12" x2="19" y2="12"/>
+                    <polyline points="12 5 19 12 12 19"/>
+                  </svg>
+                </button>
+              </div>
+
+              <!-- Quick Action Chips -->
+              <div class="assistant-quick-actions">
+                <div class="quick-title font-mono">FLAGSHIP QUICK ACTIONS</div>
+                <div class="quick-chips font-sans">
+                  <button class="chip-action chip-lilac" data-action="summarize">
+                    <svg class="lucide-icon icon-sm" viewBox="0 0 24 24">
+                      <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/>
+                      <circle cx="12" cy="13" r="3"/>
+                    </svg>
+                    <span>Summarize Screen</span>
+                  </button>
+                  <button class="chip-action chip-lilac" data-action="mascot" title="Summon Floating Desktop Mascot">
+                    <svg class="lucide-icon icon-sm" viewBox="0 0 24 24">
+                      <circle cx="12" cy="12" r="10"/>
+                      <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+                      <line x1="9" y1="9" x2="9.01" y2="9"/>
+                      <line x1="15" y1="9" x2="15.01" y2="9"/>
+                    </svg>
+                    <span>Floating Mascot</span>
+                  </button>
+                  <button class="chip-action chip-lilac" data-action="clean">
+                    <svg class="lucide-icon icon-sm" viewBox="0 0 24 24">
+                      <path d="m21.64 3.64-1.28-1.28a1.21 1.21 0 0 0-1.72 0L2.36 18.64a1.21 1.21 0 0 0 0 1.72l1.28 1.28a1.2 1.2 0 0 0 1.72 0L21.64 5.36a1.2 1.2 0 0 0 0-1.72Z"/>
+                      <path d="m14 7 3 3"/>
+                      <path d="M5 6v4"/>
+                      <path d="M19 14v4"/>
+                    </svg>
+                    <span>Clean Desktop</span>
+                  </button>
+                  <button class="chip-action chip-lilac" data-action="focus">
+                    <svg class="lucide-icon icon-sm" viewBox="0 0 24 24">
+                      <circle cx="12" cy="12" r="10"/>
+                      <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    <span>Deep Focus</span>
+                  </button>
+                  <button class="chip-action chip-white" data-action="mute">
+                    <svg class="lucide-icon icon-sm" viewBox="0 0 24 24">
+                      <line x1="2" y1="2" x2="22" y2="22"/>
+                      <path d="M18.89 13.23A7.12 7.12 0 0 0 19 12v-2a7 7 0 0 0-14 0v2"/>
+                      <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                    </svg>
+                    <span>Mute Pings</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- ──────────────────────────────────────────────────────────
+                 SLOT 03: KUMO AMP RETRO-MODERN DECK WIDGET
+                 28-Band Spectrum Analyzer & SMTC Controls
+                 Strictly Zero Emojis (Warm Tactile Pastel System)
+                 ────────────────────────────────────────────────────────── -->
+            <div id="widget-amp" class="widget-panel">
+              <!-- Top Metadata & Telemetry Deck Header (from Stitch) -->
+              <div class="amp-deck-header font-sans">
+                <div class="amp-header-left truncate">
+                  <div class="amp-album-badge" title="Active Audio Stream">
+                    <svg class="lucide-icon icon-sm" viewBox="0 0 24 24">
+                      <circle cx="12" cy="12" r="10"/>
+                      <polygon points="10 8 16 12 10 16 10 8"/>
+                    </svg>
+                  </div>
+                  <div class="amp-header-meta truncate">
+                    <h4 class="amp-song-title font-sans truncate" id="amp-song-title">Paper Lanterns</h4>
+                    <p class="amp-song-sub font-mono truncate" id="amp-song-artist">Kiri Moon · Spotify Audio Stream · 44.1kHz</p>
+                  </div>
+                </div>
+
+                <div class="amp-header-right font-mono">
+                  <span class="amp-dsp-pill font-mono">DSP: ACTIVE</span>
+                  <div class="source-badges font-mono" id="amp-source-badges">
+                    <button class="src-badge active" data-src="spotify" title="Spotify Audio Source">
+                      <span class="src-live-dot"></span>Spotify Live
+                    </button>
+                    <button class="src-badge" data-src="apple" title="Apple Music">Apple</button>
+                    <button class="src-badge" data-src="local" title="Local Audio Deck">Local</button>
+                  </div>
+                  <button id="btn-amp-popout" class="src-badge" title="Open Standalone Window">
+                    <svg class="lucide-icon icon-sm" viewBox="0 0 24 24" style="width:11px;height:11px;">
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                      <polyline points="15 3 21 3 21 9"/>
+                      <line x1="10" y1="14" x2="21" y2="3"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- 28-BAND LCD SPECTRUM EQUALIZER -->
+              <div class="amp-lcd-panel">
+                <!-- 28-Band Spectrum Analyzer Rack -->
+                <div class="spectrum-rack" id="spectrum-rack"></div>
+
+                <!-- LCD Footer Mode Selector -->
+                <div class="lcd-footer font-mono">
+                  <span class="seek-label">SEEK BUFFER READY</span>
+                  <div class="mode-pills">
+                    <button class="mode-pill active" data-mode="bars">BARS</button>
+                    <button class="mode-pill" data-mode="mirror">MIRROR</button>
+                    <button class="mode-pill" data-mode="wave">WAVE</button>
+                    <button class="mode-pill" data-mode="dots">DOTS</button>
+                    <button class="mode-pill" data-mode="rain">RAIN</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Seek Scrub Bar (Stitch pulse_edge_suite_warm_pastel.html) -->
+              <div class="amp-scrubber-bar font-mono" id="amp-scrubber-bar">
+                <span class="scrub-time" id="amp-time-current">0:45</span>
+                <div class="scrub-track-wrapper" id="amp-seek-track" title="Click or drag to seek">
+                  <div class="scrub-track-fill" id="amp-seek-fill" style="width: 24%;"></div>
+                  <div class="scrub-track-thumb" id="amp-seek-thumb" style="left: 24%;"></div>
+                </div>
+                <span class="scrub-time scrub-time-right" id="amp-time-total">3:34</span>
+              </div>
+
+              <!-- Tactile Transport & Controls Bar (Stitch Warm Pastel Deck) -->
+              <div class="amp-controls-bar font-sans">
+                <!-- Transport Cluster -->
+                <div class="transport-cluster">
+                  <button id="btn-amp-prev" class="trans-btn" title="Previous Track">
+                    <svg class="lucide-icon icon-sm" viewBox="0 0 24 24">
+                      <polygon points="19 20 9 12 19 4 19 20"/>
+                      <line x1="5" y1="19" x2="5" y2="5"/>
+                    </svg>
+                  </button>
+                  <button id="btn-amp-rewind" class="trans-btn font-mono" title="Rewind 10s">-10s</button>
+                  <!-- Hero Iris Circular Play/Pause Button -->
+                  <button id="btn-amp-play" class="trans-btn-hero" title="Play / Pause">
+                    <svg class="lucide-icon icon-sm icon-pause" viewBox="0 0 24 24">
+                      <rect width="4" height="16" x="6" y="4"/>
+                      <rect width="4" height="16" x="14" y="4"/>
+                    </svg>
+                    <svg class="lucide-icon icon-sm icon-play" viewBox="0 0 24 24" style="display:none;">
+                      <polygon points="5 3 19 12 5 21 5 3"/>
+                    </svg>
+                  </button>
+                  <button id="btn-amp-forward" class="trans-btn font-mono" title="Forward 10s">+10s</button>
+                  <button id="btn-amp-next" class="trans-btn" title="Next Track">
+                    <svg class="lucide-icon icon-sm" viewBox="0 0 24 24">
+                      <polygon points="5 4 15 12 5 20 5 4"/>
+                      <line x1="19" y1="5" x2="19" y2="19"/>
+                    </svg>
+                  </button>
+                </div>
+
+                <!-- Secondary Actions: Tactile Volume Capsule & Pin Media -->
+                <div class="deck-actions-cluster">
+                  <div class="volume-capsule font-mono">
+                    <svg class="lucide-icon icon-sm vol-icon" viewBox="0 0 24 24">
+                      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                      <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                    </svg>
+                    <input type="range" id="amp-vol-slider" min="0" max="100" value="74" class="vol-slider">
+                    <span id="amp-vol-label" class="vol-pct font-mono">74%</span>
+                  </div>
+
+                  <button id="btn-amp-pin-live" class="btn-pin-media font-mono" title="Pin current media & stopped timestamp to Kumoboard">
+                    <svg class="lucide-icon icon-sm" viewBox="0 0 24 24">
+                      <path d="M12 17v5"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/>
+                    </svg>
+                    <span>Pin Media</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Upcoming Queue & Session History Drawer -->
+              <div class="amp-queue-drawer font-sans" id="amp-queue-drawer">
+                <div class="queue-header-row font-mono">
+                  <div class="queue-title-cluster">
+                    <svg class="lucide-icon icon-sm" viewBox="0 0 24 24">
+                      <line x1="8" y1="6" x2="21" y2="6"/>
+                      <line x1="8" y1="12" x2="21" y2="12"/>
+                      <line x1="8" y1="18" x2="21" y2="18"/>
+                      <line x1="3" y1="6" x2="3.01" y2="6"/>
+                      <line x1="3" y1="12" x2="3.01" y2="12"/>
+                      <line x1="3" y1="18" x2="3.01" y2="18"/>
+                    </svg>
+                    <span>QUEUE & UP NEXT</span>
+                  </div>
+                  <span class="queue-badge-chip font-mono" id="queue-status-chip">Live Session</span>
+                </div>
+
+                <div class="queue-cards-carousel" id="amp-queue-carousel">
+                  <!-- Populated dynamically via amp.js -->
+                </div>
+              </div>
+            </div>
+
+            <!-- ──────────────────────────────────────────────────────────
+                 SLOT 04: EDGE DROP DESKTOP SHELF WIDGET
+                 Inspired by Deepender25/Edge-Drop
+                 Clipboard history, drag-out, filtering & staging
+                 ────────────────────────────────────────────────────────── -->
+            <div id="widget-edge" class="widget-panel">
+              <div class="edge-drop-container font-sans">
+                <!-- Shelf Top Brand & Action Bar -->
+                <div class="edge-shelf-header">
+                  <div class="edge-shelf-brand">
+                    <div class="shelf-portal-icon">
+                      <svg class="lucide-icon icon-sm" viewBox="0 0 24 24">
+                        <polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/>
+                        <path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>
+                      </svg>
+                    </div>
+                    <span class="shelf-title font-sans">Edge Drop Shelf</span>
+                  </div>
+
+                  <div class="shelf-header-actions font-mono">
+                    <span class="shelf-count-badge" id="shelf-count-badge">0 items</span>
+                    <button id="btn-shelf-clear" class="btn-shelf-clear" title="Clear all drops">
+                      <svg class="lucide-icon icon-sm" viewBox="0 0 24 24">
+                        <path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                      </svg>
+                      <span>Clear</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Search & Type Filter Toolbar -->
+                <div class="edge-shelf-toolbar">
+                  <div class="shelf-search-box">
+                    <svg class="lucide-icon icon-sm text-muted" viewBox="0 0 24 24">
+                      <circle cx="11" cy="11" r="8"/>
+                      <path d="m21 21-4.3-4.3"/>
+                    </svg>
+                    <input type="text" id="shelf-search-input" class="shelf-search-input font-sans"
+                      placeholder="Search history or drops...">
+                  </div>
+
+                  <div class="shelf-filters font-mono">
+                    <button class="filter-chip active" data-filter="all">All</button>
+                    <button class="filter-chip" data-filter="file">Files</button>
+                    <button class="filter-chip" data-filter="link">Links</button>
+                    <button class="filter-chip" data-filter="snippet">Text</button>
+                  </div>
+                </div>
+
+                <!-- Horizontal Cards Carousel -->
+                <div class="edge-cards-carousel" id="edge-cards-carousel">
+                  <!-- Dynamically populated via edge-drop.js -->
+                </div>
+              </div>
+            </div>
+
+            <!-- ──────────────────────────────────────────────────────────
+                 AMBIENT DRAG-OVER DROP TARGET
+                 Swoops in whenever dragging files from Windows desktop
+                 ────────────────────────────────────────────────────────── -->
+            <div id="edge-drop-ambient-overlay" class="edge-drop-ambient-overlay font-sans">
+              <div class="ambient-drop-box">
+                <div class="ambient-drop-icon">
+                  <svg class="lucide-icon icon-xl" viewBox="0 0 24 24">
+                    <polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/>
+                    <path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>
+                  </svg>
+                </div>
+                <div class="ambient-drop-title">Drop into Edge Shelf</div>
+                <div class="ambient-drop-sub font-mono">Release files, links, or snippets to stage in Kumo</div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Audio Element for sound synthesis / local tracks -->
+  <audio id="audio-engine" preload="auto"></audio>
+
+  <!-- Modular Scripts across dedicated folders -->
+  <script src="chassis/haptics.js"></script>
+  <script src="chassis/state.js"></script>
+  <script src="board/board.js"></script>
+  <script src="assistant/assistant.js"></script>
+  <script src="amp/js/visualizer-engine.js"></script>
+  <script src="amp/js/queue-manager.js"></script>
+  <script src="amp/js/controls-manager.js"></script>
+  <script src="amp/amp.js"></script>
+  <script src="edge-drop/edge-drop.js"></script>
+  <script src="island.js"></script>
+</body>
+
+</html>

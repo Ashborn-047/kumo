@@ -8,8 +8,11 @@ const path = require('path');
 
 let studioWindow = null;
 
-function openStudioWindow(preloadPath, options = {}) {
-  if (studioWindow) {
+function openStudioWindow(preloadPath, options = {}, iconImage) {
+  if (studioWindow && !studioWindow.isDestroyed()) {
+    if (iconImage) {
+      try { studioWindow.setIcon(iconImage); } catch {}
+    }
     studioWindow.focus();
     return studioWindow;
   }
@@ -20,7 +23,7 @@ function openStudioWindow(preloadPath, options = {}) {
     minWidth: 920,
     minHeight: 640,
     title: 'Kumo Studio — Desktop Customizer & Lab',
-    icon: path.join(__dirname, '../assets/icon.png'),
+    icon: iconImage || path.join(__dirname, '../assets/icon.png'),
     autoHideMenuBar: true,
     backgroundColor: '#0a0d14',
     webPreferences: {

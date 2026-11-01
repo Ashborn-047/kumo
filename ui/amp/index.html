@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Kumo Amp // Standalone Deck MK-IV</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="amp.css">
+</head>
+<body>
+  <!-- Standalone 400px Tactile Chassis -->
+  <div class="amp-standalone-window font-sans" id="amp-standalone-window">
+    
+    <!-- Drag Titlebar / Window Header -->
+    <header class="amp-titlebar" id="amp-titlebar">
+      <div class="titlebar-left font-sans">
+        <svg class="lucide-icon icon-sm drag-grip" viewBox="0 0 24 24">
+          <circle cx="9" cy="12" r="1"/><circle cx="9" cy="5" r="1"/><circle cx="9" cy="19" r="1"/>
+          <circle cx="15" cy="12" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="19" r="1"/>
+        </svg>
+        <span class="amp-brand-title">Kumo Amp</span>
+        <span class="amp-version-badge font-mono">MK-IV</span>
+      </div>
+
+      <div class="titlebar-right font-mono">
+        <span class="smtc-live-badge font-mono" id="smtc-live-badge">
+          <span class="pulse-dot"></span>SMTC LIVE
+        </span>
+        <button class="titlebar-btn-close" id="btn-win-close" title="Close Window">
+          <svg class="lucide-icon icon-sm" viewBox="0 0 24 24">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Component 1: Retro-Modern LCD Spectrum Deck -->
+    <section class="amp-lcd-card">
+      <div class="lcd-meta-row font-sans">
+        <div class="lcd-vinyl-badge" title="Vinyl Deck Active">
+          <svg class="lucide-icon icon-md" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10"/>
+            <circle cx="12" cy="12" r="4"/>
+            <circle cx="12" cy="12" r="1"/>
+          </svg>
+        </div>
+        <div class="lcd-track-info truncate">
+          <h3 class="lcd-title truncate font-sans" id="win-song-title">Paper Lanterns</h3>
+          <p class="lcd-subtitle truncate font-mono" id="win-song-artist">Kiri Moon · Spotify · 320 KBPS · STEREO</p>
+        </div>
+        <div class="lcd-dsp-meta font-mono">
+          <div class="lcd-time-readout" id="win-time-readout">0:45 / 3:34</div>
+          <span class="lcd-dsp-tag">DSP: ACTIVE</span>
+        </div>
+      </div>
+
+      <!-- 28-Band Spectrum Analyzer -->
+      <div class="spectrum-rack" id="win-spectrum-rack"></div>
+
+      <!-- LCD Mode Controls -->
+      <div class="lcd-mode-bar font-mono">
+        <span class="mode-label">MODE:</span>
+        <div class="mode-buttons">
+          <button class="mode-btn active" data-mode="bars">BARS</button>
+          <button class="mode-btn" data-mode="mirror">MIRROR</button>
+          <button class="mode-btn" data-mode="wave">WAVE</button>
+          <button class="mode-btn" data-mode="dots">DOTS</button>
+          <button class="mode-btn" data-mode="rain">RAIN</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Component 2: Seek Scrubber Bar -->
+    <section class="amp-scrubber-section font-mono">
+      <div class="scrub-labels">
+        <span class="scrub-time" id="win-time-curr">0:45</span>
+        <span class="scrub-ready-label">SEEK READY</span>
+        <span class="scrub-time" id="win-time-total">3:34</span>
+      </div>
+      <div class="scrub-track" id="win-scrub-track" title="Click or drag to seek">
+        <div class="scrub-fill" id="win-scrub-fill" style="width: 24%;"></div>
+        <div class="scrub-thumb" id="win-scrub-thumb" style="left: 24%;"></div>
+      </div>
+    </section>
+
+    <!-- Component 3: Tactile Transport Controls Cluster -->
+    <section class="amp-transport-section">
+      <button class="win-trans-btn" id="win-btn-prev" title="Previous Track">
+        <svg class="lucide-icon icon-sm" viewBox="0 0 24 24">
+          <polygon points="19 20 9 12 19 4 19 20"/>
+          <line x1="5" y1="19" x2="5" y2="5"/>
+        </svg>
+      </button>
+
+      <button class="win-trans-btn font-mono" id="win-btn-rewind" title="Rewind 10s">-10s</button>
+
+      <!-- Hero 48px Iris Circular Play/Pause -->
+      <button class="win-trans-hero" id="win-btn-play" title="Play / Pause">
+        <svg class="lucide-icon icon-md icon-pause" viewBox="0 0 24 24">
+          <rect width="4" height="16" x="6" y="4"/>
+          <rect width="4" height="16" x="14" y="4"/>
+        </svg>
+        <svg class="lucide-icon icon-md icon-play" viewBox="0 0 24 24" style="display:none;">
+          <polygon points="5 3 19 12 5 21 5 3"/>
+        </svg>
+      </button>
+
+      <button class="win-trans-btn font-mono" id="win-btn-forward" title="Forward 10s">+10s</button>
+
+      <button class="win-trans-btn" id="win-btn-next" title="Next Track">
+        <svg class="lucide-icon icon-sm" viewBox="0 0 24 24">
+          <polygon points="5 4 15 12 5 20 5 4"/>
+          <line x1="19" y1="5" x2="19" y2="19"/>
+        </svg>
+      </button>
+    </section>
+
+    <!-- Component 4: Volume Capsule & Eject / Pin Button -->
+    <section class="amp-volume-eject-row font-mono">
+      <div class="volume-capsule">
+        <svg class="lucide-icon icon-sm" viewBox="0 0 24 24">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+          <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+        </svg>
+        <input type="range" min="0" max="100" value="74" class="vol-slider" id="win-vol-slider">
+        <span class="vol-label" id="win-vol-label">74%</span>
+      </div>
+
+      <button class="btn-pin-eject font-mono" id="win-btn-pin" title="Pin Media to Kumoboard Canvas">
+        <svg class="lucide-icon icon-sm" viewBox="0 0 24 24">
+          <path d="M12 17v5"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/>
+        </svg>
+        <span>EJECT / PIN</span>
+      </button>
+    </section>
+
+    <!-- Component 5: Source Selector Pills -->
+    <section class="amp-sources-grid font-sans">
+      <button class="source-pill active" data-src="spotify">
+        <span class="source-dot dot-green"></span>Spotify
+      </button>
+      <button class="source-pill" data-src="apple">
+        <span class="source-dot dot-orange"></span>Apple
+      </button>
+      <button class="source-pill" data-src="ytmusic">
+        <span class="source-dot dot-red"></span>YT Music
+      </button>
+      <button class="source-pill" data-src="local">
+        <span class="source-dot dot-purple"></span>Local
+      </button>
+    </section>
+
+    <!-- Component 6: Upcoming Queue Drawer (4 Tracks) -->
+    <section class="amp-queue-box font-sans">
+      <div class="queue-box-header font-mono">
+        <span class="queue-title-text" id="win-queue-count">UPCOMING QUEUE (4)</span>
+        <span class="queue-crossfade-tag">AUTO-CROSSFADE</span>
+      </div>
+      <div class="queue-track-list font-sans" id="win-queue-list">
+        <!-- Rendered dynamically via amp.js -->
+      </div>
+    </section>
+
+    <!-- Footer Caption -->
+    <footer class="amp-footer-caption font-mono">
+      <span>Standalone 400px tactile desktop player with real-time 28-band LCD spectrum.</span>
+    </footer>
+
+  </div>
+
+  <script src="amp.js"></script>
+</body>
+</html>
+

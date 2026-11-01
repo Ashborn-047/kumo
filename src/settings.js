@@ -25,6 +25,12 @@ const DEFAULTS = {
   autostart:       false,
   startMinimized:  false,
   studioTheme:     'light',
+  island: {
+    enabled:       true,
+    edge:          'top',
+    style:         'seamless',
+    soundHaptics:  true,
+  },
   permissions: {
     appLaunch:         true,
     clipboardAccess:   true,

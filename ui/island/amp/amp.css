@@ -1,0 +1,14 @@
+/* ============================================================
+   Pulse Dynamic Island — amp/amp.css (Aggregator)
+   Segregated Modular Architecture:
+   - css/header.css     : Deck header, album badge & telemetry
+   - css/visualizer.css : 28-Band LCD spectrum & mode pills
+   - css/controls.css   : Seek scrubber, tactile transport & volume
+   - css/queue.css      : Upcoming session queue drawer
+   Strictly Zero Emojis
+   ============================================================ */
+
+@import "css/header.css";
+@import "css/visualizer.css";
+@import "css/controls.css";
+@import "css/queue.css";
