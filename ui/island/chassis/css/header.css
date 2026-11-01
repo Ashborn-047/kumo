@@ -303,13 +303,14 @@
   border: 1px solid #e7e0f2;
 }
 
-/* Mini Audio Equalizer Visualizer */
+/* Mini Audio Equalizer Visualizer (Pinned to left, strictly isolated from scrolling text) */
 .mini-music-bars {
   display: inline-flex;
   align-items: flex-end;
   gap: 2px;
   height: 12px;
   flex-shrink: 0;
+  z-index: 2;
 }
 
 .mini-music-bars .bar {
@@ -352,6 +353,34 @@
   height: 3px;
   opacity: 0.35;
   animation: none;
+}
+
+/* Dedicated Marquee Viewport: Enforces strict inner clipping & edge feathering */
+.marquee-viewport {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.marquee-viewport.is-overflowing {
+  mask-image: linear-gradient(
+    to right,
+    transparent 0px,
+    black 6px,
+    black calc(100% - 6px),
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0px,
+    black 6px,
+    black calc(100% - 6px),
+    transparent 100%
+  );
 }
 
 /* Marquee Track */

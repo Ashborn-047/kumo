@@ -115,15 +115,27 @@ test.describe('Kumo Application Boot & Windows', () => {
 
       // Verify music visualizer bars, marquee track text, and play/pause action are visible
       await expect(firstWin.locator('#header-music-bars')).toBeVisible();
+      await expect(firstWin.locator('#marquee-viewport')).toBeVisible();
       await expect(firstWin.locator('#marquee-text')).toBeVisible();
       const heroAction = firstWin.locator('#btn-hero-action');
       await expect(heroAction).toBeVisible();
 
-      // Ensure hero action button is within chassis bounds (not clipped)
+      // Wait for resting state transition to settle
       await firstWin.waitForFunction(() => {
         const chassis = document.querySelector('.seamless-chassis');
         return chassis && Math.round(chassis.getBoundingClientRect().width) >= 340;
       });
+
+      // Ensure marquee viewport isolates scrolling text from music bars
+      const barsBox = await firstWin.locator('#header-music-bars').boundingBox();
+      const vpBox = await firstWin.locator('#marquee-viewport').boundingBox();
+      expect(barsBox).toBeTruthy();
+      expect(vpBox).toBeTruthy();
+      if (barsBox && vpBox) {
+        expect(vpBox.x).toBeGreaterThanOrEqual(barsBox.x + barsBox.width);
+      }
+
+      // Ensure hero action button is within chassis bounds (not clipped)
       const heroBox = await heroAction.boundingBox();
       const chassisBox = await firstWin.locator('.seamless-chassis').boundingBox();
       expect(heroBox).toBeTruthy();

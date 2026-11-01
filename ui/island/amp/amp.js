@@ -7,6 +7,7 @@
 function initAmpWidget() {
   const marqueeText = document.getElementById('marquee-text');
   const marqueeTrack = document.getElementById('marquee-track');
+  const marqueeViewport = document.getElementById('marquee-viewport');
   const marqueeWell = document.getElementById('header-marquee');
   const headerMusicBars = document.getElementById('header-music-bars');
   const pillTime = document.getElementById('pill-time');
@@ -42,20 +43,22 @@ function initAmpWidget() {
   function updateMarquee(text) {
     if (!marqueeText) return;
     marqueeText.textContent = text;
-    if (!marqueeTrack || !marqueeWell) return;
+    if (!marqueeTrack) return;
 
     requestAnimationFrame(() => {
-      const barsWidth = (headerMusicBars && headerMusicBars.offsetParent !== null) ? (headerMusicBars.offsetWidth + 6) : 0;
-      const wellWidth = marqueeWell.clientWidth;
-      const available = wellWidth - barsWidth - 16;
+      const container = marqueeViewport || marqueeWell;
+      if (!container) return;
+      const available = container.clientWidth;
       const trackWidth = marqueeTrack.scrollWidth;
 
-      if (trackWidth > available && available > 30) {
+      if (trackWidth > available && available > 20) {
         const diff = trackWidth - available;
-        marqueeTrack.style.setProperty('--marquee-distance', `-${diff + 8}px`);
+        marqueeTrack.style.setProperty('--marquee-distance', `-${diff + 4}px`);
         marqueeTrack.classList.add('is-overflowing');
+        marqueeViewport?.classList.add('is-overflowing');
       } else {
         marqueeTrack.classList.remove('is-overflowing');
+        marqueeViewport?.classList.remove('is-overflowing');
         marqueeTrack.style.removeProperty('--marquee-distance');
       }
     });
