@@ -197,7 +197,7 @@ function initStateController() {
       pillMascot.style.transition = 'transform 0.5s cubic-bezier(0.17, 0.89, 0.32, 1.28), opacity 0.4s ease';
       pillMascot.style.transform = 'translateY(0) scale(1)';
       pillMascot.style.opacity = '1';
-      if (marqueeText) marqueeText.textContent = 'Paper Lanterns · Kiri Moon';
+      if (marqueeText) marqueeText.textContent = 'Kumo Desktop Ready';
     });
   }
 

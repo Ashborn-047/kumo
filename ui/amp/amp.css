@@ -631,7 +631,19 @@ body.is-dragging * {
 }
 
 .track-name {
-  truncate;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.queue-empty-row {
+  padding: 12px 8px;
+  text-align: center;
+  color: #8c85a0;
+  font-size: 9.5px;
+  background: #fbf9fe;
+  border-radius: 8px;
+  border: 1px dashed #e3dced;
 }
 
 .track-artist {

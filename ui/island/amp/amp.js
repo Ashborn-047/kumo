@@ -227,7 +227,7 @@ function initAmpWidget() {
   }
 
   // Initialize resting marquee display
-  updateMarquee(marqueeText?.textContent || 'Paper Lanterns · Kiri Moon');
+  updateMarquee(marqueeText?.textContent || 'Kumo Ready · Idle');
 
   // Defer initial status poll to idle so boot remains instant
   setTimeout(pollLiveMedia, 3500);

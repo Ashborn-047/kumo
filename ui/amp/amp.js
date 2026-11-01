@@ -286,10 +286,33 @@
 
     if (hasTitle) {
       if (winSongTitle) winSongTitle.textContent = meta.title;
+      const src = meta.source || 'Spotify';
       if (winSongArtist) {
-        const src = meta.source || 'Spotify';
         winSongArtist.textContent = `${meta.artist || 'Unknown Artist'} · ${src} · 320 KBPS · STEREO`;
       }
+
+      // Sync active source pill
+      const lowerSrc = src.toLowerCase();
+      sourcePills.forEach(pill => {
+        const target = pill.dataset.src;
+        if (target === 'spotify' && lowerSrc.includes('spotify')) {
+          pill.classList.add('active');
+        } else if (target === 'apple' && lowerSrc.includes('apple')) {
+          pill.classList.add('active');
+        } else if (target === 'ytmusic' && (lowerSrc.includes('youtube') || lowerSrc.includes('chrome') || lowerSrc.includes('edge'))) {
+          pill.classList.add('active');
+        } else if (target === 'local' && (lowerSrc.includes('local') || lowerSrc.includes('media player') || lowerSrc.includes('system'))) {
+          pill.classList.add('active');
+        } else if (target === 'spotify' && !lowerSrc.includes('spotify')) {
+          pill.classList.remove('active');
+        } else if (target === 'apple' && !lowerSrc.includes('apple')) {
+          pill.classList.remove('active');
+        } else if (target === 'ytmusic' && !lowerSrc.includes('youtube') && !lowerSrc.includes('chrome') && !lowerSrc.includes('edge')) {
+          pill.classList.remove('active');
+        } else if (target === 'local' && !lowerSrc.includes('local') && !lowerSrc.includes('media player')) {
+          pill.classList.remove('active');
+        }
+      });
 
       const posStr = formatTime(meta.position);
       const durStr = formatTime(meta.duration);
@@ -304,6 +327,7 @@
 
       const isActuallyPlaying = (meta.status === 'Playing' || meta.isPlaying === true);
       setPlayingState(isActuallyPlaying);
+      pollQueue();
     } else {
       if (winSongTitle) winSongTitle.textContent = 'No Active Media';
       if (winSongArtist) winSongArtist.textContent = 'Spotify / Windows Media Player Ready';
@@ -313,35 +337,90 @@
       if (winScrubFill) winScrubFill.style.width = '0%';
       if (winScrubThumb) winScrubThumb.style.left = '0%';
       setPlayingState(false);
+      pollQueue();
     }
   }
 
-  // 2. Queue Rendering
-  const fallbackQueue = [
-    { title: 'Paper Lanterns', artist: 'Kiri Moon', duration: '3:34', active: true },
-    { title: 'Slow Orbit', artist: 'Hollow Fern', duration: '3:07', active: false },
-    { title: 'Neon Tide', artist: 'Aya Brooks', duration: '4:01', active: false },
-    { title: 'Marigold Hours', artist: 'Tomo & The Static', duration: '3:19', active: false }
-  ];
+  // 2. Real Queue Management & Rendering
+  function escapeHtml(str) {
+    return String(str || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
 
-  function renderQueueList(queue) {
+  function renderQueueList(raw) {
     if (!winQueueList) return;
-    const items = (Array.isArray(queue) && queue.length > 0) ? queue : fallbackQueue;
-    if (winQueueCount) winQueueCount.textContent = `UPCOMING QUEUE (${items.length})`;
+
+    const isCloudConnected = Boolean(raw?.connected);
+    const rawItems = Array.isArray(raw) ? raw : (Array.isArray(raw?.queue) ? raw.queue : []);
+
+    let displayItems = [];
+
+    if (isCloudConnected && rawItems.length > 0) {
+      if (winQueueCount) winQueueCount.textContent = `SPOTIFY QUEUE (${rawItems.length})`;
+      displayItems = rawItems.map((item, idx) => ({
+        title: item.title,
+        artist: item.artist || 'Unknown Artist',
+        duration: formatTime(item.duration),
+        active: idx === 0 && isPlaying
+      }));
+    } else {
+      const activeTitle = activeMedia?.title;
+      const hasActive = Boolean(activeTitle && activeTitle !== 'Media Controller Idle' && activeTitle !== 'Spotify Ready');
+
+      if (hasActive) {
+        displayItems.push({
+          title: activeMedia.title,
+          artist: activeMedia.artist || 'Unknown Artist',
+          duration: formatTime(activeMedia.duration),
+          active: isPlaying,
+          isCurrent: true
+        });
+      }
+
+      rawItems.forEach(item => {
+        if (!item?.title) return;
+        if (hasActive && item.title.toLowerCase() === activeTitle.toLowerCase()) return;
+        displayItems.push({
+          title: item.title,
+          artist: item.artist || 'Unknown Artist',
+          duration: formatTime(item.duration),
+          active: false,
+          isCurrent: false
+        });
+      });
+
+      if (winQueueCount) {
+        winQueueCount.textContent = displayItems.length > 0
+          ? `UPCOMING QUEUE (${displayItems.length})`
+          : 'SESSION QUEUE (0)';
+      }
+    }
 
     winQueueList.innerHTML = '';
-    items.forEach((item, idx) => {
+
+    if (displayItems.length === 0) {
+      const emptyRow = document.createElement('div');
+      emptyRow.className = 'queue-empty-row font-mono';
+      emptyRow.textContent = 'No media in queue. Play a song in Spotify, YouTube Music, or browser.';
+      winQueueList.appendChild(emptyRow);
+      return;
+    }
+
+    displayItems.forEach((item, idx) => {
       const row = document.createElement('div');
       row.className = `queue-track-row ${item.active ? 'active' : ''}`;
       row.innerHTML = `
         <div class="track-left truncate">
           <span class="track-num">${String(idx + 1).padStart(2, '0')}</span>
-          <span class="track-name truncate">${item.title}</span>
-          <span class="track-artist truncate">· ${item.artist}</span>
+          <span class="track-name truncate">${escapeHtml(item.title)}</span>
+          <span class="track-artist truncate">· ${escapeHtml(item.artist)}</span>
         </div>
         <div class="track-right font-mono">
           ${item.active ? '<span class="track-dot-active"></span>' : ''}
-          <span>${item.duration || '3:00'}</span>
+          <span>${item.duration || '0:00'}</span>
         </div>
       `;
       row.addEventListener('click', () => {
@@ -353,7 +432,21 @@
     });
   }
 
-  renderQueueList(fallbackQueue);
+  async function pollQueue() {
+    try {
+      if (window.goo?.getMediaQueue) {
+        const q = await window.goo.getMediaQueue();
+        renderQueueList(q);
+      } else if (window.goo?.action) {
+        const q = await window.goo.action('media.queue');
+        renderQueueList(q?.result || q);
+      } else {
+        renderQueueList(null);
+      }
+    } catch {
+      renderQueueList(null);
+    }
+  }
 
   // 3. User Controls Binding
   function togglePlay() {
@@ -487,7 +580,9 @@
         applyMediaState(s);
       }
     } catch {}
+    pollQueue();
   }
   setTimeout(poll, 400);
+  setInterval(pollQueue, 4000);
 })();
 

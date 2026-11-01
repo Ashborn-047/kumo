@@ -18,7 +18,21 @@
     if (!carouselElem) return;
     const isConnected = Boolean(data?.connected);
     const queueList = data?.queue || [];
-    const sig = `${isConnected}-${queueList.length}-${queueList.map(t => `${t.title}:${t.timestamp || ''}`).join('|')}`;
+    let itemsToRender = [...queueList];
+    const hasActive = Boolean(activeMedia?.title && activeMedia.title !== 'Media Controller Idle' && activeMedia.title !== 'Spotify Ready');
+    if (itemsToRender.length === 0 && hasActive) {
+      itemsToRender.push({
+        title: activeMedia.title,
+        artist: activeMedia.artist || 'Unknown Artist',
+        source: activeMedia.source,
+        position: activeMedia.position,
+        duration: activeMedia.duration,
+        timestamp: 'Now Playing',
+        isPlaying: activeMedia.isPlaying
+      });
+    }
+
+    const sig = `${isConnected}-${itemsToRender.length}-${itemsToRender.map(t => `${t.title}:${t.timestamp || ''}`).join('|')}`;
     if (sig === lastQueueSig) return;
     lastQueueSig = sig;
 
@@ -26,7 +40,7 @@
       chipElem.textContent = isConnected ? 'Spotify Live' : 'Session Queue';
     }
 
-    if (queueList.length === 0) {
+    if (itemsToRender.length === 0) {
       carouselElem.innerHTML = `
         <div style="font-size: 8px; color: #9f9ab2; padding: 4px; font-style: italic;">
           Session queue ready. Tracks appear dynamically as you listen.
@@ -36,7 +50,7 @@
     }
 
     carouselElem.innerHTML = '';
-    queueList.forEach((item, index) => {
+    itemsToRender.forEach((item, index) => {
       const card = document.createElement('div');
       card.className = 'queue-item-card font-sans';
       card.innerHTML = `
