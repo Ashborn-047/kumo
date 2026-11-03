@@ -12,6 +12,7 @@ import { addNewTool } from './js/tool-factory.js';
 import { initFilters, initFloatingActions, initPermissionsModal } from './js/board-modals.js';
 import { setupPinListener, setupCompanionSpatialMigration } from './js/pin-listener.js';
 import { applyLiveTelemetry } from './js/telemetry-dispatcher.js';
+import { initUpdaterUI } from './js/updater-ui.js';
 
 export { toast, saveState, loadState, updateMiniMap, renderCards, addNewTool, applyLiveTelemetry };
 
@@ -35,4 +36,7 @@ export { toast, saveState, loadState, updateMiniMap, renderCards, addNewTool, ap
   // Pinning & Spatial Companion Migration
   setupPinListener();
   setupCompanionSpatialMigration({ addNewTool, toast });
+
+  // In-App Background Update Notifications
+  initUpdaterUI();
 })();

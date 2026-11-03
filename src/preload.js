@@ -95,4 +95,26 @@ contextBridge.exposeInMainWorld('goo', {
   onCompanionBoardEnter: (cb)          => ipcRenderer.on('companion:board-enter', (_e, d) => cb(d)),
   onCompanionLeap:       (cb)          => ipcRenderer.on('companion:island-enter', (_e, d) => cb(d)),
   companionLeapReturn:   ()            => ipcRenderer.send('companion:board-exit'),
+
+  // Auto-Update & Patch Delivery Bridge
+  updaterGetStatus:      ()            => ipcRenderer.invoke('updater:get-status'),
+  updaterCheck:          ()            => ipcRenderer.invoke('updater:check'),
+  updaterQuitAndInstall: ()            => ipcRenderer.invoke('updater:quit-and-install'),
+  updaterOpenRelease:    (url)         => ipcRenderer.invoke('updater:open-release', url),
+  onUpdaterStatus:       (cb)          => ipcRenderer.on('updater:status-changed', (_e, d) => cb(d)),
+  onUpdaterAvailable:    (cb)          => ipcRenderer.on('updater:available', (_e, d) => cb(d)),
+  onUpdaterProgress:     (cb)          => ipcRenderer.on('updater:progress', (_e, d) => cb(d)),
+  onUpdaterDownloaded:   (cb)          => ipcRenderer.on('updater:downloaded', (_e, d) => cb(d)),
+});
+
+// Dedicated standalone bridge for Kumo Updater
+contextBridge.exposeInMainWorld('kumoUpdater', {
+  getStatus: () => ipcRenderer.invoke('updater:get-status'),
+  checkForUpdates: () => ipcRenderer.invoke('updater:check'),
+  quitAndInstall: () => ipcRenderer.invoke('updater:quit-and-install'),
+  openReleasePage: (url) => ipcRenderer.invoke('updater:open-release', url),
+  onStatusChanged: (cb) => ipcRenderer.on('updater:status-changed', (_e, d) => cb(d)),
+  onAvailable: (cb) => ipcRenderer.on('updater:available', (_e, d) => cb(d)),
+  onProgress: (cb) => ipcRenderer.on('updater:progress', (_e, d) => cb(d)),
+  onDownloaded: (cb) => ipcRenderer.on('updater:downloaded', (_e, d) => cb(d)),
 });

@@ -38,6 +38,7 @@ const settings       = require('./settings');
 const ai             = require('./ai');
 const islandManager  = require('./island');
 const clipboardWatcher = require('./clipboard-watcher');
+const updaterManager = require('./updater');
 const { registerIpcHandlers } = require('./main/ipc-handlers');
 const { startTelemetryBroadcast, startMediaSync } = require('./main/telemetry-service');
 
@@ -191,6 +192,16 @@ app.whenReady().then(async () => {
     startTelemetryBroadcast(boardManager);
     startMediaSync(islandManager, boardManager, ampManager);
     clipboardWatcher.startWatcher(islandManager.get());
+
+    updaterManager.initUpdater({
+      getWindows: () => [
+        boardManager.get(),
+        overlayManager.get(),
+        studioManager.get(),
+        ampManager.get(),
+        islandManager.get(),
+      ],
+    });
   };
 
   if (primaryWin && typeof primaryWin.once === 'function') {
@@ -255,5 +266,8 @@ app.whenReady().then(async () => {
 });
 
 // ── Cleanup ───────────────────────────────────────────────────
-app.on('will-quit', () => globalShortcut.unregisterAll());
+app.on('will-quit', () => {
+  updaterManager.cleanupUpdater();
+  globalShortcut.unregisterAll();
+});
 app.on('window-all-closed', () => {});

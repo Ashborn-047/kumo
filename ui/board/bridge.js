@@ -89,9 +89,15 @@
     drawFill:    ()              => Promise.resolve(null),
     saveFile:    (b64, name)     => Promise.resolve(name),
     docPDF:      ()              => Promise.resolve(null),
-    updateCheck: ()              => Promise.resolve(false),
-    updateNow:   ()              => Promise.resolve(),
-    version:     ()              => Promise.resolve('0.1.0'),
+    updateCheck: ()              => window.kumoUpdater ? window.kumoUpdater.checkForUpdates() : (window.goo ? window.goo.updaterCheck() : Promise.resolve({ ok: false })),
+    updateNow:   ()              => window.kumoUpdater ? window.kumoUpdater.quitAndInstall() : (window.goo ? window.goo.updaterQuitAndInstall() : Promise.resolve()),
+    version:     async ()        => {
+      if (window.kumoUpdater) {
+        const s = await window.kumoUpdater.getStatus();
+        return s?.currentVersion || '0.1.0';
+      }
+      return '0.1.0';
+    },
   };
 
   window.mb = mb;

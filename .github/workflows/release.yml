@@ -32,8 +32,8 @@ jobs:
         env:
           CI: true
 
-      - name: Build Windows Executables (NSIS Installer + Portable)
-        run: npm run dist
+      - name: Build Windows Executables (NSIS Installer + Portable + Update Blockmaps)
+        run: npm run dist:release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -43,6 +43,7 @@ jobs:
           files: |
             dist/*.exe
             dist/*.blockmap
+            dist/latest.yml
           draft: false
           prerelease: false
           generate_release_notes: true
