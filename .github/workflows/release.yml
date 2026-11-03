@@ -14,6 +14,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js 20
         uses: actions/setup-node@v4
@@ -37,22 +39,29 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract Release Title from Notes
+      - name: Extract Release Notes from Tag Annotation
         id: release_meta
         shell: bash
         run: |
-          if [ -f RELEASE_NOTES.md ]; then
-            TITLE=$(head -n 1 RELEASE_NOTES.md | sed 's/^# *//')
-            echo "title=$TITLE" >> $GITHUB_OUTPUT
+          git fetch --tags --force
+          NOTES=$(git tag -l --format='%(contents)' ${{ github.ref_name }})
+          if [ -n "$NOTES" ]; then
+            printf "%s\n" "$NOTES" > extracted_notes.md
+            TITLE=$(head -n 1 extracted_notes.md | sed 's/^# *//')
+          elif [ -f RELEASE_TEMPLATE.md ]; then
+            TITLE="Kumo ${{ github.ref_name }}"
+            sed "s/__VERSION__/${{ github.ref_name }}/g" RELEASE_TEMPLATE.md > extracted_notes.md
           else
-            echo "title=Kumo ${{ github.ref_name }}" >> $GITHUB_OUTPUT
+            TITLE="Kumo ${{ github.ref_name }}"
+            echo "Release ${{ github.ref_name }}" > extracted_notes.md
           fi
+          echo "title=$TITLE" >> $GITHUB_OUTPUT
 
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           name: ${{ steps.release_meta.outputs.title }}
-          body_path: RELEASE_NOTES.md
+          body_path: extracted_notes.md
           files: |
             dist/*.exe
             dist/*.blockmap

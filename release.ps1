@@ -1,10 +1,12 @@
 # ============================================================
 # release.ps1 — Local Release & Publishing Automation for Kumo
-# Runs local tests, updates version & notes, tags & pushes
+# Runs local tests, updates version, tags with notes & pushes
 # ============================================================
 
 param (
-    [string]$Version
+    [string]$Version,
+    [string]$Title,
+    [switch]$SkipTests
 )
 
 $ErrorActionPreference = 'Stop'
@@ -18,11 +20,10 @@ Write-Host ""
 $packageJsonPath = Join-Path $PSScriptRoot "package.json"
 $pkg = Get-Content $packageJsonPath | ConvertFrom-Json
 $currentVersion = $pkg.version
-Write-Host "Current local version: v$currentVersion" -ForegroundColor Yellow
+Write-Host "Current version: v$currentVersion" -ForegroundColor Yellow
 
 # 2. Determine Target Version
 if (-not $Version) {
-    # Calculate default next patch (e.g. 0.1.1 -> 0.1.2)
     $parts = $currentVersion.Split('.')
     if ($parts.Length -eq 3) {
         $nextPatch = "$($parts[0]).$($parts[1]).$([int]$parts[2] + 1)"
@@ -49,52 +50,69 @@ if (-not $Version) {
 Write-Host "Target release version: v$Version" -ForegroundColor Green
 Write-Host ""
 
-# 3. Check RELEASE_NOTES.md
-Write-Host "[1/5] Verifying release documentation..." -ForegroundColor Yellow
+# 3. Prepare Dynamic Release Notes from Template
 $notesPath = Join-Path $PSScriptRoot "RELEASE_NOTES.md"
+$templatePath = Join-Path $PSScriptRoot "RELEASE_TEMPLATE.md"
+
 if (-not (Test-Path $notesPath)) {
-    Write-Host "❌ Error: RELEASE_NOTES.md not found!" -ForegroundColor Red
-    Write-Host "   Please create and populate RELEASE_NOTES.md with this release's title and notes." -ForegroundColor Red
-    exit 1
+    if (Test-Path $templatePath) {
+        $rawTemplate = Get-Content $templatePath -Raw
+        $releaseTitle = if ($Title) { $Title } else { "Update & Improvements" }
+        $dynamicNotes = $rawTemplate -replace '__VERSION__', $Version -replace '__TITLE__', $releaseTitle
+        Set-Content -Path $notesPath -Value $dynamicNotes -Encoding utf8
+        Write-Host "Created local dynamic notes draft from template: RELEASE_NOTES.md" -ForegroundColor Cyan
+    } else {
+        Set-Content -Path $notesPath -Value "# Kumo v$Version`n`nAutomatic release update." -Encoding utf8
+    }
 }
 
 $notesFirstLine = (Get-Content $notesPath -TotalCount 1).Trim()
-Write-Host "       Release Title: $notesFirstLine" -ForegroundColor Cyan
+Write-Host "Release Title: $notesFirstLine" -ForegroundColor Cyan
+Write-Host ""
 
 $confirm = Read-Host "Proceed with these release notes for v$Version? (Y/N)"
 if ($confirm -notmatch '^[Yy]') {
-    Write-Host "Release aborted by user. Please update RELEASE_NOTES.md and re-run." -ForegroundColor Yellow
+    Write-Host "Release cancelled. You can edit RELEASE_NOTES.md locally and run this again." -ForegroundColor Yellow
     exit 0
 }
 
-# 4. Local Test Gate
-Write-Host ""
-Write-Host "[2/5] Running local unit tests gate..." -ForegroundColor Yellow
-try {
-    npm run test:unit
-    Write-Host "       All local tests passed successfully!" -ForegroundColor Green
-} catch {
-    Write-Host "❌ Error: Local unit tests failed. Release aborted." -ForegroundColor Red
-    exit 1
+# 4. Local Unit Tests Gate
+if (-not $SkipTests) {
+    Write-Host ""
+    Write-Host "[1/4] Running local unit tests gate..." -ForegroundColor Yellow
+    try {
+        npm run test:unit
+        Write-Host "       All local tests passed successfully!" -ForegroundColor Green
+    } catch {
+        Write-Host "❌ Error: Local unit tests failed. Release aborted." -ForegroundColor Red
+        exit 1
+    }
 }
 
 # 5. Version Bump
 Write-Host ""
-Write-Host "[3/5] Updating package.json to v$Version..." -ForegroundColor Yellow
+Write-Host "[2/4] Updating package.json to v$Version..." -ForegroundColor Yellow
 npm version $Version --no-git-tag-version | Out-Null
 Write-Host "       Updated version to v$Version" -ForegroundColor Green
 
-# 6. Git Commit & Tag
+# 6. Commit & Annotated Tag
 Write-Host ""
-Write-Host "[4/5] Creating release commit and git tag..." -ForegroundColor Yellow
-git add package.json package-lock.json RELEASE_NOTES.md src/ ui/ .github/
+Write-Host "[3/4] Committing and creating annotated git tag..." -ForegroundColor Yellow
+git add package.json package-lock.json
 git commit -m "feat(release): prepare and publish Kumo v$Version"
-git tag "v$Version"
-Write-Host "       Created tag v$Version" -ForegroundColor Green
+
+# Embed full release notes into the annotated tag object
+git tag -a "v$Version" -F "$notesPath"
+Write-Host "       Created annotated git tag v$Version" -ForegroundColor Green
+
+# Clean up temporary local RELEASE_NOTES.md
+if (Test-Path $notesPath) {
+    Remove-Item $notesPath -Force
+}
 
 # 7. Push to Remote
 Write-Host ""
-Write-Host "[5/5] Pushing release commit and tag to GitHub..." -ForegroundColor Yellow
+Write-Host "[4/4] Pushing release commit and tag to GitHub..." -ForegroundColor Yellow
 git push origin main
 git push origin "v$Version"
 
@@ -103,9 +121,6 @@ Write-Host "==========================================" -ForegroundColor Green
 Write-Host "  ✨ Release v$Version successfully pushed! " -ForegroundColor Green
 Write-Host "==========================================" -ForegroundColor Green
 Write-Host ""
-Write-Host "GitHub Actions is now compiling the Windows installers and publishing the release:" -ForegroundColor White
-Write-Host "  https://github.com/Ashborn-047/kumo/actions" -ForegroundColor Cyan
-Write-Host ""
-Write-Host "View release page once build completes:" -ForegroundColor White
+Write-Host "GitHub Actions will extract the notes from your tag and publish:" -ForegroundColor White
 Write-Host "  https://github.com/Ashborn-047/kumo/releases/tag/v$Version" -ForegroundColor Yellow
 Write-Host ""

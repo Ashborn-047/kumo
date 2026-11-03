@@ -33,11 +33,13 @@ Desktop.ini
 graphify-out/
 .graphify*
 
-
 # Test artifacts
 test-results/
 tests/report/
 scratch/
+
+# Local release draft
+RELEASE_NOTES.md
 
 # Documentation
 Docs/
