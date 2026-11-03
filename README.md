@@ -22,6 +22,7 @@
 [![CSS3: Glassmorphism](https://img.shields.io/badge/CSS3-Backdrop%20Blur%20%26%20Glass-1572B6?style=flat-square&logo=css3&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/CSS)
 [![PowerShell: SMTC Automation](https://img.shields.io/badge/PowerShell-SMTC%20%26%20Automation-5391FE?style=flat-square&logo=powershell&logoColor=white)](https://learn.microsoft.com/en-us/powershell/)
 [![NSIS Installer](https://img.shields.io/badge/Packaging-NSIS%20x64%20Installer-00599E?style=flat-square)](https://nsis.sourceforge.io/)
+[![Auto-Update: Differential Deltas](https://img.shields.io/badge/Auto--Update-Differential%20Deltas-2EA44F?style=flat-square&logo=electron)](LATEST_RELEASE.md)
 
 <br/>
 
@@ -36,6 +37,17 @@
 <p align="center">
   <b>Kumo</b> is a privacy-first, high-performance desktop productivity suite for Windows.<br/>
   Featuring an organic physics companion, the kinetic Pulse Dynamic Island bezel overlay, the Edge Drop desktop staging shelf, live Windows SMTC media control (Kumo Amp), real-time OpenRouter token streaming, a 3-tier desktop action safety gate, and an infinite spatial planning canvas ported from Mochiboard.
+</p>
+
+<!-- Latest Release Callout -->
+<p align="center">
+  <a href="https://github.com/Ashborn-047/kumo/releases/tag/v0.1.1">
+    <img src="https://img.shields.io/badge/Latest%20Release-v0.1.1%20(Auto--Updates%20%26%20Patches)-6355d8?style=for-the-badge&logo=github&logoColor=white" alt="Latest Release v0.1.1"/>
+  </a>
+  <br/>
+  <a href="https://github.com/Ashborn-047/kumo/releases/download/v0.1.1/Kumo-Setup-0.1.1.exe"><b>Download Setup Installer (.exe)</b></a> • 
+  <a href="https://github.com/Ashborn-047/kumo/releases/download/v0.1.1/Kumo-0.1.1-portable.exe"><b>Download Portable (.exe)</b></a> • 
+  <a href="LATEST_RELEASE.md"><b>Release Notes (v0.1.1)</b></a>
 </p>
 
 [Quick Start](#quick-start) • [Pulse Dynamic Island](#pulse-dynamic-island) • [Edge Drop Shelf](#edge-drop-desktop-shelf) • [Architecture](#system-architecture) • [Contributing](CONTRIBUTING.md) • [Code of Conduct](CODE_OF_CONDUCT.md) • [Security](SECURITY.md) • [License](LICENSE)
@@ -54,6 +66,7 @@
   - [Organic Mascot & Asset Studio](#organic-physics-mascot--asset-studio)
   - [Real-Time Streaming AI](#real-time-streaming-ai)
   - [3-Tier Safety Gate](#3-tier-safety-system)
+  - [Live In-App Auto-Updates](#live-in-app-auto-updates)
 - [System Architecture](#system-architecture)
   - [Architectural Overview](#architectural-overview)
   - [Component Deep Dive](#component-deep-dive)
@@ -141,6 +154,13 @@ Most desktop AI assistants are heavy application windows that clutter your taskb
   - `GREEN`: Silent execution for safe, read-only operations (clipboard read/write, scoped file search, browser URL opening).
   - `YELLOW`: Explicit user confirmation for system modifications (app launch, folder open, PowerShell inspection).
   - `RED`: Automatic refusal for destructive actions (file deletion, formatting, registry edits).
+
+### Live In-App Auto-Updates
+- **Zero-Downtime Patch Delivery (`src/updater.js`, `ui/board/js/updater-ui.js`)**:
+  - Powered by `electron-updater` with differential binary blockmap deltas.
+  - Discreet, glassmorphic floating notification pill in the Kumoboard canvas displaying real-time download progress.
+  - One-click restart hot-swap to apply updates immediately with zero user canvas data loss.
+  - See full release highlights in [LATEST_RELEASE.md](LATEST_RELEASE.md).
 
 ---
 
@@ -315,16 +335,24 @@ The modular stage in [`ui/island/`](ui/island/) supports extensible widgets:
 
 ## Packaging & Distribution
 
-To build a standalone Windows `.exe` installer (NSIS):
+### Local Builds
+To compile assets and build standalone Windows binaries locally:
 
 ```powershell
-# Compiles assets and builds Windows installer in dist/
+# Compiles assets and builds Windows NSIS installer + portable exe in dist/
 npm run dist
 ```
 
-Generated installer:
-```
-dist/Kumo Setup 0.1.0.exe
+Generated binaries:
+- `dist/Kumo-Setup-0.1.1.exe` (NSIS Installer)
+- `dist/Kumo-0.1.1-portable.exe` (Standalone Portable)
+
+### Automated Releases & Publishing
+To publish a new verified release to GitHub:
+
+```powershell
+# Runs local test gates, updates version, tags with notes, and triggers CI release
+npm run release
 ```
 
 ---
@@ -343,6 +371,7 @@ dist/Kumo Setup 0.1.0.exe
 - [x] Compact icon-only navigation dock to maximize stage space
 - [x] 3D & 2D Mascot Asset Studio & Theme Lab
 - [x] 3-Tier safety gate for system actions
+- [x] Live in-app background auto-updates & differential patch delivery (electron-updater)
 - [ ] Multi-monitor display selection
 - [ ] Voice input / TTS audio feedback
 - [ ] System tray notification badges for reminders
