@@ -14,3 +14,4 @@
 
 ---
 *Built with Electron 31, Node.js 20, and Playwright on Windows x64.*
+
