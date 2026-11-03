@@ -66,3 +66,4 @@ All release assets are built directly on clean Windows runners via GitHub Action
 - **Build Workflow:** [Release Kumo Binaries #41582754928](https://github.com/Ashborn-047/kumo/actions/runs/41582754928)
 - **Git Commit:** [`5ed0324`](https://github.com/Ashborn-047/kumo/commit/5ed0324fec5fab8018fe097834b3e6b7e6d9a8d7)
 - **Tag:** [`v0.1.1`](https://github.com/Ashborn-047/kumo/releases/tag/v0.1.1)
+
