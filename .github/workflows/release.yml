@@ -37,13 +37,26 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Extract Release Title from Notes
+        id: release_meta
+        shell: bash
+        run: |
+          if [ -f RELEASE_NOTES.md ]; then
+            TITLE=$(head -n 1 RELEASE_NOTES.md | sed 's/^# *//')
+            echo "title=$TITLE" >> $GITHUB_OUTPUT
+          else
+            echo "title=Kumo ${{ github.ref_name }}" >> $GITHUB_OUTPUT
+          fi
+
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
         with:
+          name: ${{ steps.release_meta.outputs.title }}
+          body_path: RELEASE_NOTES.md
           files: |
             dist/*.exe
             dist/*.blockmap
             dist/latest.yml
           draft: false
           prerelease: false
-          generate_release_notes: true
+          generate_release_notes: false
